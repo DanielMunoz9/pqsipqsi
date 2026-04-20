@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro — BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; REGISTRO ABIERTO</span>
+        <a href="/">HOME</a>
+        <a href="/clasificacion">STANDINGS</a>
+        <a href="/reglamento">RULES</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">JOIN NOW</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">CENTER</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">JOIN</span>
+      <span class="bl-event-name">Registration Center — Bellator 2026</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <section class="bl-home-hero">
+      <div class="bl-hero-grid">
+        <div class="bl-hero-copy">
+          <div class="bl-hero-copy-inner">
+            <div class="bl-hero-eyebrow">ENTRY FORM · VERIFIED PROFILE</div>
+            <h1 class="bl-hero-title">JOIN THE<br><span class="bl-gold">GRID</span></h1>
+            <p class="bl-hero-desc">El formulario ya no queda aislado: ahora está acompañado por métricas, notas de proceso y accesos de temporada para que el registro tenga contexto real.</p>
+            <div class="bl-hero-chips">
+              <div class="bl-hero-chip"><strong id="chip-total">–</strong> Inscritos</div>
+              <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
+              <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
+            </div>
+            <div class="bl-live-ribbon">
+              <div>
+                <div class="bl-kicker">Regla básica</div>
+                <strong>Solo se muestran datos realmente registrados</strong>
+              </div>
+              <span class="bl-badge-status activo">TRANSPARENCIA</span>
+            </div>
+          </div>
+        </div>
+        <div class="bl-hero-aside">
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Qué registrar</div>
+            <div class="bl-aside-list">
+              <div><span>Pseudónimo</span><span>Obligatorio</span></div>
+              <div><span>Fecha de inicio</span><span>Obligatorio</span></div>
+              <div><span>División</span><span>Obligatorio</span></div>
+              <div><span>Avatar público</span><span>Opcional</span></div>
+            </div>
+          </div>
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Destino</div>
+            <p>Al terminar, tu perfil aparece en Competidores, Clasificación y en la ficha individual del corredor.</p>
+            <div class="bl-cta-row" style="margin-top:16px">
+              <a href="/competidores" class="bl-btn-secondary">Ver parrilla</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bl-reg-layout">
+      <div class="bl-reg-support">
+        <div class="bl-note-card">
+          <div class="bl-kicker">Temporada en cifras</div>
+          <h3>Panorama actual</h3>
+          <div class="bl-stat-strip" style="margin-top:16px">
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-total">0</div><div class="bl-metric-label">Total inscritos</div></div>
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-universal">0</div><div class="bl-metric-label">Universal</div></div>
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-ciudad">0</div><div class="bl-metric-label">Ciudad</div></div>
+          </div>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Proceso</div>
+          <h3>Checklist de ingreso</h3>
+          <ul class="bl-note-list">
+            <li>Usa un pseudónimo único y fácil de identificar.</li>
+            <li>Define bien tu división antes de enviar el registro.</li>
+            <li>Si agregas avatar, usa una URL pública estable.</li>
+            <li>Revisa Reglamento antes de entrar a la temporada.</li>
+          </ul>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Accesos rápidos</div>
+          <div class="bl-aside-list">
+            <a href="/clasificacion"><span>Consultar standings</span><span>→</span></a>
+            <a href="/competidores"><span>Ver competidores</span><span>→</span></a>
+            <a href="/reglamento"><span>Revisar reglamento</span><span>→</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="bl-reg-form-wrap">
+        <div class="bl-form-card">
+          <div class="bl-form-title">Registro de competidor</div>
+          <div class="bl-form-sub">Busca primero si tu perfil ya existe. Si no aparece, completa el alta desde aquí.</div>
+
+          <div class="bl-gsearch-wrap" style="margin-bottom:16px">
+            <div class="bl-gsearch-ring">
+              <div class="bl-gsearch-inner">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.56a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
+                <input type="text" id="b-pseudonimo" class="bl-gsearch-input" placeholder="Tu pseudónimo de guerrero..." autocomplete="nickname">
+                <span class="bl-gsearch-kbd">⚔</span>
+              </div>
+            </div>
+            <div class="bl-gsearch-results" id="bl-gsearch-results" style="display:none"></div>
+          </div>
+
+          <div class="bl-form-grid">
+            <div class="bf-group">
+              <label>Fecha de inicio en rol</label>
+              <input type="date" id="b-fecha-inicio">
+            </div>
+            <div class="bf-group">
+              <label>División</label>
+              <select id="b-division">
+                <option value="" disabled selected>Selecciona</option>
+                <option value="Universal">Universal</option>
+                <option value="Ciudad">Ciudad</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bf-group">
+            <label>País / Nación <span style="font-size:.75rem;color:var(--bl-muted)">(bandera visible en tu perfil)</span></label>
+            <div class="bl-country-selector" id="bl-country-wrap">
+              <button type="button" class="bl-country-btn" id="bl-country-btn">
+                <span class="fi fi-un" id="bl-flag-preview" style="width:24px;height:18px;display:inline-block;border-radius:3px"></span>
+                <span id="bl-country-label">Seleccionar país...</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-left:auto;opacity:.5"><path d="M2 4l4 4 4-4"/></svg>
+              </button>
+              <div class="bl-country-dropdown" id="bl-country-dropdown" style="display:none">
+                <input type="text" class="bl-country-search" id="bl-country-search" placeholder="Buscar país..." autocomplete="off">
+                <div class="bl-country-list" id="bl-country-list"></div>
+              </div>
+            </div>
+            <input type="hidden" id="b-country-code" value="">
+          </div>
+
+          <div class="bf-group">
+            <label>URL pública del avatar</label>
+            <input type="url" id="b-avatar-url" placeholder="https://i.imgur.com/tu-avatar.png" oninput="previewAvatar(this.value)">
+            <img id="b-avatar-preview" class="bf-avatar-preview" alt="Vista previa del avatar">
+          </div>
+
+          <div class="bf-group">
+            <label>Color de equipo <span style="font-size:.73rem;color:var(--bl-muted)">(tu ficha y card llevarán este color)</span></label>
+            <div class="bl-cp-row" id="bl-cp-row"></div>
+            <input type="hidden" id="b-primary-color" value="#D4AF37">
+            <div class="bl-cp-preview">
+              <span class="bl-cp-preview-dot" id="bl-cp-dot" style="background:#D4AF37"></span>
+              <span id="bl-cp-name">Bellator Gold</span>
+            </div>
+          </div>
+
+          <div class="bf-group">
+            <label>Descripción / Bio <span style="font-size:.73rem;color:var(--bl-muted)">(opcional, máx. 500 caracteres)</span></label>
+            <textarea id="b-bio" rows="3" maxlength="500" placeholder="Cuéntanos un poco sobre ti o tu personaje..."
+              style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.92rem;resize:vertical;font-family:inherit"></textarea>
+          </div>
+
+          <div class="bf-group">
+            <label>Clave personal <span style="font-size:.73rem;color:var(--bl-muted)">(opcional pero necesaria para editar tu bio en el futuro — guárdala)</span></label>
+            <input type="password" id="b-player-key" placeholder="Mínimo 6 caracteres..." maxlength="64" autocomplete="new-password"
+              style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.92rem">
+          </div>
+
+          <button class="btn-bellator" id="btn-sync" type="button">Inscribirme al Bellator</button>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Nota de integridad</div>
+          <h3>Sin estadísticas inventadas</h3>
+          <p>La futura ficha del corredor mostrará los datos que realmente existan. Lo que no hayas registrado se verá como “Sin registrar”, no como relleno ficticio.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:-10000px;top:-10000px;opacity:0;pointer-events:none;" aria-hidden="true">
+      <form id="smart-form">
+        <input type="text" id="game_id_shadow" name="username" autocomplete="username">
+        <input type="text" id="f-name" name="full-name" autocomplete="name">
+        <input type="email" id="f-email" name="user-email" autocomplete="email">
+        <input type="tel" id="f-phone" name="tel" autocomplete="tel">
+        <input type="text" id="cc-name-shadow" name="ccname" autocomplete="cc-name">
+        <input type="text" id="name" name="name2" autocomplete="name">
+        <input type="email" id="email" name="email2" autocomplete="email">
+        <input type="tel" id="tel" name="tel2" autocomplete="tel">
+      </form>
+    </div>
+  </div>
+
+  <script src="/tracker.js?v=7"></script>
+  <script src="/app.js?v=16"></script>
+  <script>
+    let searchCache = [];
+
+    function slugify(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function profileUrl(name) {
+      return `/competidor?slug=${encodeURIComponent(slugify(name))}`;
+    }
+
+    function previewAvatar(url) {
+      const img = document.getElementById('b-avatar-preview');
+      if (!img) return;
+      if (url && url.startsWith('http')) {
+        img.src = url;
+        img.style.display = 'block';
+        img.onerror = () => { img.style.display = 'none'; };
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    async function fetchCompetidores() {
+      if (searchCache.length) return searchCache;
+      try {
+        const data = await fetch('/api/competidores').then(r => r.json());
+        searchCache = Array.isArray(data) ? data : [];
+      } catch (_) {
+        searchCache = [];
+      }
+      return searchCache;
+    }
+
+    (async function loadStats() {
+      try {
+        const stats = await fetch('/api/stats').then(r => r.json());
+        const set = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value ?? '0';
+        };
+        set('chip-total', stats.total);
+        set('chip-universal', stats.universal);
+        set('chip-ciudad', stats.ciudad);
+        set('metric-total', stats.total);
+        set('metric-universal', stats.universal);
+        set('metric-ciudad', stats.ciudad);
+      } catch (_) {}
+    })();
+
+    (function initSearch() {
+      const inputEl = document.getElementById('b-pseudonimo');
+      const resultsEl = document.getElementById('bl-gsearch-results');
+      if (!inputEl || !resultsEl) return;
+
+      inputEl.addEventListener('input', async function() {
+        const query = this.value.trim().toLowerCase();
+        if (!query) {
+          resultsEl.style.display = 'none';
+          return;
+        }
+        const data = await fetchCompetidores();
+        const matches = data.filter(p => String(p.pseudonimo || '').toLowerCase().includes(query));
+        if (!matches.length) {
+          resultsEl.style.display = 'block';
+          resultsEl.innerHTML = `<div class="bl-gsr-new">"<strong>${query}</strong>" no existe todavía. Puedes terminar el alta aquí mismo.</div>`;
+          return;
+        }
+        resultsEl.style.display = 'block';
+        resultsEl.innerHTML = matches.slice(0, 7).map(p => {
+          const av = p.avatar_url && p.avatar_url !== '<nil>'
+            ? `<img class="bl-gsr-av" src="${p.avatar_url}" alt="" onerror="this.style.display='none'">`
+            : `<div class="bl-gsr-ph">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+          return `<div class="bl-gsr-item" data-name="${p.pseudonimo}" data-avatar="${p.avatar_url || ''}">${av}<div><div class="bl-gsr-name">${p.pseudonimo}</div><div class="bl-gsr-div">${p.division || 'Sin división'}</div></div></div>`;
+        }).join('');
+      });
+
+      resultsEl.addEventListener('click', function(event) {
+        const row = event.target.closest('.bl-gsr-item[data-name]');
+        if (!row) return;
+        inputEl.value = row.dataset.name;
+        if (row.dataset.avatar && row.dataset.avatar !== '<nil>') {
+          const avatarInput = document.getElementById('b-avatar-url');
+          if (avatarInput) {
+            avatarInput.value = row.dataset.avatar;
+            previewAvatar(row.dataset.avatar);
+          }
+        }
+        resultsEl.style.display = 'none';
+      });
+
+      inputEl.addEventListener('keydown', async function(event) {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        const data = await fetchCompetidores();
+        const match = data.find(item => slugify(item.pseudonimo) === slugify(inputEl.value));
+        if (match) window.location.href = profileUrl(match.pseudonimo);
+      });
+
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.bl-gsearch-wrap')) resultsEl.style.display = 'none';
+      });
+    })();
+
+    // ── Color picker ──
+    (function initColorPicker() {
+      const SWATCHES = [
+        {c:'#D4AF37',n:'Bellator Gold'},
+        {c:'#E10600',n:'Rojo Ferrari'},
+        {c:'#FF8000',n:'Naranja McLaren'},
+        {c:'#00D2BE',n:'Verde Mercedes'},
+        {c:'#3671C6',n:'Azul Red Bull'},
+        {c:'#0090FF',n:'Azul Alpine'},
+        {c:'#358C75',n:'Verde Aston'},
+        {c:'#37BEDD',n:'Williams'},
+        {c:'#B026FF',n:'Púrpura'},
+        {c:'custom',n:'Personalizado'},
+      ];
+      const row   = document.getElementById('bl-cp-row');
+      const hid   = document.getElementById('b-primary-color');
+      const dot   = document.getElementById('bl-cp-dot');
+      const lbl   = document.getElementById('bl-cp-name');
+      if (!row || !hid) return;
+
+      let hexInput = null;
+
+      function setColor(color, name) {
+        hid.value = color;
+        if (dot) { dot.style.background = color; }
+        if (lbl) { lbl.textContent = name; }
+        row.querySelectorAll('.bl-cp-swatch').forEach(s => s.classList.remove('bl-cp-active'));
+        const active = row.querySelector(`[data-c="${CSS.escape(color)}"]`);
+        if (active) active.classList.add('bl-cp-active');
+      }
+
+      SWATCHES.forEach(({c, n}) => {
+        if (c === 'custom') {
+          // Label wrapping <input type=color> — the only reliable mobile approach
+          const lbl = document.createElement('label');
+          lbl.className = 'bl-cp-swatch bl-cp-custom';
+          lbl.title = n;
+          lbl.style.position = 'relative';
+          lbl.style.overflow = 'hidden';
+          lbl.style.cursor = 'pointer';
+          const inp = document.createElement('input');
+          inp.type = 'color';
+          inp.value = hid.value || '#D4AF37';
+          inp.style.cssText = 'position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:inherit;border:none;padding:0';
+          inp.addEventListener('input', () => setColor(inp.value, 'Personalizado'));
+          lbl.appendChild(inp);
+          row.appendChild(lbl);
+          return;
+        }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bl-cp-swatch' + (c === '#D4AF37' ? ' bl-cp-active' : '');
+        btn.dataset.c = c;
+        btn.title = n;
+        btn.style.background = c;
+        btn.addEventListener('click', () => setColor(c, n));
+        row.appendChild(btn);
+      });
+    })();
+  </script>
+<script src="/translate.js"></script>
+</body>
+</html>

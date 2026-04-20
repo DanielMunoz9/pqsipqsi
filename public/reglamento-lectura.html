@@ -1,0 +1,1033 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier Editorial — BELLATOR ROLBATTLE</title>
+  <style id="ro-base-styles">
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Teko:wght@400;500;600;700&display=swap');
+
+    :root{
+      --ro-bg:#0a1018;
+      --ro-surface:#0e1822;
+      --ro-red:#d71818;
+      --ro-gold:#d4af37;
+      --ro-gold2:#f0cc5a;
+      --cat-convivencia:#3b82f6;
+      --cat-divisiones:#10b981;
+      --cat-combate:#ef4444;
+      --cat-poderes:#f59e0b;
+      --cat-niveles:#a855f7;
+      --cat-crossover:#14b8a6;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:var(--ro-bg);color:#e8edf2;font-family:'Barlow Semi Condensed',sans-serif}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit;border:none;outline:none;background:none;cursor:pointer}
+    img{display:block;max-width:100%}
+
+    /* ── LAYOUT ── */
+    .ro-layout{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
+    .ro-sidebar{
+      position:sticky;top:0;height:100vh;overflow-y:auto;
+      background:var(--ro-surface);
+      border-right:1px solid rgba(255,255,255,.07);
+      display:flex;flex-direction:column;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;
+    }
+    .ro-sidebar-logo{padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .ro-sidebar-logo a{display:flex;align-items:center;gap:10px}
+    .ro-logo-badge{
+      width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(135deg,var(--ro-gold),#8e6a14);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Teko',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;
+    }
+    .ro-logo-title{font-family:'Teko',sans-serif;font-size:1.05rem;letter-spacing:1.5px;text-transform:uppercase;color:#fff;line-height:1;display:block}
+    .ro-logo-sub{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ro-gold);line-height:1.3;display:block}
+
+    .ro-search-panel{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .ro-search-wrap{
+      display:flex;align-items:center;gap:8px;
+      padding:8px 11px;border-radius:8px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+      transition:border-color .18s;
+    }
+    .ro-search-wrap:focus-within{border-color:var(--ro-gold)}
+    .ro-search-wrap svg{color:#7a8899;flex-shrink:0}
+    .ro-search-input{flex:1;color:#fff;font-size:.86rem;background:transparent}
+    .ro-search-input::placeholder{color:#5a6879}
+
+    .ro-side-section{padding:10px 14px 4px}
+    .ro-side-label{font-size:.66rem;letter-spacing:2.5px;text-transform:uppercase;color:#5a6879;margin-bottom:6px}
+
+    .ro-layer-list{display:flex;flex-direction:column;gap:2px}
+    .ro-layer-btn{
+      display:flex;align-items:center;gap:9px;
+      padding:7px 9px;border-radius:7px;
+      color:#9aabb8;font-size:.88rem;
+      transition:background .15s,color .15s;text-align:left;
+    }
+    .ro-layer-btn:hover{background:rgba(255,255,255,.05);color:#fff}
+    .ro-layer-btn.active{background:rgba(212,175,55,.1);color:var(--ro-gold)}
+    .ro-layer-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:currentColor}
+
+    .ro-cat-list{display:flex;flex-direction:column;gap:2px}
+    .ro-cat-btn{
+      display:flex;align-items:center;gap:8px;
+      padding:5px 9px;border-radius:6px;
+      color:#8494a6;font-size:.82rem;
+      transition:background .15s,color .15s;text-align:left;
+    }
+    .ro-cat-btn:hover{background:rgba(255,255,255,.04);color:#e0e7ee}
+    .ro-cat-btn.active{color:#fff;background:rgba(255,255,255,.07)}
+    .ro-cat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+    .ro-toc-wrap{flex:1;overflow-y:auto;padding:4px 6px 14px;scrollbar-width:thin}
+    .ro-toc-link{
+      display:block;padding:6px 10px;border-radius:6px;
+      color:#66788a;font-size:.78rem;line-height:1.3;
+      border-left:2px solid transparent;
+      transition:all .14s;
+    }
+    .ro-toc-link:hover{color:#c0cdd8;background:rgba(255,255,255,.04)}
+    .ro-toc-link.active{color:#fff;background:rgba(255,255,255,.06);border-left-color:var(--ro-gold)}
+    .ro-toc-cat{display:block;font-size:.64rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1px;opacity:.7}
+    .ro-toc-name{display:block;font-size:.8rem}
+
+    .ro-sidebar-footer{
+      margin-top:auto;padding:12px 14px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .ro-back-btn{
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      padding:8px 12px;border-radius:7px;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+      color:#8494a6;font-size:.84rem;transition:all .16s;
+    }
+    .ro-back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+    /* ── MAIN ── */
+    .ro-main{overflow-x:hidden;min-width:0}
+
+    /* ── MASTHEAD ── */
+    .ro-masthead{
+      position:relative;overflow:hidden;
+      min-height:400px;
+      display:flex;flex-direction:column;justify-content:flex-end;
+      padding:36px 44px;
+      background:
+        radial-gradient(circle at 18% 42%, rgba(215,24,24,.38), transparent 32%),
+        radial-gradient(circle at 80% 18%, rgba(212,175,55,.22), transparent 28%),
+        linear-gradient(155deg, #0f1e30 0%, #05080d 100%);
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .ro-masthead::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:repeating-linear-gradient(-40deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 22px);
+    }
+    .ro-masthead-gif{
+      position:absolute;right:0;top:0;bottom:0;width:48%;
+      object-fit:cover;opacity:.18;
+      mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.4) 35%,#000 100%);
+      -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.4) 35%,#000 100%);
+      pointer-events:none;
+    }
+    .ro-masthead-inner{position:relative;z-index:1;max-width:800px}
+    .ro-masthead-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:4px 12px 3px;border-radius:999px;
+      background:rgba(215,24,24,.16);border:1px solid rgba(215,24,24,.32);
+      font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:#f87171;
+      margin-bottom:16px;
+    }
+    .ro-masthead-title{
+      font-family:'Teko',sans-serif;
+      font-size:clamp(3.2rem,7vw,6.8rem);
+      line-height:.86;letter-spacing:-1px;text-transform:uppercase;color:#fff;
+    }
+    .ro-masthead-title em{color:var(--ro-gold);font-style:normal}
+    .ro-masthead-sub{
+      margin-top:12px;font-size:1rem;color:#9db0c2;line-height:1.6;font-style:italic;
+    }
+    .ro-masthead-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .ro-masthead-tag{
+      padding:5px 12px;border-radius:999px;
+      background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+      font-size:.76rem;letter-spacing:1.5px;text-transform:uppercase;color:#c0cdd8;
+    }
+    .ro-masthead-count{
+      margin-top:20px;
+      font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:2px;
+      text-transform:uppercase;color:var(--ro-gold);
+    }
+    .ro-voice-box{
+      margin-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      background:rgba(8,12,18,.66);border:1px solid rgba(212,175,55,.18);
+      border-radius:12px;padding:12px 14px;max-width:720px;
+    }
+    .ro-voice-chip{
+      font-family:'Teko',sans-serif;font-size:.84rem;letter-spacing:2px;
+      color:var(--ro-gold);white-space:nowrap;
+    }
+    .ro-voice-select{
+      flex:1;min-width:220px;background:transparent;border:none;outline:none;
+      color:#d7e0e8;font-size:.84rem;font-family:'Barlow Semi Condensed',sans-serif;
+    }
+    .ro-voice-select option{background:#0d1117;color:#f3f4f6}
+    .ro-voice-stop{
+      border:none;border-radius:999px;padding:8px 14px;background:rgba(212,175,55,.14);
+      color:var(--ro-gold);font-family:'Teko',sans-serif;font-size:.88rem;letter-spacing:2px;
+      text-transform:uppercase;cursor:pointer;
+    }
+
+    /* ── CREDITS ── */
+    .ro-credits{max-width:900px;margin:0 auto;padding:18px 28px 0}
+    .ro-credits-inner{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:13px 18px;border-radius:10px;
+      background:rgba(212,175,55,.07);
+      border:1px solid rgba(212,175,55,.16);
+      border-left:3px solid var(--ro-gold);
+    }
+    .ro-credits-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+    .ro-credits-label{
+      display:block;font-family:'Teko',sans-serif;font-size:1rem;
+      letter-spacing:2.5px;text-transform:uppercase;color:var(--ro-gold);
+      line-height:1;margin-bottom:5px;
+    }
+    .ro-credits-text{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.5}
+    .ro-credits-text strong{color:rgba(255,255,255,.9)}
+    .ro-credits-text em{font-style:normal;color:var(--ro-gold)}
+    .ro-media-duo{
+      display:block;background:#0a1016;border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .ro-media-duo.is-single{display:block}
+
+    /* ── STICKY TOOLBAR ── */
+    .ro-toolbar{
+      position:sticky;top:0;z-index:40;
+      display:flex;align-items:center;gap:12px;
+      padding:9px 44px;
+      background:rgba(10,16,24,.9);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .ro-toolbar-label{
+      font-family:'Teko',sans-serif;font-size:.92rem;letter-spacing:2px;
+      text-transform:uppercase;color:#586878;
+    }
+    .ro-toolbar-count{margin-left:auto;font-size:.8rem;color:var(--ro-gold);letter-spacing:1px}
+
+    /* ── SECTION COVER (portada por categoría, con GIF) ── */
+    .ro-cover{
+      position:relative;overflow:hidden;
+      margin:28px 44px 0;
+      border-radius:18px;
+      min-height:190px;
+      display:flex;flex-direction:column;justify-content:flex-end;
+      padding:24px 28px;
+    }
+    .ro-cover-gif{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;opacity:.38;
+      pointer-events:none;
+    }
+    .ro-cover-overlay{
+      position:absolute;inset:0;pointer-events:none;
+    }
+    .ro-cover-inner{position:relative;z-index:1}
+    .ro-cover-chip{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:3px 10px 2px;border-radius:999px;
+      font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+      background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.15);
+      color:#fff;margin-bottom:8px;
+    }
+    .ro-cover-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+    .ro-cover-title{
+      font-family:'Teko',sans-serif;
+      font-size:clamp(2rem,4vw,3.4rem);
+      line-height:.88;letter-spacing:.2px;color:#fff;text-transform:uppercase;
+    }
+    .ro-cover-meta{margin-top:6px;font-size:.82rem;color:rgba(255,255,255,.6);letter-spacing:.5px}
+    .ro-cover-source{
+      margin-top:10px;font-size:.68rem;letter-spacing:1.4px;text-transform:uppercase;
+      color:rgba(255,255,255,.72)
+    }
+
+    /* ── ARTICLES WRAPPER ── */
+    .ro-articles{padding:0 44px 60px;display:flex;flex-direction:column;gap:0}
+
+    /* ── SINGLE SHEET (el "papel") ── */
+    .ro-sheet{
+      margin-top:20px;border-radius:14px;overflow:hidden;
+      background:#f4f0e7;color:#141414;
+      border-top:4px solid var(--ro-accent,#e5dfd2);
+      box-shadow:0 8px 32px rgba(0,0,0,.32),0 2px 4px rgba(0,0,0,.2);
+    }
+
+    /* header del sheet */
+    .ro-sheet-head{
+      display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;
+      padding:24px 28px 18px;
+      background:#fff;border-bottom:2px solid var(--ro-accent,#e5dfd2);
+    }
+    .ro-sheet-tag-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;flex-wrap:wrap}
+    .ro-sheet-cat{
+      display:inline-flex;align-items:center;
+      padding:3px 9px 2px;border-radius:3px;
+      font-size:.68rem;letter-spacing:2px;text-transform:uppercase;
+      color:#fff;font-weight:700;
+    }
+    .ro-sheet-num{font-family:'Teko',sans-serif;font-size:.84rem;letter-spacing:2px;color:#9aabb8}
+    .ro-sheet-title{
+      font-family:'Teko',sans-serif;
+      font-size:clamp(1.7rem,2.8vw,2.6rem);
+      line-height:.9;letter-spacing:.2px;color:#111;
+    }
+    .ro-sheet-summary{
+      margin-top:7px;max-width:840px;
+      color:#4a5568;font-size:.95rem;line-height:1.6;font-style:italic;
+    }
+    .ro-sheet-aside{display:flex;flex-direction:column;gap:7px;align-items:flex-end;min-width:150px}
+    .ro-sheet-badge{
+      padding:3px 10px 2px;border-radius:3px;
+      font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;
+      background:#1a202c;color:#f6e8c3;font-weight:600;
+    }
+    .ro-sheet-link{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:4px 9px;border-radius:999px;
+      background:#ece7de;border:1px solid #d4ccbc;
+      font-size:.72rem;color:#6b7280;
+      transition:background .14s;
+    }
+    .ro-sheet-link:hover{background:#ddd8ce}
+    .ro-audio-btn{
+      display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;
+      padding:6px 11px 5px;border-radius:999px;background:#ece7de;color:#705414;
+      font-family:'Teko',sans-serif;font-size:.74rem;letter-spacing:1.8px;text-transform:uppercase;
+      transition:background .16s,color .16s,transform .12s;
+    }
+    .ro-audio-btn:hover{background:#e4dbc7;transform:translateY(-1px)}
+    .ro-audio-btn.is-speaking{background:#1d3f1f;color:#b6f3b9}
+
+    /* GIF BANNER dentro del sheet */
+    .ro-gif-frame{
+      position:relative;height:156px;overflow:hidden;background:#080d12;
+      border-top:2px solid var(--ro-accent,#e5dfd2);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .ro-gif-frame picture{display:block;width:100%;height:100%}
+    .ro-gif{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;transform:scale(1.01)}
+    .ro-gif-frame::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(5,8,13,.08) 0%,rgba(5,8,13,.22) 52%,rgba(5,8,13,.68) 100%);
+      pointer-events:none;
+    }
+    .ro-gif-caption{
+      position:absolute;bottom:0;left:0;right:0;
+      padding:8px 16px 10px;
+      background:linear-gradient(transparent,rgba(0,0,0,.72));
+      font-size:.76rem;color:rgba(255,255,255,.78);letter-spacing:.4px;
+      z-index:2;
+    }
+    .ro-gif-credit{
+      display:block;margin-top:3px;font-size:.64rem;letter-spacing:1.3px;
+      text-transform:uppercase;color:rgba(255,255,255,.58)
+    }
+    .ro-gif-kind{
+      position:absolute;top:12px;right:12px;z-index:2;
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px 4px;border-radius:999px;
+      font-size:.62rem;letter-spacing:1.8px;text-transform:uppercase;
+      color:#fff;background:rgba(7,10,14,.56);border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(8px);
+    }
+    .ro-gif-frame[data-kind="image"] .ro-gif-kind{color:#f6e8c3;border-color:rgba(246,232,195,.28)}
+    .ro-gif-frame[data-kind="gif"] .ro-gif-kind{color:#9fe870;border-color:rgba(159,232,112,.24)}
+
+    /* BODY */
+    .ro-sheet-body{padding:24px 28px}
+
+    /* adaptar estilos canónicos a fondo claro */
+    .ro-sheet-body .rgl-prose{color:#1b1b1b}
+    .ro-sheet-body .rgl-prose p{color:#232323;margin-bottom:.7em}
+    .ro-sheet-body .rgl-prose strong{color:#9f1313}
+    .ro-sheet-body .rgl-hl{background:rgba(215,24,24,.07);border-left:3px solid var(--ro-red);color:#1d1d1d}
+    .ro-sheet-body .rgl-hax-card,.ro-sheet-body .rgl-free-card,.ro-sheet-body .rgl-warn,
+    .ro-sheet-body .rgl-info,.ro-sheet-body .rgl-compare-bad,.ro-sheet-body .rgl-compare-good,
+    .ro-sheet-body .rgl-tier,.ro-sheet-body .rgl-limit-sheet,.ro-sheet-body .rgl-power-item{
+      background:#faf6ee!important;border-color:#ddd5c4!important;box-shadow:none!important;
+    }
+    .ro-sheet-body .rgl-hax-title,.ro-sheet-body .rgl-free-title,.ro-sheet-body .rgl-power-item-title,
+    .ro-sheet-body .rgl-tier-name,.ro-sheet-body .rgl-tier-num,.ro-sheet-body .rgl-tier-subtitle,
+    .ro-sheet-body .rgl-limit-name,.ro-sheet-body .rgl-ornament,.ro-sheet-body .rgl-hax-group-title,
+    .ro-sheet-body .rgl-compare-label,.ro-sheet-body .rgl-warn-title,.ro-sheet-body .rgl-info-title{
+      color:#151515!important;
+    }
+    .ro-sheet-body .rgl-hax-desc,.ro-sheet-body .rgl-free-desc,.ro-sheet-body .rgl-power-item-desc,
+    .ro-sheet-body .rgl-compare-text,.ro-sheet-body .rgl-info-desc,.ro-sheet-body .rgl-warn-desc,
+    .ro-sheet-body .rgl-limit-line,.ro-sheet-body .rgl-limit-subnote,.ro-sheet-body .rgl-limit-thermals,
+    .ro-sheet-body .rgl-tier-stats,.ro-sheet-body .rgl-declaration,.ro-sheet-body .rgl-cd-row,
+    .ro-sheet-body .rgl-verb-note,.ro-sheet-body .rgl-verb-example,.ro-sheet-body .rgl-verb-tense{
+      color:#343434!important;
+    }
+    .ro-sheet-body .rgl-hax-link{color:#7b1111!important;border-bottom-color:rgba(123,17,17,.3)!important}
+    .ro-sheet-body .rgl-hax-link::after{color:#7b1111!important}
+    .ro-sheet-body .rgl-verb-row{
+      background:#f3eee5!important;
+      border:1px solid #d7c7ab!important;
+      box-shadow:none!important;
+    }
+    .ro-sheet-body .rgl-verb-example{color:#3d4756!important}
+    .ro-sheet-body .rgl-verb-note{color:#2f3640!important}
+    .ro-sheet-body .rgl-verb-note strong{color:#b91c1c!important}
+    .ro-sheet-body mark,.ro-sheet-body .ro-mark{
+      background:#ffe566;color:#111;padding:0 .12em;border-radius:3px;
+    }
+    /* ── NO COPY ── */
+    #ro-content{-webkit-user-select:none;user-select:none}
+
+    /* ── STATE CARDS ── */
+    .ro-state{
+      margin:44px 44px;padding:52px 32px;
+      border-radius:16px;text-align:center;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+    }
+    .ro-state-icon{font-size:2.6rem;margin-bottom:14px}
+    .ro-state-title{font-family:'Teko',sans-serif;font-size:2.4rem;color:#fff;line-height:.9}
+    .ro-state-copy{margin-top:10px;color:#6a7c8e;font-size:.96rem;line-height:1.6;max-width:520px;margin-inline:auto}
+    .ro-state-copy a{color:var(--ro-gold);text-decoration:underline}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px){
+      .ro-layout{grid-template-columns:1fr}
+      .ro-sidebar{position:static;height:auto}
+      .ro-toc-wrap{display:none}
+      .ro-masthead{padding:24px 22px;min-height:280px}
+      .ro-masthead-gif{width:55%;opacity:.12}
+      .ro-toolbar{padding:9px 22px}
+      .ro-credits{padding-left:22px;padding-right:22px}
+      .ro-media-duo{display:block}
+      .ro-cover{margin:20px 16px 0;padding:18px 20px}
+      .ro-articles{padding:0 16px 48px}
+      .ro-sheet-head{grid-template-columns:1fr}
+      .ro-sheet-aside{align-items:flex-start}
+      .ro-sheet-body,.ro-sheet-head{padding:18px 20px}
+    }
+    @media(max-width:600px){
+      .ro-masthead-title{font-size:2.6rem}
+      .ro-cover-title{font-size:1.8rem}
+      .ro-gif-frame{height:136px}
+      .ro-sheet-title{font-size:1.6rem}
+      .ro-state{margin:24px 16px;padding:32px 20px}
+      .ro-voice-box{padding:11px 12px}
+      .ro-voice-select{min-width:0;width:100%}
+      .ro-voice-stop{width:100%}
+      .ro-credits{padding-left:16px;padding-right:16px}
+      .ro-media-duo{display:block}
+    }
+  </style>
+  <style id="ro-canonical-rules"></style>
+</head>
+<body>
+<div class="ro-layout">
+
+  <!-- ██ SIDEBAR ██ -->
+  <aside class="ro-sidebar">
+    <div class="ro-sidebar-logo">
+      <a href="/reglamento">
+        <div class="ro-logo-badge">B</div>
+        <div>
+          <span class="ro-logo-title">Bellator</span>
+          <span class="ro-logo-sub">Dossier editorial</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="ro-search-panel">
+      <label class="ro-search-wrap" for="ro-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="ro-search-input" id="ro-search" type="search" placeholder="Buscar regla, HAX, división…" autocomplete="off">
+      </label>
+    </div>
+
+    <div class="ro-side-section">
+      <div class="ro-side-label">Capas</div>
+      <div class="ro-layer-list" id="ro-layer-list">
+        <button class="ro-layer-btn active" data-layer="all"><span class="ro-layer-dot" style="background:var(--ro-gold)"></span>Todas</button>
+        <button class="ro-layer-btn" data-layer="bellator"><span class="ro-layer-dot" style="background:var(--cat-divisiones)"></span>Bellator</button>
+        <button class="ro-layer-btn" data-layer="convivencia"><span class="ro-layer-dot" style="background:var(--cat-convivencia)"></span>Convivencia</button>
+        <button class="ro-layer-btn" data-layer="combate"><span class="ro-layer-dot" style="background:var(--cat-combate)"></span>Combate</button>
+      </div>
+    </div>
+
+    <div class="ro-side-section">
+      <div class="ro-side-label">Subcategorías</div>
+      <div class="ro-cat-list" id="ro-cat-list"></div>
+    </div>
+
+    <div class="ro-side-section" style="padding-bottom:0">
+      <div class="ro-side-label">Índice</div>
+    </div>
+    <nav class="ro-toc-wrap" id="ro-toc"></nav>
+
+    <div class="ro-sidebar-footer">
+      <a class="ro-back-btn" href="/reglamento">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Volver al Reglamento
+      </a>
+    </div>
+  </aside>
+
+  <!-- ██ MAIN ██ -->
+  <main class="ro-main">
+
+    <!-- MASTHEAD con GIF de fondo -->
+    <div class="ro-masthead">
+      <img class="ro-masthead-gif"
+        src="https://media.giphy.com/media/c4p59oQhRFE1W/giphy.gif"
+        alt="" loading="lazy" onerror="this.style.display='none'">
+      <div class="ro-masthead-inner">
+        <div class="ro-masthead-badge">
+          <svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="3.5" fill="currentColor"/></svg>
+          Archivo Oficial · Bellator RolBattle 2026
+        </div>
+        <h1 class="ro-masthead-title">Reglamento<br><em>Solo Lectura</em></h1>
+        <p class="ro-masthead-sub">Dossier editorial continuo — combate, HAX, convivencia, divisiones y juzgado en un solo flujo.</p>
+        <div class="ro-masthead-tags">
+          <span class="ro-masthead-tag">Búsqueda activa</span>
+          <span class="ro-masthead-tag">Índice anclado</span>
+          <span class="ro-masthead-tag">Filtro por capa</span>
+          <span class="ro-masthead-tag">GIFs de ejemplo</span>
+          <span class="ro-masthead-tag">Sincronizado</span>
+        </div>
+        <div class="ro-masthead-count" id="ro-masthead-count">Cargando…</div>
+        <div class="ro-voice-box" aria-label="Voz del narrador del dossier">
+          <span class="ro-voice-chip">Narrador Piper</span>
+          <select class="ro-voice-select" id="ro-voice-select" data-tts-voice-select></select>
+          <button class="ro-voice-stop" type="button" id="ro-voice-stop">Detener voz</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREDITS -->
+    <div class="ro-credits">
+      <div class="ro-credits-inner">
+        <span class="ro-credits-icon">⚔️</span>
+        <div>
+          <span class="ro-credits-label">Créditos</span>
+          <span class="ro-credits-text">Reglamento y sistema de combate Bellator creado por <strong>Bandet</strong> y el <em>Odiado Clan Orochi</em>. Plataforma web y dossier digital desarrollados por <strong>Bandet</strong>.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR STICKY -->
+    <div class="ro-toolbar">
+      <span class="ro-toolbar-label">Dossier Bellator</span>
+      <span class="ro-toolbar-count" id="ro-count">—</span>
+    </div>
+
+    <!-- CONTENIDO DINÁMICO -->
+    <div id="ro-content">
+      <div class="ro-state" id="ro-loading">
+        <div class="ro-state-icon">⚙️</div>
+        <h2 class="ro-state-title">Montando el dossier</h2>
+        <p class="ro-state-copy">Se importa el reglamento canónico. Solo tarda un momento.</p>
+      </div>
+      <div class="ro-state" id="ro-empty" hidden>
+        <div class="ro-state-icon">🔍</div>
+        <h2 class="ro-state-title">Sin resultados</h2>
+        <p class="ro-state-copy">Prueba con otra palabra o quita los filtros.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/tts-client.js"></script>
+<script>
+(function(){
+"use strict";
+
+var roActiveAudioBtn = null;
+var roVoiceSelect = null;
+
+/* ── META POR CATEGORÍA: color, GIF de portada, GIFs por sección ── */
+var CAT = {
+  convivencia:{layer:'convivencia',label:'Convivencia',color:'#3b82f6',
+    coverGif:'https://media.giphy.com/media/nLJAs215zpyqA/giphy.gif',
+    coverSource:'Utawarerumono via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/RK7d8948SrLpS4yZ8f/giphy.gif',cap:'Spam, apelación y escala disciplinaria',source:'Funimation via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/uD9ys1HkUSbuMJciFe/giphy.gif',cap:'Código de honor, rivalidad y conducta táctica',source:'Crunchyroll via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/YaUOSO2UAix5r62vRB/giphy.gif',cap:'Disciplina mental y foco competitivo',source:'Baki via Giphy'}
+    ]
+  },
+  divisiones:{layer:'bellator',label:'Divisiones',color:'#10b981',
+    coverGif:'https://media.giphy.com/media/gfkF9dCTbM8gM90E51/giphy.gif',
+    coverSource:'TVGalicia via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/ZpOycNIkRTpsyDgdTG/giphy.gif',cap:'Escala divisional y territorio competitivo',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/fytdvZKErZiwTLsZgA/giphy.gif',cap:'Ranking global — velocidad de Quicksilver',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/JAk1MzuEvhSqTW66SB/giphy.gif',cap:'Ascenso y presión por escalón',source:'Dragon Ball Sparking Zero via Giphy'}
+    ]
+  },
+  sc:{layer:'combate',label:'Sistema',color:'#8b5cf6',
+    coverGif:'https://media.giphy.com/media/YgM0iEEUr05NLaR0XO/giphy.gif',
+    coverSource:'Jujutsu Kaisen via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/XpFcYeXZbRWeob95oI/giphy.gif',cap:'Mecánica base del sistema de combate',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/o59XjVXy3dErtsT3Ei/giphy.gif',cap:'Intercambio, lectura y respuesta',source:'Jujutsu Kaisen via Giphy'}
+    ]
+  },
+  combate:{layer:'combate',label:'Combate',color:'#ef4444',
+    coverGif:'https://media.giphy.com/media/1xONKAmjT1GHFpkLRd/giphy.gif',
+    coverSource:'Anime fight via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/BGZTfUlsBmgaPLmKiN/giphy.gif',cap:'Fase de apertura — ambientación narrativa',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/hYxfXTcDzwzUk/giphy.gif',cap:'Marco operativo y protocolo de etiqueta',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/c4p59oQhRFE1W/giphy.gif',cap:'Política de integridad narrativa',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/qsLVENvjyRHNu/giphy.gif',cap:'Gestión de acciones y dinámica de combate',source:'Anime fight archive via Giphy'}
+    ]
+  },
+  poderes:{layer:'combate',label:'HAX',color:'#f59e0b',
+    coverGif:'https://media.giphy.com/media/n4lry0QHHlLVVaZWz4/giphy.gif',
+    coverSource:'BANDAI NAMCO via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/l2JJHdKaR3agT2MVi/giphy.gif',cap:'Choque de titanes — Batman vs Superman',source:'Batman v Superman via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/KmG26GNmdWOUE/giphy.gif',cap:'HAX, presión y lectura de capacidades',source:'Funimation via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/FgiqVS360M3RGPjm9y/giphy.gif',cap:'Despliegue técnico y amenaza escalada',source:'Dragon Ball Super via Giphy'}
+    ]
+  },
+  redaccion:{layer:'combate',label:'Redacción',color:'#ec4899',
+    coverGif:'https://media.giphy.com/media/RDkH4q3dT6ACFMrCQO/giphy.gif',
+    coverSource:'Jujutsu Kaisen via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/YlbpBydX5mlrgGHu4Y/giphy.gif',cap:'Meta-rol, presión y orden narrativo',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/wiaoWlW17fqIo/giphy.gif',cap:'Pasividad, huida y defensa estéril',source:'Dragon Ball Z via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/m0Q3puFE9wT8mpsME6/giphy.gif',cap:'Cierre narrativo y ajuste fino del texto',source:'Jujutsu Kaisen via Giphy'}
+    ]
+  },
+  tiempos:{layer:'combate',label:'Tiempos',color:'#06b6d4',
+    coverGif:'https://media.giphy.com/media/U0eIOz45aRCH1pny2M/giphy.gif',
+    coverSource:'Baki Hanma via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/9oWrLKc7ryOt3XvHZY/giphy.gif',cap:'Stats y aclaraciones de tiempo — Yujiro entra al dossier',source:'Baki via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/VDZDQWaCR2YhQ0qeUo/giphy.gif',cap:'Ritmo del intercambio y ventanas de acción',source:'Crunchyroll via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/Q61ar4HvKga83trZKs/giphy.gif',cap:'Tiempo de lectura y adaptación — Musashi',source:'Baki via Giphy'}
+    ]
+  },
+  niveles:{layer:'combate',label:'Niveles',color:'#a855f7',
+    coverGif:'https://media.giphy.com/media/14fDAUGhWvgiyc/giphy.gif',
+    coverSource:'Funimation via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/FMhLMAVWdE1a0/giphy.gif',cap:'Escala, choque y cierre del veredicto',source:'Batman via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/A2w0A1JzVEW1G/giphy.gif',cap:'Escalado entre cortes y jerarquías',source:'Dragon Ball GT via Giphy'}
+    ]
+  },
+  juez:{layer:'combate',label:'Jueces',color:'#f97316',
+    coverGif:'https://media.giphy.com/media/06J6jhrtTu2hgJ4C3u/giphy.gif',
+    coverSource:'Dragon Ball Z via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/h3Jxu7a7pd72w/giphy.gif',cap:'Criterios, lectura y veredicto técnico',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/6D0tp2M0nBVkF0AP7T/giphy.gif',cap:'Revisión final y castigo del error',source:'Jujutsu Kaisen via Giphy'}
+    ]
+  },
+  crossover:{layer:'combate',label:'Crossover',color:'#14b8a6',
+    coverGif:'https://media.giphy.com/media/CVrPwH916t3ASL0Ff1/giphy.gif',
+    coverSource:'BANDAI NAMCO via Giphy',
+    gifs:[
+      {kind:'gif',url:'https://media.giphy.com/media/lSzihjWuCQ57W/giphy.gif',cap:'Choque de sistemas distintos',source:'Funimation via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/1SEjdMlXPX0CbkOCNC/giphy.gif',cap:'Cruce de poder y lectura entre universos',source:'SuperRareBears via Giphy'}
+    ]
+  }
+};
+var DEFAULT_CAT={layer:'combate',label:'Regla',color:'#ef4444',coverGif:'',gifs:[]};
+function cm(cat){return CAT[cat]||DEFAULT_CAT;}
+function gifFor(cat,idx){var g=cm(cat).gifs;return idx<g.length?g[idx]:null;}
+
+/* ── STATE ── */
+var state={layer:'all',category:'all',query:'',sections:[]};
+
+/* ── UTILS ── */
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function escRe(v){return v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function slug(v){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')||'s';}
+function textOf(h){var d=document.createElement('div');d.innerHTML=h;return d.textContent||'';}
+function summaryOf(t){var s=String(t||'').replace(/\s+/g,' ').trim();return s.length<=260?s:s.slice(0,257)+'…';}
+
+/* ── EXTRACT ── */
+function injectStyles(doc){
+  var s=doc.querySelector('style');
+  if(s) document.getElementById('ro-canonical-rules').textContent=s.textContent;
+}
+function normalizeBody(el){
+  el.querySelectorAll('.rgl-sec-header').forEach(function(n){n.remove();});
+  el.querySelectorAll('[onclick]').forEach(function(n){if(!n.classList.contains('rgl-power-tab'))n.removeAttribute('onclick');});
+}
+function extractSections(doc){
+  return Array.prototype.slice.call(doc.querySelectorAll('.rgl-block[data-category] .rgl-section'))
+  .map(function(sec,i){
+    var block=sec.closest('.rgl-block');
+    var cat=block?block.getAttribute('data-category'):'combate';
+    var m=cm(cat);
+    var labelEl=sec.querySelector('.rgl-sec-label');
+    var badgeEl=sec.querySelector('.rgl-sec-badge');
+    var bodyEl=sec.querySelector('.rgl-sec-body');
+    var title=labelEl?labelEl.textContent.trim():'Sección '+(i+1);
+    var badge=badgeEl?badgeEl.textContent.trim():m.label;
+    var clone=bodyEl?bodyEl.cloneNode(true):document.createElement('div');
+    normalizeBody(clone);
+    var firstP=clone.querySelector('p');
+    var summary=summaryOf(firstP?firstP.textContent:clone.textContent);
+    return{
+      id:slug(m.layer+'-'+m.label+'-'+title)+'-'+(i+1),
+      title:title,badge:badge,
+      category:cat,categoryLabel:m.label,layer:m.layer,
+      summary:summary,bodyHtml:clone.innerHTML,
+      searchText:[title,badge,m.label,m.layer,textOf(clone.innerHTML)].join(' ').toLowerCase(),
+      index:i
+    };
+  });
+}
+
+/* ── FILTER ── */
+function filtered(){
+  var q=state.query.trim().toLowerCase();
+  return state.sections.filter(function(s){
+    if(state.layer!=='all'&&s.layer!==state.layer) return false;
+    if(state.category!=='all'&&s.category!==state.category) return false;
+    if(q) return s.searchText.indexOf(q)!==-1;
+    return true;
+  });
+}
+
+/* ── HIGHLIGHT ── */
+function highlight(root,query){
+  if(!query) return;
+  var safe=escRe(query);if(!safe) return;
+  var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  var nodes=[];var node;
+  while((node=walker.nextNode())){
+    var p=node.parentElement;
+    if(!p||['SCRIPT','STYLE','MARK'].indexOf(p.tagName)!==-1) continue;
+    if(node.textContent.toLowerCase().indexOf(query.toLowerCase())!==-1) nodes.push(node);
+  }
+  var re=new RegExp('('+safe+')','gi');
+  nodes.forEach(function(n){
+    var span=document.createElement('span');
+    span.innerHTML=esc(n.textContent).replace(re,'<mark class="ro-mark">$1</mark>');
+    n.parentNode.replaceChild(span,n);
+  });
+}
+
+/* ── SIDEBAR FILTERS ── */
+function updateLayerBtns(){
+  document.querySelectorAll('[data-layer]').forEach(function(b){
+    b.classList.toggle('active',b.getAttribute('data-layer')===state.layer);
+  });
+}
+function updateCatList(){
+  var used={};var cats=[];
+  state.sections.forEach(function(s){
+    if(state.layer!=='all'&&s.layer!==state.layer) return;
+    if(used[s.category]) return;
+    used[s.category]=true;
+    cats.push({id:s.category,label:s.categoryLabel,color:cm(s.category).color});
+  });
+  var el=document.getElementById('ro-cat-list');
+  var html='<button class="ro-cat-btn'+(state.category==='all'?' active':'')+'" data-cat="all"><span class="ro-cat-dot" style="background:var(--ro-gold)"></span>Todas</button>';
+  cats.forEach(function(c){
+    html+='<button class="ro-cat-btn'+(state.category===c.id?' active':'')+'" data-cat="'+esc(c.id)+'"><span class="ro-cat-dot" style="background:'+esc(c.color)+'"></span>'+esc(c.label)+'</button>';
+  });
+  el.innerHTML=html;
+}
+function updateToc(sections){
+  var el=document.getElementById('ro-toc');
+  el.innerHTML=sections.map(function(s){
+    var m=cm(s.category);
+    return '<a class="ro-toc-link" href="#'+esc(s.id)+'"><span class="ro-toc-cat" style="color:'+esc(m.color)+'">'+esc(m.label)+'</span><span class="ro-toc-name">'+esc(s.title)+'</span></a>';
+  }).join('');
+}
+
+/* ── RENDER ── */
+function render(){
+  var sections=filtered();
+  updateLayerBtns();
+  updateCatList();
+  updateToc(sections);
+
+  var countEl=document.getElementById('ro-count');
+  var mastEl=document.getElementById('ro-masthead-count');
+  var emptyEl=document.getElementById('ro-empty');
+  var contentEl=document.getElementById('ro-content');
+
+  if(document.getElementById('ro-loading')) document.getElementById('ro-loading').remove();
+  contentEl.querySelectorAll('.ro-cover,.ro-articles').forEach(function(n){n.remove();});
+
+  countEl.textContent=sections.length+' secciones';
+  if(mastEl) mastEl.textContent=sections.length+' secciones en este dossier';
+
+  if(!sections.length){emptyEl.hidden=false;return;}
+  emptyEl.hidden=true;
+
+  /* agrupar por categoría en orden de aparición */
+  var groups=[];var gmap={};
+  sections.forEach(function(s){
+    if(!gmap[s.category]){gmap[s.category]={cat:s.category,items:[]};groups.push(gmap[s.category]);}
+    gmap[s.category].items.push(s);
+  });
+
+  var query=state.query.trim();
+
+  groups.forEach(function(g){
+    var m=cm(g.cat);
+
+    /* ── PORTADA DE SECCIÓN ── */
+    var cover=document.createElement('div');
+    cover.className='ro-cover';
+    cover.style.background='linear-gradient(150deg,rgba(0,0,0,.64),rgba(0,0,0,.88)),linear-gradient(135deg,'+m.color+' 0%,#060c14 100%)';
+    cover.style.boxShadow='inset 0 0 0 1px '+m.color;
+    var coverHtml='';
+    if(m.coverGif){
+      coverHtml+='<img class="ro-cover-gif" src="'+esc(m.coverGif)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    }
+    coverHtml+='<div class="ro-cover-overlay" style="background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 65%),linear-gradient(to right,rgba(0,0,0,.68) 0%,transparent 52%)"></div>';
+    coverHtml+='<div class="ro-cover-inner">';
+    coverHtml+='<div class="ro-cover-chip" style="border-color:'+esc(m.color)+';color:'+esc(m.color)+'"><span class="ro-cover-dot" style="background:'+esc(m.color)+'"></span>'+esc(m.label)+'</div>';
+    coverHtml+='<div class="ro-cover-title">'+esc(m.label)+'</div>';
+    coverHtml+='<div class="ro-cover-meta">'+g.items.length+' sección'+(g.items.length!==1?'es':'')+'</div>';
+    if(m.coverSource) coverHtml+='<div class="ro-cover-source">Fuente visual: '+esc(m.coverSource)+'</div>';
+    coverHtml+='</div>';
+    cover.innerHTML=coverHtml;
+    contentEl.insertBefore(cover,emptyEl);
+
+    /* ── SHEETS ── */
+    var wrap=document.createElement('div');
+    wrap.className='ro-articles';
+
+    g.items.forEach(function(s,idx){
+      var gifObj=gifFor(g.cat,idx);
+      var gifHtml='';
+      if(gifObj){
+        var mediaKind=gifObj.kind||'gif';
+        var mediaTag='';
+        var staticUrl=gifObj.url.replace('/giphy.gif','/200_s.gif');
+        mediaTag=[
+          '<picture>',
+          '<source media="(max-width:767px)" srcset="'+esc(staticUrl)+'">',
+          '<img class="ro-gif" src="'+esc(gifObj.url)+'" alt="Ejemplo visual" loading="lazy" onerror="this.parentElement.parentElement.style.display=\'none\'">',
+          '</picture>'
+        ].join('');
+        gifHtml=[
+          '<div class="ro-media-duo is-single">',
+          gifObj?'<div class="ro-gif-frame" data-kind="'+esc(mediaKind)+'"><span class="ro-gif-kind">'+(mediaKind==='image'?'Imagen':'GIF')+'</span>'+mediaTag+'<div class="ro-gif-caption">'+esc(gifObj.cap)+(gifObj.source?'<span class="ro-gif-credit">Fuente: '+esc(gifObj.source)+'</span>':'')+'</div></div>':'',
+          '</div>'
+        ].join('');
+      }
+
+      var art=document.createElement('article');
+      art.className='ro-sheet';
+      art.id=s.id;
+      art.style.setProperty('--ro-accent', m.color);
+      art.setAttribute('data-layer',s.layer);
+      art.setAttribute('data-category',s.category);
+      art.innerHTML=[
+        '<div class="ro-sheet-head">',
+        '<div>',
+        '<div class="ro-sheet-tag-row">',
+        '<span class="ro-sheet-cat" style="background:'+esc(m.color)+'">'+esc(m.label)+'</span>',
+        '<span class="ro-sheet-num">'+esc(m.label)+' · '+(idx+1)+' / '+g.items.length+'</span>',
+        '</div>',
+        '<h2 class="ro-sheet-title">'+esc(s.title)+'</h2>',
+        '<p class="ro-sheet-summary">'+esc(s.summary)+'</p>',
+        '</div>',
+        '<div class="ro-sheet-aside">',
+        '<span class="ro-sheet-badge">'+esc(s.badge)+'</span>',
+        '<button class="ro-audio-btn" type="button" aria-label="Escuchar artículo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span>Escuchar</span></button>',
+        '<a class="ro-sheet-link" href="/reglamento">',
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+        'Fuente</a>',
+        '</div>',
+        '</div>',
+        gifHtml,
+        '<div class="ro-sheet-body rgl-prose">'+s.bodyHtml+'</div>'
+      ].join('');
+
+      if(query) highlight(art.querySelector('.ro-sheet-body'),query);
+      wrap.appendChild(art);
+    });
+
+    contentEl.insertBefore(wrap,emptyEl);
+  });
+}
+
+function setupTts(){
+  roVoiceSelect = document.getElementById('ro-voice-select');
+  if (window.BellatorTTS) window.BellatorTTS.populateSelect(roVoiceSelect);
+  var stopBtn = document.getElementById('ro-voice-stop');
+  if (stopBtn) {
+    stopBtn.addEventListener('click', function(){
+      if (window.BellatorTTS && window.BellatorTTS.isSpeaking()) window.BellatorTTS.stop();
+      if (roActiveAudioBtn) {
+        roActiveAudioBtn.classList.remove('is-speaking');
+        var label = roActiveAudioBtn.querySelector('span');
+        if (label) label.textContent = 'Escuchar';
+        roActiveAudioBtn = null;
+      }
+    });
+  }
+}
+
+function speakSheetText(article, btn){
+  if (!window.BellatorTTS || !article) return;
+  var body = article.querySelector('.ro-sheet-body');
+  var title = article.querySelector('.ro-sheet-title');
+  var summary = article.querySelector('.ro-sheet-summary');
+  var chunks = [];
+  if (title && title.textContent) chunks.push(title.textContent.trim() + '.');
+  if (summary && summary.textContent) chunks.push(summary.textContent.trim());
+  if (body) {
+    Array.prototype.slice.call(body.querySelectorAll('p, li')).some(function(node, index){
+      var copy = String(node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
+      if (!copy) return false;
+      chunks.push(copy);
+      return index >= 2;
+    });
+  }
+  var txt = chunks.join(' ').replace(/\s+/g,' ').trim();
+  if (!txt) return;
+  if (txt.length > 900) txt = txt.slice(0, 900).trim() + '...';
+
+  if (roActiveAudioBtn && roActiveAudioBtn !== btn) {
+    roActiveAudioBtn.classList.remove('is-speaking');
+    var prevLabel = roActiveAudioBtn.querySelector('span');
+    if (prevLabel) prevLabel.textContent = 'Escuchar';
+  }
+  if (window.BellatorTTS.isSpeaking() && roActiveAudioBtn === btn) {
+    window.BellatorTTS.stop();
+    btn.classList.remove('is-speaking');
+    var stopLabel = btn.querySelector('span');
+    if (stopLabel) stopLabel.textContent = 'Escuchar';
+    roActiveAudioBtn = null;
+    return;
+  }
+
+  roActiveAudioBtn = btn;
+  var label = btn.querySelector('span');
+  btn.classList.add('is-speaking');
+  if (label) label.textContent = 'Generando...';
+  window.BellatorTTS.speak(txt, {
+    voice: roVoiceSelect ? roVoiceSelect.value : '',
+    onPlay: function(){
+      if (label) label.textContent = 'Detener';
+    },
+    onEnd: function(){
+      btn.classList.remove('is-speaking');
+      if (label) label.textContent = 'Escuchar';
+      if (roActiveAudioBtn === btn) roActiveAudioBtn = null;
+    },
+    onError: function(message){
+      btn.classList.remove('is-speaking');
+      if (label) label.textContent = 'Error';
+      if (roActiveAudioBtn === btn) roActiveAudioBtn = null;
+      window.setTimeout(function(){
+        if (label) label.textContent = 'Escuchar';
+      }, 1600);
+      if (message) console.error(message);
+    }
+  });
+}
+
+/* ── TOC SCROLL ── */
+function tocScroll(){
+  var links=Array.prototype.slice.call(document.querySelectorAll('.ro-toc-link'));
+  var pairs=links.map(function(l){return{link:l,el:document.getElementById(l.getAttribute('href').slice(1))};}).filter(function(p){return!!p.el;});
+  function upd(){
+    var cur=pairs[0];
+    pairs.forEach(function(p){if(p.el.getBoundingClientRect().top<=180) cur=p;});
+    links.forEach(function(l){l.classList.remove('active');});
+    if(cur) cur.link.classList.add('active');
+  }
+  upd();
+  window.addEventListener('scroll',upd,{passive:true});
+}
+
+/* ── EVENTS ── */
+function wireEvents(){
+  document.getElementById('ro-search').addEventListener('input',function(){
+    state.query=this.value||'';render();tocScroll();
+  });
+  document.getElementById('ro-layer-list').addEventListener('click',function(e){
+    var b=e.target.closest('[data-layer]');if(!b) return;
+    state.layer=b.getAttribute('data-layer');state.category='all';render();tocScroll();
+  });
+  document.getElementById('ro-cat-list').addEventListener('click',function(e){
+    var b=e.target.closest('[data-cat]');if(!b) return;
+    state.category=b.getAttribute('data-cat');render();tocScroll();
+  });
+  /* power module tabs */
+  document.addEventListener('click',function(e){
+    var tab=e.target.closest('.rgl-power-tab');if(!tab) return;
+    var mod=tab.closest('.rgl-power-module');if(!mod) return;
+    var div=tab.textContent.toLowerCase().indexOf('universal')!==-1?'universal':'ciudad';
+    mod.querySelectorAll('.rgl-power-tab').forEach(function(t){t.classList.toggle('active',t===tab);});
+    mod.querySelectorAll('.rgl-power-pane').forEach(function(p){p.classList.toggle('active',p.getAttribute('data-power-division')===div);});
+  });
+  /* hax search */
+  document.addEventListener('input',function(e){
+    if(e.target&&e.target.id==='rgl-hax-search'){
+      var body=e.target.closest('.ro-sheet-body');if(!body) return;
+      var reg=body.querySelector('.rgl-hax-registry');if(!reg) return;
+      var q=String(e.target.value||'').trim().toLowerCase();var cnt=0;
+      reg.querySelectorAll('.rgl-hax-card').forEach(function(c){
+        var v=!q||c.textContent.toLowerCase().indexOf(q)!==-1;
+        c.style.display=v?'':'none';if(v)cnt++;
+      });
+      var counter=body.querySelector('#rgl-hax-count');if(counter)counter.textContent=cnt+' resultado'+(cnt!==1?'s':'');
+      var emp=body.querySelector('#rgl-hax-empty');if(emp)emp.style.display=cnt?'none':'';
+    }
+  });
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.ro-audio-btn');
+    if (!btn) return;
+    e.preventDefault();
+    speakSheetText(btn.closest('.ro-sheet'), btn);
+  });
+}
+
+/* ── LOAD ── */
+async function load(){
+  try{
+    var resp=await fetch('/reglamento',{cache:'no-store'});
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    var html=await resp.text();
+    var doc=new DOMParser().parseFromString(html,'text/html');
+    injectStyles(doc);
+    state.sections=extractSections(doc);
+    render();wireEvents();tocScroll();
+  }catch(err){
+    var el=document.getElementById('ro-loading');
+    if(el) el.innerHTML='<div class="ro-state-icon">⚠️</div><h2 class="ro-state-title">Error al cargar</h2><p class="ro-state-copy">No se pudo importar el reglamento. <a href="/reglamento">Abrir reglamento principal</a>.</p>';
+    console.error(err);
+  }
+}
+
+updateCatList();
+setupTts();
+/* ── NO COPY ── */
+document.addEventListener('copy',function(e){e.preventDefault();});
+document.addEventListener('selectstart',function(e){
+  if(e.target.closest('#ro-content'))e.preventDefault();
+});
+
+load();
+})();
+</script>
+<script src="/translate.js"></script>
+</body>
+</html>

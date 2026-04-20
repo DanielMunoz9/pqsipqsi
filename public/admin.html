@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valhala � Security Dashboard</title>
+<style>
+:root {
+  --bg:       #0b0d12;
+  --surface:  #111520;
+  --border:   #1e2540;
+  --accent:   #4f6ef7;
+  --accent2:  #7c3aed;
+  --danger:   #ef4444;
+  --warn:     #f59e0b;
+  --safe:     #22c55e;
+  --muted:    #6b7280;
+  --text:     #e2e8f0;
+  --text2:    #94a3b8;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* ── LOGIN WALL ──────────────────────────────────────────────────── */
+#login-wall {
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh;
+  background: radial-gradient(ellipse at 50% 30%, #1a1f35 0%, var(--bg) 70%);
+}
+.login-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; padding:40px 48px; width:380px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.7);
+}
+.login-logo { text-align:center; margin-bottom:28px; }
+.login-logo svg { width:48px; height:48px; }
+.login-logo h1 { font-size:22px; font-weight:700; margin-top:10px;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.login-logo p { color:var(--muted); font-size:13px; margin-top:4px; }
+.login-field { margin-bottom:18px; }
+.login-field label { display:block; font-size:12px; color:var(--text2);
+  margin-bottom:6px; text-transform:uppercase; letter-spacing:.05em; }
+.login-field input {
+  width:100%; padding:11px 14px; background:#0e1017;
+  border:1px solid var(--border); border-radius:8px; color:var(--text);
+  font-size:14px; outline:none; transition:border-color .2s;
+}
+.login-field input:focus { border-color:var(--accent); }
+.login-btn {
+  width:100%; padding:12px; border:none; border-radius:8px; cursor:pointer;
+  font-size:14px; font-weight:600; letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff; transition:opacity .2s;
+}
+.login-btn:hover { opacity:.85; }
+#login-error {
+  margin-top:14px; padding:10px 14px; border-radius:8px;
+  background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.3);
+  color:var(--danger); font-size:13px; display:none; text-align:center;
+}
+
+/* ── DASHBOARD ───────────────────────────────────────────────────── */
+#dashboard { display:none; }
+
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px; background:var(--surface);
+  border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+}
+.topbar-brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:16px; }
+.topbar-brand .dot { width:8px; height:8px; border-radius:50%;
+  background:var(--safe); box-shadow:0 0 8px var(--safe); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.topbar-right { display:flex; align-items:center; gap:14px; }
+.topbar-right .timer { font-size:12px; color:var(--muted); }
+.logout-btn {
+  padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--text2); cursor:pointer; font-size:13px; transition:all .2s;
+}
+.logout-btn:hover { border-color:var(--danger); color:var(--danger); }
+
+/* ── KPI ROW ─────────────────────────────────────────────────────── */
+.kpi-row {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:16px; padding:24px 24px 0;
+}
+.kpi { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+.kpi-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+.kpi-val { font-size:30px; font-weight:700; margin-top:4px; }
+.kpi-val.danger { color:var(--danger); }
+.kpi-val.warn   { color:var(--warn); }
+.kpi-val.safe   { color:var(--safe); }
+.kpi-val.accent { color:var(--accent); }
+
+/* ── FILTER BAR ──────────────────────────────────────────────────── */
+.filter-bar { display:flex; align-items:center; gap:10px; padding:20px 24px 8px; flex-wrap:wrap; }
+.filter-bar input[type=search] {
+  flex:1; min-width:180px; max-width:280px; padding:8px 14px; background:#0e1017;
+  border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:13px; outline:none;
+}
+.filter-bar input[type=search]:focus { border-color:var(--accent); }
+.fbtn {
+  padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--text2); cursor:pointer; font-size:12px;
+  transition:all .2s; white-space:nowrap;
+}
+.fbtn:hover, .fbtn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.fbtn.warn-btn:hover, .fbtn.warn-btn.active { background:var(--warn); border-color:var(--warn); color:#000; }
+.fbtn.danger-btn:hover, .fbtn.danger-btn.active { background:var(--danger); border-color:var(--danger); color:#fff; }
+.refresh-btn {
+  margin-left:auto; padding:7px 16px; border-radius:8px; cursor:pointer;
+  background:var(--accent); border:none; color:#fff; font-size:12px; font-weight:600; transition:opacity .2s;
+}
+.refresh-btn:hover { opacity:.8; }
+
+/* ── ATTACKER CARDS ──────────────────────────────────────────────── */
+.cards-container { padding:16px 24px 40px; display:flex; flex-direction:column; gap:14px; }
+.attacker-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+.attacker-card.danger-card { border-color:rgba(239,68,68,.4); }
+.attacker-card.warn-card   { border-color:rgba(245,158,11,.4); }
+.attacker-card.safe-card   { border-color:rgba(34,197,94,.25); }
+.card-header {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 18px; cursor:pointer; user-select:none; transition:background .15s;
+}
+.card-header:hover { background:rgba(255,255,255,.03); }
+.threat-badge {
+  flex-shrink:0; padding:3px 10px; border-radius:999px; font-size:11px;
+  font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+}
+.threat-high   { background:rgba(239,68,68,.18); color:var(--danger); border:1px solid rgba(239,68,68,.3); }
+.threat-medium { background:rgba(245,158,11,.18); color:var(--warn);   border:1px solid rgba(245,158,11,.3); }
+.threat-low    { background:rgba(34,197,94,.15);  color:var(--safe);   border:1px solid rgba(34,197,94,.25); }
+.fp-tag {
+  font-size:12px; color:var(--text2); font-family:'Courier New',monospace;
+  background:#0e1017; border:1px solid var(--border); padding:2px 8px;
+  border-radius:6px; flex-shrink:0;
+}
+.card-meta { flex:1; display:flex; gap:16px; font-size:12px; color:var(--muted); flex-wrap:wrap; }
+.visits-count { margin-left:auto; font-size:13px; color:var(--text2); flex-shrink:0; }
+.card-chevron { color:var(--muted); font-size:12px; transition:transform .2s; }
+.card-header.open .card-chevron { transform:rotate(90deg); }
+
+/* ── SESSION TABLE ───────────────────────────────────────────────── */
+.sessions-table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:#0e1017; }
+th {
+  padding:9px 14px; text-align:left; color:var(--muted); font-weight:600;
+  text-transform:uppercase; letter-spacing:.05em; font-size:11px;
+  border-bottom:1px solid var(--border);
+}
+tbody tr { border-bottom:1px solid var(--border); transition:background .1s; }
+tbody tr:hover { background:rgba(255,255,255,.025); }
+td { padding:9px 14px; color:var(--text2); vertical-align:middle; }
+td.mono { font-family:'Courier New',monospace; font-size:11px; }
+.tag { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; }
+.tag-red    { background:rgba(239,68,68,.15); color:var(--danger); }
+.tag-orange { background:rgba(245,158,11,.15); color:var(--warn); }
+.tag-green  { background:rgba(34,197,94,.12);  color:var(--safe); }
+.tag-blue   { background:rgba(79,110,247,.15); color:var(--accent); }
+.tag-gray   { background:rgba(107,114,128,.15);color:var(--muted); }
+.no-data { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+.skeleton { animation:shimmer 1.5s infinite; }
+@keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:.9} }
+.identity-tag {
+  font-size:13px; font-weight:600; color:var(--text);
+  flex-shrink:0; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     LOGIN WALL
+═════════════════════════════════════════════════════════════ -->
+<div id="login-wall">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="12" fill="url(#g1)"/>
+        <path d="M24 10L14 20v8l10 10 10-10v-8L24 10z" fill="rgba(255,255,255,.9)"/>
+        <path d="M24 10L14 20h20L24 10z" fill="rgba(0,0,0,.25)"/>
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="48" y2="48">
+            <stop offset="0%" stop-color="#4f6ef7"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <h1>Valhala Security</h1>
+      <p>Panel de Administraci�n � Acceso Restringido</p>
+    </div>
+    <div class="login-field">
+      <label>Usuario</label>
+      <input type="text" id="l-user" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>Contrase�a</label>
+      <input type="password" id="l-pass" placeholder="��������" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') attemptLogin()">
+    </div>
+    <button class="login-btn" onclick="attemptLogin()">Iniciar Sesi�n</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     DASHBOARD
+═════════════════════════════════════════════════════════════ -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="dot"></div>
+      Valhala � Security Dashboard
+    </div>
+    <div class="topbar-right">
+      <span class="timer" id="next-refresh">Actualizando en 30s</span>
+      <button class="logout-btn" onclick="doLogout()">Cerrar Sesi�n</button>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-label">Total Sesiones</div><div class="kpi-val accent" id="k-total">0</div></div>
+    <div class="kpi"><div class="kpi-label">Perfiles �nicos</div><div class="kpi-val accent" id="k-profiles">0</div></div>
+    <div class="kpi"><div class="kpi-label">VPN Detectadas</div><div class="kpi-val warn" id="k-vpn">0</div></div>
+    <div class="kpi"><div class="kpi-label">Spamhaus / Botnet</div><div class="kpi-val danger" id="k-spam">0</div></div>
+    <div class="kpi"><div class="kpi-label">Atacantes Multi-IP</div><div class="kpi-val danger" id="k-multi">0</div></div>
+    <div class="kpi"><div class="kpi-label">Sesiones Limpias</div><div class="kpi-val safe" id="k-clean">0</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="search" id="search-box" placeholder="&#x1F50D; Buscar por IP, fbclid, fuente�" oninput="applyFilters()">
+    <button class="fbtn active" id="f-all"      onclick="setFilter('all')">Todos</button>
+    <button class="fbtn warn-btn"   id="f-vpn"  onclick="setFilter('vpn')">&#x26A0; VPN</button>
+    <button class="fbtn danger-btn" id="f-spam" onclick="setFilter('spam')">&#x1F9A0; Spamhaus</button>
+    <button class="fbtn danger-btn" id="f-attacker" onclick="setFilter('attacker')">&#x1F6A8; Multi-IP</button>
+    <button class="fbtn"            id="f-24h"  onclick="setFilter('24h')">�ltimas 24h</button>
+    <button class="fbtn"            id="f-fb"   onclick="setFilter('fb')">&#x1F4D8; Facebook</button>
+    <button class="refresh-btn"     onclick="loadData()">&#x21BB; Actualizar</button>
+  </div>
+
+  <div class="cards-container" id="cards-container">
+    <div class="no-data skeleton">Cargando datos de seguridad�</div>
+  </div>
+</div>
+
+
+<script>
+// ───────────────────────────────────────────────────────────────
+// STATE
+// ───────────────────────────────────────────────────────────────
+let jwtToken     = sessionStorage.getItem('valhala_admin_token') || '';
+let allData      = [];
+let activeFilter = 'all';
+let refreshTimer = 30;
+let refreshInterval, countdownInterval;
+const geoCache = {};
+
+// ───────────────────────────────────────────────────────────────
+// LOGIN
+// ───────────────────────────────────────────────────────────────
+async function attemptLogin() {
+  const user  = document.getElementById('l-user').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  try {
+    const res  = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      const rem = data.remaining !== undefined ? ` (${data.remaining} intentos restantes)` : '';
+      errEl.textContent  = (data.error || 'Error de autenticaci�n') + rem;
+      errEl.style.display = 'block';
+      return;
+    }
+    jwtToken = data.token;
+    sessionStorage.setItem('valhala_admin_token', jwtToken);
+    showDashboard();
+  } catch (e) {
+    errEl.textContent  = 'No se puede conectar con el servidor.';
+    errEl.style.display = 'block';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('valhala_admin_token');
+  jwtToken = '';
+  clearInterval(refreshInterval);
+  clearInterval(countdownInterval);
+  document.getElementById('dashboard').style.display  = 'none';
+  document.getElementById('login-wall').style.display = 'flex';
+}
+
+function showDashboard() {
+  document.getElementById('login-wall').style.display = 'none';
+  document.getElementById('dashboard').style.display  = 'block';
+  loadData();
+  startAutoRefresh();
+}
+
+function startAutoRefresh() {
+  clearInterval(refreshInterval);
+  clearInterval(countdownInterval);
+  refreshTimer = 30;
+  refreshInterval   = setInterval(() => { loadData(); refreshTimer = 30; }, 30000);
+  countdownInterval = setInterval(() => {
+    refreshTimer--;
+    document.getElementById('next-refresh').textContent = `Actualizando en ${refreshTimer}s`;
+    if (refreshTimer <= 0) refreshTimer = 30;
+  }, 1000);
+}
+
+// ───────────────────────────────────────────────────────────────
+// DATA LOADING
+// ───────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('/api/visitors', {
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.status === 401) { doLogout(); return; }
+    allData = await res.json() || [];
+    updateKPIs();
+    applyFilters();
+    enrichGeo(allData).then(() => applyFilters()); // geolocalizar en segundo plano
+  } catch (e) {
+    document.getElementById('cards-container').innerHTML =
+      '<div class="no-data">Error al cargar los datos.</div>';
+  }
+}
+
+async function enrichGeo(data) {
+  const ips = [...new Set(data.map(v => v.ip_real_webrtc).filter(ip =>
+    ip && ip !== 'unknown' && ip !== 'timeout' &&
+    !/^(127\.|::1$|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.)/.test(ip)
+  ))].filter(ip => !geoCache[ip]);
+  if (!ips.length) return;
+  try {
+    const r = await fetch('http://ip-api.com/batch?fields=status,country,countryCode,city,isp,query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(ips.slice(0, 100))
+    });
+    for (const g of await r.json()) {
+      if (g.status === 'success') geoCache[g.query] = g;
+    }
+  } catch (_) {}
+}
+
+function parseUA(ua) {
+  if (!ua) return { os: 'Desconocido', browser: '?', icon: '\u{1F4BB}' };
+  const s = ua.toLowerCase();
+  const os = s.includes('windows') ? 'Windows'
+    : s.includes('android')        ? 'Android'
+    : s.includes('iphone') || s.includes('ipad') ? 'iOS'
+    : s.includes('mac os')         ? 'macOS'
+    : s.includes('linux')          ? 'Linux' : 'Otro';
+  const browser = s.includes('edg/')   ? 'Edge'
+    : s.includes('opr/') || s.includes('opera') ? 'Opera'
+    : s.includes('chrome')  ? 'Chrome'
+    : s.includes('firefox') ? 'Firefox'
+    : s.includes('safari')  ? 'Safari' : 'Otro';
+  const icon = (os === 'Android' || os === 'iOS') ? '\u{1F4F1}' : '\u{1F4BB}';
+  return { os, browser, icon };
+}
+
+// ───────────────────────────────────────────────────────────────
+// KPIs
+// ───────────────────────────────────────────────────────────────
+function updateKPIs() {
+  const grouped = groupByFingerprint(allData);
+  const multiIPs = Object.values(grouped).filter(
+    segs => new Set(segs.map(r => r.ip_conexion_hash).filter(Boolean)).size > 1).length;
+  document.getElementById('k-total').textContent    = allData.length;
+  document.getElementById('k-profiles').textContent = Object.keys(grouped).length;
+  document.getElementById('k-vpn').textContent      = allData.filter(v => v.vpn_detectada === true).length;
+  document.getElementById('k-spam').textContent     = allData.filter(v =>
+    v.spamhaus_status && v.spamhaus_status !== 'clean' && v.spamhaus_status !== 'ipv6_skipped').length;
+  document.getElementById('k-multi').textContent    = multiIPs;
+  document.getElementById('k-clean').textContent    = allData.filter(v =>
+    !v.vpn_detectada && (!v.spamhaus_status || v.spamhaus_status === 'clean')).length;
+}
+
+// ───────────────────────────────────────────────────────────────
+// FILTERS
+// ───────────────────────────────────────────────────────────────
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('f-' + f);
+  if (btn) btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q   = (document.getElementById('search-box').value || '').toLowerCase();
+  const now = Date.now();
+  const h24 = 24 * 60 * 60 * 1000;
+  const grouped = groupByFingerprint(allData);
+  const multiIPFps = new Set(Object.entries(grouped)
+    .filter(([, v]) => new Set(v.map(r => r.ip_conexion_hash).filter(Boolean)).size > 1)
+    .map(([k]) => k));
+  const filtered = allData.filter(v => {
+    if (q && !JSON.stringify(v).toLowerCase().includes(q)) return false;
+    switch (activeFilter) {
+      case 'vpn':      return v.vpn_detectada === true;
+      case 'spam':     return v.spamhaus_status && v.spamhaus_status !== 'clean' && v.spamhaus_status !== 'ipv6_skipped';
+      case 'attacker': return multiIPFps.has(v.hardware_fingerprint);
+      case '24h':      return (now - new Date(v.timestamp).getTime()) < h24;
+      case 'fb':       return v.fb_click_id && v.fb_click_id !== '' && v.fb_click_id !== 'no-fbclid';
+    }
+    return true;
+  });
+  renderCards(filtered);
+}
+
+// ───────────────────────────────────────────────────────────────
+// GROUP & RENDER
+// ───────────────────────────────────────────────────────────────
+function groupByFingerprint(data) {
+  const groups = {};
+  for (const v of data) {
+    const key = v.hardware_fingerprint || '__unknown__';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(v);
+  }
+  return groups;
+}
+
+function renderCards(data) {
+  const container = document.getElementById('cards-container');
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="no-data">Sin registros para este filtro.</div>';
+    return;
+  }
+  const groups       = groupByFingerprint(data);
+  const sortedGroups = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
+  container.innerHTML = sortedGroups.map(([fp, sessions]) => {
+    const threat     = computeThreat(sessions);
+    const cardCls    = { high:'danger-card', medium:'warn-card', low:'safe-card' }[threat];
+    const badgeCls   = { high:'threat-high', medium:'threat-medium', low:'threat-low' }[threat];
+    const badgeLbl   = { high:'&#x1F534; Alto Riesgo', medium:'&#x1F7E0; VPN/Proxy', low:'&#x1F7E2; Limpio' }[threat];
+    const lastSeen   = sessions.reduce((m, s) => s.timestamp > m ? s.timestamp : m, '');
+    const lastLabel  = lastSeen ? new Date(lastSeen).toLocaleString('es-ES') : '-';
+    const fbCids     = [...new Set(sessions.map(s => s.fb_click_id).filter(b => b && b !== 'no-fbclid'))];
+    const cid        = 'c' + fp.substring(0,12).replace(/[^a-z0-9]/gi,'_');
+    // Identidad capturada: pseud�nimo visible + nombre/email de autofill
+    const ident      = sessions.find(s => s.pseudonimo || s.nombre_real || s.email_capturado);
+    const identLabel = ident
+      ? escH([ident.pseudonimo, ident.nombre_real, ident.email_capturado].filter(Boolean).join(' � '))
+      : '<em style="color:var(--muted)">An�nimo</em>';
+    // Avatar del jugador (primera sesi�n con avatar_url)
+    const avatarSess = sessions.find(s => s.avatar_url && s.avatar_url.startsWith('http'));
+    const avatarHTML = avatarSess
+      ? `<img src="${escH(avatarSess.avatar_url)}" onerror="this.style.display='none'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(180,80,255,0.6);vertical-align:middle;margin-right:6px;">`
+      : '';
+    // Geolocalizaci�n: GPS exacto primero, luego IP geo como fallback
+    const gpsSess    = [...sessions].reverse().find(s => s.gps_location && s.gps_location.trim());
+    const ipSess     = [...sessions].reverse().find(s => s.ip_real_webrtc && geoCache[s.ip_real_webrtc]);
+    const geo        = ipSess ? geoCache[ipSess.ip_real_webrtc] : null;
+    const geoLabel   = gpsSess
+      ? `?? ${escH(gpsSess.gps_location)}`
+      : (geo ? `${countryFlag(geo.countryCode)} ${[geo.city, geo.country].filter(Boolean).join(', ')}` : '');
+    // OS / Navegador del �ltimo UA disponible
+    const uaSess     = sessions.find(s => s.user_agent);
+    const { os, browser, icon: di } = parseUA(uaSess ? uaSess.user_agent : '');
+    const osBrowser  = uaSess ? `${di} ${os} \u00b7 ${browser}` : '';
+    return `
+<div class="attacker-card ${cardCls}">
+  <div class="card-header" id="h-${cid}" onclick="toggleCard('${cid}')">
+    <span class="threat-badge ${badgeCls}">${badgeLbl}</span>
+    ${avatarHTML}<span class="identity-tag">${identLabel}</span>
+    <div class="card-meta">
+      ${geoLabel ? `<span title="${geo ? escH(geo.isp||'') : ''}">${geoLabel}</span>` : ''}
+      ${osBrowser ? `<span>${osBrowser}</span>` : ''}
+      ${fbCids.length ? `<span>&#x1F4D8; fbclid</span>` : ''}
+      <span>&#x1F551; ${lastLabel}</span>
+    </div>
+    <span class="visits-count">${sessions.length} sesi\u00f3n${sessions.length!==1?'es':''}</span>
+    <span class="card-chevron">&#x25B6;</span>
+  </div>
+  <div id="b-${cid}" style="display:none">
+    <div class="sessions-table-wrap">
+      <table>
+        <thead><tr>
+          <th>Fecha</th><th>Ubicaci�n Real / IP</th><th>VPN</th><th>Spamhaus</th>
+          <th>Pseud�nimo</th><th>Nombre</th><th>Email</th><th>Tel</th><th>Divisi�n</th><th>Dispositivo</th>
+        </tr></thead>
+        <tbody>${sessions.map(renderRow).join('')}</tbody>
+      </table>
+    </div>
+  </div>
+</div>`;
+  }).join('');
+}
+
+function renderRow(v) {
+  const ts     = v.timestamp ? new Date(v.timestamp).toLocaleString('es-ES') : '-';
+  const geo    = v.ip_real_webrtc ? geoCache[v.ip_real_webrtc] : null;
+  const geoStr = (v.gps_location && v.gps_location.trim())
+    ? `?? ${escH(v.gps_location)}`
+    : (geo
+      ? `${countryFlag(geo.countryCode)} ${[geo.city, geo.country].filter(Boolean).join(', ')}`
+      : escH(v.ip_real_webrtc || '-'));
+  const ispStr = (v.gps_location && v.gps_location.trim()) ? escH(v.ip_real_webrtc || '') : (geo ? escH(geo.isp || '') : '');
+  const vpnTag = v.vpn_detectada === true
+    ? '<span class="tag tag-orange">&#x26A0; VPN</span>'
+    : '<span class="tag tag-green">&#x2713; OK</span>';
+  let spamTag;
+  switch (v.spamhaus_status) {
+    case 'listed_xbl':     spamTag = '<span class="tag tag-red">Botnet</span>';    break;
+    case 'listed_sbl':     spamTag = '<span class="tag tag-red">Spam</span>';      break;
+    case 'listed_sbl_css': spamTag = '<span class="tag tag-red">C&amp;C</span>';   break;
+    case 'listed_pbl':     spamTag = '<span class="tag tag-orange">PBL</span>';    break;
+    case 'listed_other':   spamTag = '<span class="tag tag-orange">Listed</span>'; break;
+    case 'ipv6_skipped':   spamTag = '<span class="tag tag-gray">IPv6</span>';     break;
+    default:               spamTag = '<span class="tag tag-green">&#x2713; OK</span>';
+  }
+  const { os, browser, icon: di } = parseUA(v.user_agent);
+  const nombre = escH(v.nombre_real     || '-');
+  const email  = escH(v.email_capturado || '-');
+  const pseudo = escH(v.pseudonimo      || '-');
+  const tel    = escH(v.telefono        || '-');
+  const div    = escH(v.division        || '-');
+  const avatar = (v.avatar_url && v.avatar_url.startsWith('http'))
+    ? `<img src="${escH(v.avatar_url)}" onerror="this.style.display='none'" style="width:22px;height:22px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:4px;">`
+    : '';
+  return `<tr>
+    <td>${ts}</td>
+    <td title="${escH(v.ip_real_webrtc||'')}">${geoStr}${ispStr ? `<br><small style="color:var(--muted)">${ispStr}</small>` : ''}</td>
+    <td>${vpnTag}</td><td>${spamTag}</td>
+    <td>${avatar}${pseudo}</td>
+    <td>${nombre}</td><td>${email}</td><td>${tel}</td><td>${div}</td>
+    <td title="${escH(v.user_agent||'')}">${di} ${escH(os)} � ${escH(browser)}</td>
+  </tr>`;
+}
+
+// ───────────────────────────────────────────────────────────────
+// HELPERS
+// ───────────────────────────────────────────────────────────────
+function computeThreat(sessions) {
+  const isMultiIP = new Set(sessions.map(s => s.ip_conexion_hash).filter(Boolean)).size > 1;
+  if (isMultiIP || sessions.some(s =>
+    s.spamhaus_status && s.spamhaus_status !== 'clean' && s.spamhaus_status !== 'ipv6_skipped'))
+    return 'high';
+  if (sessions.some(s => s.vpn_detectada === true))
+    return 'medium';
+  return 'low';
+}
+
+function toggleCard(id) {
+  const body = document.getElementById('b-' + id);
+  const head = document.getElementById('h-' + id);
+  const open = body.style.display === 'none';
+  body.style.display = open ? 'block' : 'none';
+  head.classList.toggle('open', open);
+}
+
+function countryFlag(cc) {
+  if (!cc || cc.length !== 2) return '&#x1F310;';
+  return String.fromCodePoint(...[...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ───────────────────────────────────────────────────────────────
+// INIT
+// ───────────────────────────────────────────────────────────────
+(function init() {
+  if (jwtToken) showDashboard();
+})();
+</script>
+</body>
+</html>

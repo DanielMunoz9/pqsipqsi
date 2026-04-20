@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clanes — BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; CLANES ACTIVOS</span>
+        <a href="/">HOME</a>
+        <a href="/competidores">DRIVERS</a>
+        <a href="/registro">JOIN</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink bl-navlink--active" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">CLANES</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">LINAJES</span>
+      <span class="bl-event-name">Clanes y familias de Bellator 2026</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <section class="bl-home-hero">
+      <div class="bl-hero-grid">
+        <div class="bl-hero-copy">
+          <div class="bl-hero-copy-inner">
+            <div class="bl-hero-eyebrow">LINAJES · FAMILIAS · ALIANZAS</div>
+            <h1 class="bl-hero-title">CLANES<br><span class="bl-gold">& LINAJES</span></h1>
+            <p class="bl-hero-desc">Los competidores de Bellator se agrupan en clanes. Cada guerrero pertenece a un único linaje. Crea el tuyo o únete a uno ya existente.</p>
+            <div class="bl-toolbar" style="margin-top:8px">
+              <button class="bl-filter-btn active" id="btn-crear-clan" style="background:rgba(212,175,55,.15);border-color:var(--bl-gold);color:var(--bl-gold)">
+                + Crear Clan
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bl-hero-aside">
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Buscar clan</div>
+            <div class="bl-gsearch-wrap" style="max-width:none;margin-top:10px">
+              <div class="bl-gsearch-ring">
+                <div class="bl-gsearch-inner">
+                  <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.56a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
+                  <input type="text" id="clan-search" class="bl-gsearch-input" placeholder="Buscar clan..." autocomplete="off">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Sobre los clanes</div>
+            <div class="bl-aside-list">
+              <div><span>Un clan por jugador</span><span>✓</span></div>
+              <div><span>Línea familiar</span><span>✓</span></div>
+              <div><span>Líder designado</span><span>✓</span></div>
+              <div><span>Sin límite de miembros</span><span>✓</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulario crear clan (oculto por defecto) -->
+    <section class="bl-section" id="bl-crear-clan-section" style="display:none">
+      <div class="bl-section-head">
+        <h2 class="bl-section-h2">Crear nuevo clan</h2>
+        <button class="bl-section-link" id="btn-cancelar-clan" style="background:none;border:none;cursor:pointer;color:var(--bl-muted);font-size:0.85rem">✕ Cancelar</button>
+      </div>
+      <div style="max-width:540px;margin:0 auto">
+        <div class="bf-group">
+          <label>Nombre del clan <span style="color:var(--bl-gold)">*</span></label>
+          <input type="text" id="clan-name" class="bl-gsearch-input" placeholder="Nombre único del clan..." maxlength="64" autocomplete="off" style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.95rem">
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>Descripción</label>
+          <textarea id="clan-desc" placeholder="Historia o descripción del clan..." maxlength="300" rows="3" style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.95rem;resize:vertical;font-family:inherit"></textarea>
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>URL del escudo / logo</label>
+          <input type="url" id="clan-logo" class="bl-gsearch-input" placeholder="https://..." autocomplete="off" style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.95rem">
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>Tu pseudónimo (líder del clan)</label>
+          <input type="text" id="clan-leader" class="bl-gsearch-input" placeholder="Tu pseudónimo de guerrero..." maxlength="64" autocomplete="off" style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.95rem">
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>Color del clan <span style="font-size:.8rem;color:var(--bl-muted)">(aparecerá en la card del clan)</span></label>
+          <div class="bl-cp-row" id="bl-cp-row-clan"></div>
+          <input type="hidden" id="clan-primary-color" value="#D4AF37">
+          <div class="bl-cp-preview">
+            <span class="bl-cp-preview-dot" id="bl-cp-dot-clan" style="background:#D4AF37"></span>
+            <span id="bl-cp-name-clan">Bellator Gold</span>
+          </div>
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>Miembros iniciales <span style="color:var(--bl-muted);font-size:.78rem">(jugadores sin clan activo)</span></label>
+          <input type="text" id="clan-members-filter" placeholder="Filtrar jugadores disponibles..." autocomplete="off"
+            style="width:100%;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.85rem;margin-bottom:8px;box-sizing:border-box">
+          <div id="clan-members-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--bl-border);border-radius:10px;background:rgba(255,255,255,.02)">
+            <div style="padding:10px 14px;color:var(--bl-muted);font-size:.85rem">Haz clic en &ldquo;Crear Clan&rdquo; para cargar los jugadores disponibles.</div>
+          </div>
+          <div id="clan-members-pills" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;min-height:0"></div>
+        </div>
+        <div class="bf-group" style="margin-top:14px">
+          <label>Clave del clan <span style="color:var(--bl-gold)">*</span> <span style="font-size:.78rem;color:var(--bl-muted)">— la necesitarás para editar o eliminar el clan</span></label>
+          <input type="password" id="clan-key" placeholder="Mínimo 6 caracteres..." maxlength="64" autocomplete="new-password"
+            style="width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.95rem">
+        </div>
+        <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+          <button id="btn-submit-clan" style="padding:11px 28px;background:var(--bl-gold);border:none;border-radius:10px;color:#0d1117;font-weight:800;font-size:.95rem;cursor:pointer;letter-spacing:1px">CREAR CLAN</button>
+          <span id="clan-msg" style="font-size:.85rem;color:var(--bl-muted)"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal editar / eliminar clan -->
+    <div id="clan-edit-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);align-items:center;justify-content:center">
+      <div style="background:#0f141b;border:1px solid rgba(212,175,55,.28);border-radius:22px;padding:32px;max-width:480px;width:calc(100% - 32px);position:relative">
+        <button id="clan-edit-close" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--bl-muted);font-size:1.2rem;cursor:pointer">✕</button>
+        <h3 style="font-family:'Teko',sans-serif;font-size:2rem;margin-bottom:4px" id="clan-edit-title">Editar clan</h3>
+        <p style="font-size:.85rem;color:var(--bl-muted);margin-bottom:18px">Solo el líder puede modificar o eliminar el clan usando su clave.</p>
+        <input type="hidden" id="clan-edit-id">
+        <div class="bf-group" style="margin-bottom:12px">
+          <label style="font-size:.82rem;color:var(--bl-muted)">Tu pseudónimo (líder)</label>
+          <input type="text" id="clan-edit-leader" placeholder="Tu pseudónimo..." style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.9rem;margin-top:4px">
+        </div>
+        <div class="bf-group" style="margin-bottom:12px">
+          <label style="font-size:.82rem;color:var(--bl-muted)">Clave del clan</label>
+          <input type="password" id="clan-edit-key" placeholder="Tu clave secreta..." style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.9rem;margin-top:4px">
+        </div>
+        <div id="clan-edit-fields" style="display:grid;gap:10px;margin-bottom:18px">
+          <div>
+            <label style="font-size:.82rem;color:var(--bl-muted)">Nuevo nombre (opcional)</label>
+            <input type="text" id="clan-edit-name" maxlength="64" style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.9rem;margin-top:4px">
+          </div>
+          <div>
+            <label style="font-size:.82rem;color:var(--bl-muted)">Nueva descripción (opcional)</label>
+            <textarea id="clan-edit-desc" rows="2" maxlength="300" style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.9rem;resize:vertical;font-family:inherit;margin-top:4px"></textarea>
+          </div>
+          <div>
+            <label style="font-size:.82rem;color:var(--bl-muted)">Nueva URL de logo (opcional)</label>
+            <input type="url" id="clan-edit-logo" style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--bl-border);color:#fff;font-size:.9rem;margin-top:4px">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button id="clan-edit-save" style="padding:10px 22px;background:var(--bl-gold);border:none;border-radius:10px;color:#0d1117;font-weight:800;font-size:.9rem;cursor:pointer">GUARDAR CAMBIOS</button>
+          <button id="clan-edit-delete" style="padding:10px 22px;background:rgba(255,77,79,.15);border:1px solid rgba(255,77,79,.4);border-radius:10px;color:#ff4d4f;font-weight:800;font-size:.9rem;cursor:pointer">ELIMINAR CLAN</button>
+          <span id="clan-edit-msg" style="font-size:.82rem;color:var(--bl-muted)"></span>
+        </div>
+      </div>
+    </div>
+
+    <section class="bl-section">
+      <div class="bl-section-head">
+        <h2 class="bl-section-h2">Clanes activos</h2>
+        <span class="bl-section-link" id="bl-clan-count">Cargando...</span>
+      </div>
+      <div class="bl-drivers-grid" id="bl-clanes-list">
+        <div class="bl-drivers-empty">Cargando clanes...</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/tracker.js?v=7"></script>
+  <script src="/app.js?v=16"></script>
+  <script>
+    let allClanes = [];
+    let allAvailablePlayers = [];
+    let selectedMembers = [];
+
+    function isNilVal(v) { return !v || v === 'null' || v === '<nil>'; }
+
+    function renderClanes() {
+      const list = document.getElementById('bl-clanes-list');
+      const countEl = document.getElementById('bl-clan-count');
+      const query = String(document.getElementById('clan-search')?.value || '').trim().toLowerCase();
+      if (!list) return;
+      let filtered = allClanes.filter(c =>
+        !query || String(c.name || '').toLowerCase().includes(query) || String(c.description || '').toLowerCase().includes(query)
+      );
+      if (countEl) countEl.textContent = `${filtered.length} clan${filtered.length !== 1 ? 'es' : ''}`;
+      if (!filtered.length) {
+        list.innerHTML = '<div class="bl-drivers-empty">No hay clanes registrados aún. ¡Sé el primero en crear uno!</div>';
+        return;
+      }
+      list.innerHTML = filtered.map((clan, i) => {
+        const tc = !isNilVal(clan.primary_color) ? clan.primary_color : '';
+        const cardClass = tc ? 'bl-f1-card' : (i===0?'gold-1':i===1?'gold-2':i===2?'gold-3':'');
+        const tcStyle = tc ? `--tc:${tc};` : '';
+        const slashes = tc ? `<div class="bl-f1-slash bl-f1-slash-l" aria-hidden="true"></div><div class="bl-f1-slash bl-f1-slash-r" aria-hidden="true"></div>` : '';
+        const logoEl = !isNilVal(clan.logo_url)
+          ? `<img class="bl-driver-avatar" src="${clan.logo_url}" alt="${clan.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : '';
+        const initial = (clan.name || '?').charAt(0).toUpperCase();
+        const members = Array.isArray(clan.members) ? clan.members : [];
+        const memberCount = members.length;
+        return `
+          <div class="bl-driver-card ${cardClass}" style="${tcStyle}position:relative">
+            ${slashes}
+            <div class="bl-driver-pos">C${i + 1}</div>
+            <div class="bl-driver-avatar-wrap">
+              ${logoEl}
+              <div class="bl-driver-avatar-placeholder" style="${!isNilVal(clan.logo_url) ? 'display:none' : ''}">${initial}</div>
+            </div>
+            <div class="bl-driver-info">
+              <div class="bl-driver-div">CLAN &middot; ${memberCount} MIEMBRO${memberCount !== 1 ? 'S' : ''}</div>
+              <div class="bl-driver-name">${clan.name}</div>
+              <div class="bl-driver-since">${!isNilVal(clan.description) ? clan.description.slice(0, 65) + (clan.description.length > 65 ? '…' : '') : 'Sin descripción'}</div>
+              <div class="bl-driver-since" style="margin-top:4px;color:var(--bl-gold);font-size:.7rem">LÍDER: ${!isNilVal(clan.leader_pseudonimo) ? clan.leader_pseudonimo : '—'}</div>
+              ${memberCount ? `<div class="bl-driver-since" style="margin-top:3px;font-size:.68rem;color:var(--bl-muted)">${members.slice(0,4).join(', ')}${memberCount > 4 ? ` +${memberCount-4}` : ''}</div>` : ''}
+            </div>
+            <div class="bl-driver-footer">
+              <div class="bl-driver-points">${memberCount}<span>MBR</span></div>
+              <button class="bl-driver-cta" data-clanid="${clan.id}" data-clanname="${clan.name}" onclick="openEditModal(this)" style="background:none;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;color:rgba(255,255,255,.7);cursor:pointer;font-size:.78rem">✎ Editar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadClanes() {
+      const list = document.getElementById('bl-clanes-list');
+      if (!list) return;
+      try {
+        const data = await fetch('/api/clanes').then(r => r.json());
+        allClanes = Array.isArray(data) ? data : [];
+        renderClanes();
+      } catch (_) {
+        list.innerHTML = '<div class="bl-drivers-empty">Error cargando clanes.</div>';
+      }
+    }
+
+    async function loadAvailablePlayers() {
+      const listEl = document.getElementById('clan-members-list');
+      if (listEl) listEl.innerHTML = '<div style="padding:10px 14px;color:var(--bl-muted);font-size:.85rem">Cargando jugadores...</div>';
+      try {
+        const data = await fetch('/api/competidores').then(r => r.json());
+        allAvailablePlayers = Array.isArray(data)
+          ? data.filter(p => isNilVal(p.clan_name))
+          : [];
+        renderMemberPicker('');
+      } catch (_) {
+        if (listEl) listEl.innerHTML = '<div style="padding:10px 14px;color:#f87171;font-size:.85rem">Error cargando jugadores.</div>';
+      }
+    }
+
+    function renderMemberPicker(filter) {
+      const listEl = document.getElementById('clan-members-list');
+      if (!listEl) return;
+      const q = filter.toLowerCase();
+      const visible = allAvailablePlayers.filter(p =>
+        !q || String(p.pseudonimo || '').toLowerCase().includes(q)
+      );
+      if (!visible.length) {
+        listEl.innerHTML = '<div style="padding:10px 14px;color:var(--bl-muted);font-size:.85rem">No hay jugadores disponibles.</div>';
+        return;
+      }
+      listEl.innerHTML = visible.map(p => {
+        const checked = selectedMembers.includes(p.pseudonimo) ? 'checked' : '';
+        const flag = p.country_code ? `<span class="fi fi-${p.country_code.toLowerCase()}" style="width:16px;height:12px;border-radius:2px;flex-shrink:0"></span>` : '';
+        return `<label style="display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.04)'" onmouseout="this.style.background=''">
+          <input type="checkbox" value="${p.pseudonimo}" ${checked} style="accent-color:var(--bl-gold);width:15px;height:15px;cursor:pointer;flex-shrink:0">
+          ${flag}
+          <span style="font-size:.88rem;color:#e6e6e6;flex:1">${p.pseudonimo}</span>
+          <span style="font-size:.73rem;color:var(--bl-muted)">${p.division || ''}</span>
+        </label>`;
+      }).join('');
+      listEl.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.addEventListener('change', function() {
+          if (this.checked) {
+            if (!selectedMembers.includes(this.value)) selectedMembers.push(this.value);
+          } else {
+            selectedMembers = selectedMembers.filter(m => m !== this.value);
+          }
+          renderPills();
+        });
+      });
+    }
+
+    function renderPills() {
+      const pillsEl = document.getElementById('clan-members-pills');
+      if (!pillsEl) return;
+      pillsEl.innerHTML = selectedMembers.map(m =>
+        `<span style="display:inline-flex;align-items:center;gap:6px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);border-radius:20px;padding:3px 10px;font-size:.8rem;color:#e6e6e6">
+          ${m}
+          <button type="button" data-m="${m}" style="background:none;border:none;color:var(--bl-muted);cursor:pointer;font-size:.9rem;line-height:1;padding:0">×</button>
+        </span>`
+      ).join('');
+      pillsEl.querySelectorAll('button[data-m]').forEach(btn => {
+        btn.addEventListener('click', function() {
+          selectedMembers = selectedMembers.filter(x => x !== this.dataset.m);
+          renderPills();
+          renderMemberPicker(document.getElementById('clan-members-filter')?.value || '');
+        });
+      });
+    }
+
+    document.getElementById('clan-search')?.addEventListener('input', renderClanes);
+    document.getElementById('clan-members-filter')?.addEventListener('input', function() {
+      renderMemberPicker(this.value);
+    });
+
+    // Toggle formulario crear clan
+    document.getElementById('btn-crear-clan')?.addEventListener('click', function() {
+      selectedMembers = [];
+      renderPills();
+      document.getElementById('bl-crear-clan-section').style.display = 'block';
+      document.getElementById('bl-crear-clan-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      loadAvailablePlayers();
+    });
+    document.getElementById('btn-cancelar-clan')?.addEventListener('click', function() {
+      document.getElementById('bl-crear-clan-section').style.display = 'none';
+      selectedMembers = [];
+    });
+
+    // Submit crear clan
+    document.getElementById('btn-submit-clan')?.addEventListener('click', async function() {
+      const name   = document.getElementById('clan-name').value.trim();
+      const desc   = document.getElementById('clan-desc').value.trim();
+      const logo   = document.getElementById('clan-logo').value.trim();
+      const leader = document.getElementById('clan-leader').value.trim();
+      const clanKey= document.getElementById('clan-key').value.trim();
+      const msg    = document.getElementById('clan-msg');
+      if (!name) { msg.textContent = '⚠ El nombre es requerido.'; return; }
+      if (!clanKey || clanKey.length < 6) { msg.style.color='#f87171'; msg.textContent = '⚠ La clave debe tener al menos 6 caracteres.'; return; }
+      msg.textContent = 'Creando...';
+      const members = [...selectedMembers];
+      if (leader && !members.includes(leader)) members.unshift(leader);
+      try {
+        const res = await fetch('/api/clanes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, description: desc, logo_url: logo, leader_pseudonimo: leader, members, primary_color: document.getElementById('clan-primary-color').value, clan_key: clanKey })
+        });
+        if (res.ok) {
+          msg.style.color = '#4ade80';
+          msg.textContent = '¡Clan creado exitosamente!';
+          document.getElementById('clan-name').value = '';
+          document.getElementById('clan-desc').value = '';
+          document.getElementById('clan-logo').value = '';
+          document.getElementById('clan-leader').value = '';
+          document.getElementById('clan-members-filter').value = '';
+          selectedMembers = [];
+          renderPills();
+          setTimeout(() => {
+            document.getElementById('bl-crear-clan-section').style.display = 'none';
+            msg.style.color = ''; msg.textContent = '';
+            loadClanes();
+          }, 1800);
+        } else {
+          const err = await res.json().catch(() => ({}));
+          msg.style.color = '#f87171';
+          msg.textContent = err.error === 'clan_existente_o_db_error' ? '⚠ Ya existe un clan con ese nombre.' : '⚠ Error creando clan.';
+        }
+      } catch (_) {
+        msg.style.color = '#f87171';
+        msg.textContent = '⚠ Error de conexión.';
+      }
+    });
+
+    loadClanes();
+
+    // ── Modal editar / eliminar clan ──────────────────────────────────────
+    const editModal = document.getElementById('clan-edit-modal');
+
+    function openEditModal(btn) {
+      const id   = btn.dataset.clanid;
+      const name = btn.dataset.clanname || '';
+      document.getElementById('clan-edit-id').value   = id;
+      document.getElementById('clan-edit-name').value = name;
+      document.getElementById('clan-edit-desc').value = '';
+      document.getElementById('clan-edit-logo').value = '';
+      document.getElementById('clan-edit-leader').value = '';
+      document.getElementById('clan-edit-key').value  = '';
+      document.getElementById('clan-edit-msg').textContent = '';
+      document.getElementById('clan-edit-title').textContent = '✎ Editar clan';
+      editModal.style.display = 'flex';
+    }
+
+    document.getElementById('clan-edit-close').addEventListener('click', () => {
+      editModal.style.display = 'none';
+    });
+    editModal.addEventListener('click', function(e) {
+      if (e.target === editModal) editModal.style.display = 'none';
+    });
+
+    document.getElementById('clan-edit-save').addEventListener('click', async function() {
+      const id     = document.getElementById('clan-edit-id').value;
+      const leader = document.getElementById('clan-edit-leader').value.trim();
+      const key    = document.getElementById('clan-edit-key').value.trim();
+      const name   = document.getElementById('clan-edit-name').value.trim();
+      const desc   = document.getElementById('clan-edit-desc').value.trim();
+      const logo   = document.getElementById('clan-edit-logo').value.trim();
+      const msg    = document.getElementById('clan-edit-msg');
+      if (!leader || !key) { msg.style.color='#f87171'; msg.textContent='⚠ Ingresa tu pseudónimo y la clave del clan.'; return; }
+      msg.style.color=''; msg.textContent='Guardando...';
+      try {
+        const body = { leader_pseudonimo: leader, clan_key: key };
+        if (name) body.name = name;
+        if (desc) body.description = desc;
+        if (logo) body.logo_url = logo;
+        const res = await fetch(`/api/clanes/${id}`, {
+          method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          msg.style.color='#4ade80'; msg.textContent='✓ Clan actualizado.';
+          setTimeout(() => { editModal.style.display='none'; loadClanes(); }, 1200);
+        } else {
+          const err = await res.json().catch(()=>({}));
+          msg.style.color='#f87171';
+          msg.textContent = err.error === 'clave_incorrecta' ? '⚠ Pseudónimo o clave incorrectos.' : '⚠ Error al guardar.';
+        }
+      } catch(_) { msg.style.color='#f87171'; msg.textContent='⚠ Error de conexión.'; }
+    });
+
+    document.getElementById('clan-edit-delete').addEventListener('click', async function() {
+      const id     = document.getElementById('clan-edit-id').value;
+      const leader = document.getElementById('clan-edit-leader').value.trim();
+      const key    = document.getElementById('clan-edit-key').value.trim();
+      const msg    = document.getElementById('clan-edit-msg');
+      if (!leader || !key) { msg.style.color='#f87171'; msg.textContent='⚠ Ingresa tu pseudónimo y la clave del clan.'; return; }
+      if (!confirm('¿Eliminar este clan permanentemente? Esta acción no se puede deshacer.')) return;
+      msg.style.color=''; msg.textContent='Eliminando...';
+      try {
+        const res = await fetch(`/api/clanes/${id}`, {
+          method: 'DELETE', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ leader_pseudonimo: leader, clan_key: key })
+        });
+        if (res.ok) {
+          msg.style.color='#4ade80'; msg.textContent='✓ Clan eliminado.';
+          setTimeout(() => { editModal.style.display='none'; loadClanes(); }, 1200);
+        } else {
+          const err = await res.json().catch(()=>({}));
+          msg.style.color='#f87171';
+          msg.textContent = err.error === 'clave_incorrecta' ? '⚠ Pseudónimo o clave incorrectos.' : '⚠ Error al eliminar.';
+        }
+      } catch(_) { msg.style.color='#f87171'; msg.textContent='⚠ Error de conexión.'; }
+    });
+
+    // Color picker para el clan
+    (function initClanColorPicker() {
+      const SWATCHES = [
+        { color: '#D4AF37', name: 'Bellator Gold' },
+        { color: '#E10600', name: 'Ferrari Red' },
+        { color: '#FF8000', name: 'McLaren Orange' },
+        { color: '#00D2BE', name: 'Mercedes Teal' },
+        { color: '#3671C6', name: 'Red Bull Blue' },
+        { color: '#0090FF', name: 'Alpine Blue' },
+        { color: '#358C75', name: 'Aston Green' },
+        { color: '#37BEDD', name: 'Williams Blue' },
+        { color: '#B026FF', name: 'Purple' },
+        { color: 'custom',  name: 'Personalizado' },
+      ];
+      const row = document.getElementById('bl-cp-row-clan');
+      const input = document.getElementById('clan-primary-color');
+      const dot   = document.getElementById('bl-cp-dot-clan');
+      const label = document.getElementById('bl-cp-name-clan');
+      if (!row) return;
+      function setColor(color, name) {
+        if (color === 'custom') return;
+        input.value = color;
+        dot.style.background = color;
+        label.textContent = name;
+        row.querySelectorAll('.bl-cp-swatch').forEach(s => s.classList.toggle('bl-cp-active', s.dataset.color === color));
+      }
+      SWATCHES.forEach(sw => {
+        if (sw.color === 'custom') {
+          const lbl = document.createElement('label');
+          lbl.className = 'bl-cp-swatch bl-cp-custom';
+          lbl.title = sw.name;
+          lbl.style.position = 'relative';
+          lbl.style.overflow = 'hidden';
+          lbl.style.cursor = 'pointer';
+          const inp = document.createElement('input');
+          inp.type = 'color';
+          inp.value = input.value || '#D4AF37';
+          inp.style.cssText = 'position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:inherit;border:none;padding:0';
+          inp.addEventListener('input', function() { setColor(this.value, 'Personalizado'); });
+          lbl.appendChild(inp);
+          row.appendChild(lbl);
+          return;
+        }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bl-cp-swatch' + (sw.color === '#D4AF37' ? ' bl-cp-active' : '');
+        btn.dataset.color = sw.color;
+        btn.dataset.name  = sw.name;
+        btn.title = sw.name;
+        btn.style.background = sw.color;
+        btn.addEventListener('click', function() { setColor(sw.color, sw.name); });
+        row.appendChild(btn);
+      });
+    })();
+  </script>
+<script src="/translate.js"></script>
+</body>
+</html>

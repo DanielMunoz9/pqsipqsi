@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BELLATOR ROLBATTLE — Inicio</title>
+  <link rel="stylesheet" href="/shared.css?v=4">
+  <style>
+    .bl-search-hero{padding:64px 24px 52px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:1px solid var(--bl-border2);position:relative;z-index:10}
+    .bl-sh-eyebrow{font-family:'Teko',sans-serif;letter-spacing:6px;font-size:.7rem;color:var(--bl-gold);text-transform:uppercase;opacity:.9}
+    .bl-sh-title{font-family:'Teko',sans-serif;font-size:clamp(2.8rem,6vw,4.2rem);font-weight:700;line-height:.95;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 45%,var(--bl-gold2,#f0c040) 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0}
+    .bl-sh-sub{font-size:.95rem;color:var(--bl-soft);margin:0 0 14px;max-width:480px;opacity:.85}
+    .bl-sh-wrap{width:100%;max-width:680px}
+    .bl-gsr-cat-label{font-size:.63rem;letter-spacing:3px;padding:8px 16px 4px;color:var(--bl-muted);text-transform:uppercase;background:rgba(13,17,23,.5);border-bottom:1px solid var(--bl-border2);font-family:'Teko',sans-serif}
+    .bl-gsr-page-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--bl-border2);text-decoration:none;color:inherit}
+    .bl-gsr-page-item:hover{background:rgba(212,175,55,.06)}
+    .bl-gsr-page-icon{width:36px;height:36px;border-radius:8px;background:rgba(212,175,55,.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;color:var(--bl-gold)}
+    .bl-gsr-page-name{font-size:.95rem;color:var(--bl-text);font-weight:700}
+    .bl-gsr-page-desc{font-size:.8rem;color:var(--bl-muted)}
+    .bl-gsr-page-arrow{margin-left:auto;color:var(--bl-muted);font-size:.85rem;flex-shrink:0;padding-left:8px}
+    .bl-home-hero--slim{padding:28px 0 36px}
+    mark{background:rgba(212,175,55,.22);color:var(--bl-gold);border-radius:2px;padding:0 1px;font-style:normal}
+    .bl-nav-card-icon{color:var(--bl-gold)}
+    .bl-nav-card-icon svg{display:block;stroke:var(--bl-gold)}
+  </style>
+</head>
+<body>
+  <div class="intrusion-modal" id="intrusionModal">
+    <img src="/404alert.jpg" alt="ALERTA">
+    <h1>INTENTO DE INTRUSIÓN DETECTADO</h1>
+    <p>Acción no autorizada detectada por el sistema.</p>
+    <button class="close-btn" onclick="document.getElementById('intrusionModal').classList.remove('active')">ENTENDIDO</button>
+  </div>
+
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; SISTEMA ACTIVO</span>
+        <a href="/clasificacion">STANDINGS</a>
+        <a href="/competidores">DRIVERS</a>
+        <a href="/reglamento">RULES</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">TEMPORADA 2026</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">T-2026</span>
+      <span class="bl-event-name">Liga Universal Bellator</span>
+      <div class="bl-event-clock">
+        <span id="bl-clock">00:00:00</span>
+      </div>
+    </div>
+
+    <section class="bl-search-hero">
+      <div class="bl-sh-eyebrow">BELLATOR SYSTEM SEARCH</div>
+      <h2 class="bl-sh-title">¿Qué buscas hoy?</h2>
+      <p class="bl-sh-sub">Competidores, reglas y páginas del sistema — todo desde aquí.</p>
+      <div class="bl-gsearch-wrap bl-sh-wrap">
+        <div class="bl-gsearch-ring">
+          <div class="bl-gsearch-inner">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.56a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
+            <input type="text" id="b-pseudonimo" class="bl-gsearch-input" placeholder="Busca competidores, reglas, páginas..." autofocus autocomplete="off">
+            <span class="bl-gsearch-kbd">ENTER</span>
+          </div>
+        </div>
+        <div class="bl-gsearch-results" id="bl-gsearch-results" style="display:none"></div>
+      </div>
+    </section>
+
+    <section class="bl-home-hero bl-home-hero--slim">
+      <div class="bl-home-hero-grid">
+        <div class="bl-hero-copy">
+          <div class="bl-hero-copy-inner">
+            <div class="bl-hero-eyebrow">BELLATOR WORLD CHAMPIONSHIP · 2026</div>
+            <div class="bl-hero-chips">
+              <div class="bl-hero-chip"><strong id="chip-total">–</strong> Guerreros</div>
+              <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
+              <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
+            </div>
+            <div class="bl-cta-row">
+              <a href="/registro" class="bl-btn-primary">Registrar competidor</a>
+              <a href="/clasificacion" class="bl-btn-secondary">Ver standings</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bl-hero-aside">
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Event Tracker</div>
+            <h3 id="hero-round-title">Cargando ronda</h3>
+            <p id="hero-round-copy">Obteniendo información del calendario Bellator 2026.</p>
+            <div class="bl-live-ribbon" style="margin-top:18px">
+              <div>
+                <div class="bl-kicker">Próximo foco</div>
+                <strong id="hero-next-focus">Liga Universal</strong>
+              </div>
+              <span class="bl-badge-status pendiente" id="hero-round-status">PENDIENTE</span>
+            </div>
+          </div>
+          <div class="bl-aside-card">
+            <div class="bl-kicker">Quick Access</div>
+            <div class="bl-aside-list">
+              <a href="/competidores"><span>Drivers Line-up</span><span>→</span></a>
+              <a href="/clasificacion"><span>Full Standings</span><span>→</span></a>
+              <a href="/registro"><span>Registration Center</span><span>→</span></a>
+              <a href="/reglamento"><span>Sporting Regulations</span><span>→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bl-section">
+      <div class="bl-section-head">
+        <h2 class="bl-section-h2">Top 3 de la temporada</h2>
+        <a href="/clasificacion" class="bl-section-link">Ver tabla completa</a>
+      </div>
+      <div class="bl-home-podium" id="bl-home-podium">
+        <div class="bl-featured-skeleton">Cargando top 3...</div>
+      </div>
+    </section>
+
+    <div class="bl-content-grid">
+      <section class="bl-table-card">
+        <div class="bl-section-head">
+          <h2 class="bl-section-h2">Standings Snapshot</h2>
+          <span class="bl-badge-live">LIVE</span>
+        </div>
+        <div class="bl-standings-mini" id="bl-standings-mini">
+          <div class="bl-featured-skeleton">Cargando standings...</div>
+        </div>
+      </section>
+      <section class="bl-editorial-card">
+        <div class="bl-section-head">
+          <h2 class="bl-section-h2">Centro editorial</h2>
+        </div>
+        <div class="bl-story-grid">
+          <a class="bl-story-card" href="/competidores">
+            <div class="bl-story-tag">Drivers</div>
+            <h3>Consulta la parrilla completa</h3>
+            <p>Tarjetas más grandes, navegación a perfil individual y filtros por división.</p>
+          </a>
+          <a class="bl-story-card" href="/clasificacion">
+            <div class="bl-story-tag">Results</div>
+            <h3>Revisa posiciones y podio</h3>
+            <p>Tabla clicable y snapshot de líderes con acceso directo a cada ficha.</p>
+          </a>
+          <a class="bl-story-card" href="/registro">
+            <div class="bl-story-tag">Join</div>
+            <h3>Registra tu perfil</h3>
+            <p>Formulario acompañado por métricas, notas rápidas y guía del proceso.</p>
+          </a>
+          <a class="bl-story-card" href="/reglamento">
+            <div class="bl-story-tag">Rules</div>
+            <h3>Entiende el código de honor</h3>
+            <p>Reglamento legible, con jerarquía visual y CTA al centro de inscripción.</p>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="bl-nav-grid">
+      <a href="/registro" class="bl-nav-card">
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg></span>
+        <span class="bl-nav-card-label">Registro</span>
+        <span class="bl-nav-card-sub">Centro de inscripción y datos básicos</span>
+      </a>
+      <a href="/competidores" class="bl-nav-card">
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="bl-nav-card-label">Competidores</span>
+        <span class="bl-nav-card-sub">Cards grandes con acceso a perfil individual</span>
+      </a>
+      <a href="/clasificacion" class="bl-nav-card">
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>
+        <span class="bl-nav-card-label">Clasificación</span>
+        <span class="bl-nav-card-sub">Top 3, snapshot de líderes y tabla completa</span>
+      </a>
+      <a href="/reglamento" class="bl-nav-card">
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <span class="bl-nav-card-label">Reglamento</span>
+        <span class="bl-nav-card-sub">Código de honor y formato de temporada</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- CREDITS FOOTER -->
+  <div style="max-width:1100px;margin:32px auto 0;padding:0 24px 40px">
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-radius:12px;
+      background:linear-gradient(90deg,rgba(212,175,55,.07),rgba(212,175,55,.02));
+      border:1px solid rgba(212,175,55,.15);border-left:3px solid var(--bl-gold)">
+      <span style="font-size:1.4rem;flex-shrink:0;margin-top:2px">⚔️</span>
+      <div>
+        <div style="font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--bl-gold);line-height:1;margin-bottom:6px">Créditos</div>
+        <div style="font-size:.8rem;color:var(--bl-soft);line-height:1.5">
+          Reglamento y sistema de combate <strong style="color:var(--bl-white)">Bellator RolBattle</strong> creado por
+          <strong style="color:var(--bl-white)">Bandet</strong> y el <span style="color:var(--bl-gold)">Odiado Clan Orochi</span>.
+          Plataforma web, dossier digital y desarrollo completo por <strong style="color:var(--bl-white)">Bandet</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/tracker.js?v=7"></script>
+  <script src="/app.js?v=16"></script>
+  <script>
+    let searchCache = [];
+
+    function slugify(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function profileUrl(name) {
+      return `/competidor?slug=${encodeURIComponent(slugify(name))}`;
+    }
+
+    async function fetchCompetidores() {
+      if (searchCache.length) return searchCache;
+      try {
+        const data = await fetch('/api/competidores').then(r => r.json());
+        searchCache = Array.isArray(data) ? data : [];
+      } catch (_) {
+        searchCache = [];
+      }
+      return searchCache;
+    }
+
+    (function initSearch() {
+      const input = document.getElementById('b-pseudonimo');
+      const results = document.getElementById('bl-gsearch-results');
+      if (!input || !results) return;
+
+      const SITE_INDEX = [
+        {type:'pagina',  name:'Registro',           desc:'Inscribir un nuevo competidor al sistema',                         url:'/registro',      icon:'⚔'},
+        {type:'pagina',  name:'Competidores',        desc:'Parrilla completa de guerreros registrados',                      url:'/competidores',  icon:'🏁'},
+        {type:'pagina',  name:'Clasificación',       desc:'Standings, tabla de posiciones y podio',                          url:'/clasificacion', icon:'📊'},
+        {type:'pagina',  name:'Reglamento',          desc:'Sistema de Combate y normas del B.R.B.',                          url:'/reglamento',    icon:'📜'},
+        {type:'pagina',  name:'Reglamento Solo Lectura', desc:'Dossier editorial largo con búsqueda e índice anclado',        url:'/reglamento-lectura', icon:'📚'},
+        {type:'pagina',  name:'Banco de Práctica',   desc:'Revisar turnos, ortografía y reglas en tiempo real',              url:'/practica',      icon:'🎯'},
+        {type:'reglamento', name:'Sistema de Combate',    desc:'Principios: ROL LEGIBLE · ESTRATEGIA · INTERPRETACIÓN',         url:'/reglamento'},
+        {type:'reglamento', name:'Manipulación Negra',    desc:'Dar por hecho consecuencias sobre el rival — regla primaria',   url:'/reglamento'},
+        {type:'reglamento', name:'Sello Obligatorio',     desc:'Encierra todas las opciones del rival forzando un único resultado', url:'/reglamento'},
+        {type:'reglamento', name:'Manipulación Negada',   desc:'Asumir consecuencias implícitas sin describir fuerza ni propiedades', url:'/reglamento'},
+        {type:'reglamento', name:'Manipulación Blanca',   desc:'Aprovechar los huecos argumentales del rival — permitida',       url:'/reglamento'},
+        {type:'reglamento', name:'Super-Rol / God-Rol',   desc:'Hazañas que superan el material original del personaje',         url:'/reglamento'},
+        {type:'reglamento', name:'Meta-Rol',              desc:'Usar conocimiento que el personaje no debería poseer',           url:'/reglamento'},
+        {type:'reglamento', name:'Rule-Sharking',         desc:'Presionar al juez para interrumpir el combate — prohibido',      url:'/reglamento'},
+        {type:'reglamento', name:'Rol Espejo',            desc:'Plasmar las mismas acciones del rival — penaliza puntaje',       url:'/reglamento'},
+        {type:'reglamento', name:'Regresión y Adelanto',  desc:'Regresión válida · Adelanto (interrumpir acción) prohibido',     url:'/reglamento'},
+        {type:'reglamento', name:'HAX Activos y Pasivos', desc:'Sistema de Cooldown para habilidades antinaturales',             url:'/reglamento'},
+        {type:'reglamento', name:'Cooldown',              desc:'Tiempo de espera de 1 turno tras usar un HAX activo',            url:'/reglamento'},
+        {type:'reglamento', name:'BFR',                   desc:'Battlefield Remove — totalmente prohibido en combate',           url:'/reglamento'},
+        {type:'reglamento', name:'Inmortalidad',          desc:'HAX prohibido — toda forma de inmortalidad está anulada',        url:'/reglamento'},
+        {type:'reglamento', name:'Primer Turno',          desc:'Solo presentación — prohibido atacar o defender con efectos',    url:'/reglamento'},
+        {type:'reglamento', name:'Cronología',            desc:'La cronología es sagrada — romperla equivale a derrota inmediata', url:'/reglamento'},
+        {type:'reglamento', name:'Regeneración',          desc:'Máx. 3 usos · Máx. 30% del daño de un ataque específico',       url:'/reglamento'},
+        {type:'reglamento', name:'Control Mental',        desc:'Máximo un objetivo — requiere cadena Causa-Efecto coherente',    url:'/reglamento'},
+        {type:'reglamento', name:'Borrado Existencial',   desc:'Un solo uso por batalla — directamente vs rival = descalificación', url:'/reglamento'},
+        {type:'reglamento', name:'Power Nullification',   desc:'Máximo 2 usos por batalla',                                      url:'/reglamento'},
+        {type:'reglamento', name:'Acasualidad',           desc:'HAX PROHIBIDO completamente en combate',                         url:'/reglamento'},
+        {type:'reglamento', name:'Fisiología No Existente', desc:'HAX PROHIBIDO — todos los personajes deben existir',           url:'/reglamento'},
+        {type:'reglamento', name:'Rol Pausa',             desc:'1 uso por intercambio · reglas de tiempo y consecuencias',       url:'/reglamento'},
+        {type:'reglamento', name:'Tiempos de Respuesta',  desc:'24h por turno · 12h Punto Muerto · 5min tolerancia final',      url:'/reglamento'},
+        {type:'reglamento', name:'Niveles de Poder',      desc:'BESTIA · OGRO · DRAGÓN · DIOS — cuatro tiers de escalada',      url:'/reglamento'},
+        {type:'reglamento', name:'BESTIA',                desc:'Tier 1: Large Building · Mach 1-3 · 700m · 2 000°C',            url:'/reglamento'},
+        {type:'reglamento', name:'OGRO',                  desc:'Tier 2: City Block · Mach 10-1000 · 20km · 7 000°C',           url:'/reglamento'},
+        {type:'reglamento', name:'DRAGÓN',                desc:'Tier 3: Mountain · 50% SoL · 1 000km · 30 000°K',              url:'/reglamento'},
+        {type:'reglamento', name:'DIOS',                  desc:'Tier 4: Planetary · 300 000 km/s · 510.1M km²',                url:'/reglamento'},
+        {type:'reglamento', name:'El Juzgado',            desc:'5 parámetros: Normas, Lógica, Interpretación, Legibilidad, Extensión', url:'/reglamento'},
+        {type:'reglamento', name:'Crossover',             desc:'Ki, Mana, Nen, Chakra, Cosmo, Reatsu, Haki — energías equivalentes', url:'/reglamento'},
+        {type:'reglamento', name:'Etiqueta',              desc:'Etiquetar al rival en el canal de spam — procedimiento de default', url:'/reglamento'},
+        {type:'reglamento', name:'Copy-paste',            desc:'Prohibido reutilizar turnos de combates anteriores',             url:'/reglamento'},
+        {type:'reglamento', name:'Tecnicismos',           desc:'Física, química, matemáticas permitidas — juzgados con mayor rigor', url:'/reglamento'},
+        {type:'reglamento', name:'Análisis de Información', desc:'HAX con CD — revelar ubicación, estadísticas o historial del rival', url:'/reglamento'},
+        {type:'reglamento', name:'Clarividencia',         desc:'HAX con CD — percepción del futuro cercano',                    url:'/reglamento'},
+        {type:'reglamento', name:'Teletransportación',    desc:'HAX con CD — desplazamiento instantáneo a través del espacio',  url:'/reglamento'},
+        {type:'reglamento', name:'Manipulación del Tiempo', desc:'LIMITADO: solo beneficio propio — Time Stop al rival = Sello', url:'/reglamento'},
+        {type:'reglamento', name:'Manipulación de Realidad', desc:'No puede afectar al rival directamente ni alterar todo el campo', url:'/reglamento'},
+      ];
+
+      function hl(text, q) {
+        if (!q) return text;
+        const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return String(text).replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
+      }
+
+      function norm(s) {
+        return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      }
+
+      async function runSearch(rawQuery) {
+        const q = rawQuery.trim();
+        const nq = norm(q);
+        if (!nq) { results.style.display = 'none'; return; }
+
+        const staticMatches = SITE_INDEX.filter(item => norm(item.name).includes(nq) || norm(item.desc).includes(nq));
+        const pages = staticMatches.filter(i => i.type === 'pagina');
+        const reglas = staticMatches.filter(i => i.type === 'reglamento');
+
+        const data = await fetchCompetidores();
+        const comps = data.filter(item => norm(item.pseudonimo).includes(nq) || norm(item.division || '').includes(nq));
+
+        if (!pages.length && !reglas.length && !comps.length) {
+          results.style.display = 'block';
+          results.innerHTML = `<div class="bl-gsr-new">Sin resultados para "${q}". Intenta otro término o <a href="/registro" style="color:var(--bl-gold)">registra un competidor</a>.</div>`;
+          return;
+        }
+
+        let html = '';
+
+        if (pages.length) {
+          html += `<div class="bl-gsr-cat-label">Páginas</div>`;
+          html += pages.slice(0, 3).map(item => `
+            <a class="bl-gsr-page-item" href="${item.url}">
+              <div class="bl-gsr-page-icon">${item.icon}</div>
+              <div style="flex:1;min-width:0">
+                <div class="bl-gsr-page-name">${hl(item.name, q)}</div>
+                <div class="bl-gsr-page-desc">${hl(item.desc, q)}</div>
+              </div>
+              <span class="bl-gsr-page-arrow">→</span>
+            </a>`).join('');
+        }
+
+        if (reglas.length) {
+          html += `<div class="bl-gsr-cat-label">Reglamento</div>`;
+          html += reglas.slice(0, 5).map(item => `
+            <a class="bl-gsr-page-item" href="${item.url}">
+              <div class="bl-gsr-page-icon" style="font-family:'Teko',sans-serif;font-size:.78rem;letter-spacing:1px">REG</div>
+              <div style="flex:1;min-width:0">
+                <div class="bl-gsr-page-name">${hl(item.name, q)}</div>
+                <div class="bl-gsr-page-desc">${hl(item.desc, q)}</div>
+              </div>
+              <span class="bl-gsr-page-arrow">→</span>
+            </a>`).join('');
+        }
+
+        if (comps.length) {
+          html += `<div class="bl-gsr-cat-label">Competidores</div>`;
+          html += comps.slice(0, 4).map(item => {
+            const avatar = item.avatar_url && item.avatar_url !== '<nil>'
+              ? `<img class="bl-gsr-av" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none'">`
+              : `<div class="bl-gsr-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+            return `<div class="bl-gsr-item" data-name="${item.pseudonimo}">${avatar}<div><div class="bl-gsr-name">${hl(item.pseudonimo, q)}</div><div class="bl-gsr-div">${hl(item.division || 'Sin división', q)}</div></div></div>`;
+          }).join('');
+        }
+
+        results.style.display = 'block';
+        results.innerHTML = html;
+      }
+
+      let debTimer;
+      input.addEventListener('input', function() {
+        clearTimeout(debTimer);
+        debTimer = setTimeout(() => runSearch(this.value), 120);
+      });
+
+      input.addEventListener('keydown', async function(event) {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        clearTimeout(debTimer);
+        const q = this.value.trim();
+        const nq = norm(q);
+        if (!nq) return;
+        const data = await fetchCompetidores();
+        const exact = data.find(item => norm(item.pseudonimo) === nq);
+        if (exact) { window.location.href = profileUrl(exact.pseudonimo); return; }
+        const partial = data.find(item => norm(item.pseudonimo).includes(nq));
+        if (partial) { window.location.href = profileUrl(partial.pseudonimo); return; }
+        const si = SITE_INDEX.find(item => norm(item.name) === nq || norm(item.name).startsWith(nq));
+        if (si) { window.location.href = si.url; return; }
+        runSearch(q);
+      });
+
+      results.addEventListener('click', function(event) {
+        const item = event.target.closest('.bl-gsr-item[data-name]');
+        if (!item) return;
+        window.location.href = profileUrl(item.dataset.name);
+      });
+
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.bl-gsearch-wrap')) results.style.display = 'none';
+      });
+    })();
+
+    (async function loadHeroStats() {
+      try {
+        const stats = await fetch('/api/stats').then(r => r.json());
+        const set = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value ?? '0';
+        };
+        set('chip-total', stats.total);
+        set('chip-universal', stats.universal);
+        set('chip-ciudad', stats.ciudad);
+      } catch (_) {}
+    })();
+
+    (async function loadSchedule() {
+      const featured = document.getElementById('bl-featured-round');
+      const grid = document.getElementById('bl-schedule-grid');
+      try {
+        const schedule = await fetch('/api/schedule').then(r => r.json());
+        if (!Array.isArray(schedule)) return;
+        const active = schedule.find(item => item.estado === 'activo') || schedule.find(item => item.estado === 'pendiente') || schedule[0];
+        if (active && featured) {
+          featured.innerHTML = `
+            <div class="bl-feat-round-num">Ronda ${active.ronda}</div>
+            <div class="bl-feat-round-name">${active.nombre}</div>
+            <div class="bl-feat-meta">
+              <div class="bl-feat-meta-item"><strong>Fecha</strong>${active.fecha}</div>
+              <div class="bl-feat-meta-item"><strong>País</strong>${active.pais}</div>
+            </div>
+            <span class="bl-badge-status ${active.estado}">${active.estado}</span>
+          `;
+          const heroTitle = document.getElementById('hero-round-title');
+          const heroCopy = document.getElementById('hero-round-copy');
+          const heroStatus = document.getElementById('hero-round-status');
+          const nextFocus = document.getElementById('hero-next-focus');
+          if (heroTitle) heroTitle.textContent = active.nombre;
+          if (heroCopy) heroCopy.textContent = `${active.fecha} · ${active.pais}`;
+          if (heroStatus) {
+            heroStatus.className = `bl-badge-status ${active.estado}`;
+            heroStatus.textContent = active.estado.toUpperCase();
+          }
+          if (nextFocus) nextFocus.textContent = `Ronda ${active.ronda}`;
+        }
+        if (grid) {
+          grid.innerHTML = schedule.map(item => `
+            <article class="bl-sched-card ${item.estado}">
+              <div class="bl-sched-ronda">R${String(item.ronda).padStart(2, '0')}</div>
+              <div class="bl-sched-name">${item.nombre}</div>
+              <div class="bl-sched-date">${item.fecha} · ${item.pais}</div>
+            </article>
+          `).join('');
+        }
+      } catch (_) {
+        if (featured) featured.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar la ronda.</div>';
+        if (grid) grid.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar el calendario.</div>';
+      }
+    })();
+
+    (async function loadCompetitors() {
+      const podium = document.getElementById('bl-home-podium');
+      const standings = document.getElementById('bl-standings-mini');
+      try {
+        const data = await fetchCompetidores();
+        if (!data.length) {
+          if (podium) podium.innerHTML = '<div class="bl-featured-skeleton">Aún no hay competidores inscritos.</div>';
+          if (standings) standings.innerHTML = '<div class="bl-featured-skeleton">Aún no hay standings disponibles.</div>';
+          return;
+        }
+        if (podium) {
+          podium.innerHTML = data.slice(0, 3).map((item, index) => {
+            const rankClass = index === 0 ? 'p1' : index === 1 ? 'p2' : 'p3';
+            const avatar = item.avatar_url && item.avatar_url !== '<nil>'
+              ? `<img class="bl-podium-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+              : '';
+            return `
+              <a class="bl-podium-card ${rankClass}" href="${profileUrl(item.pseudonimo)}">
+                <div class="bl-podium-rank">${index + 1}<small>${index === 0 ? 'ST' : index === 1 ? 'ND' : 'RD'}</small></div>
+                <div class="bl-podium-avatar-wrap">
+                  ${avatar}
+                  <div class="bl-podium-placeholder" style="${item.avatar_url && item.avatar_url !== '<nil>' ? 'display:none' : ''}">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>
+                </div>
+                <div class="bl-podium-copy">
+                  <div class="bl-podium-division">${item.division || 'Sin división'}</div>
+                  <div class="bl-podium-name">${item.pseudonimo}</div>
+                  <div class="bl-podium-meta">
+                    <div class="bl-podium-points">${index + 1}<span>POSICIÓN</span></div>
+                    <div class="bl-podium-cta">Abrir perfil →</div>
+                  </div>
+                </div>
+              </a>
+            `;
+          }).join('');
+        }
+        if (standings) {
+          standings.innerHTML = data.slice(0, 6).map((item, index) => {
+            const avatar = item.avatar_url && item.avatar_url !== '<nil>'
+              ? `<img class="bl-mini-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none'">`
+              : `<div class="bl-mini-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+            return `
+              <a class="bl-mini-row" href="${profileUrl(item.pseudonimo)}">
+                <span class="bl-mini-pos">${index + 1}</span>
+                ${avatar}
+                <span>
+                  <span class="bl-mini-name">${item.pseudonimo}</span>
+                  <span class="bl-mini-sub">${item.division || 'Sin división'}</span>
+                </span>
+                <span class="bl-mini-points">${index + 1}</span>
+              </a>
+            `;
+          }).join('');
+        }
+      } catch (_) {
+        if (podium) podium.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar el top 3.</div>';
+        if (standings) standings.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar la tabla.</div>';
+      }
+    })();
+
+    (function initTypewriter() {
+      const input = document.getElementById('b-pseudonimo');
+      if (!input) return;
+      const phrases = [
+        'Busca un competidor por nombre...',
+        'Busca "Manipulaci\u00f3n Negra" en las reglas...',
+        'Busca "HAX Activos" o "Cooldown"...',
+        'Busca "BESTIA", "OGR0", "DRAG\u00d3N", "DIOS"...',
+        'Busca la p\u00e1gina de Clasificaci\u00f3n...',
+        'Busca "Sello Obligatorio" o "Rule-Sharking"...',
+        'Escribe el nombre de un guerrero...',
+        'Busca "Banco de Pr\u00e1ctica" o "Reglamento"...',
+      ];
+      let pi = 0, ci = 0, erasing = false;
+      const T = { type: 55, erase: 22, pause: 2400, start: 1000 };
+      function step() {
+        if (document.activeElement === input) { setTimeout(step, 400); return; }
+        const phrase = phrases[pi];
+        if (!erasing) {
+          ci++;
+          input.setAttribute('placeholder', phrase.slice(0, ci));
+          if (ci >= phrase.length) { erasing = true; setTimeout(step, T.pause); return; }
+          setTimeout(step, T.type + Math.random() * 30);
+        } else {
+          ci--;
+          input.setAttribute('placeholder', phrase.slice(0, ci));
+          if (ci <= 0) { erasing = false; pi = (pi + 1) % phrases.length; setTimeout(step, T.start); return; }
+          setTimeout(step, T.erase);
+        }
+      }
+      input.setAttribute('placeholder', '');
+      setTimeout(step, T.start);
+    })();
+
+
+
+  </script>
+<script src="/translate.js"></script>
+</body>
+</html>

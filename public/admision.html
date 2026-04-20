@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cámara de Admisión — Bellator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&family=Teko:wght@400;500;600;700&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --text: #eef4ff;
+      --muted: rgba(238, 244, 255, 0.68);
+      --line: rgba(255, 255, 255, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      color: var(--text);
+      font-family: 'Barlow Semi Condensed', sans-serif;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(125, 181, 255, 0.04), transparent 34%),
+        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05), transparent 58%);
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.02) 30%, rgba(0, 0, 0, 0.24) 100%),
+        radial-gradient(circle at center, transparent 0%, transparent 56%, rgba(0, 0, 0, 0.24) 100%);
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      display: block;
+    }
+
+    .hud {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .top-chip,
+    .bottom-right,
+    .countdown,
+    .center-copy {
+      position: absolute;
+    }
+
+    .top-chip,
+    .bottom-right,
+    .countdown {
+      background: linear-gradient(180deg, rgba(7, 11, 18, 0.32), rgba(7, 11, 18, 0.1));
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+    }
+
+    .top-chip {
+      top: 18px;
+      left: 18px;
+      max-width: min(390px, calc(100vw - 36px));
+      border-radius: 18px;
+      padding: 12px 14px;
+    }
+
+    .eyebrow,
+    .mini-label,
+    .status-label,
+    .footer-label {
+      font-family: 'Teko', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.26rem;
+    }
+
+    .eyebrow {
+      font-size: 0.76rem;
+      color: var(--gold);
+    }
+
+    .title {
+      margin-top: 4px;
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.7rem);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.04rem;
+      text-shadow: 0 0 28px rgba(212, 175, 55, 0.18);
+    }
+
+    .title span { color: var(--gold); }
+
+    .lead {
+      margin-top: 6px;
+      max-width: 24rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .countdown {
+      top: 18px;
+      right: 18px;
+      min-width: 120px;
+      padding: 10px 14px;
+      border-radius: 18px;
+    }
+
+    .count-inner { text-align: center; }
+
+    .mini-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .count-value {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.6rem, 5vw, 3.5rem);
+      line-height: 0.82;
+      text-shadow: 0 0 18px rgba(255,255,255,0.12);
+    }
+
+    .center-copy {
+      left: 50%;
+      bottom: 36px;
+      transform: translateX(-50%);
+      width: min(660px, calc(100vw - 40px));
+      text-align: center;
+      text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .status-label {
+      font-size: 0.72rem;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .status-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      letter-spacing: 0.06rem;
+      line-height: 0.95;
+    }
+
+    .status-copy {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .status-bar {
+      position: relative;
+      height: 4px;
+      margin-top: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .status-bar > span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold), #fff1b3, #7db5ff);
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.32);
+      transition: width 0.9s cubic-bezier(.2,1,.22,1);
+    }
+
+    .bottom-right {
+      right: 18px;
+      bottom: 18px;
+      width: min(280px, calc(100vw - 36px));
+      border-radius: 18px;
+      padding: 12px 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      pointer-events: auto;
+      margin-top: 12px;
+    }
+
+    .primary,
+    .secondary {
+      appearance: none;
+      border: 0;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    }
+
+    .primary {
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gold), #f3d36f);
+      color: #091017;
+      font-family: 'Teko', sans-serif;
+      font-size: 1.02rem;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      box-shadow: 0 12px 34px rgba(212, 175, 55, 0.22);
+    }
+
+    .secondary {
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      font-family: 'Teko', sans-serif;
+      font-size: 0.96rem;
+      letter-spacing: 0.14rem;
+      text-transform: uppercase;
+    }
+
+    .primary[disabled] {
+      opacity: 0.42;
+      cursor: wait;
+      transform: none;
+    }
+
+    .primary:not([disabled]):hover,
+    .secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .footer-label {
+      font-family: 'Teko', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.22rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .footer-copy,
+    .hint {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .hint { margin-top: 8px; }
+
+    @media (max-width: 780px) {
+      .top-chip,
+      .bottom-right,
+      .countdown {
+        left: 14px;
+        right: 14px;
+        width: auto;
+        max-width: none;
+      }
+
+      .top-chip {
+        top: 14px;
+      }
+
+      .countdown {
+        top: auto;
+        bottom: 14px;
+      }
+
+      .bottom-right {
+        display: none;
+      }
+
+      .center-copy {
+        bottom: 90px;
+        width: calc(100vw - 30px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div class="hud">
+    <div class="top-chip">
+      <div class="eyebrow">Bellator Admission Sequence</div>
+      <div class="title">Prueba de <span>Admisión</span></div>
+      <div class="lead">El sistema usa estos 15 segundos para alistarse. Puedes acercarte o alejarte con la rueda mientras el núcleo queda estable.</div>
+    </div>
+
+    <div class="countdown">
+      <div class="count-inner">
+        <div class="mini-label">Cuenta atrás</div>
+        <div class="count-value" id="countValue">15</div>
+      </div>
+    </div>
+
+    <div class="center-copy">
+      <div class="status-label">Estado</div>
+      <div class="status-title" id="statusTitle">Iniciando prueba de admisión</div>
+      <div class="status-copy" id="statusCopy">La cámara orbital está levantando el entorno previo al examen.</div>
+      <div class="status-bar"><span id="statusBar"></span></div>
+    </div>
+
+    <div class="bottom-right">
+      <div>
+        <div class="footer-label">Destino actual</div>
+        <div class="footer-copy">Al terminar el contador se libera la entrada al placeholder de prueba en <strong>/practica</strong>.</div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="enterButton" disabled>Iniciar prueba</button>
+        <a class="secondary" href="/">Volver</a>
+      </div>
+      <div class="hint" id="hintText">Redirección automática en preparación.</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+    const isLowPowerDevice = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || window.innerWidth < 820;
+
+    const canvas = document.getElementById('scene');
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: !isLowPowerDevice,
+      alpha: false,
+      powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPowerDevice ? 1.5 : 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 1);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.001, 1000);
+    const cameraBaseY = 1;
+    let cameraTargetZ = 1.15;
+    camera.position.set(0, cameraBaseY, cameraTargetZ);
+    camera.lookAt(0, 0, 0);
+
+    const clock = new THREE.Clock();
+    const group = new THREE.Group();
+    scene.add(group);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.15));
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const mousePoint = new THREE.Vector3(999, 999, 999);
+    const mouseTarget = new THREE.Vector3(999, 999, 999);
+    const interactionPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(10, 10, 10, 10).rotateX(-Math.PI / 2),
+      new THREE.MeshBasicMaterial({ visible: false })
+    );
+    scene.add(interactionPlane);
+
+    function makeParticleTexture() {
+      const textureCanvas = document.createElement('canvas');
+      textureCanvas.width = 128;
+      textureCanvas.height = 128;
+      const ctx = textureCanvas.getContext('2d');
+      const gradient = ctx.createRadialGradient(64, 64, 2, 64, 64, 64);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.16, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.4, 'rgba(255,255,255,0.5)');
+      gradient.addColorStop(0.62, 'rgba(255,255,255,0.15)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 128, 128);
+      const texture = new THREE.CanvasTexture(textureCanvas);
+      texture.needsUpdate = true;
+      return texture;
+    }
+
+    const particleTexture = makeParticleTexture();
+    const palette = ['#f7b373', '#88b3ce', '#ce9dcf'];
+    const layers = [
+      { count: isLowPowerDevice ? 7200 : 10000, minRadius: 0.42, maxRadius: 2.45, size: 0.86, amp: 1.0 },
+      { count: isLowPowerDevice ? 7200 : 10000, minRadius: 0.58, maxRadius: 2.22, size: 0.52, amp: 2.8 },
+      { count: isLowPowerDevice ? 7200 : 10000, minRadius: 0.52, maxRadius: 2.36, size: 0.52, amp: 1.9 }
+    ];
+    const meshes = [];
+    const baseRotations = [];
+
+    function makeGalaxyLayer(options, colorHex, index) {
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(options.count * 3);
+      const scales = new Float32Array(options.count);
+      const randomness = new Float32Array(options.count * 3);
+
+      for (let i = 0; i < options.count; i++) {
+        const i3 = i * 3;
+        const angle = Math.random() * Math.PI * 2;
+        const radius = THREE.MathUtils.lerp(options.minRadius, options.maxRadius, Math.random());
+        positions[i3 + 0] = Math.sin(angle) * radius;
+        positions[i3 + 1] = (Math.random() - 0.5) * 0.2;
+        positions[i3 + 2] = Math.cos(angle) * radius;
+        scales[i] = Math.random();
+        randomness[i3 + 0] = (Math.random() - 0.5) * 0.05;
+        randomness[i3 + 1] = (Math.random() - 0.5) * 0.04;
+        randomness[i3 + 2] = (Math.random() - 0.5) * 0.05;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
+      geometry.setAttribute('aRandom', new THREE.BufferAttribute(randomness, 3));
+
+      const material = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        uniforms: {
+          uTime: { value: 0 },
+          uAmp: { value: options.amp },
+          uColor: { value: new THREE.Color(colorHex) },
+          uPixelRatio: { value: renderer.getPixelRatio() },
+          uMouse: { value: mousePoint.clone() },
+          uTexture: { value: particleTexture },
+          uSize: { value: options.size }
+        },
+        vertexShader: `
+          uniform float uTime;
+          uniform float uAmp;
+          uniform float uPixelRatio;
+          uniform vec3 uMouse;
+          uniform float uSize;
+          attribute float aScale;
+          attribute vec3 aRandom;
+          varying float vStrength;
+
+          mat3 rotation3dY(float angle) {
+            float s = sin(angle);
+            float c = cos(angle);
+            return mat3(c, 0.0, -s, 0.0, 1.0, 0.0, s, 0.0, c);
+          }
+
+          float saturate(float x) {
+            return clamp(x, 0.0, 1.0);
+          }
+
+          void main() {
+            vec3 p = position;
+            float particleSize = aScale * 0.5 + 0.5;
+            vec3 worldPos = rotation3dY(uTime * 0.3 * (0.1 + 0.5 * particleSize)) * p;
+            worldPos += aRandom * (0.8 + uAmp * 0.08);
+            worldPos.y += sin(uTime * 0.7 + length(p.xz) * 3.0 + aRandom.y * 9.0) * 0.04 * uAmp;
+
+            float distToMouse = pow(1.0 - saturate(length(uMouse.xz - worldPos.xz) - 0.1), 4.0);
+            vec3 dir = worldPos - uMouse;
+            worldPos = mix(worldPos, uMouse + normalize(dir + vec3(0.0001)) * 0.12, distToMouse);
+
+            vec4 mvPosition = modelViewMatrix * vec4(worldPos, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            gl_PointSize = (10.0 + 12.0 * particleSize) * uSize * uPixelRatio * (1.0 / -mvPosition.z);
+            vStrength = 0.45 + particleSize * 0.55;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 uColor;
+          uniform sampler2D uTexture;
+          varying float vStrength;
+          void main() {
+            vec4 tex = texture2D(uTexture, gl_PointCoord);
+            gl_FragColor = vec4(uColor, tex.r * (0.58 + vStrength * 0.6));
+          }
+        `
+      });
+
+      const points = new THREE.Points(geometry, material);
+      points.rotation.x = -0.28;
+      group.add(points);
+      meshes.push(points);
+      baseRotations.push(points.rotation.x);
+    }
+
+    layers.forEach((layer, index) => makeGalaxyLayer(layer, palette[index], index));
+
+    const blackHole = new THREE.Mesh(
+      new THREE.SphereGeometry(0.24, 48, 48),
+      new THREE.MeshBasicMaterial({ color: 0x020202 })
+    );
+    group.add(blackHole);
+
+    const accretionRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.34, 0.035, 18, 160),
+      new THREE.MeshBasicMaterial({ color: 0xf3c876, transparent: true, opacity: 0.22 })
+    );
+    accretionRing.rotation.x = Math.PI * 0.5;
+    group.add(accretionRing);
+
+    const eventHorizonGlow = new THREE.Mesh(
+      new THREE.RingGeometry(0.28, 0.5, 96),
+      new THREE.MeshBasicMaterial({ color: 0x6ea8ff, transparent: true, opacity: 0.08, side: THREE.DoubleSide })
+    );
+    eventHorizonGlow.rotation.x = Math.PI * 0.5;
+    group.add(eventHorizonGlow);
+
+    const dustGeometry = new THREE.BufferGeometry();
+    const dustCount = isLowPowerDevice ? 700 : 1200;
+    const dustPositions = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount; i++) {
+      const i3 = i * 3;
+      dustPositions[i3 + 0] = (Math.random() - 0.5) * 26;
+      dustPositions[i3 + 1] = (Math.random() - 0.5) * 18;
+      dustPositions[i3 + 2] = (Math.random() - 0.5) * 20;
+    }
+    dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+    const dustMaterial = new THREE.PointsMaterial({
+      color: 0xa2bde0,
+      size: 0.018,
+      transparent: true,
+      opacity: 0.24,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const dust = new THREE.Points(dustGeometry, dustMaterial);
+    scene.add(dust);
+
+    window.addEventListener('pointermove', (event) => {
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObject(interactionPlane);
+      if (intersects[0]) {
+        mouseTarget.copy(intersects[0].point);
+      }
+    });
+
+    window.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      cameraTargetZ += event.deltaY * 0.0012;
+      cameraTargetZ = THREE.MathUtils.clamp(cameraTargetZ, 0.75, 2.15);
+    }, { passive: false });
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPowerDevice ? 1.5 : 2));
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      meshes.forEach((mesh) => {
+        mesh.material.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+      });
+    });
+
+    function animate() {
+      const elapsed = clock.getElapsedTime();
+      mousePoint.lerp(mouseTarget, 0.08);
+      camera.position.z += (cameraTargetZ - camera.position.z) * 0.08;
+      camera.position.y = cameraBaseY + Math.sin(elapsed * 0.08) * 0.015;
+      camera.lookAt(0, 0, 0);
+
+      group.rotation.y = elapsed * 0.03;
+      group.rotation.z = Math.sin(elapsed * 0.12) * 0.03;
+      accretionRing.rotation.z = elapsed * 0.4;
+      eventHorizonGlow.rotation.z = -elapsed * 0.22;
+      dust.rotation.y = elapsed * 0.01;
+
+      meshes.forEach((mesh, index) => {
+        mesh.material.uniforms.uTime.value = elapsed * (0.75 + index * 0.08);
+        mesh.material.uniforms.uMouse.value.copy(mousePoint);
+        mesh.rotation.y = elapsed * (0.05 + index * 0.015);
+        mesh.rotation.x = baseRotations[index] + Math.sin(elapsed * 0.2 + index) * 0.02;
+      });
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    const countValue = document.getElementById('countValue');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusCopy = document.getElementById('statusCopy');
+    const statusBar = document.getElementById('statusBar');
+    const enterButton = document.getElementById('enterButton');
+    const hintText = document.getElementById('hintText');
+
+    const steps = [
+      { title: 'Iniciando prueba de admisión', copy: 'La cámara orbital está levantando el entorno previo al examen.' },
+      { title: 'Calibrando núcleo de admisión', copy: 'El sistema aprovecha estos segundos para alistarse mientras la galaxia responde al cursor y al zoom.' },
+      { title: 'Desplegando acceso al examen', copy: 'La compuerta final de la prueba está a punto de quedar activa.' },
+      { title: 'Prueba lista', copy: 'La cámara terminó. Puedes pasar de inmediato al examen de admisión.' }
+    ];
+
+    let remaining = 15;
+    let stepIndex = 0;
+
+    function syncStatus() {
+      const progress = ((15 - remaining) / 15) * 100;
+      statusBar.style.width = `${progress}%`;
+      const nextIndex = Math.min(steps.length - 1, Math.floor((15 - remaining) / 4));
+      if (nextIndex !== stepIndex) {
+        stepIndex = nextIndex;
+      }
+      statusTitle.textContent = steps[stepIndex].title;
+      statusCopy.textContent = steps[stepIndex].copy;
+      countValue.textContent = String(remaining);
+    }
+
+    syncStatus();
+
+    const timer = setInterval(() => {
+      remaining -= 1;
+      if (remaining <= 0) {
+        remaining = 0;
+        syncStatus();
+        clearInterval(timer);
+        enterButton.disabled = false;
+        hintText.textContent = 'Redirección automática en 2 segundos. Si prefieres, entra manualmente.';
+        setTimeout(() => {
+          window.location.href = '/practica';
+        }, 2000);
+        return;
+      }
+      syncStatus();
+    }, 1000);
+
+    enterButton.addEventListener('click', () => {
+      window.location.href = '/practica';
+    });
+  </script>
+<script src="/translate.js"></script>
+</body>
+</html>

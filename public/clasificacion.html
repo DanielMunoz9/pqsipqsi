@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clasificación — BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=4">
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; STANDINGS LIVE</span>
+        <a href="/">HOME</a>
+        <a href="/competidores">DRIVERS</a>
+        <a href="/registro">JOIN</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">RESULTS</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">RESULTS</span>
+      <span class="bl-event-name">Clasificación general Bellator 2026</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <section class="bl-section" style="padding-top:28px">
+      <div class="bl-section-head">
+        <h2 class="bl-section-h2">Podio actual</h2>
+        <a href="/competidores" class="bl-section-link">Abrir parrilla</a>
+      </div>
+      <div class="bl-home-podium" id="bl-home-podium">
+        <div class="bl-featured-skeleton">Cargando podio...</div>
+      </div>
+    </section>
+
+    <section class="bl-section">
+      <div class="bl-clasif-stats">
+        <div class="bl-stat-card">
+          <span class="bl-stat-num" id="stat-total">–</span>
+          <span class="bl-stat-label">Guerreros inscritos</span>
+        </div>
+        <div class="bl-stat-card" style="border-top-color:#D4AF37">
+          <span class="bl-stat-num" id="stat-universal">–</span>
+          <span class="bl-stat-label">División Universal</span>
+        </div>
+        <div class="bl-stat-card" style="border-top-color:#3b82f6">
+          <span class="bl-stat-num" id="stat-ciudad">–</span>
+          <span class="bl-stat-label">División Ciudad</span>
+        </div>
+      </div>
+
+      <div class="bl-section-head" style="margin-top:8px">
+        <h2 class="bl-section-h2">Tabla completa</h2>
+        <span class="bl-badge-live">LIVE</span>
+      </div>
+      <div class="bl-rank-wrap">
+        <div class="bl-rank-row rank-head">
+          <span>#</span><span>Avatar</span><span>Competidor</span><span>División</span><span class="bl-rank-since">Desde</span>
+        </div>
+        <div id="bl-rank-list">
+          <div class="bl-rank-row"><span class="bl-rank-empty">Cargando clasificación...</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/tracker.js?v=7"></script>
+  <script src="/app.js?v=16"></script>
+  <script>
+    function slugify(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function profileUrl(name) {
+      return `/competidor?slug=${encodeURIComponent(slugify(name))}`;
+    }
+
+    async function loadClasificacion() {
+      const rankList = document.getElementById('bl-rank-list');
+      const podium = document.getElementById('bl-home-podium');
+      try {
+        const data = await fetch('/api/competidores').then(r => r.json());
+        if (!Array.isArray(data) || !data.length) {
+          rankList.innerHTML = '<div class="bl-rank-row"><span class="bl-rank-empty">Todavía no hay competidores inscritos.</span></div>';
+          podium.innerHTML = '<div class="bl-featured-skeleton">Todavía no hay podio disponible.</div>';
+          return;
+        }
+        document.getElementById('stat-total').textContent = data.length;
+        document.getElementById('stat-universal').textContent = data.filter(p => String(p.division || '').toLowerCase().includes('universal')).length;
+        document.getElementById('stat-ciudad').textContent = data.filter(p => String(p.division || '').toLowerCase().includes('ciudad')).length;
+
+        podium.innerHTML = data.slice(0, 3).map((item, index) => {
+          const rankClass = index === 0 ? 'p1' : index === 1 ? 'p2' : 'p3';
+          const avatar = item.avatar_url && item.avatar_url !== '<nil>'
+            ? `<img class="bl-podium-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : '';
+          return `
+            <a class="bl-podium-card ${rankClass}" href="${profileUrl(item.pseudonimo)}">
+              <div class="bl-podium-rank">${index + 1}<small>${index === 0 ? 'ST' : index === 1 ? 'ND' : 'RD'}</small></div>
+              <div class="bl-podium-avatar-wrap">
+                ${avatar}
+                <div class="bl-podium-placeholder" style="${item.avatar_url && item.avatar_url !== '<nil>' ? 'display:none' : ''}">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>
+              </div>
+              <div class="bl-podium-copy">
+                <div class="bl-podium-division">${item.division || 'Sin división'}</div>
+                <div class="bl-podium-name">${item.pseudonimo}</div>
+                <div class="bl-podium-meta">
+                  <div class="bl-podium-points">${index + 1}<span>POSICIÓN</span></div>
+                  <div class="bl-podium-cta">Abrir perfil →</div>
+                </div>
+              </div>
+            </a>
+          `;
+        }).join('');
+
+        const posClass = i => i === 0 ? 'p1' : i === 1 ? 'p2' : i === 2 ? 'p3' : '';
+        rankList.innerHTML = data.map((item, index) => {
+          const avatar = item.avatar_url && item.avatar_url !== '<nil>'
+            ? `<img class="bl-rank-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none'">`
+            : `<div class="bl-rank-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+          const divClass = String(item.division || '').toLowerCase().includes('ciudad') ? 'div-c' : '';
+          return `
+            <a class="bl-rank-row" href="${profileUrl(item.pseudonimo)}">
+              <span class="bl-rank-pos ${posClass(index)}">${index + 1}</span>
+              ${avatar}
+              <span class="bl-rank-name">${item.pseudonimo}</span>
+              <span class="bl-rank-div ${divClass}">${item.division || 'Sin división'}</span>
+              <span class="bl-rank-since">${item.fecha_inicio_rol || 'Sin registrar'}</span>
+            </a>
+          `;
+        }).join('');
+      } catch (_) {
+        rankList.innerHTML = '<div class="bl-rank-row"><span class="bl-rank-empty">Error cargando clasificación.</span></div>';
+      }
+    }
+
+    loadClasificacion();
+  </script>
+<script src="/translate.js"></script>
+</body>
+</html>

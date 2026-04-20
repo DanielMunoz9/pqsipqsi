@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Cavernícolas Enojados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .error-code {
+            font-size: 150px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ff8c42);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        p {
+            color: #ccc;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .caveman-container {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 150px;
+        }
+        
+        .caveman {
+            position: relative;
+            width: 120px;
+            height: 200px;
+        }
+        
+        .caveman-left {
+            animation: fight-left 1.5s infinite;
+        }
+        
+        .caveman-right {
+            animation: fight-right 1.5s infinite;
+            animation-delay: 0.75s;
+        }
+        
+        @keyframes fight-left {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(40px) rotate(10deg) scale(1.1); }
+            50% { transform: translateX(0) rotate(0deg); }
+        }
+        
+        @keyframes fight-right {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-40px) rotate(-10deg) scale(1.1); }
+            50% { transform: translateX(0) rotate(0deg); }
+        }
+        
+        .caveman svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+        
+        .club {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .club-left {
+            top: 20px;
+            right: -40px;
+            animation: swing-left 1.5s infinite;
+        }
+        
+        .club-right {
+            top: 20px;
+            left: -40px;
+            animation: swing-right 1.5s infinite;
+            animation-delay: 0.75s;
+        }
+        
+        @keyframes swing-left {
+            0%, 100% { transform: rotate(-30deg); }
+            25% { transform: rotate(-120deg); }
+            50% { transform: rotate(-30deg); }
+        }
+        
+        @keyframes swing-right {
+            0%, 100% { transform: rotate(30deg); }
+            25% { transform: rotate(120deg); }
+            50% { transform: rotate(30deg); }
+        }
+        
+        .impact {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: impact-effect 1.5s infinite;
+        }
+        
+        .impact svg {
+            width: 100px;
+            height: 100px;
+        }
+        
+        @keyframes impact-effect {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            12%, 62% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            15%, 65% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8c42);
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .error-code { font-size: 80px; }
+            h1 { font-size: 1.8rem; }
+            p { font-size: 1rem; padding: 0 20px; }
+            .caveman-container { gap: 80px; height: 250px; }
+            .caveman { width: 80px; height: 140px; }
+            .club { width: 50px; height: 50px; }
+            .impact svg { width: 60px; height: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1>¡ACCESO DENEGADO!</h1>
+        <p>Parece que un cavernícola quiere mirar donde no se debe...</p>
+        <a href="/" class="btn">Volver a Casa</a>
+    </div>
+    
+    <div class="caveman-container">
+        <div class="caveman caveman-left">
+            <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Cuerpo -->
+                <ellipse cx="60" cy="130" rx="35" ry="45" fill="#d4a574"/>
+                <!-- Piernas -->
+                <rect x="45" y="165" width="12" height="35" fill="#c9996b" rx="6"/>
+                <rect x="63" y="165" width="12" height="35" fill="#c9996b" rx="6"/>
+                <!-- Brazos -->
+                <rect x="25" y="110" width="15" height="50" fill="#c9996b" rx="7" transform="rotate(-20 32 110)"/>
+                <rect x="80" y="110" width="15" height="50" fill="#c9996b" rx="7" transform="rotate(20 88 110)"/>
+                <!-- Cabeza -->
+                <circle cx="60" cy="75" r="28" fill="#d4a574"/>
+                <!-- Pelo -->
+                <ellipse cx="60" cy="55" rx="32" ry="20" fill="#3d2817"/>
+                <rect x="35" y="50" width="50" height="15" fill="#3d2817"/>
+                <!-- Ojos -->
+                <circle cx="50" cy="70" r="4" fill="#000"/>
+                <circle cx="70" cy="70" r="4" fill="#000"/>
+                <!-- Boca enojada -->
+                <path d="M 45 85 Q 60 80 75 85" stroke="#000" stroke-width="2" fill="none"/>
+                <!-- Ropa -->
+                <path d="M 35 125 L 85 125 L 80 150 L 40 150 Z" fill="#8b5a3c"/>
+            </svg>
+            <div class="club club-left">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="25" cy="20" rx="20" ry="18" fill="#6b4423"/>
+                    <rect x="20" y="30" width="10" height="50" fill="#8b5a3c" rx="3"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="impact">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" fill="#ff6b6b" opacity="0.8"/>
+                <circle cx="50" cy="50" r="30" fill="#ffeb3b" opacity="0.9"/>
+                <circle cx="50" cy="50" r="20" fill="#fff" opacity="1"/>
+                <text x="50" y="60" font-size="30" font-weight="bold" text-anchor="middle" fill="#ff0000">POW!</text>
+            </svg>
+        </div>
+        
+        <div class="caveman caveman-right">
+            <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Cuerpo -->
+                <ellipse cx="60" cy="130" rx="35" ry="45" fill="#c9996b"/>
+                <!-- Piernas -->
+                <rect x="45" y="165" width="12" height="35" fill="#b88a5e" rx="6"/>
+                <rect x="63" y="165" width="12" height="35" fill="#b88a5e" rx="6"/>
+                <!-- Brazos -->
+                <rect x="25" y="110" width="15" height="50" fill="#b88a5e" rx="7" transform="rotate(-20 32 110)"/>
+                <rect x="80" y="110" width="15" height="50" fill="#b88a5e" rx="7" transform="rotate(20 88 110)"/>
+                <!-- Cabeza -->
+                <circle cx="60" cy="75" r="28" fill="#c9996b"/>
+                <!-- Pelo -->
+                <ellipse cx="60" cy="55" rx="32" ry="20" fill="#4a2f1a"/>
+                <rect x="35" y="50" width="50" height="15" fill="#4a2f1a"/>
+                <!-- Ojos -->
+                <circle cx="50" cy="70" r="4" fill="#000"/>
+                <circle cx="70" cy="70" r="4" fill="#000"/>
+                <!-- Boca enojada -->
+                <path d="M 45 85 Q 60 80 75 85" stroke="#000" stroke-width="2" fill="none"/>
+                <!-- Ropa -->
+                <path d="M 35 125 L 85 125 L 80 150 L 40 150 Z" fill="#7a4a2e"/>
+            </svg>
+            <div class="club club-right">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="25" cy="20" rx="20" ry="18" fill="#6b4423"/>
+                    <rect x="20" y="30" width="10" height="50" fill="#8b5a3c" rx="3"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Crear estrellas de fondo
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Prevenir que salgan de la página de error 404
+        console.clear();
+        console.error('%c❌ ERROR 404 - Not Found', 'color: red; font-size: 24px; font-weight: bold;');
+        console.log('%c⚔️ ¡Los cavernícolas están protegiendo esta página! ⚔️', 'color: orange; font-size: 16px;');
+        console.warn('Parece que un cavernícola quiere mirar donde no se debe...');
+    </script>
+</body>
+</html>
