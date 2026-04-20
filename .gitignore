@@ -11,6 +11,12 @@
 *.test
 *.out
 
+!main.exe
+!valhala.exe
+!valhala-tracker.exe
+!tts/piper/piper/piper.exe
+!tts/piper/piper/*.dll
+
 # Temporary and backup files
 *~
 *.tmp
