@@ -642,9 +642,7 @@
       <button class="pr-cat-btn" data-cat="redaccion">Redacción</button>
       <button class="pr-cat-btn" data-cat="juez">Juzgado</button>
       <button class="pr-cat-btn" data-cat="crossover">Crossover</button>
-      <button class="pr-cat-btn" data-cat="tiempos">Tiempos</button>
       <button class="pr-cat-btn" data-cat="niveles">Niveles</button>
-      <button class="pr-cat-btn" data-cat="cooldown">Cooldown</button>
     </div>
 
     <!-- ══ WORKSPACE ══ -->
@@ -704,6 +702,17 @@
           <div class="pr-score-verdict" id="pr-score-verdict">Escribe y analiza tu rol para ver el resultado</div>
         </div>
 
+        <!-- VARIEDAD NARRATIVA -->
+        <div class="pr-result-card" id="pr-var-card" style="display:none">
+          <div class="pr-result-card-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <span class="pr-result-card-title" style="color:#D4AF37">VARIEDAD NARRATIVA</span>
+            <span style="font-size:.62rem;letter-spacing:1.5px;color:var(--bl-muted);margin-left:2px">clic en chip = insertar</span>
+            <span class="pr-result-count" id="pr-var-count">—</span>
+          </div>
+          <div class="pr-result-body" id="pr-var-body" style="flex-direction:column;gap:7px"></div>
+        </div>
+
         <!-- ORTOGRAFÍA -->
         <div class="pr-result-card">
           <div class="pr-result-card-header">
@@ -733,17 +742,6 @@
               Esperando análisis...
             </div>
           </div>
-        </div>
-
-        <!-- VARIEDAD NARRATIVA -->
-        <div class="pr-result-card" id="pr-var-card" style="display:none">
-          <div class="pr-result-card-header">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            <span class="pr-result-card-title" style="color:#D4AF37">VARIEDAD NARRATIVA</span>
-            <span style="font-size:.62rem;letter-spacing:1.5px;color:var(--bl-muted);margin-left:2px">clic en chip = insertar</span>
-            <span class="pr-result-count" id="pr-var-count">—</span>
-          </div>
-          <div class="pr-result-body" id="pr-var-body" style="flex-direction:column;gap:7px"></div>
         </div>
 
         <!-- REFERENCIA RÁPIDA -->
