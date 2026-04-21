@@ -22,6 +22,56 @@
     mark{background:rgba(212,175,55,.22);color:var(--bl-gold);border-radius:2px;padding:0 1px;font-style:normal}
     .bl-nav-card-icon{color:var(--bl-gold)}
     .bl-nav-card-icon svg{display:block;stroke:var(--bl-gold)}
+    /* ─── DIVISION SHOWCASE ─────────────────────────────────────── */
+    .bl-divshow{width:100%;display:flex;min-height:400px;overflow:hidden;position:relative;border-top:1px solid rgba(212,175,55,.08);border-bottom:1px solid rgba(212,175,55,.08);opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
+    .bl-divshow.bl-ds-visible{opacity:1;transform:translateY(0)}
+    .bl-ds-panel{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;cursor:pointer;transition:flex .7s cubic-bezier(.25,.46,.45,.94)}
+    .bl-ds-panel:hover,.bl-ds-panel:focus-visible{flex:1.35;outline:none}
+    .bl-ds-city{background:#000b18;transform:translateX(-40px);transition:flex .7s cubic-bezier(.25,.46,.45,.94),transform .9s .1s cubic-bezier(.22,1,.36,1)}
+    .bl-divshow.bl-ds-visible .bl-ds-city{transform:translateX(0)}
+    .bl-ds-city-atmo{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 35% 85%,rgba(0,80,200,.22) 0%,transparent 65%),radial-gradient(ellipse 50% 35% at 60% 8%,rgba(0,30,120,.14) 0%,transparent 55%);pointer-events:none;z-index:0}
+    .bl-ds-city-art{position:absolute;bottom:0;left:0;width:100%;height:88%;pointer-events:none;display:block;z-index:1}
+    .bl-ds-gridline{position:absolute;inset:0;opacity:.06;background-image:linear-gradient(rgba(0,140,255,.7) 1px,transparent 1px),linear-gradient(90deg,rgba(0,140,255,.7) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:2;transition:opacity .4s}
+    .bl-ds-city:hover .bl-ds-gridline{opacity:.13}
+    .bl-ds-univ{background:#080000;transform:translateX(40px);transition:flex .7s cubic-bezier(.25,.46,.45,.94),transform .9s .2s cubic-bezier(.22,1,.36,1)}
+    .bl-divshow.bl-ds-visible .bl-ds-univ{transform:translateX(0)}
+    .bl-ds-univ-atmo{position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 68% 40%,rgba(180,0,0,.20) 0%,rgba(100,0,0,.10) 40%,transparent 70%),radial-gradient(ellipse 40% 35% at 25% 78%,rgba(80,0,0,.12) 0%,transparent 50%);pointer-events:none;z-index:0}
+    .bl-ds-starfield{position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;z-index:1}
+    .bl-ds-ring-wrap{position:absolute;top:50%;right:18%;transform:translateY(-50%);pointer-events:none;width:220px;height:220px;z-index:2}
+    .bl-ds-ring{position:absolute;border-radius:50%;border:1px solid;animation:bl-ring-pulse 3.2s ease-in-out infinite;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .bl-ds-ring.r1{width:72px;height:72px;border-color:rgba(210,40,0,.4);animation-delay:0s}
+    .bl-ds-ring.r2{width:144px;height:144px;border-color:rgba(160,0,0,.28);animation-delay:.8s}
+    .bl-ds-ring.r3{width:216px;height:216px;border-color:rgba(100,0,0,.18);animation-delay:1.6s}
+    @keyframes bl-ring-pulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+    .bl-ds-scan{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+    .bl-ds-scan::after{content:'';position:absolute;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(0,170,255,.55),transparent);animation:bl-scan-y 4.5s linear infinite;top:-4px}
+    .bl-ds-univ .bl-ds-scan::after{background:linear-gradient(90deg,transparent,rgba(200,30,0,.5),transparent);animation-duration:5.2s;animation-delay:.9s}
+    @keyframes bl-scan-y{to{top:calc(100% + 4px)}}
+    .bl-ds-divider{width:2px;flex-shrink:0;position:relative;z-index:5;display:flex;align-items:stretch}
+    .bl-ds-divider::before{content:'';display:block;width:100%;background:linear-gradient(180deg,transparent,rgba(212,175,55,.6) 20%,rgba(255,255,255,.9) 50%,rgba(212,175,55,.6) 80%,transparent);animation:bl-divglow 3.5s ease-in-out infinite}
+    @keyframes bl-divglow{0%,100%{opacity:.45}50%{opacity:1;filter:drop-shadow(0 0 5px rgba(212,175,55,.85))}}
+    .bl-ds-content{position:relative;z-index:4;padding:0 40px 44px;display:flex;flex-direction:column;gap:5px;transition:transform .4s ease}
+    .bl-ds-panel:hover .bl-ds-content{transform:translateY(-8px)}
+    .bl-ds-badge{font-family:'Barlow Semi Condensed',sans-serif;font-size:.62rem;letter-spacing:5px;font-weight:700;text-transform:uppercase;padding-bottom:4px;display:block;margin-bottom:2px}
+    .bl-ds-city .bl-ds-badge{color:rgba(80,185,255,.8)}
+    .bl-ds-univ .bl-ds-badge{color:rgba(220,60,60,.8)}
+    .bl-ds-title{font-family:'Teko',sans-serif;font-size:clamp(3.8rem,7.5vw,6rem);font-weight:700;line-height:.9;letter-spacing:-2px;color:#fff;margin:0;text-transform:uppercase;transition:letter-spacing .4s}
+    .bl-ds-panel:hover .bl-ds-title{letter-spacing:0px}
+    .bl-ds-city .bl-ds-title{text-shadow:0 0 50px rgba(0,130,255,.45),0 2px 0 rgba(0,0,0,.9)}
+    .bl-ds-univ .bl-ds-title{text-shadow:0 0 50px rgba(200,0,0,.45),0 2px 0 rgba(0,0,0,.9)}
+    .bl-ds-desc{font-family:'Barlow Semi Condensed',sans-serif;font-size:.85rem;color:rgba(255,255,255,.5);letter-spacing:2px;font-weight:400;text-transform:uppercase;margin:4px 0 14px;line-height:1.3}
+    .bl-ds-info-box{display:inline-flex;flex-direction:column;gap:0;padding:7px 18px 9px;border:1px solid;margin-bottom:16px;backdrop-filter:blur(4px);transition:border-color .3s,background .3s}
+    .bl-ds-city .bl-ds-info-box{border-color:rgba(0,140,255,.35);background:rgba(0,25,70,.4)}
+    .bl-ds-univ .bl-ds-info-box{border-color:rgba(180,0,0,.35);background:rgba(50,0,0,.4)}
+    .bl-ds-city:hover .bl-ds-info-box{border-color:rgba(0,190,255,.65)}
+    .bl-ds-univ:hover .bl-ds-info-box{border-color:rgba(230,60,60,.65)}
+    .bl-ds-info-num{font-family:'Teko',sans-serif;font-size:2.1rem;font-weight:700;line-height:1;color:#fff}
+    .bl-ds-info-label{font-family:'Barlow Semi Condensed',sans-serif;font-size:.6rem;letter-spacing:3px;font-weight:600;text-transform:uppercase;margin-top:1px}
+    .bl-ds-city .bl-ds-info-label{color:rgba(100,185,255,.65)}
+    .bl-ds-univ .bl-ds-info-label{color:rgba(210,75,75,.65)}
+    .bl-ds-cta-btn{font-family:'Teko',sans-serif;font-size:.8rem;letter-spacing:4px;color:rgba(255,255,255,.35);text-transform:uppercase;transition:color .3s,letter-spacing .3s}
+    .bl-ds-panel:hover .bl-ds-cta-btn{color:rgba(255,255,255,.85);letter-spacing:6px}
+    @media(max-width:680px){.bl-divshow{flex-direction:column}.bl-ds-panel{min-height:260px}.bl-ds-divider{width:100%;height:2px}.bl-ds-divider::before{background:linear-gradient(90deg,transparent,rgba(212,175,55,.6) 20%,rgba(255,255,255,.9) 50%,rgba(212,175,55,.6) 80%,transparent)}.bl-ds-ring-wrap{right:8%;width:160px;height:160px}.bl-ds-content{padding:0 24px 30px}.bl-ds-city{transform:translateY(-20px)}.bl-ds-univ{transform:translateY(20px)}.bl-divshow.bl-ds-visible .bl-ds-city,.bl-divshow.bl-ds-visible .bl-ds-univ{transform:none}}
   </style>
 </head>
 <body>
@@ -110,6 +160,144 @@
         </div>
         <div class="bl-gsearch-results" id="bl-gsearch-results" style="display:none"></div>
       </div>
+    </section>
+
+    <!-- DIVISION SHOWCASE — Ciudad × Universal ──────────────────────────────── -->
+    <section class="bl-divshow" id="bl-divshow" aria-label="Divisiones">
+
+      <!-- ◈ CIUDAD ──────────────────────────────────────────────── -->
+      <a href="/clasificacion" class="bl-ds-panel bl-ds-city" tabindex="0">
+        <div class="bl-ds-city-atmo" aria-hidden="true"></div>
+        <!-- Manga cityscape (inline SVG — zero external requests) -->
+        <svg class="bl-ds-city-art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <defs>
+            <filter id="glow-c"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#000d1a"/><stop offset="100%" stop-color="#001526"/>
+            </linearGradient>
+          </defs>
+          <rect width="600" height="280" fill="url(#skyg)"/>
+          <!-- moon halo -->
+          <circle cx="460" cy="52" r="28" fill="rgba(60,130,220,.06)" stroke="rgba(80,160,255,.15)" stroke-width="1"/>
+          <circle cx="460" cy="52" r="18" fill="rgba(70,150,240,.10)" stroke="rgba(100,190,255,.22)" stroke-width="1"/>
+          <!-- horizon glow -->
+          <ellipse cx="300" cy="280" rx="380" ry="70" fill="rgba(0,70,180,.09)"/>
+          <!-- far buildings -->
+          <rect x="0"   y="195" width="22"  height="85"  fill="#04172e"/>
+          <rect x="25"  y="175" width="30"  height="105" fill="#051a34"/>
+          <rect x="58"  y="162" width="24"  height="118" fill="#04172e"/>
+          <rect x="85"  y="188" width="18"  height="92"  fill="#051a34"/>
+          <rect x="106" y="152" width="38"  height="128" fill="#061e3c"/>
+          <rect x="147" y="198" width="16"  height="82"  fill="#04172e"/>
+          <!-- mid buildings -->
+          <rect x="166" y="132" width="42"  height="148" fill="#072244"/>
+          <rect x="211" y="160" width="26"  height="120" fill="#051a34"/>
+          <rect x="240" y="118" width="52"  height="162" fill="#082648"/>
+          <rect x="295" y="172" width="24"  height="108" fill="#051a34"/>
+          <!-- focal tall buildings -->
+          <rect x="322" y="98"  width="62"  height="182" fill="#0a2c54"/>
+          <rect x="387" y="148" width="32"  height="132" fill="#072244"/>
+          <rect x="422" y="78"  width="58"  height="202" fill="#0c3260"/>
+          <rect x="483" y="135" width="36"  height="145" fill="#072244"/>
+          <rect x="522" y="160" width="44"  height="120" fill="#051a34"/>
+          <rect x="569" y="178" width="31"  height="102" fill="#04172e"/>
+          <!-- windows — mid buildings -->
+          <rect x="170" y="140" width="4" height="4" fill="rgba(80,190,255,.7)"  filter="url(#glow-c)"/>
+          <rect x="178" y="140" width="4" height="4" fill="rgba(80,190,255,.4)"/>
+          <rect x="186" y="140" width="4" height="4" fill="rgba(80,190,255,.8)"  filter="url(#glow-c)"/>
+          <rect x="194" y="140" width="4" height="4" fill="rgba(80,190,255,.3)"/>
+          <rect x="170" y="150" width="4" height="4" fill="rgba(80,190,255,.5)"/>
+          <rect x="178" y="150" width="4" height="4" fill="rgba(80,190,255,.9)"  filter="url(#glow-c)"/>
+          <rect x="186" y="150" width="4" height="4" fill="rgba(80,190,255,.3)"/>
+          <rect x="194" y="150" width="4" height="4" fill="rgba(80,190,255,.7)"/>
+          <rect x="170" y="160" width="4" height="4" fill="rgba(80,190,255,.6)"/>
+          <rect x="186" y="160" width="4" height="4" fill="rgba(80,190,255,.4)"/>
+          <!-- windows — tall focal building (x322) -->
+          <rect x="326" y="107" width="5" height="5" fill="rgba(110,210,255,.9)" filter="url(#glow-c)"/>
+          <rect x="335" y="107" width="5" height="5" fill="rgba(110,210,255,.5)"/>
+          <rect x="344" y="107" width="5" height="5" fill="rgba(110,210,255,.8)" filter="url(#glow-c)"/>
+          <rect x="353" y="107" width="5" height="5" fill="rgba(110,210,255,.4)"/>
+          <rect x="362" y="107" width="5" height="5" fill="rgba(110,210,255,.7)"/>
+          <rect x="371" y="107" width="5" height="5" fill="rgba(110,210,255,.3)"/>
+          <rect x="326" y="120" width="5" height="5" fill="rgba(110,210,255,.4)"/>
+          <rect x="335" y="120" width="5" height="5" fill="rgba(110,210,255,.9)" filter="url(#glow-c)"/>
+          <rect x="344" y="120" width="5" height="5" fill="rgba(110,210,255,.35)"/>
+          <rect x="353" y="120" width="5" height="5" fill="rgba(110,210,255,.8)"/>
+          <rect x="362" y="120" width="5" height="5" fill="rgba(110,210,255,.6)"/>
+          <rect x="371" y="120" width="5" height="5" fill="rgba(110,210,255,.25)"/>
+          <rect x="326" y="133" width="5" height="5" fill="rgba(110,210,255,.7)"/>
+          <rect x="335" y="133" width="5" height="5" fill="rgba(110,210,255,.35)"/>
+          <rect x="344" y="133" width="5" height="5" fill="rgba(110,210,255,.9)" filter="url(#glow-c)"/>
+          <rect x="353" y="133" width="5" height="5" fill="rgba(110,210,255,.5)"/>
+          <rect x="362" y="133" width="5" height="5" fill="rgba(110,210,255,.2)"/>
+          <rect x="371" y="133" width="5" height="5" fill="rgba(110,210,255,.8)"/>
+          <!-- windows — right focal building (x422) -->
+          <rect x="426" y="88"  width="6" height="6" fill="rgba(100,200,255,.8)" filter="url(#glow-c)"/>
+          <rect x="436" y="88"  width="6" height="6" fill="rgba(100,200,255,.5)"/>
+          <rect x="446" y="88"  width="6" height="6" fill="rgba(100,200,255,.9)" filter="url(#glow-c)"/>
+          <rect x="456" y="88"  width="6" height="6" fill="rgba(100,200,255,.35)"/>
+          <rect x="466" y="88"  width="6" height="6" fill="rgba(100,200,255,.7)"/>
+          <rect x="426" y="101" width="6" height="6" fill="rgba(100,200,255,.3)"/>
+          <rect x="436" y="101" width="6" height="6" fill="rgba(100,200,255,.85)" filter="url(#glow-c)"/>
+          <rect x="446" y="101" width="6" height="6" fill="rgba(100,200,255,.55)"/>
+          <rect x="456" y="101" width="6" height="6" fill="rgba(100,200,255,.9)"/>
+          <rect x="466" y="101" width="6" height="6" fill="rgba(100,200,255,.4)"/>
+          <rect x="426" y="114" width="6" height="6" fill="rgba(100,200,255,.7)" filter="url(#glow-c)"/>
+          <rect x="446" y="114" width="6" height="6" fill="rgba(100,200,255,.5)"/>
+          <rect x="466" y="114" width="6" height="6" fill="rgba(100,200,255,.8)" filter="url(#glow-c)"/>
+          <!-- antenna right building -->
+          <line x1="451" y1="78" x2="451" y2="54" stroke="rgba(130,200,255,.4)" stroke-width="2"/>
+          <circle cx="451" cy="52" r="2.5" fill="rgba(255,80,80,.92)"/>
+          <!-- neon sign strip on mid buildings -->
+          <rect x="242" y="172" width="48" height="3" fill="rgba(0,170,255,.35)" rx="1"/>
+          <!-- ground layer -->
+          <rect x="0"   y="270" width="600" height="10" fill="rgba(0,30,80,.65)"/>
+          <line x1="0" y1="270" x2="600" y2="270" stroke="rgba(0,100,220,.2)" stroke-width=".5"/>
+          <!-- foreground silhouettes -->
+          <rect x="0"   y="238" width="70"  height="42" fill="#020a14"/>
+          <rect x="72"  y="248" width="50"  height="32" fill="#020a14"/>
+          <rect x="460" y="241" width="80"  height="39" fill="#020a14"/>
+          <rect x="542" y="252" width="58"  height="28" fill="#020a14"/>
+        </svg>
+        <div class="bl-ds-gridline" aria-hidden="true"></div>
+        <div class="bl-ds-scan"    aria-hidden="true"></div>
+        <div class="bl-ds-content">
+          <span class="bl-ds-badge">BELLATOR · DIVISIÓN</span>
+          <h2 class="bl-ds-title">CIUDAD</h2>
+          <p class="bl-ds-desc">Guerreros del concreto y el neón</p>
+          <div class="bl-ds-info-box">
+            <div class="bl-ds-info-num" id="bl-ds-city-n">–</div>
+            <div class="bl-ds-info-label">Guerreros activos</div>
+          </div>
+          <div class="bl-ds-cta-btn">VER STANDINGS ⟶</div>
+        </div>
+      </a>
+
+      <!-- Gold divider -->
+      <div class="bl-ds-divider" aria-hidden="true"></div>
+
+      <!-- ◈ UNIVERSAL ────────────────────────────────────────────── -->
+      <a href="/clasificacion" class="bl-ds-panel bl-ds-univ" tabindex="0">
+        <div class="bl-ds-univ-atmo" aria-hidden="true"></div>
+        <div class="bl-ds-starfield" id="bl-ds-starfield" aria-hidden="true"></div>
+        <div class="bl-ds-ring-wrap" aria-hidden="true">
+          <div class="bl-ds-ring r1"></div>
+          <div class="bl-ds-ring r2"></div>
+          <div class="bl-ds-ring r3"></div>
+        </div>
+        <div class="bl-ds-scan" aria-hidden="true"></div>
+        <div class="bl-ds-content">
+          <span class="bl-ds-badge">BELLATOR · DIVISIÓN</span>
+          <h2 class="bl-ds-title">UNIVERSAL</h2>
+          <p class="bl-ds-desc">Poderes de escala galáctica</p>
+          <div class="bl-ds-info-box">
+            <div class="bl-ds-info-num" id="bl-ds-univ-n">–</div>
+            <div class="bl-ds-info-label">Guerreros activos</div>
+          </div>
+          <div class="bl-ds-cta-btn">VER STANDINGS ⟶</div>
+        </div>
+      </a>
+
     </section>
 
     <section class="bl-home-hero bl-home-hero--slim">
@@ -579,6 +767,45 @@
       }
       input.setAttribute('placeholder', '');
       setTimeout(step, T.start);
+    })();
+
+    // ── Division Showcase ─────────────────────────────────────────
+    (function initDivShowcase() {
+      // Star field via CSS box-shadow on a 1px seed element (GPU-composited)
+      const sf = document.getElementById('bl-ds-starfield');
+      if (sf) {
+        const sh = [];
+        for (let i = 0; i < 140; i++) {
+          const x  = Math.floor(Math.random() * 950);
+          const y  = Math.floor(Math.random() * 430);
+          const sp = Math.random() < 0.11 ? ' 1px' : ' 0';
+          const r  = 155 + Math.floor(Math.random() * 100);
+          const g  = 125 + Math.floor(Math.random() * 85);
+          const b  = 125 + Math.floor(Math.random() * 85);
+          const a  = (0.15 + Math.random() * 0.68).toFixed(2);
+          sh.push(`${x}px ${y}px 0${sp} rgba(${r},${g},${b},${a})`);
+        }
+        sf.style.boxShadow = sh.join(',');
+      }
+      // Reveal animation via IntersectionObserver (connected to galaxy bg)
+      const sec = document.getElementById('bl-divshow');
+      if (!sec) return;
+      const io = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { sec.classList.add('bl-ds-visible'); io.disconnect(); }
+      }, { threshold: 0.06 });
+      io.observe(sec);
+      // Sync fight counts from the existing loadHeroStats data
+      function syncCounts() {
+        const cu  = document.getElementById('chip-ciudad');
+        const un  = document.getElementById('chip-universal');
+        const dcu = document.getElementById('bl-ds-city-n');
+        const dun = document.getElementById('bl-ds-univ-n');
+        if (dcu && cu && cu.textContent !== '\u2013') dcu.textContent = cu.textContent;
+        if (dun && un && un.textContent !== '\u2013') dun.textContent = un.textContent;
+        if ((dcu && dcu.textContent === '\u2013') || (dun && dun.textContent === '\u2013'))
+          setTimeout(syncCounts, 400);
+      }
+      setTimeout(syncCounts, 250);
     })();
 
 
