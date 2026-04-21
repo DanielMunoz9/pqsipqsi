@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -452,6 +452,26 @@
     .pr-textarea{min-height:260px;padding:16px}
     .pr-action-btn{font-size:.8rem;padding:8px 10px}
   }
+  /* ── AI TUNNEL VIZ ── */
+  .pr-ai-tunnel{background:rgba(12,17,25,.88);border:1px solid rgba(212,175,55,.20);border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.35)}
+  .pr-ai-t-header{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid rgba(48,54,61,.8);background:rgba(12,17,25,.6);font-family:'Teko',sans-serif;font-size:.9rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold)}
+  #pr-nn-canvas{padding:10px 12px 0}
+  .pr-ai-t-steps{padding:4px 16px 16px;display:flex;flex-direction:column;gap:8px}
+  .pr-ai-t-step{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-radius:8px;background:rgba(255,255,255,.022);border:1px solid rgba(48,54,61,.55)}
+  .pr-ai-t-num{font-family:'Teko',sans-serif;font-size:.85rem;letter-spacing:1px;color:rgba(212,175,55,.50);flex-shrink:0;min-width:20px;padding-top:2px}
+  .pr-ai-t-body{font-size:.74rem;line-height:1.55;color:var(--bl-muted)}
+  .pr-ai-t-body strong{color:var(--bl-soft);display:block;margin-bottom:2px}
+
+  /* ── VARIEDAD NARRATIVA ── */
+  .pr-var-row{display:flex;flex-direction:column;gap:5px;padding:9px 11px;border-radius:8px;border:1px solid rgba(48,54,61,.7);background:rgba(12,17,25,.4)}
+  .pr-var-word{font-family:'Teko',sans-serif;font-size:.92rem;letter-spacing:1px;color:var(--bl-soft);display:flex;align-items:center;gap:7px}
+  .pr-var-count{font-size:.7rem;padding:1px 8px;border-radius:4px;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25);letter-spacing:1px;font-family:'Teko',sans-serif}
+  .pr-var-chips{display:flex;flex-wrap:wrap;gap:5px;
+  margin-top:2px}
+  .pr-var-chip{font-size:.73rem;padding:3px 11px;border-radius:999px;border:1px solid rgba(212,175,55,.25);color:rgba(212,175,55,.8);background:rgba(212,175,55,.05);cursor:pointer;transition:all .15s;letter-spacing:.5px;font-family:'Barlow Semi Condensed',sans-serif}
+  .pr-var-chip:hover{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.55);color:var(--bl-gold)}
+  .pr-var-chip:active{transform:scale(.95)}
+  .pr-var-note{font-size:.69rem;color:var(--bl-muted);font-style:italic}
   </style>
 </head>
 <body>
@@ -715,14 +735,45 @@
           </div>
         </div>
 
-        <!-- REFERENCIA RÁPIDA -->
-        <div class="pr-ref-card">
-          <div class="pr-ref-title">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            REFERENCIA RÁPIDA
+        <!-- VARIEDAD NARRATIVA -->
+        <div class="pr-result-card" id="pr-var-card" style="display:none">
+          <div class="pr-result-card-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <span class="pr-result-card-title" style="color:#D4AF37">VARIEDAD NARRATIVA</span>
+            <span style="font-size:.62rem;letter-spacing:1.5px;color:var(--bl-muted);margin-left:2px">clic en chip = insertar</span>
+            <span class="pr-result-count" id="pr-var-count">—</span>
           </div>
-          <div class="pr-ref-list" id="pr-ref-list">
-            <!-- populated by JS based on active category -->
+          <div class="pr-result-body" id="pr-var-body" style="flex-direction:column;gap:7px"></div>
+        </div>
+
+        <!-- REFERENCIA RÁPIDA -->
+        <div class="pr-ai-tunnel">
+          <!-- hidden sink for renderRef — keeps catbar activeCat working -->
+          <div id="pr-ref-list" style="display:none" aria-hidden="true"></div>
+          <div class="pr-ai-t-header">
+            <span class="pr-ai-pulse-dot"></span>
+            CÓMO TU TURNO ENTRENA LA IA
+          </div>
+          <!-- Neural network canvas -->
+          <canvas id="pr-nn-canvas" width="460" height="160" style="display:block;width:100%;height:auto;max-height:160px;border-radius:8px;margin:0 0 12px"></canvas>
+          <!-- Steps -->
+          <div class="pr-ai-t-steps">
+            <div class="pr-ai-t-step">
+              <div class="pr-ai-t-num">01</div>
+              <div class="pr-ai-t-body"><strong>Tu turno llega al analizador local</strong>El texto pasa por el motor de reglas sin salir del navegador. Instantáneo, sin red.</div>
+            </div>
+            <div class="pr-ai-t-step">
+              <div class="pr-ai-t-num">02</div>
+              <div class="pr-ai-t-body"><strong>Se extraen metadatos de calidad narrativa</strong>Infracciones detectadas, tipo de redacción y puntaje estimado. Sin nombre, sin identidad.</div>
+            </div>
+            <div class="pr-ai-t-step">
+              <div class="pr-ai-t-num">03</div>
+              <div class="pr-ai-t-body"><strong>Paquete anónimo viaja en segundo plano</strong>Solo datos de calidad. Tu nombre y texto original nunca se almacenan ni se transmiten.</div>
+            </div>
+            <div class="pr-ai-t-step">
+              <div class="pr-ai-t-num">04</div>
+              <div class="pr-ai-t-body"><strong>La IA aprende a juzgar sin favoritismos</strong>Cada turno calibra el árbitro: frío, consistente, sin preferidos. Entrenas hoy al juez del mañana.</div>
+            </div>
           </div>
         </div>
 
@@ -733,6 +784,137 @@
 
   <script src="/tracker.js?v=7"></script>
   <script src="/app.js?v=16"></script>
+  <!-- Neural network canvas viz — lightweight TF Playground style -->
+  <script>
+  (function() {
+    var cv = document.getElementById('pr-nn-canvas');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var W = cv.width, H = cv.height;
+
+    /* Layer config: label + node count */
+    var layers = [
+      {lbl:'TU TURNO', n:3},
+      {lbl:'ANÁLISIS', n:4},
+      {lbl:'ANONIMIZAR', n:4},
+      {lbl:'IA ÁRBITRO', n:2},
+    ];
+
+    /* Pre-compute node positions */
+    var nodes = [];
+    var LX = layers.length;
+    for (var l = 0; l < LX; l++) {
+      var col = [];
+      var LC = layers[l].n;
+      var xPos = (W / (LX + 1)) * (l + 1);
+      for (var n = 0; n < LC; n++) {
+        var yPos = (H * 0.18) + (H * 0.64 / (LC - 1 || 1)) * n;
+        col.push({x: xPos, y: yPos, pulse: Math.random() * Math.PI * 2});
+      }
+      nodes.push(col);
+    }
+
+    /* Particles travelling along edges */
+    var particles = [];
+    function spawnParticle() {
+      var li = Math.floor(Math.random() * (LX - 1));
+      var ni = Math.floor(Math.random() * nodes[li].length);
+      var nj = Math.floor(Math.random() * nodes[li + 1].length);
+      particles.push({li: li, ni: ni, nj: nj, t: 0, spd: 0.012 + Math.random() * 0.012});
+    }
+    for (var i = 0; i < 6; i++) spawnParticle();
+
+    /* Colors */
+    var GOLD = '#D4AF37';
+    var GOLD_DIM = 'rgba(212,175,55,0.22)';
+    var NODE_BG = 'rgba(10,14,20,0.85)';
+
+    var lastTs = 0;
+    var FPS_CAP = 22;
+    var FRAME_MS = 1000 / FPS_CAP;
+    var paused = false;
+
+    document.addEventListener('visibilitychange', function() { paused = document.hidden; });
+
+    function draw(ts) {
+      requestAnimationFrame(draw);
+      if (paused) return;
+      if (ts - lastTs < FRAME_MS) return;
+      lastTs = ts;
+      var dt = Math.min(ts - lastTs + FRAME_MS, 40); /* clamp */
+
+      ctx.clearRect(0, 0, W, H);
+
+      /* Draw edges */
+      for (var l = 0; l < LX - 1; l++) {
+        for (var a = 0; a < nodes[l].length; a++) {
+          for (var b = 0; b < nodes[l + 1].length; b++) {
+            var ax = nodes[l][a].x, ay = nodes[l][a].y;
+            var bx = nodes[l + 1][b].x, by = nodes[l + 1][b].y;
+            ctx.beginPath();
+            ctx.moveTo(ax, ay);
+            ctx.lineTo(bx, by);
+            ctx.strokeStyle = GOLD_DIM;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      /* Update & draw particles */
+      for (var p = particles.length - 1; p >= 0; p--) {
+        var par = particles[p];
+        par.t += par.spd;
+        if (par.t >= 1) { particles.splice(p, 1); spawnParticle(); continue; }
+        var src = nodes[par.li][par.ni];
+        var dst = nodes[par.li + 1][par.nj];
+        var px = src.x + (dst.x - src.x) * par.t;
+        var py = src.y + (dst.y - src.y) * par.t;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212,175,55,' + (0.5 + par.t * 0.5) + ')';
+        ctx.fill();
+      }
+
+      /* Draw nodes */
+      var now = ts * 0.001;
+      for (var l = 0; l < LX; l++) {
+        for (var n2 = 0; n2 < nodes[l].length; n2++) {
+          var nd = nodes[l][n2];
+          var isOut = l === LX - 1;
+          var pulse = 0.7 + 0.3 * Math.sin(now * 1.4 + nd.pulse);
+          /* Glow */
+          var grd = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, isOut ? 16 : 12);
+          grd.addColorStop(0, 'rgba(212,175,55,' + (pulse * (isOut ? 0.45 : 0.25)) + ')');
+          grd.addColorStop(1, 'rgba(212,175,55,0)');
+          ctx.beginPath();
+          ctx.arc(nd.x, nd.y, isOut ? 16 : 12, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+          /* Node circle */
+          ctx.beginPath();
+          ctx.arc(nd.x, nd.y, isOut ? 7 : 5, 0, Math.PI * 2);
+          ctx.fillStyle = NODE_BG;
+          ctx.fill();
+          ctx.strokeStyle = isOut ? GOLD : 'rgba(212,175,55,' + (0.55 + pulse * 0.45) + ')';
+          ctx.lineWidth = isOut ? 1.8 : 1.2;
+          ctx.stroke();
+        }
+      }
+
+      /* Layer labels */
+      ctx.font = '600 8.5px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      for (var l = 0; l < LX; l++) {
+        var lx2 = (W / (LX + 1)) * (l + 1);
+        ctx.fillStyle = l === LX - 1 ? GOLD : 'rgba(212,175,55,0.6)';
+        ctx.fillText(layers[l].lbl, lx2, H - 4);
+      }
+    }
+
+    requestAnimationFrame(draw);
+  })();
+  </script>
   <script>
   (function() {
 
@@ -757,6 +939,9 @@
     var scoreVal   = document.getElementById('pr-score-value');
     var scoreVerd  = document.getElementById('pr-score-verdict');
     var refList    = document.getElementById('pr-ref-list');
+    var varCard    = document.getElementById('pr-var-card');
+    var varBody    = document.getElementById('pr-var-body');
+    var varCount   = document.getElementById('pr-var-count');
     var wave       = document.getElementById('pr-wave');
     var listenBtn  = document.getElementById('pr-listen-btn');
     var listenLbl  = document.getElementById('pr-listen-lbl');
@@ -767,6 +952,7 @@
 
     /* ── WORD COUNTER (debounced — no bloquea con textos largos) ── */
     var _counterTimer = null;
+    var _varTimer = null;
     textEl.addEventListener('input', function() {
       clearTimeout(_counterTimer);
       _counterTimer = setTimeout(function() {
@@ -774,6 +960,38 @@
         var w = v.trim() ? v.trim().split(/\s+/).length : 0;
         counterEl.textContent = w + ' palabras · ' + v.length + ' car.';
       }, 120);
+
+      clearTimeout(_varTimer);
+      _varTimer = setTimeout(function() {
+        var text = textEl.value;
+        if (text.trim().length < 60) { varCard.style.display = 'none'; return; }
+        var clean = text.toLowerCase().replace(/[¿¡.,;:!?()\[\]"'«»—–\n]/g,' ');
+        var words = clean.split(/\s+/).filter(function(w){ return w.length > 3; });
+        var freq = {};
+        words.forEach(function(w){ freq[w] = (freq[w]||0)+1; });
+        var stop = /^(este|esta|esto|ello|ellos|ellas|sera|sido|está|para|pero|cuando|como|todo|toda|todos|todas|algo|cada|otra|otro|otros|otras|entre|desde|hasta|sobre|aunque|donde|quien|cual|cuya|cuyo|habia|tenia|seria|puede|porque|mismo|misma|hacia|tiene|tengo|queda|quedan|dicho|dicha|tuyo|tuya|cual|cuales|también|tampoco|nunca|jamás|siempre|ahora|antes|después|luego|entonces|mientras|durante|primer|turno|rival|que|del|los|las|mis|sus|con|sin|una|uno|unos|unas)$/;
+        var alerts = [];
+        Object.keys(freq).forEach(function(w) {
+          if (freq[w] < 3 || stop.test(w)) return;
+          alerts.push({ w: w, n: freq[w], syns: SYNS[w] || null });
+        });
+        alerts.sort(function(a,b){ return b.n - a.n; });
+        alerts = alerts.slice(0, 6);
+        if (!alerts.length) { varCard.style.display = 'none'; return; }
+        varCard.style.display = '';
+        varCount.textContent = alerts.length + ' palabra' + (alerts.length !== 1 ? 's' : '');
+        var nodes = [];
+        alerts.forEach(function(vr) {
+          var row = document.createElement('div');
+          row.className = 'pr-var-row';
+          var chips = vr.syns
+            ? '<div class="pr-var-chips">' + vr.syns.map(function(s){ return '<button class="pr-var-chip" onclick="prInsertWord(this)">' + he(s) + '</button>'; }).join('') + '</div>'
+            : '<span class="pr-var-note">Sin alternativa directa — varía la construcción de la frase.</span>';
+          row.innerHTML = '<div class="pr-var-word">' + he(vr.w) + '<span class="pr-var-count">&times;' + vr.n + '</span></div>' + chips;
+          nodes.push(row);
+        });
+        batchRender(varBody, nodes);
+      }, 600);
     });
 
     /* ── Ctrl+Enter ── */
@@ -905,7 +1123,7 @@
         {k:'Excepciones energía', v:'Artefacto externo · Herramienta sobrenatural · Dones del alma · Anormalidades absolutas · Magia autónoma — la fuente no es interna al personaje.'},
         {k:'Energía ilimitada',   v:'Debe justificarse narrativamente. Abusar puede derivar en Super-Rol / God-Rol.'},
         {k:'Canon externo',       v:'El SC evalúa el rol escrito, no el lore del universo de origen. Los argumentos "en su mundo..." no son válidos en el campo de batalla.'},
-        {k:'Niveles de Poder',    v:'BESTIA (T1) → OGRO (T2) → DRAGÓN (T3) → DIOS (T4). Defensa sigue nivel anterior, ataque empieza en el nivel actual.'},
+        {k:'Divisiones Bellator', v:'Ciudad (7-B) y Universal (3-A). Arsenal completo desde el primer intercambio. No hay escalada por etapas.'},
       ],
       tiempos: [
         {k:'24h por turno',       v:'Tiempo máximo desde la publicación del spam correspondiente. Al finalizar las 24h se activa el Punto Muerto automáticamente.'},
@@ -921,15 +1139,14 @@
         {k:'Aclaraciones',        v:'Deben ser breves y resumidas. Si hay más narrativa en las Aclaraciones que en el turno mismo, esa información NO será considerada por el juez.'},
       ],
       niveles: [
-        {k:'BESTIA (T1)',          v:'Large Building Level. Daño = Edificio Grande · Velocidad: Mach 1–3 · Rango: 700m Ø · Calor máx: 2 000°C · Frío máx: −100°C.'},
-        {k:'OGRO (T2)',            v:'City Block Level. Daño = Bloque de Ciudad · Velocidad: Mach 10–1000 · Rango: 20km Ø · Calor: 7 000°C · Frío: −150°C.'},
-        {k:'DRAGÓN (T3)',          v:'Mountain Level. Daño = Cadena Montañosa · Velocidad: 50% Vel. de la Luz · Rango: 1 000km Ø · Calor: 30 000°K · Frío: −200°C.'},
-        {k:'DIOS (T4)',            v:'Planetary Level. Daño = Planetario · Velocidad: 300 000 km/s (SoL) · Rango: 510.1M km² · Calor: 30 000°K · Frío: 0°K (Cero Absoluto).'},
-        {k:'Escalada — Regla',    v:'La defensa de cada intercambio sigue el nivel ANTERIOR; el ataque comienza en el nivel ACTUAL del turno.'},
-        {k:'Escalada — Cronología', v:'T1: def.BESTIA/atq.BESTIA → T2: def.BESTIA/atq.OGRO → T3: def.OGRO/atq.DRAGÓN → T4: def.DRAGÓN/atq.DIOS.'},
-        {k:'HAX y escalada',      v:'Los HAX no siguen la regla de escalada física; sus agresiones y defensas se sustentan de forma independiente al nivel físico.'},
-        {k:'Armamento físico',    v:'Las armas que respetan las leyes de la física no pueden ser ajustadas por el reglamento. Solo permitidas donde sus características naturales encajen.'},
-        {k:'Estructura de batalla', v:'1 turno de llegada (presentación) + 4 intercambios de combate. Cada intercambio libera mayores capacidades conforme avanza la batalla.'},
+        {k:'División Ciudad (7-B)',   v:'City Level. Daño: 6.3–100 megatones TNT · Velocidad: Massively Hypersonic hasta Mach 1 000 · Alcance: 50 km de diámetro.'},
+        {k:'Ciudad — Temperatura',    v:'Natural: ~30 000 °C (rayo) · Frío: −196 °C (nitrógeno líquido). Si se excede sin soporte físico real, se evalúa como HAX.'},
+        {k:'División Universal (3-A)', v:'Universe Level. Masa referencial: ~1.46×10⁵³ kg · Velocidad: Massively FTL+ desde ×1 000 SoL · Alcance: 93 000 M años luz (universo observable).'},
+        {k:'Universal — Contexto',    v:'Sin techo térmico clásico. Justificación con procesos astronómicos o cosmológicos. No presupone infinitud ni omnipotencia por defecto.'},
+        {k:'Arsenal completo',         v:'Cada jugador entra con su arsenal completo desde el inicio. No existe liberación de poder por etapas en Bellator.'},
+        {k:'HAX — aplicación',        v:'Los HAX del Registro HAX aplican con los mismos usos y límites sin importar la división activa. La escala no anula la economía interna.'},
+        {k:'Armamento físico',         v:'Las armas que respetan leyes de la física no son ajustadas por el reglamento. Solo donde sus propiedades naturales encajen.'},
+        {k:'Estructura de batalla',    v:'1 turno de llegada (presentación, sin acción de combate) + 4 intercambios de combate libre con arsenal activo.'},
       ],
       cooldown: [
         {k:'Cooldown (CD)',        v:'Tiempo de espera que un HAX debe respetar tras ser utilizado. Solo puede reactivarse después de 1 turno de espera completo.'},
@@ -1004,6 +1221,7 @@
       ruleBody.innerHTML = emptyState('Esperando análisis...');
       orthCount.textContent = '—';
       ruleCount.textContent = '—';
+      if (varCard) varCard.style.display = 'none';
       scoreBar.style.width = '0%';
       scoreVal.textContent = '—';
       scoreVerd.textContent = 'Escribe y analiza tu rol para ver el resultado';
@@ -1253,8 +1471,107 @@
          msg:'CROSSOVER — Comparar tu personaje con otro canónico no es argumento de rol válido. Demuéstralo con acciones narradas, no con nombres.', lvl:'warn'},
       ],
 
-      sc: [], tiempos: [], niveles: [],
+      /* ────────────────────────────────────────
+         COMBATE EXTRA — HAX prohibidos ampliados
+      ──────────────────────────────────────── */
+      combate_hax: [
+
+        /* Primer Turno — atacar en presentación */
+        {re:/(ataco|golpeo|lanzo (un|mi)|disparo|activo|invoco).{0,80}(llegar|llegando|al entrar|presentaci[oó]n|primer turno|turno de inicio)/gi,
+         msg:'PRIMER TURNO — Está prohibido atacar, usar habilidades activas o preparar combos en el turno de presentación. El T1 es para presentar al personaje y describir el escenario neutral.', lvl:'err'},
+
+        /* Escenario ventajoso en T1 */
+        {re:/(el (lugar|escenario|campo) (tiene|cuenta con|posee|presenta) (ventaja|beneficio|potencia|poder|refuerzo|plus) (para (m[íi]|mi personaje)))/gi,
+         msg:'ESCENARIO VENTAJOSO — El escenario del Turno 1 debe ser neutral. No puedes establecer condiciones que favorezcan a tu personaje.', lvl:'warn'},
+
+        /* Plot / Narrative Manipulation — HAX prohibido absoluto */
+        {re:/(manipulo (el gui[oó]n|la (historia|narrativa|trama)|el destino narrativo)|la narrativa (me favorece|me protege|dicta que)|soy (el protagonista|el h[eé]roe de esta historia|inmune a perder))/gi,
+         msg:'HAX PROHIBIDO — PLOT/NARRATIVE MANIPULATION: Manipular la narrativa, el guión o el destino narrativo está completamente prohibido en Bellator.', lvl:'err'},
+
+        /* Arquetipos — HAX prohibido absoluto */
+        {re:/(soy el arquetipo|mi arquetipo (me protege|niega|cancela|garantiza)|por ser (el h[eé]roe|el protagonista|el archetype)|invoco (mi|el) arquetipo)/gi,
+         msg:'HAX PROHIBIDO — MANIPULACIÓN DE ARQUETIPOS: Invocar la condición de arquetipo como defensa, escudo o ventaja está completamente prohibido.', lvl:'err'},
+
+        /* Cronología — anular acciones ya ejecutadas */
+        {re:/(regreso (al|al momento|al instante) (anterior|en que|antes de|previo)|vuelvo al (momento|instante) (en que|donde|antes|previo)|anulo (lo que (hizo|lanz[oó]|ejecut[oó]|accionó)|su (ataque|movimiento) ya (descrito|publicado))|retrocedo en el tiempo del combate)/gi,
+         msg:'CRONOLOGÍA VIOLADA — La cronología del combate es sagrada. No puedes retroceder para anular o borrar acciones ya ejecutadas por el rival. Solo puedes responder a sus consecuencias.', lvl:'err'},
+
+        /* Stats infinitos / omnipotencia / invulnerabilidad absoluta */
+        {re:/(poder infinito|fuerza infinita|stats infinitos|omnipotente|todopoderoso|invulnerable (absoluto|completamente|en su totalidad|total)|da[ñn]o infinito|resistencia infinita|velocidad infinita)/gi,
+         msg:'GOD-ROL — Stats infinitos, omnipotencia o invulnerabilidad absoluta están completamente prohibidos. Todo personaje opera bajo límites medibles en Bellator.', lvl:'err'},
+
+        /* Transmutación como cierre inmediato del rival */
+        {re:/(convierto (al|a (tu|su)) (rival|oponente|enemigo) en|transmuto al? (rival|oponente) en|el (rival|oponente) se convierte en (piedra|polvo|nada|agua|metal|cristal|hielo) (para siempre|sin retorno|permanentemente|de inmediato))/gi,
+         msg:'TRANSMUTACIÓN — Declarar la transmutación final del rival como hecho consumado es Manipulación Negra. Solo 1 uso y no puede cerrar el combate de forma automática.', lvl:'err'},
+
+        /* Petrificación como estado absoluto e irreversible */
+        {re:/(queda (petrificado|paralizado|congelado) (completamente|para siempre|sin posibilidad|de forma absoluta|permanentemente|sin poder|irremediablemente))/gi,
+         msg:'PETRIFICACIÓN — No puede declararse como estado absoluto e irreversible. El rival siempre mantiene posibilidad de resistencia o ruptura (HAX limitado — 1 uso, no directo).', lvl:'err'},
+      ],
+
+      /* ────────────────────────────────────────
+         PODERES EXTRA — HAX limitados ampliados
+      ──────────────────────────────────────── */
+      poderes_hax: [
+
+        /* Regeneración — COMPLETAMENTE PROHIBIDA en Bellator */
+        {re:/(me (regenero|curo|recupero|sano|restituyo).{0,40}(da[ñn]o|herida|lesi[oó]n|[oó]rgano|cuerpo|tejido|miembro|extremidad)|regenero (el|mi) (cuerpo|brazo|pierna|[oó]rgano|tejido)|rehago (mi|el) (cuerpo|[oó]rgano))/gi,
+         msg:'HAX PROHIBIDO — REGENERACIÓN: En Bellator la regeneración está completamente prohibida. No puedes restaurar daño recibido, rehacer órganos ni recomponer el cuerpo bajo ninguna forma.', lvl:'err'},
+
+        /* Manipulación Realidad directa al rival */
+        {re:/(reescribo (la realidad|el espacio) (de|del) (rival|oponente)|la realidad (aplasta|destruye|niega|elimina) (al|a (tu|su)) (rival|oponente)|altero la realidad (del|de (tu|su)) (rival|oponente))/gi,
+         msg:'MANIPULACIÓN DE REALIDAD — No puede afectar al rival directamente. Solo deformación del entorno inmediato (1 uso). Aplicarla al rival es Manipulación Negra.', lvl:'err'},
+
+        /* Incorporeidad activa como estado continuo */
+        {re:/(mantengo (la incorporeidad|intangibilidad|mi estado intangible)|permanezco (intangible|incorp[oó]reo) (durante|por|todo|el resto|siempre|mientras)|soy intangible (todo el tiempo|durante el combate|permanentemente))/gi,
+         msg:'INCORPOREIDAD ACTIVA — No puede mantenerse como estado continuo. Solo 1 uso defensivo por combate (HAX limitado).', lvl:'err'},
+
+        /* Precognición como omnisciencia táctica total */
+        {re:/(veo (todo|cada|todos) (los|sus|tus) (movimientos|ataques|habilidades|acciones) (futuros?|del combate|que (har[aá]|vendr[aá]|ejecutar[aá]))|predigo (todo|cada movimiento|el combate entero|todos tus movimientos))/gi,
+         msg:'PRECOGNICIÓN — No puede usarse como omnisciencia táctica total. Solo 2 lecturas breves de amenaza puntual por combate (HAX defensas extraordinarias).', lvl:'warn'},
+
+        /* Manipulación Vectorial total — devolver toda la ofensiva del rival */
+        {re:/(devuelvo (todo|todos) (lo|los) (que (ataca|lanza|dispara|envía))|reflejo (toda|cualquier|cada) (su|tu) (ofensiva|ataque|habilidad) (de forma permanente|siempre|sin límite|por siempre))/gi,
+         msg:'MANIPULACIÓN VECTORIAL — Devolver absolutamente toda la ofensiva rival de forma permanente excede el límite legal (3 usos por combate, rango de combate cuerpo a cuerpo o corto).', lvl:'warn'},
+
+        /* Manip. Memoria total */
+        {re:/(borro (toda|la totalidad de) (su|tu) (memoria|mente|recuerdo|conciencia|identidad)|elimino (su|tu) (memoria|mente) (por completo|completamente|totalmente|de forma total))/gi,
+         msg:'MANIPULACIÓN DE MEMORIA TOTAL — Borrar la memoria completa del rival está completamente prohibido. Solo alteraciones parciales y puntuales (máx 1 uso).', lvl:'err'},
+
+        /* Borrado Existencial extendido */
+        {re:/(lo (borro|eraso|elimino) (de la existencia|de la realidad|de toda realidad|de este plano)|la existencia (del|de (tu|su)) (rival|oponente|enemigo) (desaparece|se borra|es erasa))/gi,
+         msg:'BORRADO EXISTENCIAL — HAX completamente prohibido como acción directa al rival. Solo afecta objetos o área pequeña, nunca al oponente directamente.', lvl:'err'},
+
+        /* Power Mimicry sin justificación */
+        {re:/(copio (todos?|sus?|tus?) (poderes?|habilidades?|capacidades?|técnicas?) (automáticamente|al instante|al verlos?|solo (con|al) (verlos?|percibirlos?)))/gi,
+         msg:'POWER MIMICRY — Copiar poderes del rival requiere justificación narrativa y canónica previa. Sin sustento es Super-Rol.', lvl:'warn'},
+      ],
+
+      /* ────────────────────────────────────────
+         SC — Sustento y evidencia
+      ──────────────────────────────────────── */
+      sc: [
+        {re:/(seg[uú]n (la wiki|wikipedia|wikia|el wiki)|la (wiki|wikipedia|wikia) (dice|indica|establece|confirma|señala|menciona) que)/gi,
+         msg:'SUSTENTO DÉBIL — Wikipedia/Wikia es editable y puede ser invalidada por el juez. Usa scans directos del manga, anime o ficha oficial como respaldo.', lvl:'warn'},
+        {re:/(edit[eé]|borr[eé]|modifiqu[eé]|cambi[eé]) (mi|el) turno/gi,
+         msg:'EDITAR/BORRAR TURNO — Cualquier modificación de un turno ya publicado se clasifica como Manipulación Negra. Consecuencia: descalificación inmediata.', lvl:'err'},
+        {re:/(no tengo (scans?|evidencia|prueba|respaldo)|sin (scans?|evidencia|prueba))/gi,
+         msg:'SIN SUSTENTO — Declarar que no tienes scans o evidencia invalida la acción de gran escala. El juez puede anular el argumento.', lvl:'warn'},
+      ],
+
+      /* ────────────────────────────────────────
+         TIEMPOS — Rol Pausa y ciclo de respuesta
+      ──────────────────────────────────────── */
+      tiempos: [
+        {re:/(parte\s*1.{1,80}parte\s*2|parte\s*uno.{1,80}parte\s*dos|publico (la |esta )?(primera|primera parte|parte 1).{1,60}(despu[eé]s|ma[ñn]ana|luego) (publico|termino|completo))/gi,
+         msg:'ROL PAUSA PROHIBIDO — Publicar fragmentado en Parte 1 + Parte 2 para detener el reloj es una infracción grave. El fraccionamiento del turno conlleva descalificación inmediata.', lvl:'err'},
+        {re:/(solicito (rol pausa|rp|pausa del combate|pausa de combate)|pido (rol pausa|pausa urgente))/gi,
+         msg:'ROL PAUSA — Solo el juzgado puede autorizar la pausa. Recuerda: solo 1 uso por intercambio y debe solicitarse antes de que venzan las primeras 24 horas.', lvl:'warn'},
+      ],
+
+      niveles: [],
     };
+    window._BELLATOR_RULES = RULES; /* expose for ejercicios engine */
 
     /* ── ANALYZE ── */
     /* ── SCORE RENDERER (shared) ── */
@@ -1283,6 +1600,51 @@
       }
     }
 
+    /* ── SINÓNIMOS DE COMBATE — dict plano para sugerencias ── */
+    var SYNS = {
+      'golpear':  ['impactar','proyectar','descargar','comprimir','sacudir'],
+      'golpe':    ['impacto','descarga','colisión','proyección','cizalla'],
+      'pegar':    ['impactar','descargar','comprimir','sacudir','conectar'],
+      'atacar':   ['avanzar','interceptar','flanquear','ejercer presión','expandir'],
+      'ataque':   ['ofensiva','descarga','proyección','saturación','cizalla'],
+      'cortar':   ['seccionar','perforar','fraccionar','rebanar','dislocar'],
+      'mover':    ['desplazar','avanzar','flanquear','pivotear','acelerar'],
+      'llegar':   ['alcanzar','cerrar distancia','interceptar','posicionarse'],
+      'correr':   ['acelerar','avanzar','desplazarse','precipitarse'],
+      'usar':     ['activar','canalizar','concentrar','desplegar','ejecutar'],
+      'lanzar':   ['proyectar','expandir','liberar','irradiar','descargar'],
+      'activar':  ['canalizar','concentrar','liberar','expandir','desplegar'],
+      'bloquear': ['interponer','contener','redistribuir','cubrir','disipar'],
+      'esquivar': ['evadir','desviar','desplazarse','pivotear','flanquear'],
+      'defender': ['interponer','disipar','cubrir','absorber','contener'],
+      'hacer':    ['ejecutar','desplegar','proyectar','dirigir','realizar'],
+      'tener':    ['poseer','contar con','disponer de','portar','cargar'],
+      'decir':    ['narrar','describir','señalar','indicar','exponer'],
+      'saber':    ['detectar','percibir','calcular','anticipar','estimar'],
+      'ver':      ['percibir','detectar','rastrear','calcular','anticipar'],
+      'estar':    ['posicionarse','mantenerse','hallarse','situarse','encontrarse'],
+      'poder':    ['lograr','ser capaz de','ejecutar','desplegar','disponer de'],
+      'impactar': ['proyectar','descargar','comprimir','seccionar','saturar'],
+      'avanzar':  ['interceptar','flanquear','pivotear','precipitarse','acelerar'],
+      'expandir': ['irradiar','liberar','descargar','saturar','propagar'],
+      'grande':   ['de alta densidad','de escala masiva','de radio amplio','colosal'],
+      'rapido':   ['a alta velocidad','explosivo','subsónico','de reacción inmediata'],
+      'fuerte':   ['de alta densidad','de gran potencia','concentrado','comprimido'],
+      'enemigo':  ['rival','oponente','adversario','contendiente'],
+      'poder':    ['capacidad','recurso técnico','mecanismo','habilidad'],
+    };
+
+    window.prInsertWord = function(btn) {
+      var word = btn.textContent.trim();
+      var s = textEl.selectionStart, e = textEl.selectionEnd;
+      textEl.value = textEl.value.substring(0, s) + word + textEl.value.substring(e);
+      textEl.selectionStart = textEl.selectionEnd = s + word.length;
+      textEl.focus();
+      var ob = btn.style.background, oc = btn.style.color, oe = btn.style.borderColor;
+      btn.style.background = 'rgba(63,185,80,.18)'; btn.style.color = '#3fb950'; btn.style.borderColor = 'rgba(63,185,80,.4)';
+      setTimeout(function(){ btn.style.background=ob; btn.style.color=oc; btn.style.borderColor=oe; }, 650);
+    };
+
     window.prAnalyze = function() {
       var text = textEl.value;
       if (!text.trim()) return;
@@ -1291,8 +1653,8 @@
       /* ── 1. REGLAS B.R.B. (síncrono, regex) ── */
       var ruleErrors = [];
       var cats = (!activeCat || activeCat === 'all')
-        ? ['universal','combate','poderes','redaccion','juez','crossover']
-        : ['universal', activeCat];
+        ? ['universal','combate','combate_hax','poderes','poderes_hax','redaccion','juez','crossover','sc','tiempos']
+        : ['universal', 'combate_hax', 'poderes_hax', 'sc', 'tiempos', activeCat];
       cats.forEach(function(cat) {
         (RULES[cat] || []).forEach(function(rule) {
           var re = new RegExp(rule.re.source, 'gi'), found = [], m;
@@ -1393,6 +1755,8 @@
 
   })();
   </script>
+
 <script src="/translate.js"></script>
+
 </body>
 </html>
