@@ -10,17 +10,18 @@
 *.dylib
 *.test
 *.out
+valhala
+valhala-tracker.exe~
+valhala.exe~
 
-!main.exe
-!valhala.exe
-!valhala-tracker.exe
-!tts/piper/piper/piper.exe
-!tts/piper/piper/*.dll
+# TTS data (heavy, not needed in Docker build)
+tts/
 
 # Temporary and backup files
 *~
 *.tmp
 *.log
+reporte_bytes.txt
 
 # Editor and OS files
 .vscode/

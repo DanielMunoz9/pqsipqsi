@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BELLATOR ROLBATTLE — Inicio</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
   <style>
     .bl-search-hero{padding:64px 24px 52px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:1px solid var(--bl-border2);position:relative;z-index:10}
     .bl-sh-eyebrow{font-family:'Teko',sans-serif;letter-spacing:6px;font-size:.7rem;color:var(--bl-gold);text-transform:uppercase;opacity:.9}
@@ -18,7 +18,71 @@
     .bl-gsr-page-name{font-size:.95rem;color:var(--bl-text);font-weight:700}
     .bl-gsr-page-desc{font-size:.8rem;color:var(--bl-muted)}
     .bl-gsr-page-arrow{margin-left:auto;color:var(--bl-muted);font-size:.85rem;flex-shrink:0;padding-left:8px}
-    .bl-home-hero--slim{padding:28px 0 30px}
+    .bl-home-intro{max-width:1320px;margin:0 auto;padding:36px 24px 20px;border-bottom:1px solid rgba(212,175,55,.10)}
+    .bl-home-intro-inner{max-width:900px;display:grid;gap:8px}
+    .bl-home-intro-eyebrow{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.85}
+    .bl-home-intro-title{font-family:'Teko',sans-serif;font-size:clamp(2.4rem,4.5vw,3.4rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0}
+    .bl-home-intro-body{font-size:1.05rem;color:var(--bl-soft);line-height:1.7;max-width:760px;border-left:3px solid rgba(212,175,55,.36);padding-left:18px;margin-top:4px}
+    .bl-home-intro-copy{display:none}
+    .bl-home-carousel[hidden]{display:none !important}
+    .bl-home-hero--slim{padding:28px 24px 30px}
+    .bl-home-hero--slim .bl-hero-copy{isolation:isolate;border-color:rgba(212,175,55,.16);background:
+      radial-gradient(circle at 78% 24%,rgba(31,111,235,.20) 0%,rgba(31,111,235,.08) 20%,transparent 38%),
+      radial-gradient(circle at 82% 78%,rgba(212,175,55,.11) 0%,transparent 28%),
+      linear-gradient(140deg,transparent 0 70%,rgba(31,111,235,.11) 70% 78%,transparent 78% 100%),
+      linear-gradient(140deg,transparent 0 78%,rgba(212,175,55,.11) 78% 84%,transparent 84% 100%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 160px),
+      linear-gradient(115deg,rgba(13,17,23,.96) 0%,rgba(10,13,19,.88) 48%,rgba(8,15,28,.80) 100%)}
+    .bl-home-hero--slim .bl-hero-copy::before{content:'';position:absolute;right:24px;top:22px;width:220px;height:220px;border-radius:50%;border:6px solid rgba(212,175,55,.10);box-shadow:0 0 0 34px rgba(212,175,55,.03),0 0 0 72px rgba(212,175,55,.02);opacity:.72;pointer-events:none}
+    .bl-home-hero--slim .bl-hero-copy-inner{max-width:560px}
+    .bl-hero-orb{position:absolute;right:24px;top:22px;width:220px;height:220px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:0}
+    .bl-hero-orb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+    .bl-hero-orb-img.orb-active{opacity:.68}
+    .bl-home-carousel{max-width:1320px;margin:0 auto;padding:4px 24px 50px}
+    .bl-home-carousel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+    .bl-home-carousel-copy{max-width:520px;margin:0;color:var(--bl-muted);font-size:.95rem;line-height:1.5}
+    .bl-home-carousel-scene{position:relative;height:420px;overflow:hidden;padding:8px 0 4px}
+    .bl-home-carousel-track{display:flex;align-items:stretch;gap:22px;height:100%;transition:transform .62s cubic-bezier(.22,1,.36,1);will-change:transform}
+    .bl-home-carousel-card{position:relative;flex:0 0 clamp(274px,24vw,320px);width:clamp(274px,24vw,320px);height:360px;border-radius:28px;overflow:hidden;text-decoration:none;color:var(--bl-text);background:linear-gradient(180deg,rgba(7,10,16,.82),rgba(7,10,16,.98));border:1px solid rgba(255,255,255,.08);box-shadow:0 26px 58px rgba(0,0,0,.34);transform:translateY(10px) scale(.86);opacity:.48;filter:blur(.35px) saturate(.78);transition:transform .62s cubic-bezier(.22,1,.36,1),opacity .35s ease,filter .35s ease,border-color .25s ease,box-shadow .25s ease;will-change:transform,opacity;isolation:isolate}
+    .bl-home-carousel-card::before{content:'';position:absolute;inset:0;background:linear-gradient(165deg,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 42%),radial-gradient(circle at 82% 18%,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 24%);opacity:.95;pointer-events:none}
+    .bl-home-carousel-card::after{content:'';position:absolute;inset:14px;border-radius:22px;border:1px solid rgba(255,255,255,.08);pointer-events:none;opacity:.75}
+    .bl-home-carousel-card.is-near{transform:translateY(4px) scale(.93);opacity:.8;filter:blur(.12px) saturate(.92)}
+    .bl-home-carousel-card.is-far{opacity:.34}
+    .bl-home-carousel-card.is-active{border-color:rgba(212,175,55,.34);box-shadow:0 32px 80px rgba(0,0,0,.42),0 0 0 1px rgba(212,175,55,.08)}
+    .bl-home-carousel-card.is-active{transform:translateY(0) scale(1);opacity:1;filter:none}
+    .bl-home-carousel-top,.bl-home-carousel-bottom{position:relative;z-index:2}
+    .bl-home-carousel-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 18px 0}
+    .bl-home-carousel-badge,.bl-home-carousel-index{display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(10,14,20,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .bl-home-carousel-badge{padding:8px 12px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.82)}
+    .bl-home-carousel-index{padding:8px 10px;font-family:'Teko',sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--bl-gold)}
+    .bl-home-carousel-media{position:absolute;inset:0;overflow:hidden}
+    .bl-home-carousel-media img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.06) contrast(1.04) brightness(.82)}
+    .bl-home-carousel-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,10,16,.02) 0%,rgba(7,10,16,.08) 38%,rgba(7,10,16,.92) 100%)}
+    .bl-home-carousel-media--abstract{background:radial-gradient(circle at 50% 26%,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 24%),linear-gradient(135deg,rgba(255,255,255,.06),transparent 30%),linear-gradient(145deg,#101928 0%,#0b1220 48%,#070b11 100%)}
+    .bl-home-carousel-fallback{position:absolute;inset:0;display:grid;place-items:center;font-family:'Teko',sans-serif;font-size:5.2rem;letter-spacing:.08em;color:rgba(255,255,255,.92);text-shadow:0 0 18px rgba(0,0,0,.34)}
+    .bl-home-carousel-bottom{position:absolute;left:0;right:0;bottom:0;padding:18px 20px 20px}
+    .bl-home-carousel-name{font-family:'Teko',sans-serif;font-size:2rem;line-height:.88;letter-spacing:.03em;color:#fff;text-transform:uppercase}
+    .bl-home-carousel-meta{margin-top:8px;font-size:.9rem;line-height:1.45;color:var(--bl-soft)}
+    .bl-home-carousel-link{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold)}
+    .bl-home-carousel-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+    .bl-home-carousel-nav{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(15,20,29,.94),rgba(9,13,18,.94));color:var(--bl-text);font-size:1.15rem;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+    .bl-home-carousel-nav:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.36);background:linear-gradient(180deg,rgba(22,28,38,.96),rgba(11,15,21,.96))}
+    .bl-home-carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;min-height:18px}
+    .bl-home-carousel-dots button{width:10px;height:10px;border-radius:50%;border:none;background:rgba(255,255,255,.18);cursor:pointer;transition:transform .18s ease,background .18s ease}
+    .bl-home-carousel-dots button.is-active{background:var(--bl-gold);transform:scale(1.2)}
+    @media (max-width:960px){
+      .bl-home-intro{padding:22px 14px 10px}
+      .bl-home-hero--slim{padding:24px 14px 22px}
+      .bl-home-hero--slim .bl-hero-copy::before{right:12px;top:auto;bottom:18px;width:150px;height:150px;box-shadow:0 0 0 24px rgba(212,175,55,.03),0 0 0 50px rgba(212,175,55,.02)}
+      .bl-hero-orb{right:12px;bottom:18px;top:auto;width:150px;height:150px}
+      .bl-home-carousel{padding:0 14px 38px}
+      .bl-home-carousel-head{margin-bottom:14px}
+      .bl-home-carousel-scene{height:auto}
+      .bl-home-carousel-track.is-mobile{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;height:auto;scrollbar-width:none;transition:none;transform:none !important}
+      .bl-home-carousel-track.is-mobile::-webkit-scrollbar{display:none}
+      .bl-home-carousel-track.is-mobile .bl-home-carousel-card{position:relative;min-width:80vw;width:80vw;height:330px;transform:none !important;opacity:1 !important;filter:none !important;scroll-snap-align:center}
+      .bl-home-carousel-controls{margin-top:8px}
+    }
     mark{background:rgba(212,175,55,.22);color:var(--bl-gold);border-radius:2px;padding:0 1px;font-style:normal}
     .bl-nav-card-icon{color:var(--bl-gold)}
     .bl-nav-card-icon svg{display:block;stroke:var(--bl-gold)}
@@ -102,6 +166,13 @@
     .bl-ds-univ .bl-ds-title,.bl-ds-univ .bl-ds-subtitle{text-shadow:0 0 32px rgba(255,70,50,.16),0 8px 22px rgba(0,0,0,.46)}
     @media(max-width:980px){.bl-divshow-grid{grid-template-columns:1fr 1fr}.bl-ds-bottom{max-width:66%}}
     @media(max-width:680px){.bl-divshow-grid{grid-template-columns:1fr}.bl-ds-panel,.bl-ds-content{min-height:212px}.bl-ds-frame{inset:10px;border-radius:14px}.bl-ds-slash{left:60%}.bl-ds-burst{right:8px;top:10px;width:50%;height:64%}.bl-ds-orb{right:8px;top:38px;width:92px;height:92px}.bl-ds-speed{inset:10px 10px 10px 58%}.bl-ds-bg-word{font-size:4.2rem}.bl-ds-bottom{max-width:66%}.bl-ds-title{font-size:2.55rem}.bl-ds-copy{max-width:24ch}.bl-ds-gif-wrap{width:50%;height:100%;top:0;right:0}}
+    /* ── Lock overlay (PRÓXIMAMENTE) — muestra el diseño de fondo ── */
+    .bl-ds-lock-overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:0 14px 14px;gap:3px;background:linear-gradient(180deg,transparent 0%,transparent 28%,rgba(7,10,16,.38) 58%,rgba(7,10,16,.90) 100%);border-radius:20px;pointer-events:none}
+    .bl-ds-lock-icon{font-size:.88rem;line-height:1;opacity:.9}
+    .bl-ds-lock-label{font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:4px;text-transform:uppercase;color:#D4AF37;font-weight:700;line-height:1.1}
+    .bl-ds-lock-date{font-size:.63rem;letter-spacing:1.5px;color:rgba(238,244,255,.72);text-transform:uppercase;line-height:1.55}
+    .bl-ds-panel--locked{pointer-events:none!important;cursor:default!important}
+    .bl-ds-panel--locked .bl-ds-content{opacity:0}
   </style>
 </head>
 <body>
@@ -161,9 +232,10 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
         <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">TEMPORADA 2026</span>
       </div>
     </nav>
@@ -192,9 +264,18 @@
       </div>
     </section>
 
+    <section class="bl-home-intro">
+      <div class="bl-home-intro-inner">
+        <div class="bl-home-intro-eyebrow">Código de Honor &mdash; El único estándar</div>
+        <h2 class="bl-home-intro-title">Aquí no se<br>entra sin mérito.</h2>
+        <p class="bl-home-intro-body">Bellator RolBattle es el estándar de combate narrativo donde cada duelo exige rol legible, lectura precisa del rival e interpretación que respete la escala. El código de honor no es opcional: es la puerta. El mérito, la única corona posible.</p>
+      </div>
+    </section>
+
     <section class="bl-home-hero bl-home-hero--slim">
       <div class="bl-home-hero-grid">
         <div class="bl-hero-copy">
+          <div id="bl-hero-orb" class="bl-hero-orb"></div>
           <div class="bl-hero-copy-inner">
             <div class="bl-hero-eyebrow">BELLATOR WORLD CHAMPIONSHIP · 2026</div>
             <div class="bl-hero-chips">
@@ -244,13 +325,13 @@
                       </div>
                     </div>
                     <div class="bl-ds-bottom">
-                      <div class="bl-ds-kicker">Inscripción abierta</div>
+                      <div class="bl-ds-kicker" id="ds-kicker-ciudad">Inscripción abierta</div>
                       <h2 class="bl-ds-title">Ciudad</h2>
                       <p class="bl-ds-subtitle">El mejor del mundo con arsenal de este tier entra.</p>
                       <p class="bl-ds-copy">Combate callejero, presión táctica y pase directo a la primera corona del circuito.</p>
                       <div class="bl-ds-meta">
                         <span class="bl-ds-chip">Nivel urbano</span>
-                        <span class="bl-ds-cta-btn">Entrar al registro +</span>
+                        <span class="bl-ds-cta-btn" id="ds-cta-ciudad">Entrar al registro +</span>
                       </div>
                     </div>
                   </div>
@@ -279,13 +360,13 @@
                       </div>
                     </div>
                     <div class="bl-ds-bottom">
-                      <div class="bl-ds-kicker">Inscripción abierta</div>
+                      <div class="bl-ds-kicker" id="ds-kicker-univ">Inscripción abierta</div>
                       <h2 class="bl-ds-title">Universal</h2>
                       <p class="bl-ds-subtitle">El mejor del mundo con arsenal de este tier entra.</p>
                       <p class="bl-ds-copy">Poder bruto, lectura de alto impacto y acceso a la cima del torneo principal.</p>
                       <div class="bl-ds-meta">
                         <span class="bl-ds-chip">Escala máxima</span>
-                        <span class="bl-ds-cta-btn">Entrar al registro +</span>
+                        <span class="bl-ds-cta-btn" id="ds-cta-univ">Entrar al registro +</span>
                       </div>
                     </div>
                   </div>
@@ -315,6 +396,38 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ── PRÓXIMAS PELEAS ──────────────────────────────────────── -->
+    <section id="bl-proximas-section" style="max-width:1320px;margin:0 auto;padding:48px 24px 16px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px">
+        <div>
+          <div style="font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9;margin-bottom:6px">AGENDA OFICIAL</div>
+          <h2 style="font-family:'Teko',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">Próximas Peleas</h2>
+        </div>
+        <a href="/competidores" style="display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold);text-decoration:none;opacity:.8">Ver todos los competidores &#8594;</a>
+      </div>
+      <div id="bl-proximas-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">
+        <div style="color:rgba(255,255,255,.3);font-size:.9rem;padding:24px 0">Cargando próximas peleas...</div>
+      </div>
+    </section>
+
+    <section class="bl-home-carousel" aria-labelledby="bl-home-carousel-title">
+      <div class="bl-home-carousel-head">
+        <div>
+          <div class="bl-kicker">Registro visual</div>
+          <h2 class="bl-section-h2" id="bl-home-carousel-title">Carrusel Bellator</h2>
+        </div>
+        <p class="bl-home-carousel-copy">Los perfiles oficiales del circuito aparecerán aquí conforme existan competidores registrados dentro de Bellator.</p>
+      </div>
+      <div class="bl-home-carousel-scene">
+        <div class="bl-home-carousel-track" id="bl-home-carousel-track" aria-live="polite"></div>
+      </div>
+      <div class="bl-home-carousel-controls">
+        <button class="bl-home-carousel-nav" id="bl-home-carousel-prev" type="button" aria-label="Mostrar tarjeta anterior">&#8592;</button>
+        <div class="bl-home-carousel-dots" id="bl-home-carousel-dots" aria-label="Paginación del carrusel"></div>
+        <button class="bl-home-carousel-nav" id="bl-home-carousel-next" type="button" aria-label="Mostrar tarjeta siguiente">&#8594;</button>
       </div>
     </section>
 
@@ -409,7 +522,7 @@
   </div>
 
   <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/app.js?v=19"></script>
   <script>
     let searchCache = [];
 
@@ -435,6 +548,15 @@
         searchCache = [];
       }
       return searchCache;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     (function initSearch() {
@@ -477,7 +599,7 @@
         {type:'reglamento', name:'Stats y Aclaraciones',                     desc:'No obligatorio — recomendado añadir scans o fuentes al inicio del turno',  url:'/reglamento'},
         {type:'reglamento', name:'Niveles de Poder — Divisiones Bellator',   desc:'División Ciudad (7-B) y División Universal (3-A) — arsenal completo',     url:'/reglamento'},
         {type:'reglamento', name:'El Juzgado',                               desc:'5 parámetros: Normas, Lógica, Interpretación, Legibilidad, Extensión',     url:'/reglamento'},
-        {type:'reglamento', name:'Crossover — Cosmologías',                  desc:'Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — energías equivalentes',      url:'/reglamento'},
+        {type:'reglamento', name:'Crossover — Cosmologías',                  desc:'Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — energías equivalentes',      url:'/cosmologias.html'},
         {type:'reglamento', name:'BFR',                                      desc:'HAX PROHIBIDO — Battlefield Remove fuera del combate',                     url:'/reglamento'},
         {type:'reglamento', name:'Inmortalidad',                             desc:'HAX PROHIBIDO — toda forma de inmortalidad está anulada',                  url:'/reglamento'},
         {type:'reglamento', name:'Acasualidad',                              desc:'HAX PROHIBIDO completamente en combate',                                   url:'/reglamento'},
@@ -709,6 +831,251 @@
       }
     })();
 
+    (async function loadHomeCarousel() {
+      const section = document.querySelector('.bl-home-carousel');
+      const scene = section ? section.querySelector('.bl-home-carousel-scene') : null;
+      const track = document.getElementById('bl-home-carousel-track');
+      const dots = document.getElementById('bl-home-carousel-dots');
+      const prev = document.getElementById('bl-home-carousel-prev');
+      const next = document.getElementById('bl-home-carousel-next');
+      if (!section || !scene || !track || !dots || !prev || !next) return;
+
+      const rawData = await fetchCompetidores();
+      section.hidden = false;
+
+      function shuffleArr(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+      }
+
+      if (!rawData.length) {
+        const carCopy = section.querySelector('.bl-home-carousel-copy');
+        if (carCopy) carCopy.textContent = 'El circuito está abierto. Cuando los primeros guerreros se inscriban, sus fichas rotarán aquí en orden aleatorio.';
+        track.innerHTML = '<div style="width:100%;min-height:240px;display:flex;align-items:center;justify-content:center;flex:1;color:var(--bl-muted);font-family:\'Teko\',sans-serif;font-size:1rem;letter-spacing:3px;opacity:.44;text-transform:uppercase">Sin guerreros registrados aún</div>';
+        prev.style.display = 'none';
+        next.style.display = 'none';
+        dots.style.display = 'none';
+        return;
+      }
+
+      const slides = shuffleArr(rawData).slice(0, Math.min(rawData.length, 8)).map((item, index) => {
+            const division = String(item.division || 'Competidor Bellator');
+            const normalizedDivision = division.toLowerCase();
+            const glow = normalizedDivision.includes('ciudad')
+              ? 'rgba(54,166,255,.24)'
+              : normalizedDivision.includes('universal')
+                ? 'rgba(255,92,64,.24)'
+                : 'rgba(212,175,55,.22)';
+            const initials = String(item.pseudonimo || '?')
+              .split(/\s+/)
+              .filter(Boolean)
+              .slice(0, 2)
+              .map(part => part.charAt(0).toUpperCase())
+              .join('') || '?';
+            return {
+              title: item.pseudonimo || `Competidor ${index + 1}`,
+              division,
+              subtitle: item.fecha_inicio_rol
+                ? `Registro Bellator desde ${item.fecha_inicio_rol}.`
+                : 'Competidor activo dentro del circuito oficial Bellator.',
+              image: item.avatar_url && item.avatar_url !== '<nil>' ? item.avatar_url : '',
+              url: profileUrl(item.pseudonimo || `competidor-${index + 1}`),
+              cta: 'Abrir perfil',
+              glow,
+              initials
+            };
+          });
+
+      track.innerHTML = slides.map((slide, index) => {
+        const media = slide.image
+          ? `
+            <div class="bl-home-carousel-media">
+              <img src="${slide.image}" alt="${escapeHtml(slide.title)}" ${index < 3 ? 'loading="eager"' : 'loading="lazy"'} onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+              <div class="bl-home-carousel-fallback" style="display:none">${escapeHtml(slide.initials || slide.title.charAt(0).toUpperCase())}</div>
+            </div>`
+          : `
+            <div class="bl-home-carousel-media bl-home-carousel-media--abstract">
+              <div class="bl-home-carousel-fallback">${escapeHtml(slide.initials || slide.title.charAt(0).toUpperCase())}</div>
+            </div>`;
+
+        return `
+          <a class="bl-home-carousel-card" href="${slide.url}" style="--card-glow:${slide.glow}">
+            <div class="bl-home-carousel-top">
+              <span class="bl-home-carousel-badge">${escapeHtml(slide.division)}</span>
+              <span class="bl-home-carousel-index">${String(index + 1).padStart(2, '0')}</span>
+            </div>
+            ${media}
+            <div class="bl-home-carousel-bottom">
+              <div class="bl-home-carousel-name">${escapeHtml(slide.title)}</div>
+              <div class="bl-home-carousel-meta">${escapeHtml(slide.subtitle)}</div>
+              <span class="bl-home-carousel-link">${escapeHtml(slide.cta)} &#8594;</span>
+            </div>
+          </a>`;
+      }).join('');
+
+      dots.innerHTML = slides.map((slide, index) => `<button type="button" data-index="${index}" aria-label="Ver tarjeta ${index + 1}: ${escapeHtml(slide.title)}"></button>`).join('');
+
+      const cards = Array.from(track.children);
+      const dotButtons = Array.from(dots.querySelectorAll('button'));
+      let active = 0;
+      let autoTimer = null;
+      let autoDirection = 1;
+      let mobileScrollTimer = null;
+
+      function isMobileCarousel() {
+        return window.matchMedia('(max-width: 960px)').matches;
+      }
+
+      function syncDots() {
+        dotButtons.forEach((dot, index) => dot.classList.toggle('is-active', index === active));
+      }
+
+      function centerActiveCard() {
+        const activeCard = cards[active];
+        if (!activeCard) return;
+        const sidePadding = Math.max((scene.clientWidth - activeCard.offsetWidth) / 2, 0);
+        track.style.paddingLeft = `${sidePadding}px`;
+        track.style.paddingRight = `${sidePadding}px`;
+        const cardCenter = activeCard.offsetLeft + (activeCard.offsetWidth / 2);
+        const targetX = (scene.clientWidth / 2) - cardCenter;
+        track.style.transform = `translate3d(${Math.round(targetX)}px,0,0)`;
+      }
+
+      function renderCarousel(shouldScrollMobile) {
+        const mobile = isMobileCarousel();
+        track.classList.toggle('is-mobile', mobile);
+        cards.forEach((card, index) => {
+          card.classList.toggle('is-active', index === active);
+          card.classList.toggle('is-near', Math.abs(index - active) === 1);
+          card.classList.toggle('is-far', Math.abs(index - active) > 1);
+          if (mobile) {
+            return;
+          }
+        });
+        syncDots();
+        if (mobile) {
+          track.style.transform = '';
+          track.style.paddingLeft = '';
+          track.style.paddingRight = '';
+          if (shouldScrollMobile && cards[active]) {
+            cards[active].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+          return;
+        }
+        centerActiveCard();
+      }
+
+      function stopAutoplay() {
+        if (autoTimer) {
+          clearInterval(autoTimer);
+          autoTimer = null;
+        }
+      }
+
+      function startAutoplay() {
+        stopAutoplay();
+        if (cards.length <= 1) return;
+        autoTimer = setInterval(() => {
+          if (active >= cards.length - 1) autoDirection = -1;
+          else if (active <= 0) autoDirection = 1;
+          active += autoDirection;
+          renderCarousel(true);
+        }, 4200);
+      }
+
+      function moveCarousel(step) {
+        autoDirection = step >= 0 ? 1 : -1;
+        active = (active + step + cards.length) % cards.length;
+        renderCarousel(true);
+        startAutoplay();
+      }
+
+      prev.addEventListener('click', () => moveCarousel(-1));
+      next.addEventListener('click', () => moveCarousel(1));
+      dots.addEventListener('click', event => {
+        const button = event.target.closest('button[data-index]');
+        if (!button) return;
+        active = Number(button.dataset.index) || 0;
+        autoDirection = active >= cards.length - 1 ? -1 : 1;
+        renderCarousel(true);
+        startAutoplay();
+      });
+      track.addEventListener('scroll', () => {
+        if (!isMobileCarousel()) return;
+        clearTimeout(mobileScrollTimer);
+        mobileScrollTimer = setTimeout(() => {
+          const sceneCenter = scene.getBoundingClientRect().left + (scene.clientWidth / 2);
+          let closestIndex = active;
+          let closestDistance = Number.POSITIVE_INFINITY;
+          cards.forEach((card, index) => {
+            const rect = card.getBoundingClientRect();
+            const cardCenter = rect.left + (rect.width / 2);
+            const distance = Math.abs(cardCenter - sceneCenter);
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestIndex = index;
+            }
+          });
+          if (closestIndex !== active) {
+            active = closestIndex;
+            syncDots();
+          }
+        }, 90);
+      }, { passive: true });
+      section.addEventListener('pointerenter', stopAutoplay);
+      section.addEventListener('pointerleave', startAutoplay);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopAutoplay();
+        else startAutoplay();
+      });
+      window.addEventListener('resize', () => renderCarousel(false));
+
+      if (cards.length <= 1) {
+        prev.style.display = 'none';
+        next.style.display = 'none';
+        dots.style.display = 'none';
+      }
+
+      renderCarousel(false);
+      startAutoplay();
+    })();
+
+    (async function initHeroOrb() {
+      const orb = document.getElementById('bl-hero-orb');
+      if (!orb) return;
+      const data = await fetchCompetidores();
+      const avatars = data
+        .filter(p => p.avatar_url && p.avatar_url !== '<nil>' && p.avatar_url.startsWith('http'))
+        .map(p => p.avatar_url);
+      if (!avatars.length) return;
+      for (let i = avatars.length - 1; i > 0; i--) {
+        const j = 0 | Math.random() * (i + 1);
+        const tmp = avatars[i]; avatars[i] = avatars[j]; avatars[j] = tmp;
+      }
+      const pool = avatars.slice(0, 8);
+      pool.forEach((url, i) => {
+        const img = document.createElement('img');
+        img.className = 'bl-hero-orb-img' + (i === 0 ? ' orb-active' : '');
+        img.src = url;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.onerror = function() { this.style.display = 'none'; };
+        orb.appendChild(img);
+      });
+      if (pool.length <= 1) return;
+      let idx = 0;
+      setInterval(() => {
+        orb.querySelectorAll('.bl-hero-orb-img').forEach(el => el.classList.remove('orb-active'));
+        idx = (idx + 1) % pool.length;
+        const imgs = orb.querySelectorAll('.bl-hero-orb-img');
+        if (imgs[idx]) imgs[idx].classList.add('orb-active');
+      }, 3400);
+    })();
+
     (function initTypewriter() {
       const input = document.getElementById('b-pseudonimo');
       if (!input) return;
@@ -767,6 +1134,144 @@
 
 
   </script>
-<script src="/translate.js"></script>
+
+  <script>
+  /* ── División slots: PRÓXIMAMENTE hasta 28 Abr 2026 9pm Col · desaparece al llegar a 16 ── */
+  (async function checkSlots() {
+    const OPENS_DATE = new Date('2026-04-29T02:00:00Z'); // 28 abr 9pm Colombia = 29 abr 02:00 UTC
+    try {
+      const s = await fetch('/api/division-slots').then(r => r.json());
+      // Forzar bloqueo en cliente si la fecha aún no llegó (independiente del servidor)
+      if (!s.locked && new Date() < OPENS_DATE) s.locked = true;
+      if (!s.opens) s.opens = '2026-04-28';
+      const max     = s.max || 16;
+      const grid    = document.querySelector('.bl-divshow-grid');
+      const divshow = document.getElementById('bl-divshow');
+      const cityCard   = document.querySelector('.bl-ds-panel.bl-ds-city');
+      const univCard   = document.querySelector('.bl-ds-panel.bl-ds-univ');
+      const cityKicker = document.getElementById('ds-kicker-ciudad');
+      const univKicker = document.getElementById('ds-kicker-univ');
+      const cityCta    = document.getElementById('ds-cta-ciudad');
+      const univCta    = document.getElementById('ds-cta-univ');
+
+      function addLockOverlay(card) {
+        const ov = document.createElement('div');
+        ov.className = 'bl-ds-lock-overlay';
+        ov.innerHTML =
+          '<div class="bl-ds-lock-icon">🔐</div>' +
+          '<div class="bl-ds-lock-label">Próximamente</div>' +
+          '<div class="bl-ds-lock-date">Inscripciones abren el<br><strong>28 de abril · 9 p.m. (Colombia)</strong></div>';
+        card.appendChild(ov);
+        card.classList.add('bl-ds-panel--locked');
+        card.removeAttribute('href');
+        card.setAttribute('tabindex', '-1');
+        card.setAttribute('aria-disabled', 'true');
+      }
+
+      // ── TORNEO BLOQUEADO hasta la fecha de apertura ──
+      if (s.locked) {
+        if (cityCard) addLockOverlay(cityCard);
+        if (univCard) addLockOverlay(univCard);
+        if (cityKicker) { cityKicker.textContent = '🔒 Inscripciones cerradas'; cityKicker.style.color = '#d4af37'; }
+        if (univKicker) { univKicker.textContent = '🔒 Inscripciones cerradas'; univKicker.style.color = '#d4af37'; }
+        if (cityCta) cityCta.style.display = 'none';
+        if (univCta) univCta.style.display = 'none';
+        return;
+      }
+
+      // ── TORNEO ABIERTO: ocultar panel cuando llega a 16 ──
+      const cityFull = (s.ciudad || 0) >= max;
+      const univFull = (s.universal || 0) >= max;
+
+      if (!cityFull) {
+        const rem = max - (s.ciudad || 0);
+        if (cityKicker) cityKicker.textContent = 'Inscripción abierta — ' + rem + ' cupo' + (rem === 1 ? '' : 's');
+        if (cityCta)    cityCta.textContent = 'Entrar al registro +';
+      }
+      if (!univFull) {
+        const rem = max - (s.universal || 0);
+        if (univKicker) univKicker.textContent = 'Inscripción abierta — ' + rem + ' cupo' + (rem === 1 ? '' : 's');
+        if (univCta)    univCta.textContent = 'Entrar al registro +';
+      }
+
+      if (cityFull && cityCard) cityCard.style.display = 'none';
+      if (univFull && univCard) univCard.style.display = 'none';
+      // Si uno llena y el otro no: expandir el restante a ancho completo
+      if ((cityFull !== univFull) && grid) grid.style.gridTemplateColumns = '1fr';
+      // Si ambos llenos: ocultar toda la sección
+      if (cityFull && univFull && divshow) divshow.style.display = 'none';
+
+    } catch (_) {
+      // Si la API falla, aplicar lock por fecha en el cliente de todas formas
+      if (new Date() < OPENS_DATE) {
+        const cityCard = document.querySelector('.bl-ds-panel.bl-ds-city');
+        const univCard = document.querySelector('.bl-ds-panel.bl-ds-univ');
+        function addLockOverlay(card) {
+          if (!card) return;
+          const ov = document.createElement('div');
+          ov.className = 'bl-ds-lock-overlay';
+          ov.innerHTML = '<div class="bl-ds-lock-icon">🔐</div><div class="bl-ds-lock-label">Próximamente</div><div class="bl-ds-lock-date">Inscripciones abren el<br><strong>28 de abril · 9 p.m. (Colombia)</strong></div>';
+          card.appendChild(ov);
+          card.classList.add('bl-ds-panel--locked');
+          card.removeAttribute('href');
+          card.setAttribute('tabindex', '-1');
+        }
+        addLockOverlay(cityCard);
+        addLockOverlay(univCard);
+        const ck = document.getElementById('ds-kicker-ciudad');
+        const uk = document.getElementById('ds-kicker-univ');
+        const cc = document.getElementById('ds-cta-ciudad');
+        const uc = document.getElementById('ds-cta-univ');
+        if (ck) { ck.textContent = '🔒 Inscripciones cerradas'; ck.style.color = '#d4af37'; }
+        if (uk) { uk.textContent = '🔒 Inscripciones cerradas'; uk.style.color = '#d4af37'; }
+        if (cc) cc.style.display = 'none';
+        if (uc) uc.style.display = 'none';
+      }
+    }
+  })();
+
+  // ── PRÓXIMAS PELEAS ─────────────────────────────────────────────
+  (async function loadProximasPeleas() {
+    const grid = document.getElementById('bl-proximas-grid');
+    if (!grid) return;
+    try {
+      const res = await fetch('/api/proximas-peleas');
+      if (!res.ok) { grid.innerHTML = ''; return; }
+      const peleas = await res.json();
+      if (!peleas || peleas.length === 0) {
+        document.getElementById('bl-proximas-section').style.display = 'none';
+        return;
+      }
+      grid.innerHTML = peleas.map(function(p) {
+        const dateStr = p.event_date ? new Date(p.event_date + 'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase() : '';
+        const av1 = p.player1_avatar && p.player1_avatar !== '' ? `<img src="${p.player1_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player1_pseudo||'?').charAt(0).toUpperCase()}</span>`;
+        const av2 = p.player2_avatar && p.player2_avatar !== '' ? `<img src="${p.player2_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player2_pseudo||'?').charAt(0).toUpperCase()}</span>`;
+        return `<div style="background:rgba(255,255,255,.035);border:1px solid rgba(212,175,55,.18);border-radius:16px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(212,175,55,.06) 0%,transparent 70%);pointer-events:none"></div>
+          <div style="font-family:'Teko',sans-serif;font-size:.62rem;letter-spacing:5px;text-transform:uppercase;color:var(--bl-gold);opacity:.75;margin-bottom:10px">${p.event_name || 'Bellator RolBattle'}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
+              <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av1}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p.player1_pseudo}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+              <div style="font-family:'Teko',sans-serif;font-size:1.5rem;font-weight:900;color:var(--bl-gold);letter-spacing:2px;line-height:1">VS</div>
+              <div style="font-size:.68rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.3">${dateStr}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
+              <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av2}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p.player2_pseudo}</div>
+            </div>
+          </div>
+          ${p.division ? `<div style="margin-top:14px;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;border-top:1px solid rgba(255,255,255,.06);padding-top:10px">${p.division}</div>` : ''}
+        </div>`;
+      }).join('');
+    } catch(e) {
+      document.getElementById('bl-proximas-section').style.display = 'none';
+    }
+  })();
+  </script>
+
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Competidores — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
 </head>
 <body>
@@ -52,14 +52,15 @@
       </button>
       <ul class="bl-navbar-links" id="bl-links">
         <li><a class="bl-navlink" href="/">Inicio</a></li>
-        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink active" href="/competidores">Competidores</a></li>
         <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
         <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">DRIVERS</span>
       </div>
     </nav>
@@ -87,6 +88,15 @@
           </div>
         </div>
         <div class="bl-hero-aside">
+          <div class="bl-aside-card" style="position:relative;overflow:hidden;min-height:190px;padding:0;border:1px solid rgba(212,175,55,.20);background:#030407">
+            <img src="https://media.giphy.com/media/c4p59oQhRFE1W/giphy.gif" alt="Ichigo Bleach" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.52;filter:saturate(1.3) contrast(1.1) brightness(.74)" loading="lazy" referrerpolicy="no-referrer">
+            <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,4,10,.94) 0%,rgba(3,4,10,.68) 52%,rgba(3,4,10,.30) 100%),linear-gradient(180deg,transparent 0%,rgba(3,4,10,.55) 100%)"></div>
+            <div style="position:relative;z-index:2;padding:22px 20px 24px;display:flex;flex-direction:column;justify-content:flex-end;min-height:190px">
+              <div class="bl-kicker" style="color:var(--bl-gold);letter-spacing:4px">SEASON LINE-UP &middot; 2026</div>
+              <div style="font-family:'Teko',sans-serif;font-size:2.4rem;line-height:.88;letter-spacing:1px;color:#fff;margin-top:6px">EN GRID<br><span style="color:var(--bl-gold)">LISTOS</span></div>
+              <p style="font-size:.8rem;color:rgba(255,255,255,.55);margin-top:10px;line-height:1.45">Cada competidor tiene una ficha. Cada ficha, una historia que solo el combate define.</p>
+            </div>
+          </div>
           <div class="bl-aside-card">
             <div class="bl-kicker">Quick Search</div>
             <div class="bl-gsearch-wrap" style="max-width:none;margin-top:10px">
@@ -122,8 +132,8 @@
     </section>
   </div>
 
-  <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/tracker.js?v=8"></script>
+  <script src="/app.js?v=19"></script>
   <script>
     let allDrivers = [];
     let currentFilter = 'all';
@@ -164,9 +174,12 @@
           ? `<img class="bl-driver-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">`
           : '';
         const flagEl = item.country_code ? `<span class="fi fi-${item.country_code.toLowerCase()} bl-driver-flag"></span>` : '';
+        const isAspirante = String(item.status || item.division || '').toLowerCase().includes('aspirante');
+        const aspiranteBadge = isAspirante ? `<div style="position:absolute;top:8px;right:8px;z-index:10;font-size:.55rem;letter-spacing:2px;font-weight:800;padding:2px 8px;border-radius:4px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.40);color:#D4AF37;text-transform:uppercase;font-family:'Barlow Semi Condensed',sans-serif">ASPIRANTE</div>` : '';
         return `
           <a class="bl-driver-card ${cardClass}" href="${profileUrl(item.pseudonimo)}" style="${tcStyle}position:relative">
             ${slashes}
+            ${aspiranteBadge}
             ${flagEl}
             <div class="bl-driver-pos">P${index + 1}</div>
             <div class="bl-driver-avatar-wrap">
@@ -210,7 +223,53 @@
     });
 
     loadCompetidores();
+
+    // ── PRÓXIMAS PELEAS ───────────────────────────────────────
+    (async function loadProximasPeleas() {
+      try {
+        const res = await fetch('/api/proximas-peleas');
+        if (!res.ok) return;
+        const peleas = await res.json();
+        if (!peleas || peleas.length === 0) return;
+        const section = document.createElement('section');
+        section.style.cssText = 'max-width:1320px;margin:0 auto;padding:48px 24px 64px';
+        section.innerHTML = `
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px">
+            <div>
+              <div style="font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9;margin-bottom:6px">AGENDA OFICIAL</div>
+              <h2 style="font-family:'Teko',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">Próximas Peleas</h2>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">
+            ${peleas.map(function(p) {
+              const dateStr = p.event_date ? new Date(p.event_date + 'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase() : '';
+              const av1 = p.player1_avatar && p.player1_avatar !== '' ? '<img src="' + p.player1_avatar + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">' : '<span style="font-family:\'Teko\',sans-serif;font-size:1.8rem;color:var(--bl-gold)">' + (p.player1_pseudo||'?').charAt(0).toUpperCase() + '</span>';
+              const av2 = p.player2_avatar && p.player2_avatar !== '' ? '<img src="' + p.player2_avatar + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">' : '<span style="font-family:\'Teko\',sans-serif;font-size:1.8rem;color:var(--bl-gold)">' + (p.player2_pseudo||'?').charAt(0).toUpperCase() + '</span>';
+              return '<div style="background:rgba(255,255,255,.035);border:1px solid rgba(212,175,55,.18);border-radius:16px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden">' +
+                '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(212,175,55,.06) 0%,transparent 70%);pointer-events:none"></div>' +
+                '<div style="font-family:\'Teko\',sans-serif;font-size:.62rem;letter-spacing:5px;text-transform:uppercase;color:var(--bl-gold);opacity:.75;margin-bottom:10px">' + (p.event_name || 'Bellator RolBattle') + '</div>' +
+                '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
+                  '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">' +
+                    '<div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">' + av1 + '</div>' +
+                    '<div style="font-family:\'Teko\',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">' + p.player1_pseudo + '</div>' +
+                  '</div>' +
+                  '<div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">' +
+                    '<div style="font-family:\'Teko\',sans-serif;font-size:1.5rem;font-weight:900;color:var(--bl-gold);letter-spacing:2px;line-height:1">VS</div>' +
+                    '<div style="font-size:.68rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.3">' + dateStr + '</div>' +
+                  '</div>' +
+                  '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">' +
+                    '<div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">' + av2 + '</div>' +
+                    '<div style="font-family:\'Teko\',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">' + p.player2_pseudo + '</div>' +
+                  '</div>' +
+                '</div>' +
+                (p.division ? '<div style="margin-top:14px;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;border-top:1px solid rgba(255,255,255,.06);padding-top:10px">' + p.division + '</div>' : '') +
+                '</div>';
+            }).join('')}
+          </div>`;
+        document.querySelector('main') ? document.querySelector('main').appendChild(section) : document.body.appendChild(section);
+      } catch(e) { /* silent */ }
+    })();
   </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

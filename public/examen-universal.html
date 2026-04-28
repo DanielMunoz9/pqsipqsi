@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examen de Admisión — Universal · 3-A</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&family=Teko:wght@400;500;600;700&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --cosmos: #7c6ab5;
+      --cosmos2: #a890e0;
+      --text: #eef4ff;
+      --muted: rgba(238,244,255,.65);
+      --bg: #060812;
+      --card: rgba(8,10,22,.97);
+      --border: rgba(160,130,220,.18);
+      --green: #3fb950;
+      --red: #ef4444;
+      --warn: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.04) 3px, rgba(0,0,0,.04) 4px);
+    }
+
+    /* ── HEADER ── */
+    .xh {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+      height: 50px;
+      background: rgba(6,8,18,.98);
+      border-bottom: 1px solid rgba(160,130,220,.18);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px;
+    }
+    .xh-logo {
+      font-family: 'Teko', sans-serif; font-size: 1rem;
+      letter-spacing: 5px; color: var(--cosmos2); text-transform: uppercase;
+    }
+    .xh-title {
+      font-family: 'Teko', sans-serif; font-size: .78rem;
+      letter-spacing: 3px; color: rgba(238,244,255,.35); text-transform: uppercase;
+    }
+    .xh-clock { display: flex; align-items: center; gap: 8px; }
+    .xh-clock-label {
+      font-family: 'Teko', sans-serif; font-size: .68rem;
+      letter-spacing: 2px; color: rgba(238,244,255,.3); text-transform: uppercase;
+    }
+    .xh-clock-val {
+      font-family: 'Teko', sans-serif; font-size: 1.05rem;
+      letter-spacing: 2px; color: var(--cosmos2); min-width: 46px; text-align: right;
+      transition: color .3s;
+    }
+    .xh-clock-val.warn { color: var(--warn) !important; }
+    .xh-clock-val.crit { color: var(--red) !important; animation: blink .55s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .xgbar {
+      position: fixed; top: 50px; left: 0; right: 0; z-index: 29;
+      height: 3px; background: rgba(255,255,255,.06);
+    }
+    .xgbar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cosmos), var(--cosmos2));
+      transition: width 1s linear, background .5s;
+      width: 100%;
+    }
+    .xgbar-fill.warn { background: linear-gradient(90deg, var(--warn), var(--red)); }
+
+    .xwarn {
+      position: fixed; top: 53px; left: 0; right: 0; z-index: 28;
+      background: rgba(239,68,68,.1); border-bottom: 1px solid rgba(239,68,68,.22);
+      color: var(--red); font-size: .76rem; letter-spacing: .7px;
+      text-align: center; padding: 6px; display: none;
+    }
+    .xwarn.show { display: block; }
+
+    .xmain {
+      position: fixed; inset: 0;
+      padding-top: 60px;
+      display: flex; align-items: center; justify-content: center;
+      overflow-y: auto;
+      padding-left: 16px; padding-right: 16px; padding-bottom: 16px;
+    }
+
+    /* ── LAUNCH ── */
+    .xl { text-align: center; max-width: 500px; padding: 16px 0; }
+    .xl-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .xl-title {
+      font-family: 'Teko', sans-serif; font-size: 2rem;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--cosmos2);
+      margin-bottom: 8px;
+    }
+    .xl-sub { font-size: .87rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .xl-rules {
+      background: rgba(160,130,220,.04);
+      border: 1px solid rgba(160,130,220,.16);
+      border-radius: 14px; padding: 16px 20px; margin-bottom: 26px;
+      text-align: left;
+    }
+    .xl-rules li { font-size: .81rem; color: var(--muted); line-height: 2; list-style: none; }
+    .xl-rules li::before { content: '▸ '; color: var(--cosmos2); }
+
+    /* ── EXAM CARD ── */
+    .xcard {
+      width: 100%; max-width: 670px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 30px 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7);
+    }
+
+    .xph-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .xph {
+      font-family: 'Teko', sans-serif; font-size: .7rem; letter-spacing: 2px;
+      text-transform: uppercase; padding: 3px 12px; border-radius: 99px;
+      border: 1px solid rgba(160,130,220,.4); color: var(--cosmos2);
+      background: rgba(160,130,220,.07);
+    }
+    .xph.off { border-color: rgba(255,255,255,.08); color: rgba(238,244,255,.28); background: transparent; }
+    .xph-sep { width: 22px; height: 1px; background: rgba(255,255,255,.1); }
+
+    .xmeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .xmeta span { font-family: 'Teko', sans-serif; font-size: .72rem; letter-spacing: 2px; color: rgba(238,244,255,.4); text-transform: uppercase; }
+    #xScore { color: var(--cosmos2) !important; }
+
+    .xprog { height: 3px; border-radius: 99px; background: rgba(255,255,255,.07); margin-bottom: 16px; overflow: hidden; }
+    .xprog > div { height: 100%; border-radius: 99px; background: linear-gradient(90deg,var(--cosmos),var(--cosmos2)); transition: width .45s cubic-bezier(.2,1,.22,1); width: 0%; }
+
+    .xqt { margin-bottom: 15px; }
+    .xqt-bar { height: 3px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden; margin-bottom: 4px; }
+    .xqt-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,var(--cosmos),var(--cosmos2)); transition: width .85s linear, background .5s; width: 100%; }
+    .xqt-fill.warn { background: linear-gradient(90deg,var(--warn),var(--red)) !important; }
+    .xqt-row { display: flex; justify-content: space-between; align-items: center; }
+    .xqt-label { font-family:'Teko',sans-serif;font-size:.63rem;letter-spacing:2px;color:rgba(238,244,255,.3);text-transform:uppercase; }
+    .xqt-val { font-family:'Teko',sans-serif;font-size:.77rem;letter-spacing:1px;color:var(--cosmos2);transition:color .3s; }
+    .xqt-val.warn { color: var(--red) !important; }
+
+    .xqtext { font-size: 1rem; line-height: 1.6; color: var(--text); margin-bottom: 17px; min-height: 46px; }
+    .xopts { display: flex; flex-direction: column; gap: 9px; margin-bottom: 15px; }
+    .xopt {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px; padding: 11px 16px;
+      color: var(--text); font-size: .91rem; line-height: 1.4;
+      cursor: pointer; text-align: left;
+      transition: all .18s; letter-spacing: .2px;
+    }
+    .xopt:hover:not([disabled]) { border-color: rgba(160,130,220,.4); background: rgba(160,130,220,.06); }
+    .xopt.correct { border-color: var(--green) !important; background: rgba(63,185,80,.1) !important; color: var(--green) !important; }
+    .xopt.wrong   { border-color: var(--red) !important; background: rgba(239,68,68,.08) !important; color: var(--red) !important; }
+    .xopt.reveal  { border-color: var(--green); background: rgba(63,185,80,.06); color: var(--green); }
+    .xfb { font-size: .78rem; line-height: 1.6; color: var(--muted); min-height: 20px; margin-bottom: 13px; padding: 0 2px; }
+    .xfb.ok { color: var(--green); }
+    .xfb.no { color: var(--red); }
+
+    /* combat */
+    .xct-title { font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--cosmos2);text-transform:uppercase;margin-bottom:5px; }
+    .xct-brief { font-size:.81rem;color:var(--muted);line-height:1.5;margin-bottom:15px; }
+    .xct-rules { display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px; }
+    .xct-rule { font-size:.67rem;letter-spacing:.7px;padding:4px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(238,244,255,.4);transition:all .3s; }
+    .xct-rule.ok   { border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.07);color:var(--green); }
+    .xct-rule.fail { border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07);color:var(--red); }
+    .xct-ta {
+      width:100%; min-height:160px; resize:vertical;
+      background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.1);
+      border-radius:12px; color:var(--text);
+      font-family:'Barlow Semi Condensed',sans-serif; font-size:.92rem; line-height:1.65;
+      padding:13px 15px; outline:none; transition:border-color .2s;
+    }
+    .xct-ta:focus { border-color:rgba(160,130,220,.35); }
+    .xct-ortho { font-size:.71rem;color:var(--warn);margin:4px 0 10px;min-height:16px;line-height:1.4; }
+    .xct-counter { font-size:.7rem;color:var(--muted);text-align:right;margin:5px 0 13px;letter-spacing:.5px; }
+
+    /* result */
+    .xres { text-align: center; padding: 12px 0; }
+    .xres-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .xres-title { font-family:'Teko',sans-serif;font-size:1.8rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px; }
+    .xres-sub { font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:10px; }
+    .xres-score { font-family:'Teko',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--cosmos2);margin-bottom:6px; }
+    .xres-redir { font-size:.78rem;color:rgba(238,244,255,.3);margin-bottom:18px; }
+
+    .xbtn {
+      display: block; width: 100%;
+      padding: 12px 20px; border-radius: 99px; border: 0; cursor: pointer;
+      background: linear-gradient(135deg, var(--cosmos), var(--cosmos2));
+      color: #fff; font-family: 'Teko', sans-serif; font-size: 1rem;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      box-shadow: 0 8px 28px rgba(124,106,181,.3); transition: all .2s;
+    }
+    .xbtn:hover:not([disabled]) { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(124,106,181,.4); }
+    .xbtn[disabled] { opacity: .35; cursor: default; }
+
+    @media(max-width:600px) {
+      .xcard { padding: 18px 16px 20px; border-radius: 14px; }
+      .xh-title { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Gate: verificar cupos División Universal al cargar ── -->
+  <script>
+  (async function gateCheck() {
+    try {
+      const s = await fetch('/api/division-slots').then(r => r.json());
+      const OPENS = new Date('2026-04-29T02:00:00Z');
+      const locked = s.locked || new Date() < OPENS;
+      const full   = !locked && (s.universal || 0) >= (s.max || 16);
+      if (!locked && !full) return;
+      document.body.innerHTML = `
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          html,body{width:100%;height:100%;background:#060a12;color:#eef4ff;
+            font-family:'Barlow Semi Condensed',sans-serif;
+            display:flex;align-items:center;justify-content:center}
+          .xgate{text-align:center;max-width:480px;padding:32px 24px}
+          .xgate-icon{font-size:3rem;margin-bottom:16px}
+          .xgate-title{font-family:'Teko',sans-serif;font-size:2.4rem;letter-spacing:4px;
+            text-transform:uppercase;color:${locked?'#d4af37':'#ef4444'};margin-bottom:10px}
+          .xgate-msg{font-size:.95rem;color:rgba(238,244,255,.72);line-height:1.6;margin-bottom:24px}
+          .xgate-btn{display:inline-block;padding:12px 32px;border-radius:99px;
+            background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);
+            color:#d4af37;font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:3px;
+            text-transform:uppercase;text-decoration:none;cursor:pointer;
+            transition:background .2s}
+          .xgate-btn:hover{background:rgba(212,175,55,.22)}
+        </style>
+        <div class="xgate">
+          <div class="xgate-icon">${locked ? '🔐' : '⛔'}</div>
+          <div class="xgate-title">${locked ? 'Próximamente' : 'División Universal — Llena'}</div>
+          <div class="xgate-msg">${locked
+            ? 'El examen de admisión aún no está disponible.<br>Las inscripciones al campeonato abren el <strong>28 de abril · 9 p.m. (Colombia)</strong>.'
+            : 'Los 16 cupos de División Universal ya fueron cubiertos.<br>No se aceptan más inscripciones para esta división.'}
+          </div>
+          <a href="/" class="xgate-btn">← Volver al inicio</a>
+        </div>`;
+    } catch(_) {}
+  })();
+  </script>
+
+  <div class="xh">
+    <div class="xh-logo">🌌 Bellator</div>
+    <div class="xh-title">Examen de Admisión — División Universal · 3-A</div>
+    <div class="xh-clock">
+      <span class="xh-clock-label">Tiempo</span>
+      <span class="xh-clock-val" id="xGVal">5:00</span>
+    </div>
+  </div>
+  <div class="xgbar"><div class="xgbar-fill" id="xGFill"></div></div>
+  <div class="xwarn" id="xWarn">⚠ ADVERTENCIA: Abandonaste pantalla completa o cambiaste de pestaña. Próxima infracción = descalificación.</div>
+
+  <div class="xmain">
+
+    <div class="xl" id="panelLaunch">
+      <div class="xl-icon">🌌</div>
+      <div class="xl-title">Cámara Universal</div>
+      <div class="xl-sub">Estás a punto de iniciar el examen oficial de ingreso a <strong>División Universal · Tier 3-A</strong>.<br>Leé las condiciones antes de comenzar.</div>
+      <div class="xl-rules">
+        <ul>
+          <li>10 preguntas de reglamento Universal con tiempo por pregunta</li>
+          <li>Tiempo total máximo: <strong>5 minutos</strong></li>
+          <li>Fase de combate: turno ofensivo con mínimo 30 palabras distintas a escala cósmica</li>
+          <li>No podés cambiar de pestaña ni salir de pantalla completa</li>
+          <li>La pantalla completa se activa al comenzar</li>
+        </ul>
+      </div>
+      <button class="xbtn" id="xBtnLaunch">COMENZAR EXAMEN →</button>
+    </div>
+
+    <div class="xcard" id="panelQuiz" style="display:none">
+      <div class="xph-bar">
+        <div class="xph" id="xPh1">01 · Teoría Universal</div>
+        <div class="xph-sep"></div>
+        <div class="xph off" id="xPh2">02 · Combate Cósmico</div>
+      </div>
+      <div class="xmeta">
+        <span id="xNum">PREGUNTA 1 / 10</span>
+        <span id="xScore">🌌 0 / 10</span>
+      </div>
+      <div class="xprog"><div id="xProg"></div></div>
+      <div class="xqt">
+        <div class="xqt-bar"><div id="xQFill" class="xqt-fill"></div></div>
+        <div class="xqt-row">
+          <span class="xqt-label">tiempo por pregunta</span>
+          <span class="xqt-val" id="xQVal">—</span>
+        </div>
+      </div>
+      <div class="xqtext" id="xQText"></div>
+      <div class="xopts" id="xOpts"></div>
+      <div class="xfb" id="xFB"></div>
+      <button class="xbtn" id="xNext" disabled>SIGUIENTE →</button>
+    </div>
+
+    <div class="xcard" id="panelCombat" style="display:none">
+      <div class="xph-bar">
+        <div class="xph off">01 · Teoría Universal</div>
+        <div class="xph-sep"></div>
+        <div class="xph">02 · Combate Cósmico</div>
+      </div>
+      <div class="xct-title">Turno de Combate — División Universal · 3-A</div>
+      <div class="xct-brief">Redactá un turno ofensivo a escala cósmica. Cuantificá con magnitudes astronómicas (MFTL+, LY, masa, energía). Mínimo 200 caracteres, vocabulario variado, tiempo verbal correcto.</div>
+      <div class="xct-rules" id="xCRules">
+        <div class="xct-rule" data-key="len">📏 200 caracteres mín.</div>
+        <div class="xct-rule" data-key="words">📚 30+ palabras únicas</div>
+        <div class="xct-rule" data-key="diversity">🔠 10+ letras distintas</div>
+        <div class="xct-rule" data-key="intent">⚔ Verbo de intención</div>
+        <div class="xct-rule" data-key="mn">🚫 Sin Manipulación Negra</div>
+        <div class="xct-rule" data-key="det">🚫 Sin Determinismo</div>
+        <div class="xct-rule" data-key="god">🚫 Sin God-Rol</div>
+        <div class="xct-rule" data-key="informal">✍ Sin lenguaje informal</div>
+      </div>
+      <textarea class="xct-ta" id="xCTA" placeholder="Narra tu turno de combate cósmico aquí…" maxlength="4000"></textarea>
+      <div class="xct-ortho" id="xCOrtho"></div>
+      <div class="xct-counter" id="xCCounter">0 car.</div>
+      <button class="xbtn" id="xCSubmit" disabled>VERIFICAR TURNO →</button>
+    </div>
+
+    <div class="xcard" id="panelResult" style="display:none">
+      <div class="xres">
+        <div class="xres-icon" id="xRI"></div>
+        <div class="xres-title" id="xRT"></div>
+        <div class="xres-sub" id="xRS"></div>
+        <div class="xres-score" id="xRSc"></div>
+        <div class="xres-redir">Regresando a la sala de admisión…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════
+       BELLATOR UNIVERSAL EXAM ENGINE
+    ══════════════════════════════════════ */
+
+    const _AC = window.AudioContext || window.webkitAudioContext;
+    let _actx = null;
+    function _gc() { if (!_actx) _actx = new _AC(); return _actx; }
+    function tone(freq, type, dur, gain) {
+      try {
+        const c = _gc(), o = c.createOscillator(), g = c.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, c.currentTime);
+        g.gain.setValueAtTime(gain || .15, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001, c.currentTime + dur);
+        o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + dur);
+      } catch(e) {}
+    }
+    const sfxClick   = () => tone(660, 'square', .08, .12);
+    const sfxCorrect = () => { tone(392,'square',.08,.14); setTimeout(()=>tone(494,'square',.08,.14),90); setTimeout(()=>tone(659,'square',.15,.14),180); };
+    const sfxWrong   = () => { tone(196,'sawtooth',.08,.14); setTimeout(()=>tone(180,'sawtooth',.15,.12),100); };
+    const sfxWarn    = () => tone(330, 'square', .06, .09);
+    const sfxPhase   = () => [392,494,659,880].forEach((f,i)=>setTimeout(()=>tone(f,'square',.12,.1),i*120));
+
+    let examRunning = false;
+    window.addEventListener('beforeunload', e => {
+      if (examRunning) { e.preventDefault(); e.returnValue = ''; return ''; }
+    });
+
+    let infractions = 0;
+    const warnEl = document.getElementById('xWarn');
+
+    function requestFS() {
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+      } catch(e) {}
+    }
+
+    function onFSChange() {
+      const fs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
+      if (!fs && examRunning) {
+        infractions++;
+        warnEl.classList.add('show');
+        setTimeout(() => warnEl.classList.remove('show'), 5000);
+        if (infractions >= 2) autoFail('Descalificado: saliste de pantalla completa más de una vez.');
+      }
+    }
+    document.addEventListener('fullscreenchange', onFSChange);
+    document.addEventListener('webkitfullscreenchange', onFSChange);
+    document.addEventListener('mozfullscreenchange', onFSChange);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && examRunning) {
+        infractions++;
+        warnEl.classList.add('show');
+        setTimeout(() => warnEl.classList.remove('show'), 5000);
+        if (infractions >= 2) autoFail('Descalificado: cambiaste de pestaña más de una vez.');
+      }
+    });
+
+    const TOTAL = 300;
+    let gRemaining = TOTAL;
+    let gInterval = null;
+
+    function startGlobal() {
+      const fill = document.getElementById('xGFill');
+      const val  = document.getElementById('xGVal');
+      fill.style.transition = 'none'; fill.style.width = '100%';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.transition = 'width ' + (TOTAL - 1) + 's linear';
+        fill.style.width = '0%';
+      }));
+      gInterval = setInterval(() => {
+        gRemaining--;
+        const m = Math.floor(gRemaining / 60);
+        const s = gRemaining % 60;
+        val.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        if (gRemaining <= 60)  { fill.classList.add('warn'); val.classList.add('warn'); }
+        if (gRemaining <= 30)  { val.classList.remove('warn'); val.classList.add('crit'); sfxWarn(); }
+        if (gRemaining <= 0)   { clearInterval(gInterval); autoFail('Tiempo agotado.'); }
+      }, 1000);
+    }
+
+    function stopGlobal() { clearInterval(gInterval); }
+
+    function autoFail(reason) {
+      examRunning = false;
+      stopGlobal(); stopQTimer();
+      sessionStorage.setItem('bellator_exam_result_universal', JSON.stringify({
+        passed: false, score: qScore, total: 10, reason
+      }));
+      exitAndRedirect();
+    }
+
+    function exitAndRedirect() {
+      try {
+        const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
+        if (ex) ex.call(document).catch(() => {});
+      } catch(e) {}
+      setTimeout(() => { window.location.href = '/admision'; }, 520);
+    }
+
+    document.getElementById('xBtnLaunch').addEventListener('click', () => {
+      sfxClick();
+      requestFS();
+      document.getElementById('panelLaunch').style.display = 'none';
+      document.getElementById('panelQuiz').style.display = 'block';
+      examRunning = true;
+      startGlobal();
+      renderQuestion();
+    });
+
+    /* ──────────────────────────────────────
+       PREGUNTAS — DIVISIÓN UNIVERSAL 3-A
+    ────────────────────────────────────── */
+    const QUESTIONS = [
+      /* ── Q1 30s: VELOCIDAD OPERACIONAL EN UNIVERSAL ── */
+      {
+        text: '¿Cuál es el techo de velocidad operacional establecido por el reglamento de Bellator para División Universal?',
+        opts: [
+          'FTL (más rápido que la luz), sin límite superior definido',
+          'MFTL sin restricción: cualquier múltiplo de c es válido si el personaje lo acredita',
+          'MFTL+ con un mínimo operacional de ≥ 1.000 veces la velocidad de la luz como piso de cómputo',
+          'Velocidad de la luz exacta (c = 299.792 km/s) como techo absoluto en esta división'
+        ],
+        correct: 2, time: 30,
+        fb_ok: 'Correcto. División Universal establece MFTL+ con un piso de ≥ 1.000× c como referencia operacional. No hay un techo superior fijo, pero toda afirmación de velocidad debe estar justificada con scans del personaje.',
+        fb_no: 'Incorrecto — C. El reglamento fija el piso en MFTL+ ≥ 1.000× la velocidad de la luz. FTL simple (apenas superar c) aplica a divisiones inferiores; en Universal el mínimo esperado es cuatro órdenes de magnitud por encima.'
+      },
+      /* ── Q2 30s: ESCALA ESPACIAL ── */
+      {
+        text: 'Un personaje declara que su ataque "borrará el universo observable". ¿Bajo qué condición exacta es eso válido en División Universal?',
+        opts: [
+          'Siempre es válido: en División Universal no existe límite de escala',
+          'Solo si el árbitro aprueba el ataque antes de que comience el combate',
+          'Si el personaje acredita escala de destrucción de universo observable con scans verificables, y la narrativa respeta los 93 mil millones de años luz de diámetro sin trascender a multiverso',
+          'Solo si el rival también tiene scans de nivel universal y acepta el escenario narrativamente'
+        ],
+        correct: 2, time: 30,
+        fb_ok: 'Correcto. El reglamento de Universal fija el marco en el universo observable (93 mil millones de años luz de diámetro). La destrucción cosmológica es válida dentro de ese límite si hay scans que la acrediten; cualquier afirmación multiversal o transdimensional queda fuera sin justificación específica.',
+        fb_no: 'Incorrecto — C. Universal no es ilimitado: el techo explícito son los 93 mil millones de años luz del universo observable. Además, el universo en sí no te da omnipotencia automática; los scans deben existir y la narrativa mantiene el principio de acción-reacción.'
+      },
+      /* ── Q3 30s: HAX EN UNIVERSAL VS CIUDAD ── */
+      {
+        text: '¿Cuántos HAX nuevos agrega División Universal respecto al registro de División Ciudad?',
+        opts: [
+          'Todos los HAX de Ciudad más un nivel cosmológico desbloqueado automáticamente',
+          'Cinco HAX exclusivos: Manipulación del Tiempo sin límite, Omnisciencia, Trascendencia Dimensional, Absorción Universal y Reescritura de Física',
+          'Ninguno: Universal usa exactamente el mismo registro de HAX que Ciudad sin entradas adicionales',
+          'Tres HAX desbloqueados: MFTL libre, Destrucción Universal y Causalidad Cósmica'
+        ],
+        correct: 2, time: 30,
+        fb_ok: 'Correcto. El reglamento es explícito: División Universal NO agrega nuevas entradas al registro de HAX. Los mismos HAX disponibles en Ciudad, con las mismas restricciones, se aplican en Universal. La diferencia está en la ESCALA de aplicación, no en el catálogo de herramientas.',
+        fb_no: 'Incorrecto — C. Una confusión frecuente: "jugar en Universal" no desbloquea HAX extras. El catálogo es idéntico al de Ciudad. Lo que escala es la magnitud de los efectos, no los tipos de habilidades disponibles.'
+      },
+      /* ── Q4 45s: ECONOMÍA DE ATAQUES — "1 ataque sigue siendo 1 ataque" ── */
+      {
+        text: 'Un jugador en Universal dice: "Mi personaje lanza un ataque que destruye el universo observable. Como el daño es universal, ese único ataque debería contar como 5 ataques en el scorecard." ¿Qué responde el reglamento?',
+        opts: [
+          'El árbitro puede asignarle más peso narrativo a escala universal, por lo que el argumento es válido',
+          'Solo aplica si el rival no tiene defensa declarada al nivel universal',
+          'Incorrecto: la economía de ataque establece que 1 ataque = 1 ataque independientemente de la escala; mayor magnitud no multiplica el conteo ni el peso en el scorecard',
+          'Correcto siempre que el árbitro certifique la escala del ataque antes de computarlo'
+        ],
+        correct: 2, time: 45,
+        fb_ok: 'Correcto. El reglamento Universal preserva la economía de ataques: 1 ataque sigue siendo 1 ataque. La escala cosmológica no convierte un turno en cinco turnos ni otorga ventajas extra en el scorecard. La magnitud se evalúa como calidad del ataque, no como cantidad.',
+        fb_no: 'Incorrecto — C. Que un ataque sea de escala universal no lo convierte en múltiples ataques. El principio es explícito en el reglamento: la economía de ataque no varía con la escala. Si fuera así, cualquier personaje Universal ganaría automáticamente por tamaño.'
+      },
+      /* ── Q5 45s: PROHIBICIONES EN UNIVERSAL ── */
+      {
+        text: 'Un personaje en División Universal usa Acasualidad para "desconectar la causalidad del universo entero", argumentando que a escala 3-A eso es narrativamente coherente. ¿Cuál es la respuesta del reglamento?',
+        opts: [
+          'Válido: en Universal las Prohibiciones Absolutas se flexibilizan porque la escala lo justifica',
+          'Válido solo si el personaje tiene tier 3-A o superior acreditado en VS Battles',
+          'Inválido: las Prohibiciones Absolutas aplican en todas las divisiones sin excepción; la escala no modifica la lista de prohibidos',
+          'Inválido solo si el rival objeta formalmente antes de que el turno sea validado'
+        ],
+        correct: 2, time: 45,
+        fb_ok: 'Correcto. Las Prohibiciones Absolutas no tienen excepciones por división. Acasualidad está prohibida en Ciudad, Universal y cualquier futura división. No existe un "tier suficientemente alto" para desbloquear una Prohibición Absoluta.',
+        fb_no: 'Incorrecto — C. El catálogo de prohibidos es global. Ninguna escala, tier ni argumento narrativo habilita una Prohibición Absoluta. El jugador recibe descalificación inmediata independientemente de la división en que juegue.'
+      },
+      /* ── Q6 45s: MASA EN UNIVERSAL ── */
+      {
+        text: 'Un turno en Universal cita "la masa del universo observable" como base para el daño de energía cinética del personaje. ¿Cuál es el valor aproximado correcto que el reglamento reconoce para esa referencia?',
+        opts: [
+          '~1,46 × 10⁵³ kg — masa convencional del universo observable según cosmología estándar',
+          '~6 × 10²⁴ kg — masa de la Tierra como cota mínima para ataques planetarios',
+          '~2 × 10³⁰ kg — masa solar, la unidad estándar de cómputo en Universal',
+          'No existe un valor fijo; cualquier número "muy grande" es aceptable en Universal'
+        ],
+        correct: 0, time: 45,
+        fb_ok: 'Correcto. El reglamento cita específicamente ~1,46 × 10⁵³ kg como la masa convencional del universo observable. Usar ese valor (o scans del personaje compatibles con él) es la base técnica correcta para ataques de escala 3-A.',
+        fb_no: 'Incorrecto — A. El valor correcto es ~1,46 × 10⁵³ kg. La masa solar (10³⁰ kg) y la terrestre (10²⁴ kg) son referencias de divisiones inferiores. "Cualquier número grande" no es aceptable: el reglamento exige precisión o scans justificados.'
+      },
+      /* ── Q7 60s: GOD-ROL EN ESCALA CÓSMICA ── */
+      {
+        text: 'Personaje A en Universal narra: <em>"Mi energía es absoluta y no tiene límite cuantificable; a esta escala, ninguna defensa puede existir porque la física del universo se dobla ante mi presencia."</em> ¿Qué infracción comete y por qué es especialmente grave aquí?',
+        opts: [
+          'Ninguna: en Universal, afirmar dominio sobre la física del universo es narrativamente válido',
+          'Determinismo Narrativo leve: solo afecta las dos últimas palabras del párrafo',
+          'God-Rol + Determinismo Narrativo: declara poder ilimitado (God-Rol) y cierra toda posibilidad defensiva por decreto (DN). Es especialmente grave en Universal porque escalar la narrativa a "la física se dobla" amplifica el efecto y hace que el DN sea de alcance total',
+          'Solo Manipulación Blanca: usa el vacío de información del rival para asumir su estado'
+        ],
+        correct: 2, time: 60,
+        fb_ok: 'Correcto. God-Rol prohíbe declarar poder ilimitado o afirmaciones de naturaleza omnipotente ("energía absoluta sin límite cuantificable"). A eso se suma Determinismo Narrativo al cerrar toda defensa posible. En Universal esta combinación es más grave porque el alcance implícito ("la física del universo") hace que la DN bloquee TODO recurso del rival a nivel estructural.',
+        fb_no: 'Incorrecto — C. "Energía absoluta sin límite cuantificable" = God-Rol (el reglamento prohíbe explícitamente invocar omnipotencia o infinitud). "Ninguna defensa puede existir porque la física se dobla ante mi presencia" = Determinismo Narrativo de alcance cosmológico. Son dos infracciones simultáneas.'
+      },
+      /* ── Q8 60s: MFTL+ EN COMBATE — qué es válido y qué no ── */
+      {
+        text: 'Personaje B afirma que su velocidad es "MFTL+ a 10.000c" y que por eso puede "ejecutar 10.000 ataques antes de que el rival reaccione". ¿Cuál es el análisis reglamentario correcto?',
+        opts: [
+          'Válido: MFTL+ a 10.000c justifica que los ataques ocurran antes de cualquier respuesta del rival',
+          'Válido pero solo en el primer turno; en el segundo el árbitro limita el conteo',
+          'Inválido: la velocidad superiora no cancela la agencia del rival. Si 10.000c = 10.000 ataques libres sin respuesta, eso es Determinismo Narrativo encadenado disfrazado de dato técnico',
+          'Válido si el rival tiene velocidad inferior y no presenta defensa temporal'
+        ],
+        correct: 2, time: 60,
+        fb_ok: 'Correcto. La velocidad por sí sola no cancela el turno del rival. MFTL+ es un dato técnico que cuantifica la ofensiva, pero la resolución de si el rival puede responder depende del intercambio narrativo, no de un cálculo automático de "más rápido = ataca más". Convertirlo en "10.000 ataques libres" es DN encadenado.',
+        fb_no: 'Incorrecto — C. No importa cuánto c sea la velocidad: en Bellator siempre hay ventana de respuesta. Usar MFTL+ para producir un número de ataques mayor al que el rival puede procesar, convirtiéndolos en inevitables, es la definición exacta de Determinismo Narrativo usando datos técnicos como cobertura.'
+      },
+      /* ── Q9 60s: MULTIVERSE / TRASCENDENCIA — límite de la división ── */
+      {
+        text: 'Personaje A afirma que su poder "trasciende el universo observable y opera desde un plano superior al espacio-tiempo". ¿El reglamento lo permite en División Universal?',
+        opts: [
+          'Sí, si el personaje tiene tier 2-C o superior en VS Battles',
+          'Sí, cualquier afirmación cosmológica es válida en la división más alta',
+          'No sin acreditación específica: Universal cubre el universo observable. Trascender ese marco requiere un personaje multiversal o extradimensional con scans que lo acrediten explícitamente; sin eso es exceso de escala',
+          'Solo se permite si el rival también tiene scans transdimensionales y acepta el combate en ese marco'
+        ],
+        correct: 2, time: 60,
+        fb_ok: 'Correcto. "División Universal" no es sinónimo de "sin límite". El techo es el universo observable: 93 mil millones de años luz, no un plano superior al espacio-tiempo. Afirmar trascendencia dimensional sin scans específicos que la acrediten es exceso de escala, independientemente del tier de VS Battles que el jugador cite.',
+        fb_no: 'Incorrecto — C. Universal no es la división más alta sin tope: tiene un techo definido. Sin scans que acrediten que el personaje opera en planos superiores al espacio-tiempo, esa narración supera el marco de la división. El reglamento exige que cada afirmación de poder esté justificada; "jugar en Universal" no es una carta blanca.'
+      },
+      /* ── Q10 90s: CRUCETA UNIVERSAL AVANZADA ── */
+      {
+        text: 'Cruceta en Universal: turno incluye (I) Manipulación del Tiempo para revertir el universo 1 segundo atrás, (II) SUMMON de 50 entidades cósmicas, cada una genera 3 ataques a escala estelar, (III) Incorporeidad activada defensivamente + el jugador la usa para atravesar la defensa del rival, (IV) Control Mental con alcance "todos los seres del universo". ¿Cuál análisis es completamente correcto?',
+        opts: [
+          'Todo es válido en Universal porque la escala lo justifica',
+          '(I) inválido: Tiempo = 1 uso defensivo sobre el usuario, no para revertir el universo; (II) 50×3+50=200 unidades > cap de 100 SUMMON; (III) Incorporeidad dual = ilegal; (IV) CM sin conteo pero "todos los seres del universo" excede la aplicación individual y constituye God-Rol de alcance total',
+          '(I) y (IV) son los únicos problemas; (II) y (III) son válidos en Universal',
+          '(III) es el único problema real; los demás usan datos justificados en escala 3-A'
+        ],
+        correct: 1, time: 90,
+        fb_ok: 'Correcto. (I) Tiempo solo se aplica defensivamente sobre el propio usuario; revertir el universo entero = uso destructivo + excede el tipo de aplicación permitido. (II) 50 entidades × 3 ataques + 50 = 200 unidades, supera el cap de 100. (III) Incorporeidad como defensa propia + para atravesar la defensa del rival = uso dual ilegal. (IV) CM no tiene conteo pero dirigirlo a "todos los seres del universo" es God-Rol de la misma manera que afirmar poder ilimitado.',
+        fb_no: 'Incorrecto — B. Los 4 puntos tienen problema. No hay excepción Universal que levante ninguno de estos límites: el cap de SUMMON es global, Incorporeidad dual sigue siendo ilegal, Tiempo sigue siendo 1 uso defensivo, y CM no puede ser omniversal sin que eso constituya God-Rol.'
+      }
+    ];
+
+    /* ── Per-question timer ── */
+    let qInterval = null, qRem = 0;
+
+    function stopQTimer() { clearInterval(qInterval); qInterval = null; }
+
+    function startQTimer(secs) {
+      stopQTimer();
+      qRem = secs;
+      const fill = document.getElementById('xQFill');
+      const val  = document.getElementById('xQVal');
+      fill.classList.remove('warn'); val.classList.remove('warn');
+      fill.style.transition = 'none'; fill.style.width = '100%';
+      val.textContent = secs + 's';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.transition = 'width ' + (secs - .5) + 's linear, background .5s';
+        fill.style.width = '0%';
+      }));
+      qInterval = setInterval(() => {
+        qRem--;
+        val.textContent = qRem + 's';
+        if (qRem <= 5) { fill.classList.add('warn'); val.classList.add('warn'); sfxWarn(); }
+        if (qRem <= 0) { stopQTimer(); if (!answered) timeExpired(); }
+      }, 1000);
+    }
+
+    let qIndex = 0, qScore = 0, answered = false;
+
+    function renderQuestion() {
+      const q = QUESTIONS[qIndex];
+      document.getElementById('xProg').style.width = (qIndex / QUESTIONS.length * 100) + '%';
+      document.getElementById('xNum').textContent = 'PREGUNTA ' + (qIndex + 1) + ' / ' + QUESTIONS.length;
+      document.getElementById('xScore').textContent = '🌌 ' + qScore + ' / ' + QUESTIONS.length;
+      document.getElementById('xQText').innerHTML = q.text;
+      const fb = document.getElementById('xFB');
+      fb.textContent = ''; fb.className = 'xfb';
+      const optsEl = document.getElementById('xOpts');
+      optsEl.innerHTML = '';
+      q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'xopt'; btn.textContent = opt;
+        btn.addEventListener('click', () => { sfxClick(); pickAnswer(i); });
+        optsEl.appendChild(btn);
+      });
+      const next = document.getElementById('xNext');
+      next.disabled = true;
+      next.textContent = qIndex === QUESTIONS.length - 1 ? 'IR AL COMBATE →' : 'SIGUIENTE →';
+      answered = false;
+      startQTimer(q.time);
+    }
+
+    function pickAnswer(i) {
+      if (answered) return;
+      answered = true; stopQTimer();
+      const q = QUESTIONS[qIndex];
+      document.querySelectorAll('.xopt').forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === q.correct) b.classList.add('reveal');
+        if (idx === i && i !== q.correct) b.classList.add('wrong');
+        if (idx === i && i === q.correct) { b.classList.remove('reveal'); b.classList.add('correct'); }
+      });
+      const fb = document.getElementById('xFB');
+      if (i === q.correct) {
+        qScore++;
+        document.getElementById('xScore').textContent = '🌌 ' + qScore + ' / ' + QUESTIONS.length;
+        fb.textContent = '✓ ' + q.fb_ok; fb.className = 'xfb ok'; sfxCorrect();
+      } else {
+        fb.textContent = '✗ ' + q.fb_no; fb.className = 'xfb no'; sfxWrong();
+      }
+      document.getElementById('xNext').disabled = false;
+    }
+
+    function timeExpired() {
+      answered = true; sfxWrong();
+      document.querySelectorAll('.xopt').forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === QUESTIONS[qIndex].correct) b.classList.add('reveal');
+      });
+      const fb = document.getElementById('xFB');
+      fb.textContent = '⏱ Tiempo agotado. ' + QUESTIONS[qIndex].fb_no;
+      fb.className = 'xfb no';
+      document.getElementById('xNext').disabled = false;
+    }
+
+    document.getElementById('xNext').addEventListener('click', () => {
+      sfxClick(); stopQTimer(); qIndex++;
+      if (qIndex >= QUESTIONS.length) {
+        document.getElementById('panelQuiz').style.display = 'none';
+        document.getElementById('panelCombat').style.display = 'block';
+        document.getElementById('xPh1').classList.add('off');
+        document.getElementById('xPh2').classList.remove('off');
+        sfxPhase();
+      } else {
+        renderQuestion();
+      }
+    });
+
+    /* ── Combat ── */
+    const TURN_RULES = [
+      {
+        key: 'mn',
+        re: /(te\s+(golpeé|partí|maté|destruí|noqué|herí|corté|alcancé|impacté|rompí|quemé|atravesé|lancé|tiré|mandé|noqueé|vaporizaste|aniquilé|eliminé)|quedaste\s+(sin|inconsciente|derrotad|lanzad)|caíste|moriste|perdiste\s+(la|el)|fuiste\s+(derrotad|vencid|lanzad|aplastado|destruido|aniquilado)|resultaste\s+(herido|muerto|noqueado|destruido))/gi,
+        label: '🚫 Sin Manipulación Negra'
+      },
+      {
+        key: 'det',
+        re: /(imposible\s+(de\s+)?(esquivar|evadir|evitar|detener|bloquear|sobrevivir)|sin\s+(posibilidad|escapatoria|salida|forma\s+de\s+(escapar|evitar|esquivar))|no\s+(hay|tienes|tiene|existe)\s+(forma|manera|opción|salida|escape)|nadie\s+puede\s+(evitar|esquivar|detener|sobrevivir)|no\s+puedes\s+(hacer\s+nada|sobrevivir|escapar|evadirlo))/gi,
+        label: '🚫 Sin Determinismo'
+      },
+      {
+        key: 'god',
+        re: /(fuerza\s+(infinita|ilimitada|absoluta|omnipotente)|poder\s+(infinito|ilimitado|absoluto|omnipotente)|invulnerable|indestructible|omnipotente|invencible|sin\s+límite|resistencia\s+(absoluta|infinita|ilimitada)|energía\s+(infinita|ilimitada|absoluta))/gi,
+        label: '🚫 Sin God-Rol'
+      },
+      {
+        key: 'informal',
+        re: /(\bxd\b|\blol\b|\bjajaj|\bajajaj|\bjeje\b|\bbro\b|\bxq\b|\bke\b|\bomg\b|\bwtf\b|\blmao\b|\bxfavor\b|\bporfavor\b|\bporfi\b|\bq\b(?=\s)|\bsii+\b|\bnoo+\b)/gi,
+        label: '✍ Sin lenguaje informal'
+      }
+    ];
+
+    function checkUniqueness(text) {
+      const clean = text.replace(/[^a-záéíóúñü\s]/gi, '').toLowerCase();
+      const uniqueLetters = new Set(clean.replace(/\s/g, '').split('')).size;
+      const words = clean.split(/\s+/).filter(w => w.length > 1);
+      const uniqueWords = new Set(words).size;
+      const maxRep = words.length > 0 ? Math.max(...[...new Set(words)].map(w => words.filter(x => x === w).length)) : 0;
+      const noSpam = words.length === 0 || (maxRep / words.length) <= 0.38;
+      return { uniqueLetters, uniqueWords, noSpam };
+    }
+
+    const INTENT_RE = /(buscará|intentará|lanzaré|lanzo|apunto|dirijo|impulso|busco|concentro|proyecto|extiendo|acelero|enfoco|descargo|activo|libero|desato|preparo|avanzo|cargo|inicio|propulso|disparo|desplazo|converjo|comprimo|expando|ejecuto|orienta|buscaré|intentaré|atacaré|golpearé|cortaré)/gi;
+
+    let _cDeb = null;
+    document.getElementById('xCTA').addEventListener('input', () => {
+      clearTimeout(_cDeb);
+      _cDeb = setTimeout(checkTurn, 280);
+    });
+
+    function checkTurn() {
+      const text = document.getElementById('xCTA').value;
+      const len = text.trim().length;
+      document.getElementById('xCCounter').textContent = len + ' car. ' + (len >= 200 ? '✓' : '(min 200)');
+      const { uniqueLetters, uniqueWords, noSpam } = checkUniqueness(text);
+      INTENT_RE.lastIndex = 0;
+      const hasIntent = INTENT_RE.test(text);
+      const checks = {
+        len:       len >= 200,
+        words:     uniqueWords >= 30 && noSpam,
+        diversity: uniqueLetters >= 10,
+        intent:    hasIntent
+      };
+      let msg = '';
+      TURN_RULES.forEach(rule => {
+        rule.re.lastIndex = 0;
+        const fail = rule.re.test(text);
+        rule.re.lastIndex = 0;
+        checks[rule.key] = !fail;
+        if (fail) msg = '⚠ ' + rule.label + ' detectado en el texto.';
+      });
+      if (!checks.words && uniqueWords < 30 && len >= 200) {
+        msg = '⚠ Vocabulario insuficiente: usá al menos 30 palabras distintas (' + uniqueWords + '/30).';
+      } else if (!checks.diversity && len >= 10) {
+        msg = '⚠ Texto muy repetitivo — pocas letras distintas (' + uniqueLetters + '/10).';
+      } else if (!checks.intent && len >= 200) {
+        msg = '⚠ No se detectan verbos de intención de combate (lanzo, cargo, busco…).';
+      }
+      document.getElementById('xCOrtho').textContent = msg;
+      Object.keys(checks).forEach(k => {
+        const el = document.querySelector('.xct-rule[data-key="' + k + '"]');
+        if (el) { el.classList.toggle('ok', checks[k]); el.classList.toggle('fail', !checks[k]); }
+      });
+      document.getElementById('xCSubmit').disabled = !Object.values(checks).every(Boolean);
+    }
+
+    document.getElementById('xCSubmit').addEventListener('click', () => {
+      sfxPhase();
+      finishExam();
+    });
+
+    async function finishExam() {
+      examRunning = false;
+      stopGlobal(); stopQTimer();
+      const passed = qScore >= 7;
+
+      let regStatus = null;
+      let regError  = null;
+
+      if (passed) {
+        let pending = null;
+        try { pending = JSON.parse(sessionStorage.getItem('bellator_pending_reg')); } catch(_) {}
+        if (pending) {
+          try {
+            const resp = await fetch('/api/inscribir', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ ...pending, exam_score: qScore, exam_passed: true })
+            });
+            const data = await resp.json();
+            if (data.ok) {
+              regStatus = data.status;
+            } else {
+              if (data.error === 'division_full') {
+                regError = 'División Universal al límite — contactá a un administrador.';
+              } else if (data.error === 'pseudonimo_taken') {
+                regError = 'Ese pseudónimo ya está registrado.';
+              } else if (data.error === 'already_confirmed') {
+                regStatus = 'Competidor ya confirmado — bienvenido de vuelta.';
+              } else {
+                regError = 'Error al registrar. Contactá soporte.';
+              }
+            }
+          } catch(_) { regError = 'Error de red al registrar.'; }
+          sessionStorage.removeItem('bellator_pending_reg');
+        }
+      }
+
+      sessionStorage.setItem('bellator_exam_result_universal', JSON.stringify({
+        passed, score: qScore, total: 10, reason: null, reg_status: regStatus, reg_error: regError
+      }));
+      document.getElementById('panelCombat').style.display = 'none';
+      const res = document.getElementById('panelResult');
+      res.style.display = 'block';
+      document.getElementById('xRI').textContent  = passed ? '🌌' : '⚔';
+      document.getElementById('xRT').textContent  = passed ? '¡ADMITIDO!' : 'INSUFICIENTE';
+      document.getElementById('xRT').style.color  = passed ? '#3fb950' : '#f59e0b';
+      if (passed) launchConfetti();
+      document.getElementById('xRS').textContent  = passed
+        ? (regStatus ? regStatus + ' — bienvenido a Bellator.' : 'Turno válido y teoría Universal aprobada.')
+        : 'Turno válido, pero no alcanzaste 7/10 en teoría Universal. Repasá el reglamento sección Universal.';
+      document.getElementById('xRSc').textContent = 'TEORÍA: ' + qScore + ' / 10' + (passed ? '  ·  COMBATE: APROBADO' : '');
+      exitAndRedirect();
+    }
+  </script>
+  <script>function launchConfetti(){var cv=document.createElement('canvas'),cx;cv.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999';document.body.appendChild(cv);cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var cols=['#D4AF37','#FFD700','#f59e0b','#3fb950','#3671C6','#a78bfa','#fff','#E10600'],ps=Array.from({length:200},function(_,i){return{x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*14+4,h:Math.random()*7+3,c:cols[i%cols.length],rot:Math.random()*6.28,rs:(Math.random()-.5)*.14,vy:Math.random()*3+2.5,vx:(Math.random()-.5)*1.8,a:1,ci:Math.random()<.3};}),t=0,tot=280;(function draw(){cx.clearRect(0,0,cv.width,cv.height);t++;ps.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(t*.025+p.x*.008)*.6;p.rot+=p.rs;if(t>tot*.55)p.a=Math.max(0,p.a-.02);if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.ci?(cx.beginPath(),cx.arc(0,0,p.w/2,0,Math.PI*2),cx.fill()):(cx.fillRect(-p.w/2,-p.h/2,p.w,p.h));cx.restore();});t<tot?requestAnimationFrame(draw):cv.remove();}());}</script>
+  <script src="/translate.js?v=4"></script>
+</body>
+</html>

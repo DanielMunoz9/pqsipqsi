@@ -54,286 +54,232 @@
       display: block;
     }
 
-    .hud {
-      position: fixed;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
+    /* ── EXAM WRAP ── */
+    .exam-wrap{
+      position:fixed;inset:0;z-index:4;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;
+      padding:16px;
+    }
+    .exam-card{
+      pointer-events:auto;
+      width:100%;max-width:660px;
+      background:rgba(7,11,18,.84);
+      border:1px solid rgba(212,175,55,.22);
+      border-radius:22px;
+      backdrop-filter:blur(18px);
+      box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04);
+      padding:26px 28px 28px;
+      animation:cardIn .5s cubic-bezier(.2,1,.22,1) both;
+      max-height:calc(100vh - 32px);
+      overflow-y:auto;
+    }
+    @keyframes cardIn{
+      from{opacity:0;transform:translateY(18px) scale(.97)}
+      to{opacity:1;transform:none}
+    }
+    /* header */
+    .exam-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:22px;
+    }
+    .exam-logo{
+      font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:3px;
+      color:var(--gold);text-transform:uppercase;
+    }
+    .exam-phase-bar{display:flex;align-items:center;gap:10px}
+    .exam-phase{
+      font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:2px;
+      color:var(--gold);text-transform:uppercase;
+      padding:3px 10px;border-radius:99px;
+      border:1px solid rgba(212,175,55,.35);
+      background:rgba(212,175,55,.07);
+      transition:all .3s;
+    }
+    .exam-phase.inactive{
+      color:rgba(238,244,255,.28);
+      border-color:rgba(255,255,255,.08);
+      background:transparent;
+    }
+    .exam-ph-sep{width:28px;height:1px;background:rgba(255,255,255,.12)}
+    /* quiz */
+    .q-meta{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-bottom:8px;
+    }
+    .q-meta span{
+      font-family:'Teko',sans-serif;font-size:.75rem;letter-spacing:2px;
+      color:rgba(238,244,255,.45);text-transform:uppercase;
+    }
+    #qScore{color:var(--gold)!important}
+    .q-prog{
+      height:3px;border-radius:99px;
+      background:rgba(255,255,255,.07);
+      margin-bottom:20px;overflow:hidden;
+    }
+    .q-prog>div{
+      height:100%;border-radius:99px;
+      background:linear-gradient(90deg,var(--gold),#f3e68a);
+      transition:width .45s cubic-bezier(.2,1,.22,1);
+      width:0%;
+    }
+    .q-text{
+      font-size:1.05rem;line-height:1.55;color:var(--text);
+      margin-bottom:18px;min-height:52px;
+    }
+    .q-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+    .q-opt{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:10px;padding:11px 15px;
+      color:var(--text);font-size:.92rem;line-height:1.4;
+      cursor:pointer;text-align:left;
+      transition:all .18s;letter-spacing:.2px;
+    }
+    .q-opt:hover:not([disabled]){border-color:rgba(212,175,55,.45);background:rgba(212,175,55,.05)}
+    .q-opt.correct{
+      border-color:#3fb950!important;background:rgba(63,185,80,.1)!important;
+      color:#3fb950!important;
+    }
+    .q-opt.wrong{
+      border-color:#ef4444!important;background:rgba(239,68,68,.08)!important;
+      color:#ef4444!important;
+    }
+    .q-opt.reveal{border-color:#3fb950;background:rgba(63,185,80,.06);color:#3fb950}
+    .q-feedback{
+      font-size:.8rem;line-height:1.6;color:var(--muted);
+      min-height:22px;margin-bottom:14px;padding:0 4px;
+    }
+    .q-feedback.ok{color:#3fb950}
+    .q-feedback.no{color:#ef4444}
+    /* combat */
+    .c-title{
+      font-family:'Teko',sans-serif;font-size:1.15rem;letter-spacing:2px;
+      color:var(--gold);text-transform:uppercase;margin-bottom:5px;
+    }
+    .c-brief{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:16px}
+    .c-rules{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+    .c-rule{
+      font-size:.7rem;letter-spacing:.8px;padding:4px 11px;
+      border-radius:99px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.03);color:rgba(238,244,255,.45);
+      transition:all .3s;
+    }
+    .c-rule.ok{border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.07);color:#3fb950}
+    .c-rule.fail{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07);color:#ef4444}
+    .c-textarea{
+      width:100%;min-height:140px;resize:vertical;
+      background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;color:var(--text);
+      font-family:'Barlow Semi Condensed',sans-serif;font-size:.93rem;
+      line-height:1.65;padding:13px 15px;
+      outline:none;box-sizing:border-box;transition:border-color .2s;
+    }
+    .c-textarea:focus{border-color:rgba(212,175,55,.35)}
+    .c-counter{font-size:.72rem;color:var(--muted);text-align:right;margin:5px 0 14px;letter-spacing:.5px}
+    /* timer bar */
+    .q-timer-wrap{margin-bottom:14px;position:relative}
+    .q-timer-bar{height:3px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:4px}
+    .q-timer-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#3fb950,var(--gold));
+      transition:width .85s linear,background .5s;width:100%}
+    .q-timer-fill.warn{background:linear-gradient(90deg,#f59e0b,#ef4444)!important}
+    .q-timer-row{display:flex;justify-content:space-between;align-items:center}
+    .q-timer-label{font-family:'Teko',sans-serif;font-size:.68rem;letter-spacing:2px;
+      color:rgba(238,244,255,.35);text-transform:uppercase}
+    .q-timer-val{font-family:'Teko',sans-serif;font-size:.8rem;letter-spacing:1px;color:var(--gold);
+      transition:color .3s}
+    .q-timer-val.warn{color:#ef4444!important}
+    /* ortografía flags */
+    .c-ortho{font-size:.72rem;color:#f59e0b;margin:4px 0 10px;min-height:16px;line-height:1.4}
+    /* result */
+    .res-icon{font-size:2.8rem;text-align:center;margin-bottom:10px}
+    .res-title{
+      font-family:'Teko',sans-serif;font-size:1.7rem;letter-spacing:2px;
+      text-align:center;text-transform:uppercase;margin-bottom:6px;
+    }
+    .res-sub{font-size:.88rem;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:12px}
+    .res-score{font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2px;text-align:center;color:var(--gold);margin-bottom:20px}
+    .res-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    /* shared button */
+    .exam-btn{
+      display:block;width:100%;
+      padding:12px 20px;border-radius:99px;border:0;cursor:pointer;
+      background:linear-gradient(135deg,var(--gold),#f3e68a);
+      color:#07100d;font-family:'Teko',sans-serif;font-size:1rem;
+      letter-spacing:2.5px;text-transform:uppercase;
+      box-shadow:0 8px 28px rgba(212,175,55,.22);transition:all .2s;
+    }
+    .exam-btn:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 12px 36px rgba(212,175,55,.32)}
+    .exam-btn[disabled]{opacity:.35;cursor:default}
+    @media(max-width:600px){
+      .exam-card{padding:18px 16px 20px;border-radius:16px}
     }
 
-    .top-chip,
-    .bottom-right,
-    .countdown,
-    .center-copy {
-      position: absolute;
+    /* ── Intro / Resultado ── */
+    .intro-wrap{
+      position:fixed;inset:0;z-index:4;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;padding:16px;
     }
-
-    .top-chip,
-    .bottom-right,
-    .countdown {
-      background: linear-gradient(180deg, rgba(7, 11, 18, 0.32), rgba(7, 11, 18, 0.1));
-      border: 1px solid var(--line);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+    .intro-card{
+      pointer-events:auto;
+      width:100%;max-width:540px;
+      background:rgba(7,11,18,.84);
+      border:1px solid rgba(212,175,55,.22);
+      border-radius:22px;
+      backdrop-filter:blur(18px);
+      box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04);
+      padding:38px 36px 36px;
+      text-align:center;
+      animation:cardIn .6s cubic-bezier(.2,1,.22,1) both;
     }
-
-    .top-chip {
-      top: 18px;
-      left: 18px;
-      max-width: min(390px, calc(100vw - 36px));
-      border-radius: 18px;
-      padding: 12px 14px;
+    @keyframes cardIn{
+      from{opacity:0;transform:translateY(22px) scale(.97)}
+      to{opacity:1;transform:none}
     }
-
-    .eyebrow,
-    .mini-label,
-    .status-label,
-    .footer-label {
-      font-family: 'Teko', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.26rem;
+    .intro-icon{font-size:2.6rem;margin-bottom:12px}
+    .intro-title{
+      font-family:'Teko',sans-serif;font-size:2rem;letter-spacing:4px;
+      text-transform:uppercase;color:var(--gold);margin-bottom:8px;
     }
-
-    .eyebrow {
-      font-size: 0.76rem;
-      color: var(--gold);
+    .intro-sub{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:28px}
+    .intro-btn{
+      display:inline-block;text-decoration:none;
+      padding:13px 36px;border-radius:99px;border:0;cursor:pointer;
+      background:linear-gradient(135deg,var(--gold),#f3e68a);
+      color:#07100d;font-family:'Teko',sans-serif;font-size:1.05rem;
+      letter-spacing:2.5px;text-transform:uppercase;
+      box-shadow:0 8px 28px rgba(212,175,55,.22);transition:all .2s;
     }
-
-    .title {
-      margin-top: 4px;
-      font-family: 'Teko', sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.7rem);
-      line-height: 0.9;
-      text-transform: uppercase;
-      letter-spacing: -0.04rem;
-      text-shadow: 0 0 28px rgba(212, 175, 55, 0.18);
+    .intro-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(212,175,55,.32)}
+    /* result inside intro-card */
+    .res-icon2{font-size:2.8rem;margin-bottom:10px}
+    .res-title2{
+      font-family:'Teko',sans-serif;font-size:1.8rem;letter-spacing:3px;
+      text-transform:uppercase;margin-bottom:6px;
     }
-
-    .title span { color: var(--gold); }
-
-    .lead {
-      margin-top: 6px;
-      max-width: 24rem;
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.35;
+    .res-sub2{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+    .res-score2{font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold);margin-bottom:20px}
+    .res-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .res-btn{
+      display:inline-block;text-align:center;text-decoration:none;
+      padding:11px 22px;border-radius:99px;border:0;cursor:pointer;
+      font-family:'Teko',sans-serif;font-size:.9rem;
+      letter-spacing:2px;text-transform:uppercase;transition:all .2s;
     }
-
-    .countdown {
-      top: 18px;
-      right: 18px;
-      min-width: 120px;
-      padding: 10px 14px;
-      border-radius: 18px;
-    }
-
-    .count-inner { text-align: center; }
-
-    .mini-label {
-      font-size: 0.68rem;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-
-    .count-value {
-      font-family: 'Teko', sans-serif;
-      font-size: clamp(2.6rem, 5vw, 3.5rem);
-      line-height: 0.82;
-      text-shadow: 0 0 18px rgba(255,255,255,0.12);
-    }
-
-    .center-copy {
-      left: 50%;
-      bottom: 36px;
-      transform: translateX(-50%);
-      width: min(660px, calc(100vw - 40px));
-      text-align: center;
-      text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-    }
-
-    .status-label {
-      font-size: 0.72rem;
-      color: var(--gold);
-      margin-bottom: 4px;
-    }
-
-    .status-title {
-      font-family: 'Teko', sans-serif;
-      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
-      letter-spacing: 0.06rem;
-      line-height: 0.95;
-    }
-
-    .status-copy {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.45;
-    }
-
-    .status-bar {
-      position: relative;
-      height: 4px;
-      margin-top: 8px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .status-bar > span {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--gold), #fff1b3, #7db5ff);
-      box-shadow: 0 0 24px rgba(212, 175, 55, 0.32);
-      transition: width 0.9s cubic-bezier(.2,1,.22,1);
-    }
-
-    .bottom-right {
-      right: 18px;
-      bottom: 18px;
-      width: min(280px, calc(100vw - 36px));
-      border-radius: 18px;
-      padding: 12px 14px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      pointer-events: auto;
-      margin-top: 12px;
-    }
-
-    .primary,
-    .secondary {
-      appearance: none;
-      border: 0;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
-    }
-
-    .primary {
-      padding: 11px 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--gold), #f3d36f);
-      color: #091017;
-      font-family: 'Teko', sans-serif;
-      font-size: 1.02rem;
-      letter-spacing: 0.18rem;
-      text-transform: uppercase;
-      box-shadow: 0 12px 34px rgba(212, 175, 55, 0.22);
-    }
-
-    .secondary {
-      padding: 11px 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: var(--text);
-      font-family: 'Teko', sans-serif;
-      font-size: 0.96rem;
-      letter-spacing: 0.14rem;
-      text-transform: uppercase;
-    }
-
-    .primary[disabled] {
-      opacity: 0.42;
-      cursor: wait;
-      transform: none;
-    }
-
-    .primary:not([disabled]):hover,
-    .secondary:hover {
-      transform: translateY(-2px);
-    }
-
-    .footer-label {
-      font-family: 'Teko', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.22rem;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .footer-copy,
-    .hint {
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.45;
-    }
-
-    .hint { margin-top: 8px; }
-
-    @media (max-width: 780px) {
-      .top-chip,
-      .bottom-right,
-      .countdown {
-        left: 14px;
-        right: 14px;
-        width: auto;
-        max-width: none;
-      }
-
-      .top-chip {
-        top: 14px;
-      }
-
-      .countdown {
-        top: auto;
-        bottom: 14px;
-      }
-
-      .bottom-right {
-        display: none;
-      }
-
-      .center-copy {
-        bottom: 90px;
-        width: calc(100vw - 30px);
-      }
-    }
+    .res-btn:hover{transform:translateY(-2px)}
+    .res-btn-green{background:linear-gradient(135deg,#3fb950,#72d97f);color:#04120a;box-shadow:0 8px 24px rgba(63,185,80,.22)}
+    .res-btn-gold{background:linear-gradient(135deg,var(--gold),#f3e68a);color:#07100d;box-shadow:0 8px 24px rgba(212,175,55,.22)}
+    .res-btn-ghost{border:1px solid rgba(212,175,55,.3);color:var(--gold)}
+    .res-btn-muted{border:1px solid rgba(255,255,255,.12);color:rgba(238,244,255,.55)}
+    @media(max-width:600px){.intro-card{padding:24px 18px 26px;border-radius:16px}}
   </style>
 </head>
 <body>
   <canvas id="scene"></canvas>
 
-  <div class="hud">
-    <div class="top-chip">
-      <div class="eyebrow">Bellator Admission Sequence</div>
-      <div class="title">Prueba de <span>Admisión</span></div>
-      <div class="lead">El sistema usa estos 15 segundos para alistarse. Puedes acercarte o alejarte con la rueda mientras el núcleo queda estable.</div>
-    </div>
-
-    <div class="countdown">
-      <div class="count-inner">
-        <div class="mini-label">Cuenta atrás</div>
-        <div class="count-value" id="countValue">15</div>
-      </div>
-    </div>
-
-    <div class="center-copy">
-      <div class="status-label">Estado</div>
-      <div class="status-title" id="statusTitle">Iniciando prueba de admisión</div>
-      <div class="status-copy" id="statusCopy">La cámara orbital está levantando el entorno previo al examen.</div>
-      <div class="status-bar"><span id="statusBar"></span></div>
-    </div>
-
-    <div class="bottom-right">
-      <div>
-        <div class="footer-label">Destino actual</div>
-        <div class="footer-copy">Al terminar el contador se libera la entrada al placeholder de prueba en <strong>/practica</strong>.</div>
-      </div>
-      <div class="actions">
-        <button class="primary" id="enterButton" disabled>Iniciar prueba</button>
-        <a class="secondary" href="/">Volver</a>
-      </div>
-      <div class="hint" id="hintText">Redirección automática en preparación.</div>
-    </div>
+  <div class="intro-wrap">
+    <div class="intro-card" id="introCard"></div>
   </div>
 
   <script type="module">
@@ -587,57 +533,48 @@
     }
     animate();
 
-    const countValue = document.getElementById('countValue');
-    const statusTitle = document.getElementById('statusTitle');
-    const statusCopy = document.getElementById('statusCopy');
-    const statusBar = document.getElementById('statusBar');
-    const enterButton = document.getElementById('enterButton');
-    const hintText = document.getElementById('hintText');
+    /* ── Post-exam result / intro ── */
+    (function() {
+      let result = null, division = 'Ciudad', retryUrl = '/examen';
+      try {
+        const rc = sessionStorage.getItem('bellator_exam_result');
+        const ru = sessionStorage.getItem('bellator_exam_result_universal');
+        if (rc) { result = JSON.parse(rc); sessionStorage.removeItem('bellator_exam_result'); division = 'Ciudad'; retryUrl = '/examen'; }
+        else if (ru) { result = JSON.parse(ru); sessionStorage.removeItem('bellator_exam_result_universal'); division = 'Universal · 3-A'; retryUrl = '/examen-universal'; }
+      } catch(e) {}
+      const card = document.getElementById('introCard');
 
-    const steps = [
-      { title: 'Iniciando prueba de admisión', copy: 'La cámara orbital está levantando el entorno previo al examen.' },
-      { title: 'Calibrando núcleo de admisión', copy: 'El sistema aprovecha estos segundos para alistarse mientras la galaxia responde al cursor y al zoom.' },
-      { title: 'Desplegando acceso al examen', copy: 'La compuerta final de la prueba está a punto de quedar activa.' },
-      { title: 'Prueba lista', copy: 'La cámara terminó. Puedes pasar de inmediato al examen de admisión.' }
-    ];
-
-    let remaining = 15;
-    let stepIndex = 0;
-
-    function syncStatus() {
-      const progress = ((15 - remaining) / 15) * 100;
-      statusBar.style.width = `${progress}%`;
-      const nextIndex = Math.min(steps.length - 1, Math.floor((15 - remaining) / 4));
-      if (nextIndex !== stepIndex) {
-        stepIndex = nextIndex;
+      if (result) {
+        const p = result.passed;
+        const reason = result.reason || result.reg_error || ('No alcanzaste el mínimo de 7/10 en teoría. Repasá el reglamento y volvé a intentarlo.');
+        const successCopy = result.reg_status
+          ? ('Prueba superada. ' + result.reg_status + '.')
+          : ('Superaste la prueba teórica y tu turno de combate es técnicamente válido para División ' + division + '.');
+        card.innerHTML =
+          '<div class="res-icon2">' + (p ? (division.includes('Universal') ? '🌌' : '🏆') : '⚔') + '</div>' +
+          '<div class="res-title2" style="color:' + (p ? '#3fb950' : '#f59e0b') + '">' + (p ? '¡ADMITIDO!' : 'INSUFICIENTE') + '</div>' +
+          '<div class="res-sub2">' + (p ? successCopy : reason) + '</div>' +
+          '<div class="res-score2">TEORÍA: ' + result.score + ' / ' + result.total + (p ? '  ·  COMBATE: APROBADO' : '') + '</div>' +
+          '<div class="res-acts">' +
+            (p ? '<a href="/competidores" class="res-btn res-btn-green">VER ASPIRANTES →</a>' : '<a href="' + retryUrl + '" class="res-btn res-btn-gold">↺ REINTENTAR EXAMEN →</a>') +
+            '<a href="/registro" class="res-btn res-btn-gold">IR AL LOBBY →</a>' +
+            '<a href="/reglamento" class="res-btn res-btn-ghost">VER REGLAMENTO</a>' +
+            '<a href="/" class="res-btn res-btn-muted">INICIO</a>' +
+          '</div>';
+      } else {
+        card.innerHTML =
+          '<div class="intro-icon">⚔</div>' +
+          '<div class="intro-title">Cámara de Admisión</div>' +
+          '<div class="intro-sub">La prueba normalmente se inicia desde el centro de registro.<br>También tenés accesos directos al lobby y a los exámenes para pruebas rápidas.</div>' +
+          '<div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">' +
+            '<a href="/registro" class="intro-btn">IR AL LOBBY →</a>' +
+            '<a href="/examen" class="intro-btn" style="background:rgba(255,255,255,.04);color:var(--text);border:1px solid rgba(255,255,255,.14);box-shadow:none">EXAMEN CIUDAD DIRECTO →</a>' +
+            '<a href="/examen-universal" class="intro-btn" style="background:linear-gradient(135deg,#7c6ab5,#a890e0);box-shadow:0 8px 28px rgba(124,106,181,.3)">EXAMEN UNIVERSAL DIRECTO →</a>' +
+            '<a href="/reglamento" class="intro-btn" style="background:rgba(255,255,255,.04);color:var(--text);border:1px solid rgba(255,255,255,.14);box-shadow:none">VER REGLAMENTO →</a>' +
+          '</div>';
       }
-      statusTitle.textContent = steps[stepIndex].title;
-      statusCopy.textContent = steps[stepIndex].copy;
-      countValue.textContent = String(remaining);
-    }
-
-    syncStatus();
-
-    const timer = setInterval(() => {
-      remaining -= 1;
-      if (remaining <= 0) {
-        remaining = 0;
-        syncStatus();
-        clearInterval(timer);
-        enterButton.disabled = false;
-        hintText.textContent = 'Redirección automática en 2 segundos. Si prefieres, entra manualmente.';
-        setTimeout(() => {
-          window.location.href = '/practica';
-        }, 2000);
-        return;
-      }
-      syncStatus();
-    }, 1000);
-
-    enterButton.addEventListener('click', () => {
-      window.location.href = '/practica';
-    });
+    })();
   </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

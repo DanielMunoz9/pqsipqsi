@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+*.log
+.DS_Store
+.vscode/
+node_modules/
+public/audio/
+public/tts/
+public/downloads/
+public/voices/

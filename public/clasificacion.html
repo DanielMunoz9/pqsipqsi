@@ -4,7 +4,174 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clasificación — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  <style>
+    .bl-nation-stage{
+      position:relative;
+    }
+    .bl-nation-intro{
+      margin:0 0 18px;
+      padding:18px 20px;
+      border-radius:20px;
+      border:1px solid rgba(99,102,241,.24);
+      background:
+        radial-gradient(circle at top right, rgba(99,102,241,.18), transparent 36%),
+        linear-gradient(135deg, rgba(16,20,30,.96), rgba(9,12,18,.96));
+      color:rgba(238,244,255,.82);
+      box-shadow:0 18px 44px rgba(0,0,0,.28);
+    }
+    .bl-nation-intro strong{
+      color:#a5b4fc;
+    }
+    .bl-nation-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:14px;
+    }
+    .bl-nation-card{
+      position:relative;
+      display:block;
+      overflow:hidden;
+      min-height:190px;
+      padding:18px;
+      border-radius:22px;
+      text-decoration:none;
+      color:var(--bl-text);
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(180deg, rgba(17,22,31,.98), rgba(8,11,16,.98));
+      box-shadow:0 18px 42px rgba(0,0,0,.34);
+      transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .bl-nation-card:hover{
+      transform:translateY(-4px);
+      border-color:var(--nation-accent, rgba(212,175,55,.35));
+      box-shadow:0 24px 52px rgba(0,0,0,.42), 0 0 22px color-mix(in srgb, var(--nation-accent, #d4af37) 24%, transparent);
+    }
+    .bl-nation-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, color-mix(in srgb, var(--nation-accent, #d4af37) 16%, transparent), transparent 54%);
+      pointer-events:none;
+    }
+    .bl-nation-rank{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:2;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.44);
+      color:#fff;
+      font-family:'Teko',sans-serif;
+      font-size:.95rem;
+      letter-spacing:1.4px;
+    }
+    .bl-nation-bg-flag{
+      position:absolute;
+      right:-22px;
+      bottom:-16px;
+      font-size:7.2rem;
+      opacity:.08;
+      filter:blur(.2px);
+      pointer-events:none;
+    }
+    .bl-nation-head{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:20px;
+    }
+    .bl-nation-flag{
+      width:38px;
+      height:28px;
+      border-radius:5px;
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:0 8px 20px rgba(0,0,0,.35);
+      flex-shrink:0;
+    }
+    .bl-nation-division{
+      padding:4px 10px;
+      border-radius:999px;
+      font-family:'Teko',sans-serif;
+      font-size:.82rem;
+      letter-spacing:1.4px;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+      color:#dbe7ff;
+    }
+    .bl-nation-driver{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .bl-nation-avatar,
+    .bl-nation-avatar-ph{
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      flex-shrink:0;
+      border:2px solid rgba(255,255,255,.12);
+      object-fit:cover;
+      background:rgba(255,255,255,.06);
+    }
+    .bl-nation-avatar-ph{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Teko',sans-serif;
+      font-size:1.45rem;
+      color:var(--nation-accent, var(--bl-gold));
+    }
+    .bl-nation-country{
+      color:rgba(238,244,255,.58);
+      font-size:.78rem;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+    .bl-nation-name{
+      font-family:'Teko',sans-serif;
+      font-size:1.9rem;
+      letter-spacing:1px;
+      line-height:.92;
+      color:#fff;
+      margin-top:2px;
+    }
+    .bl-nation-meta{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-top:20px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:rgba(238,244,255,.72);
+      font-size:.82rem;
+      letter-spacing:.4px;
+    }
+    .bl-nation-meta strong{
+      color:#fff;
+      font-family:'Teko',sans-serif;
+      font-size:1rem;
+      letter-spacing:1px;
+    }
+    @media(max-width: 700px){
+      .bl-nation-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <canvas class="space" id="space" aria-hidden="true"></canvas>
@@ -56,9 +223,10 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
         <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">RESULTS</span>
       </div>
     </nav>
@@ -108,10 +276,21 @@
         </div>
       </div>
     </section>
+
+    <section class="bl-section bl-nation-stage" style="padding-top:0">
+      <div class="bl-section-head">
+        <h2 class="bl-section-h2">Mejor de cada nación</h2>
+        <span class="bl-badge-live" style="background:rgba(99,102,241,.12);color:#818cf8;border-color:rgba(99,102,241,.3)">BANDERAS</span>
+      </div>
+      <p class="bl-nation-intro"><strong>Mapa de líderes nacionales:</strong> se toma el mejor clasificado de cada país según el orden real de la parrilla. El bloque ahora resalta división, bandera y posición global para que se lea como un tablero importante, no como una lista secundaria.</p>
+      <div id="bl-nation-grid" class="bl-nation-grid">
+        <div style="color:rgba(238,244,255,.4);font-size:.9rem;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.03)">Cargando líderes nacionales…</div>
+      </div>
+    </section>
   </div>
 
-  <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/tracker.js?v=8"></script>
+  <script src="/app.js?v=19"></script>
   <script>
     function slugify(value) {
       return String(value || '')
@@ -180,13 +359,67 @@
             </a>
           `;
         }).join('');
+
+        // ── Mejor de cada nación ────────────────────────────────────────────────
+        const byCountry = {};
+        data.forEach(p => {
+          const cc = (p.country_code || '').toLowerCase().replace(/[^a-z]/g, '');
+          if (!cc || cc === 'un' || cc.length !== 2) return;
+          if (!byCountry[cc]) byCountry[cc] = p; // primero = mejor rankeado
+        });
+        const nationGrid = document.getElementById('bl-nation-grid');
+        const countryNames = (typeof Intl !== 'undefined' && Intl.DisplayNames)
+          ? new Intl.DisplayNames(['es'], { type: 'region' })
+          : null;
+        if (nationGrid) {
+          const entries = Object.entries(byCountry);
+          if (!entries.length) {
+            nationGrid.innerHTML = '<div style="color:rgba(238,244,255,.4);font-size:.9rem;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.03)">Sin datos de país registrados aún.</div>';
+          } else {
+            nationGrid.innerHTML = entries.map(([cc, p]) => {
+              const globalRank = data.findIndex(item => item.pseudonimo === p.pseudonimo) + 1;
+              const accent = String(p.division || '').toLowerCase().includes('ciudad') ? '#60a5fa' : '#d4af37';
+              const countryLabel = countryNames ? countryNames.of(cc.toUpperCase()) : cc.toUpperCase();
+              const av = p.avatar_url && p.avatar_url !== '<nil>'
+                ? `<img class="bl-nation-avatar" src="${p.avatar_url}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">\n                   <div class="bl-nation-avatar-ph" style="display:none">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`
+                : `<div class="bl-nation-avatar-ph">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+              const isCiudad = String(p.division || '').toLowerCase().includes('ciudad');
+              const divBadge = isCiudad
+                ? '<span class="bl-nation-division" style="color:#93c5fd;border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.12)">Ciudad</span>'
+                : '<span class="bl-nation-division" style="color:#f6d36b;border-color:rgba(212,175,55,.26);background:rgba(212,175,55,.10)">Universal</span>';
+              return `<a class="bl-nation-card" href="${profileUrl(p.pseudonimo)}" style="--nation-accent:${accent}">
+                <div class="bl-nation-rank">TOP ${globalRank}</div>
+                <span class="bl-nation-bg-flag fi fi-${cc}" aria-hidden="true"></span>
+                <div class="bl-nation-head">
+                  <span class="fi fi-${cc} bl-nation-flag" aria-hidden="true"></span>
+                  ${divBadge}
+                </div>
+                <div class="bl-nation-driver">
+                  ${av}
+                  <div style="min-width:0">
+                    <div class="bl-nation-country">${countryLabel}</div>
+                    <div class="bl-nation-name">${p.pseudonimo}</div>
+                  </div>
+                </div>
+                <div class="bl-nation-meta">
+                  <span>Líder nacional</span>
+                  <strong>Ver perfil →</strong>
+                </div>
+              </a>`;
+            }).join('');
+          }
+        }
       } catch (_) {
         rankList.innerHTML = '<div class="bl-rank-row"><span class="bl-rank-empty">Error cargando clasificación.</span></div>';
+        const nationGrid = document.getElementById('bl-nation-grid');
+        if (nationGrid) {
+          nationGrid.innerHTML = '<div style="color:rgba(238,244,255,.4);font-size:.9rem;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.03)">No se pudo cargar el mapa de líderes nacionales.</div>';
+        }
       }
     }
 
     loadClasificacion();
   </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

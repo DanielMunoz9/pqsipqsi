@@ -1,12 +1,12 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Banco de Pr√°ctica BETA ‚Äî BELLATOR ROLBATTLE</title>
+  <title>Banco de Pr·ctica BETA ó BELLATOR ROLBATTLE</title>
   <link rel="stylesheet" href="/shared.css?v=4">
   <style>
-  /* ‚îÄ‚îÄ HERO ‚îÄ‚îÄ */
+  /* -- HERO -- */
   .pr-hero{
     padding:54px 24px 0;max-width:1200px;margin:0 auto;position:relative;z-index:10;
   }
@@ -60,7 +60,7 @@
     margin:22px 0;animation:fadeSlideDown .5s ease .4s both;
   }
 
-  /* ‚îÄ‚îÄ BETA NOTICE ‚îÄ‚îÄ */
+  /* -- BETA NOTICE -- */
   .pr-notice{
     max-width:1200px;margin:0 auto 28px;padding:0 24px;
     animation:fadeSlideDown .7s ease .45s both;position:relative;z-index:10;
@@ -89,7 +89,7 @@
   }
   .pr-notice-text strong{color:var(--bl-soft)}
 
-  /* ‚îÄ‚îÄ CATEGORY SELECTOR ‚îÄ‚îÄ */
+  /* -- CATEGORY SELECTOR -- */
   .pr-catbar{
     max-width:1200px;margin:0 auto 24px;padding:0 24px;
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
@@ -110,7 +110,7 @@
     background:var(--bl-gold);border-color:var(--bl-gold);color:#0d1117;
   }
 
-  /* ‚îÄ‚îÄ MAIN WORKSPACE ‚îÄ‚îÄ */
+  /* -- MAIN WORKSPACE -- */
   .pr-workspace{
     max-width:1200px;margin:0 auto;padding:0 24px 60px;
     display:grid;grid-template-columns:1fr 420px;gap:20px;
@@ -119,7 +119,7 @@
   }
   @media(max-width:900px){.pr-workspace{grid-template-columns:1fr}}
 
-  /* ‚îÄ‚îÄ EDITOR PANEL ‚îÄ‚îÄ */
+  /* -- EDITOR PANEL -- */
   .pr-editor-panel{
     background:rgba(22,27,34,.9);border:1px solid rgba(48,54,61,.85);
     border-radius:16px;overflow:hidden;
@@ -199,7 +199,7 @@
   }
   .pr-hint{font-size:.72rem;color:rgba(139,148,158,.5);letter-spacing:.5px}
 
-  /* ‚îÄ‚îÄ RESULTS PANEL ‚îÄ‚îÄ */
+  /* -- RESULTS PANEL -- */
   .pr-results-panel{
     display:flex;flex-direction:column;gap:16px;
     animation:fadeSlideUp .5s ease .65s both;
@@ -227,7 +227,7 @@
   }
   .pr-result-body{padding:14px;display:flex;flex-direction:column;gap:7px;min-height:80px}
 
-  /* Ortograf√≠a: grilla 2 columnas con scroll cuando hay muchos errores */
+  /* OrtografÌa: grilla 2 columnas con scroll cuando hay muchos errores */
   #pr-orth-body{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -245,7 +245,7 @@
     display:flex;gap:9px;align-items:flex-start;
     padding:10px 13px;border-radius:8px;font-size:.8rem;line-height:1.5;
   }
-  /* √≠tem compacto para resultados LT (m√°s densos) */
+  /* Ìtem compacto para resultados LT (m·s densos) */
   .pr-item-compact{
     padding:7px 10px;gap:7px;
   }
@@ -262,7 +262,7 @@
   .pr-item-text strong{color:var(--bl-text)}
   .pr-item-text small{color:var(--bl-muted);font-size:.73rem;display:block;margin-top:2px}
 
-  /* ‚îÄ‚îÄ EMPTY STATE ‚îÄ‚îÄ */
+  /* -- EMPTY STATE -- */
   .pr-empty{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:10px;padding:28px 16px;color:var(--bl-muted);
@@ -270,7 +270,7 @@
   }
   .pr-empty svg{opacity:.25}
 
-  /* ‚îÄ‚îÄ SCORE BAR ‚îÄ‚îÄ */
+  /* -- SCORE BAR -- */
   .pr-score-card{
     background:rgba(22,27,34,.9);border:1px solid rgba(48,54,61,.85);
     border-radius:14px;overflow:hidden;
@@ -298,7 +298,7 @@
     font-size:.76rem;color:var(--bl-muted);letter-spacing:1.5px;margin-top:4px;
   }
 
-  /* ‚îÄ‚îÄ LISTENING WAVE ‚îÄ‚îÄ */
+  /* -- LISTENING WAVE -- */
   .pr-wave{
     display:none;gap:3px;align-items:flex-end;height:24px;padding:0 4px;
     margin-right:8px;
@@ -315,12 +315,12 @@
   .pr-wave span:nth-child(5){height:10px;animation-delay:.05s}
   @keyframes waveBar{from{opacity:.3;transform:scaleY(.4)}to{opacity:1;transform:scaleY(1)}}
 
-  /* ‚îÄ‚îÄ ANIMATIONS ‚îÄ‚îÄ */
+  /* -- ANIMATIONS -- */
   @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
   @keyframes fadeSlideUp  {from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)}}
   @keyframes titleReveal  {from{opacity:0;transform:translateY(40px) skewY(3deg)}to{opacity:1;transform:translateY(0) skewY(0)}}
 
-  /* ‚îÄ‚îÄ RULE REFERENCE SIDE NOTE ‚îÄ‚îÄ */
+  /* -- RULE REFERENCE SIDE NOTE -- */
   .pr-ref-card{
     background:rgba(12,17,25,.85);border:1px solid rgba(212,175,55,.18);
     border-radius:14px;padding:18px;
@@ -343,7 +343,7 @@
     min-width:80px;flex-shrink:0;letter-spacing:.5px;
   }
 
-  /* ‚îÄ‚îÄ AI BANNER ‚îÄ‚îÄ */
+  /* -- AI BANNER -- */
   .pr-ai-banner{
     margin:0 auto 20px;max-width:1400px;padding:0 24px;
   }
@@ -408,7 +408,7 @@
     color:#D4AF37;border-color:rgba(212,175,55,.3);background:rgba(212,175,55,.05);
   }
 
-  /* ‚îÄ‚îÄ LT loading state ‚îÄ‚îÄ */
+  /* -- LT loading state -- */
   .pr-lt-loading{
     display:flex;align-items:center;gap:10px;padding:12px 0;
     font-size:.78rem;color:var(--bl-muted);
@@ -452,7 +452,7 @@
     .pr-textarea{min-height:260px;padding:16px}
     .pr-action-btn{font-size:.8rem;padding:8px 10px}
   }
-  /* ‚îÄ‚îÄ AI TUNNEL VIZ ‚îÄ‚îÄ */
+  /* -- AI TUNNEL VIZ -- */
   .pr-ai-tunnel{background:rgba(12,17,25,.88);border:1px solid rgba(212,175,55,.20);border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.35)}
   .pr-ai-t-header{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid rgba(48,54,61,.8);background:rgba(12,17,25,.6);font-family:'Teko',sans-serif;font-size:.9rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold)}
   #pr-nn-canvas{padding:10px 12px 0}
@@ -462,7 +462,7 @@
   .pr-ai-t-body{font-size:.74rem;line-height:1.55;color:var(--bl-muted)}
   .pr-ai-t-body strong{color:var(--bl-soft);display:block;margin-bottom:2px}
 
-  /* ‚îÄ‚îÄ VARIEDAD NARRATIVA ‚îÄ‚îÄ */
+  /* -- VARIEDAD NARRATIVA -- */
   .pr-var-row{display:flex;flex-direction:column;gap:5px;padding:9px 11px;border-radius:8px;border:1px solid rgba(48,54,61,.7);background:rgba(12,17,25,.4)}
   .pr-var-word{font-family:'Teko',sans-serif;font-size:.92rem;letter-spacing:1px;color:var(--bl-soft);display:flex;align-items:center;gap:7px}
   .pr-var-count{font-size:.7rem;padding:1px 8px;border-radius:4px;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25);letter-spacing:1px;font-family:'Teko',sans-serif}
@@ -493,19 +493,19 @@
 
   <div class="container">
 
-    <!-- ‚ïê‚ïê TOPBAR ‚ïê‚ïê -->
+    <!-- -- TOPBAR -- -->
     <div class="bl-topbar bl-stripe-bg">
       <div class="bl-topbar-left">
         <span><span class="bl-live-dot"></span>&nbsp; SISTEMA ACTIVO</span>
         <a href="/">INICIO</a>
-        <a href="/clasificacion">CLASIFICACI√ìN</a>
+        <a href="/clasificacion">CLASIFICACI”N</a>
       </div>
       <div class="bl-topbar-right">
         <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
       </div>
     </div>
 
-    <!-- ‚ïê‚ïê NAVBAR ‚ïê‚ïê -->
+    <!-- -- NAVBAR -- -->
     <nav class="bl-navbar" style="position:relative">
       <a class="bl-navbar-logo" href="/">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -516,54 +516,55 @@
         </svg>
         <span>BELLATOR</span>
       </a>
-      <button class="bl-hamburger" id="bl-burger" aria-label="Men√∫">
+      <button class="bl-hamburger" id="bl-burger" aria-label="Men˙">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
       </button>
       <ul class="bl-navbar-links" id="bl-links">
         <li><a class="bl-navlink" href="/">Inicio</a></li>
         <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
-        <li><a class="bl-navlink" href="/clasificacion">Clasificaci√≥n</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">ClasificaciÛn</a></li>
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li>
           <a class="bl-navlink active" href="/practica" style="display:inline-flex;align-items:center;gap:6px">
-            Pr√°ctica
+            Pr·ctica
             <span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span>
           </a>
         </li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">CosmologÌas<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">‚öî INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
       </div>
     </nav>
 
-    <!-- ‚ïê‚ïê EVENT BAR ‚ïê‚ïê -->
+    <!-- -- EVENT BAR -- -->
     <div class="bl-event-bar bl-stripe-bg">
       <span class="bl-event-round">T-2026</span>
-      <span class="bl-event-name">‚öî Liga Universal Bellator ‚Äî C√≥digo de Honor</span>
+      <span class="bl-event-name">? Liga Universal Bellator ó CÛdigo de Honor</span>
       <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
     </div>
 
-    <!-- ‚ïê‚ïê HERO ‚ïê‚ïê -->
+    <!-- -- HERO -- -->
     <div class="pr-hero">
-      <div class="pr-eyebrow">TEMPORADA 2026 ¬∑ HERRAMIENTA DE ENTRENAMIENTO</div>
+      <div class="pr-eyebrow">TEMPORADA 2026 ∑ HERRAMIENTA DE ENTRENAMIENTO</div>
       <div class="pr-title-row">
-        <h1 class="pr-title">BANCO DE<br>PR√ÅCTICA</h1>
+        <h1 class="pr-title">BANCO DE<br>PR¡CTICA</h1>
         <div class="pr-beta-badge">
           <span class="pr-beta-pulse"></span>
           BETA
         </div>
       </div>
-      <div class="pr-subtitle">BELLATOR ROLBATTLE ‚Äî SIMULADOR DE ROL DE COMBATE</div>
+      <div class="pr-subtitle">BELLATOR ROLBATTLE ó SIMULADOR DE ROL DE COMBATE</div>
       <hr class="pr-divider">
     </div>
 
-    <!-- ‚ïê‚ïê AVISO IA ‚ïê‚ïê -->
+    <!-- -- AVISO IA -- -->
     <div class="pr-ai-banner">
       <div class="pr-ai-banner-inner">
 
         <div class="pr-ai-left">
-          <!-- √≠cono de circuito / chip IA -->
+          <!-- Ìcono de circuito / chip IA -->
           <svg class="pr-ai-circuit" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="14" y="14" width="26" height="26" rx="4" stroke="#D4AF37" stroke-width="1.4"/>
             <rect x="19" y="19" width="16" height="16" rx="2" fill="rgba(212,175,55,.08)" stroke="rgba(212,175,55,.4)" stroke-width="1"/>
@@ -595,19 +596,19 @@
             CADA TURNO QUE PRACTICAS ENTRENA A NUESTRA IA
           </div>
           <div class="pr-ai-text">
-            La percepci√≥n humana es imperfecta ‚Äî un juez que simpatiza con el rival encontrar√°
+            La percepciÛn humana es imperfecta ó un juez que simpatiza con el rival encontrar·
             razones para aventajarle aunque el reglamento diga lo contrario. La amistad, el cansancio
-            y el favoritismo corrompen el criterio. <strong>Nosotros creemos en la raz√≥n, no en el gusto.</strong>
+            y el favoritismo corrompen el criterio. <strong>Nosotros creemos en la razÛn, no en el gusto.</strong>
             <br><br>
-            Cada turno que escribes aqu√≠ alimenta, en segundo plano, el conjunto de datos que entrenar√°
-            la futura <strong>IA √Årbitro de Bellator</strong> ‚Äî un sistema que juzgar√° fr√≠o, consistente
+            Cada turno que escribes aquÌ alimenta, en segundo plano, el conjunto de datos que entrenar·
+            la futura <strong>IA ¡rbitro de Bellator</strong> ó un sistema que juzgar· frÌo, consistente
             y sin favoritismos, aplicando el mismo reglamento para todos, siempre.
             Porque el combate narrativo merece jueces que no se corrompan, no se cansen y no tengan
-            preferidos. <strong>Entrena hoy y s√© parte del cambio. :)</strong>
+            preferidos. <strong>Entrena hoy y sÈ parte del cambio. :)</strong>
           </div>
           <div class="pr-ai-footer">
             <span class="pr-ai-tag pr-ai-tag-green">EN DESARROLLO</span>
-            <span class="pr-ai-tag pr-ai-tag-gold">DATOS AN√ìNIMOS</span>
+            <span class="pr-ai-tag pr-ai-tag-gold">DATOS AN”NIMOS</span>
             <span class="pr-ai-tag pr-ai-tag-gold">SIN ALMACENAMIENTO PERSONAL</span>
           </div>
         </div>
@@ -615,40 +616,40 @@
       </div>
     </div>
 
-    <!-- ‚ïê‚ïê AVISO BETA ‚ïê‚ïê -->
+    <!-- -- AVISO BETA -- -->
     <div class="pr-notice">
       <div class="pr-notice-inner">
-        <div class="pr-notice-icon">‚ö†</div>
+        <div class="pr-notice-icon">?</div>
         <div class="pr-notice-body">
-          <div class="pr-notice-title">VERSI√ìN BETA ‚Äî EN DESARROLLO ACTIVO</div>
+          <div class="pr-notice-title">VERSI”N BETA ó EN DESARROLLO ACTIVO</div>
           <div class="pr-notice-text">
-            Esta herramienta combina detecci√≥n autom√°tica de infracciones con la
-            <strong>API de LanguageTool</strong> para ortograf√≠a y gram√°tica en espa√±ol.
-            Los an√°lisis son orientativos ‚Äî el lenguaje narrativo tiene matices que el sistema a√∫n aprende.
+            Esta herramienta combina detecciÛn autom·tica de infracciones con la
+            <strong>API de LanguageTool</strong> para ortografÌa y gram·tica en espaÒol.
+            Los an·lisis son orientativos ó el lenguaje narrativo tiene matices que el sistema a˙n aprende.
             <strong>El criterio final siempre corresponde al juez designado.</strong>
-            La funci√≥n de audio requiere un navegador compatible con Web Speech API.
+            La funciÛn de audio requiere un navegador compatible con Web Speech API.
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ‚ïê‚ïê SELECTOR DE CATEGOR√çA ‚ïê‚ïê -->
+    <!-- -- SELECTOR DE CATEGORÕA -- -->
     <div class="pr-catbar">
       <span class="pr-catbar-label">Revisar reglas de:</span>
       <button class="pr-cat-btn active" data-cat="all">General</button>
       <button class="pr-cat-btn" data-cat="sc">S.C.</button>
       <button class="pr-cat-btn" data-cat="combate">Combate</button>
       <button class="pr-cat-btn" data-cat="poderes">Poderes</button>
-      <button class="pr-cat-btn" data-cat="redaccion">Redacci√≥n</button>
+      <button class="pr-cat-btn" data-cat="redaccion">RedacciÛn</button>
       <button class="pr-cat-btn" data-cat="juez">Juzgado</button>
       <button class="pr-cat-btn" data-cat="crossover">Crossover</button>
       <button class="pr-cat-btn" data-cat="niveles">Niveles</button>
     </div>
 
-    <!-- ‚ïê‚ïê WORKSPACE ‚ïê‚ïê -->
+    <!-- -- WORKSPACE -- -->
     <div class="pr-workspace">
 
-      <!-- ‚îÄ EDITOR ‚îÄ -->
+      <!-- - EDITOR - -->
       <div class="pr-editor-panel">
         <div class="pr-editor-header">
           <span class="pr-editor-title">ROL DE COMBATE</span>
@@ -681,24 +682,24 @@
             id="pr-text"
             spellcheck="true"
             lang="es"
-            placeholder="Escribe aqu√≠ tu rol de combate. El sistema analizar√° ortograf√≠a e infracciones al reglamento seg√∫n la categor√≠a seleccionada arriba.&#10;&#10;Recuerda: narra en presente, no decidas el resultado del rival, y evita frases de god-mode o sello."></textarea>
+            placeholder="Escribe aquÌ tu rol de combate. El sistema analizar· ortografÌa e infracciones al reglamento seg˙n la categorÌa seleccionada arriba.&#10;&#10;Recuerda: narra en presente, no decidas el resultado del rival, y evita frases de god-mode o sello."></textarea>
         </div>
         <div class="pr-editor-footer">
-          <span class="pr-counter" id="pr-counter">0 palabras ¬∑ 0 car.</span>
+          <span class="pr-counter" id="pr-counter">0 palabras ∑ 0 car.</span>
           <span class="pr-hint">Ctrl + Enter = Analizar</span>
         </div>
       </div>
 
-      <!-- ‚îÄ RESULTADOS ‚îÄ -->
+      <!-- - RESULTADOS - -->
       <div class="pr-results-panel">
 
         <!-- SCORE -->
         <div class="pr-score-card" id="pr-score-card">
-          <div class="pr-score-label">PUNTUACI√ìN DE ROL</div>
+          <div class="pr-score-label">PUNTUACI”N DE ROL</div>
           <div class="pr-score-bar-wrap">
             <div class="pr-score-bar" id="pr-score-bar"></div>
           </div>
-          <div class="pr-score-value" id="pr-score-value" style="color:var(--bl-gold)">‚Äî</div>
+          <div class="pr-score-value" id="pr-score-value" style="color:var(--bl-gold)">ó</div>
           <div class="pr-score-verdict" id="pr-score-verdict">Escribe y analiza tu rol para ver el resultado</div>
         </div>
 
@@ -708,7 +709,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
             <span class="pr-result-card-title" style="color:#D4AF37">VARIEDAD NARRATIVA</span>
             <span style="font-size:.62rem;letter-spacing:1.5px;color:var(--bl-muted);margin-left:2px">clic en chip = insertar</span>
-            <span class="pr-result-count" id="pr-var-count">‚Äî</span>
+            <span class="pr-result-count" id="pr-var-count">ó</span>
           </div>
           <div class="pr-result-body" id="pr-var-body" style="flex-direction:column;gap:7px">
             <div class="pr-empty">
@@ -718,18 +719,18 @@
           </div>
         </div>
 
-        <!-- ORTOGRAF√çA -->
+        <!-- ORTOGRAFÕA -->
         <div class="pr-result-card">
           <div class="pr-result-card-header">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span class="pr-result-card-title" style="color:#f59e0b">ORTOGRAF√çA &amp; GRAM√ÅTICA</span>
+            <span class="pr-result-card-title" style="color:#f59e0b">ORTOGRAFÕA &amp; GRAM¡TICA</span>
             <span style="font-family:'Teko',sans-serif;font-size:.6rem;letter-spacing:1.5px;color:#3fb950;border:1px solid rgba(63,185,80,.3);background:rgba(63,185,80,.07);padding:1px 7px;border-radius:3px;margin-left:4px;flex-shrink:0">LANGUAGETOOL</span>
-            <span class="pr-result-count" id="pr-orth-count">‚Äî</span>
+            <span class="pr-result-count" id="pr-orth-count">ó</span>
           </div>
           <div class="pr-result-body" id="pr-orth-body">
             <div class="pr-empty">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              Esperando an√°lisis...
+              Esperando an·lisis...
             </div>
           </div>
         </div>
@@ -739,23 +740,23 @@
           <div class="pr-result-card-header">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span class="pr-result-card-title" style="color:#ef4444">INFRACCIONES</span>
-            <span class="pr-result-count" id="pr-rule-count">‚Äî</span>
+            <span class="pr-result-count" id="pr-rule-count">ó</span>
           </div>
           <div class="pr-result-body" id="pr-rule-body">
             <div class="pr-empty">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Esperando an√°lisis...
+              Esperando an·lisis...
             </div>
           </div>
         </div>
 
-        <!-- REFERENCIA R√ÅPIDA -->
+        <!-- REFERENCIA R¡PIDA -->
         <div class="pr-ai-tunnel">
-          <!-- hidden sink for renderRef ‚Äî keeps catbar activeCat working -->
+          <!-- hidden sink for renderRef ó keeps catbar activeCat working -->
           <div id="pr-ref-list" style="display:none" aria-hidden="true"></div>
           <div class="pr-ai-t-header">
             <span class="pr-ai-pulse-dot"></span>
-            C√ìMO TU TURNO ENTRENA LA IA
+            C”MO TU TURNO ENTRENA LA IA
           </div>
           <!-- Neural network canvas -->
           <canvas id="pr-nn-canvas" width="460" height="160" style="display:block;width:100%;height:auto;max-height:160px;border-radius:8px;margin:0 0 12px"></canvas>
@@ -763,19 +764,19 @@
           <div class="pr-ai-t-steps">
             <div class="pr-ai-t-step">
               <div class="pr-ai-t-num">01</div>
-              <div class="pr-ai-t-body"><strong>Tu turno llega al analizador local</strong>El texto pasa por el motor de reglas sin salir del navegador. Instant√°neo, sin red.</div>
+              <div class="pr-ai-t-body"><strong>Tu turno llega al analizador local</strong>El texto pasa por el motor de reglas sin salir del navegador. Instant·neo, sin red.</div>
             </div>
             <div class="pr-ai-t-step">
               <div class="pr-ai-t-num">02</div>
-              <div class="pr-ai-t-body"><strong>Se extraen metadatos de calidad narrativa</strong>Infracciones detectadas, tipo de redacci√≥n y puntaje estimado. Sin nombre, sin identidad.</div>
+              <div class="pr-ai-t-body"><strong>Se extraen metadatos de calidad narrativa</strong>Infracciones detectadas, tipo de redacciÛn y puntaje estimado. Sin nombre, sin identidad.</div>
             </div>
             <div class="pr-ai-t-step">
               <div class="pr-ai-t-num">03</div>
-              <div class="pr-ai-t-body"><strong>Paquete an√≥nimo viaja en segundo plano</strong>Solo datos de calidad. Tu nombre y texto original nunca se almacenan ni se transmiten.</div>
+              <div class="pr-ai-t-body"><strong>Paquete anÛnimo viaja en segundo plano</strong>Solo datos de calidad. Tu nombre y texto original nunca se almacenan ni se transmiten.</div>
             </div>
             <div class="pr-ai-t-step">
               <div class="pr-ai-t-num">04</div>
-              <div class="pr-ai-t-body"><strong>La IA aprende a juzgar sin favoritismos</strong>Cada turno calibra el √°rbitro: fr√≠o, consistente, sin preferidos. Entrenas hoy al juez del ma√±ana.</div>
+              <div class="pr-ai-t-body"><strong>La IA aprende a juzgar sin favoritismos</strong>Cada turno calibra el ·rbitro: frÌo, consistente, sin preferidos. Entrenas hoy al juez del maÒana.</div>
             </div>
           </div>
         </div>
@@ -786,8 +787,8 @@
   </div><!-- /.container -->
 
   <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
-  <!-- Neural network canvas viz ‚Äî lightweight TF Playground style -->
+  <script src="/app.js?v=19"></script>
+  <!-- Neural network canvas viz ó lightweight TF Playground style -->
   <script>
   (function() {
     var cv = document.getElementById('pr-nn-canvas');
@@ -798,9 +799,9 @@
     /* Layer config: label + node count */
     var layers = [
       {lbl:'TU TURNO', n:3},
-      {lbl:'AN√ÅLISIS', n:4},
+      {lbl:'AN¡LISIS', n:4},
       {lbl:'ANONIMIZAR', n:4},
-      {lbl:'IA √ÅRBITRO', n:2},
+      {lbl:'IA ¡RBITRO', n:2},
     ];
 
     /* Pre-compute node positions */
@@ -921,7 +922,7 @@
   <script>
   (function() {
 
-    /* ‚îÄ‚îÄ CLOCK ‚îÄ‚îÄ */
+    /* -- CLOCK -- */
     function tick() {
       var h   = String(new Date().getHours()).padStart(2,'0');
       var m   = String(new Date().getMinutes()).padStart(2,'0');
@@ -931,7 +932,7 @@
     }
     tick(); setInterval(tick, 1000);
 
-    /* ‚îÄ‚îÄ UI REFS ‚îÄ‚îÄ */
+    /* -- UI REFS -- */
     var textEl     = document.getElementById('pr-text');
     var counterEl  = document.getElementById('pr-counter');
     var orthBody   = document.getElementById('pr-orth-body');
@@ -953,7 +954,7 @@
     var activeCat = 'all';
     if (window.BellatorTTS) window.BellatorTTS.populateSelect(voiceSelect);
 
-    /* ‚îÄ‚îÄ WORD COUNTER (debounced ‚Äî no bloquea con textos largos) ‚îÄ‚îÄ */
+    /* -- WORD COUNTER (debounced ó no bloquea con textos largos) -- */
     var _counterTimer = null;
     var _varTimer = null;
     textEl.addEventListener('input', function() {
@@ -961,19 +962,19 @@
       _counterTimer = setTimeout(function() {
         var v = textEl.value;
         var w = v.trim() ? v.trim().split(/\s+/).length : 0;
-        counterEl.textContent = w + ' palabras ¬∑ ' + v.length + ' car.';
+        counterEl.textContent = w + ' palabras ∑ ' + v.length + ' car.';
       }, 120);
 
       clearTimeout(_varTimer);
       _varTimer = setTimeout(function() {
         var text = textEl.value;
         var placeholder = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Escribe tu rol para detectar repeticiones...</div>';
-        if (text.trim().length < 60) { varBody.innerHTML = placeholder; varCount.textContent = '‚Äî'; return; }
-        var clean = text.toLowerCase().replace(/[¬ø¬°.,;:!?()\[\]"'¬´¬ª‚Äî‚Äì\n]/g,' ');
+        if (text.trim().length < 60) { varBody.innerHTML = placeholder; varCount.textContent = 'ó'; return; }
+        var clean = text.toLowerCase().replace(/[ø°.,;:!?()\[\]"'´ªóñ\n]/g,' ');
         var words = clean.split(/\s+/).filter(function(w){ return w.length > 3; });
         var freq = {};
         words.forEach(function(w){ freq[w] = (freq[w]||0)+1; });
-        var stop = /^(este|esta|esto|ello|ellos|ellas|sera|sido|est√°|para|pero|cuando|como|todo|toda|todos|todas|algo|cada|otra|otro|otros|otras|entre|desde|hasta|sobre|aunque|donde|quien|cual|cuya|cuyo|habia|tenia|seria|puede|porque|mismo|misma|hacia|tiene|tengo|queda|quedan|dicho|dicha|tuyo|tuya|cual|cuales|tambi√©n|tampoco|nunca|jam√°s|siempre|ahora|antes|despu√©s|luego|entonces|mientras|durante|primer|turno|rival|que|del|los|las|mis|sus|con|sin|una|uno|unos|unas)$/;
+        var stop = /^(este|esta|esto|ello|ellos|ellas|sera|sido|est·|para|pero|cuando|como|todo|toda|todos|todas|algo|cada|otra|otro|otros|otras|entre|desde|hasta|sobre|aunque|donde|quien|cual|cuya|cuyo|habia|tenia|seria|puede|porque|mismo|misma|hacia|tiene|tengo|queda|quedan|dicho|dicha|tuyo|tuya|cual|cuales|tambiÈn|tampoco|nunca|jam·s|siempre|ahora|antes|despuÈs|luego|entonces|mientras|durante|primer|turno|rival|que|del|los|las|mis|sus|con|sin|una|uno|unos|unas)$/;
         var alerts = [];
         Object.keys(freq).forEach(function(w) {
           if (freq[w] < 3 || stop.test(w)) return;
@@ -981,7 +982,7 @@
         });
         alerts.sort(function(a,b){ return b.n - a.n; });
         alerts = alerts.slice(0, 6);
-        if (!alerts.length) { varBody.innerHTML = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Sin repeticiones detectadas. ¬°Buena variedad!</div>'; varCount.textContent = '‚úì'; return; }
+        if (!alerts.length) { varBody.innerHTML = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Sin repeticiones detectadas. °Buena variedad!</div>'; varCount.textContent = '?'; return; }
         varCount.textContent = alerts.length + ' palabra' + (alerts.length !== 1 ? 's' : '');
         var nodes = [];
         alerts.forEach(function(vr) {
@@ -989,7 +990,7 @@
           row.className = 'pr-var-row';
           var chips = vr.syns
             ? '<div class="pr-var-chips">' + vr.syns.map(function(s){ return '<button class="pr-var-chip" onclick="prInsertWord(this)">' + he(s) + '</button>'; }).join('') + '</div>'
-            : '<span class="pr-var-note">Sin alternativa directa ‚Äî var√≠a la construcci√≥n de la frase.</span>';
+            : '<span class="pr-var-note">Sin alternativa directa ó varÌa la construcciÛn de la frase.</span>';
           row.innerHTML = '<div class="pr-var-word">' + he(vr.w) + '<span class="pr-var-count">&times;' + vr.n + '</span></div>' + chips;
           nodes.push(row);
         });
@@ -997,12 +998,12 @@
       }, 600);
     });
 
-    /* ‚îÄ‚îÄ Ctrl+Enter ‚îÄ‚îÄ */
+    /* -- Ctrl+Enter -- */
     textEl.addEventListener('keydown', function(e) {
       if (e.ctrlKey && e.key === 'Enter') prAnalyze();
     });
 
-    /* ‚îÄ‚îÄ CATEGORY SELECTOR ‚îÄ‚îÄ */
+    /* -- CATEGORY SELECTOR -- */
     var catBtns = document.querySelectorAll('.pr-cat-btn');
     catBtns.forEach(function(btn) {
       btn.addEventListener('click', function() {
@@ -1013,157 +1014,157 @@
       });
     });
 
-    /* ‚îÄ‚îÄ REFERENCE QUICK LIST (basado en el reglamento oficial B.R.B) ‚îÄ‚îÄ */
+    /* -- REFERENCE QUICK LIST (basado en el reglamento oficial B.R.B) -- */
     var REF = {
       all: [
-        {k:'Sistema de Combate',  v:'Conjunto de normas que rigen todo enfrentamiento. No usa dados ‚Äî se sustenta en rol libre y narrativo. Principios: ROL LEGIBLE ¬∑ ESTRATEGIA ¬∑ INTERPRETACI√ìN.'},
-        {k:'Manipulaci√≥n Negra',  v:'Regla primaria ‚Äî Dar por hecho consecuencias sobre el rival ignorando su posibilidad de reacci√≥n. Puede resultar en descalificaci√≥n.'},
-        {k:'Sello Obligatorio',   v:'Regla primaria ‚Äî Encierra TODAS las opciones del rival forzando un resultado √∫nico. No es cuesti√≥n de potencia, sino de redacci√≥n.'},
-        {k:'Manipulaci√≥n Negada', v:'Escala menor ‚Äî Asumir consecuencias impl√≠citas sin describir fuerza, propiedades ni comparativas del ataque.'},
-        {k:'Super-Rol',           v:'Haza√±as que superan el material original, o acciones sin feat que las respalde. La creatividad est√° permitida sobre poderes ya demostrados.'},
-        {k:'Meta-Rol',            v:'Usar conocimiento (habilidades, debilidades del rival) que el personaje no deber√≠a saber sin justificaci√≥n narrativa en el combate.'},
-        {k:'Min. l√≠neas',         v:'Todo turno de combate requiere al menos 25 l√≠neas de narrativa activa. El primer turno es presentaci√≥n ‚Äî no admite acciones de combate.'},
-        {k:'Rule-Sharking',       v:'Prohibido presionar al juez para interrumpir el combate. Solo se puede notificar una vez por turno. Hacerlo m√°s puede resultar en descalif.'},
-        {k:'Copy-paste',          v:'Prohibido reutilizar turnos propios o de terceros de combates anteriores, incluyendo el turno de presentaci√≥n.'},
+        {k:'Sistema de Combate',  v:'Conjunto de normas que rigen todo enfrentamiento. No usa dados ó se sustenta en rol libre y narrativo. Principios: ROL LEGIBLE ∑ ESTRATEGIA ∑ INTERPRETACI”N.'},
+        {k:'ManipulaciÛn Negra',  v:'Regla primaria ó Dar por hecho consecuencias sobre el rival ignorando su posibilidad de reacciÛn. Puede resultar en descalificaciÛn.'},
+        {k:'Sello Obligatorio',   v:'Regla primaria ó Encierra TODAS las opciones del rival forzando un resultado ˙nico. No es cuestiÛn de potencia, sino de redacciÛn.'},
+        {k:'ManipulaciÛn Negada', v:'Escala menor ó Asumir consecuencias implÌcitas sin describir fuerza, propiedades ni comparativas del ataque.'},
+        {k:'Super-Rol',           v:'HazaÒas que superan el material original, o acciones sin feat que las respalde. La creatividad est· permitida sobre poderes ya demostrados.'},
+        {k:'Meta-Rol',            v:'Usar conocimiento (habilidades, debilidades del rival) que el personaje no deberÌa saber sin justificaciÛn narrativa en el combate.'},
+        {k:'Min. lÌneas',         v:'Todo turno de combate requiere al menos 25 lÌneas de narrativa activa. El primer turno es presentaciÛn ó no admite acciones de combate.'},
+        {k:'Rule-Sharking',       v:'Prohibido presionar al juez para interrumpir el combate. Solo se puede notificar una vez por turno. Hacerlo m·s puede resultar en descalif.'},
+        {k:'Copy-paste',          v:'Prohibido reutilizar turnos propios o de terceros de combates anteriores, incluyendo el turno de presentaciÛn.'},
         {k:'Etiqueta',            v:'Siempre etiquetar al oponente en el canal de spam. Ganar por default sin aviso previo es una victoria sin valor.'},
-        {k:'Editar / Borrar',     v:'Cualquier modificaci√≥n de un turno ya publicado se clasifica como Manipulaci√≥n Negra ‚Äî descalificaci√≥n inmediata.'},
-        {k:'Cronolog√≠a',          v:'La cronolog√≠a del tiempo en battle es sagrada. Romperla equivale a derrota inmediata.'},
-        {k:'Declaraci√≥n de Inicio', v:'Antes de cualquier turno oficial, ambos jugadores deben publicar la declaraci√≥n de aceptaci√≥n del reglamento. Sin ella no se puede publicar.'},
-        {k:'Winner / Default',    v:'Victoria por K.O. En combates oficiales se puede enviar suplente una sola vez. Sin suplente en plazo = victoria autom√°tica por default.'},
+        {k:'Editar / Borrar',     v:'Cualquier modificaciÛn de un turno ya publicado se clasifica como ManipulaciÛn Negra ó descalificaciÛn inmediata.'},
+        {k:'CronologÌa',          v:'La cronologÌa del tiempo en battle es sagrada. Romperla equivale a derrota inmediata.'},
+        {k:'DeclaraciÛn de Inicio', v:'Antes de cualquier turno oficial, ambos jugadores deben publicar la declaraciÛn de aceptaciÛn del reglamento. Sin ella no se puede publicar.'},
+        {k:'Winner / Default',    v:'Victoria por K.O. En combates oficiales se puede enviar suplente una sola vez. Sin suplente en plazo = victoria autom·tica por default.'},
       ],
       sc: [
-        {k:'¬øQu√© es el SC?',      v:'Sistema de Combate ‚Äî conjunto de normas que rigen todo enfrentamiento. No usa dados ni mec√°nicas externas; se sustenta en rol libre y narrativo.'},
-        {k:'3 Principios',        v:'ROL LEGIBLE ¬∑ ESTRATEGIA ¬∑ INTERPRETACI√ìN. Son el fundamento obligatorio de toda batalla dentro del formato B.R.B.'},
-        {k:'HAX vs SKILLS',       v:'HAX = habilidades que ignoran estad√≠sticas naturales (antinaturales). SKILLS = t√©cnicas de poder puro. Distinci√≥n clave para crossover entre universos.'},
-        {k:'DOMINIO',             v:'Criterio de evaluaci√≥n: qui√©n conect√≥ m√°s hits o proyect√≥ mayor da√±o sostenido durante el intercambio.'},
-        {k:'ESTRATEGIA',          v:'Criterio: calidad, l√≥gica y efectividad de las t√°cticas usadas. Creatividad fundamentada en habilidades existentes = haza√±a v√°lida y puntos adicionales.'},
-        {k:'INTERPRETACI√ìN',      v:'Criterio: fidelidad a la personalidad, intelecto y forma de combatir del personaje. Personajes OC deben entregar ficha de personalidad al juez.'},
-        {k:'Legibilidad m√≠nima',  v:'Mientras la narrativa sea legible, el turno es v√°lido. La ilegibilidad acarrea penalizaciones en el par√°metro del juzgado.'},
-        {k:'K.O. por HAX Prohib.', v:'Usar un HAX marcado como PROHIBIDO en el nivel activo puede resultar en K.O. inmediato por decisi√≥n del juez.'},
-        {k:'F√≠sica natural',      v:'Solo limitada por sus propias leyes. Sin sustento f√≠sico demostrable, la habilidad es tratada como HAX.'},
-        {k:'Necesidad del SC',    v:'Sin sistema, los jugadores asumen consecuencias garantizadas sin contemplar reacci√≥n del oponente, rompiendo la l√≥gica narrativa del combate.'},
+        {k:'øQuÈ es el SC?',      v:'Sistema de Combate ó conjunto de normas que rigen todo enfrentamiento. No usa dados ni mec·nicas externas; se sustenta en rol libre y narrativo.'},
+        {k:'3 Principios',        v:'ROL LEGIBLE ∑ ESTRATEGIA ∑ INTERPRETACI”N. Son el fundamento obligatorio de toda batalla dentro del formato B.R.B.'},
+        {k:'HAX vs SKILLS',       v:'HAX = habilidades que ignoran estadÌsticas naturales (antinaturales). SKILLS = tÈcnicas de poder puro. DistinciÛn clave para crossover entre universos.'},
+        {k:'DOMINIO',             v:'Criterio de evaluaciÛn: quiÈn conectÛ m·s hits o proyectÛ mayor daÒo sostenido durante el intercambio.'},
+        {k:'ESTRATEGIA',          v:'Criterio: calidad, lÛgica y efectividad de las t·cticas usadas. Creatividad fundamentada en habilidades existentes = hazaÒa v·lida y puntos adicionales.'},
+        {k:'INTERPRETACI”N',      v:'Criterio: fidelidad a la personalidad, intelecto y forma de combatir del personaje. Personajes OC deben entregar ficha de personalidad al juez.'},
+        {k:'Legibilidad mÌnima',  v:'Mientras la narrativa sea legible, el turno es v·lido. La ilegibilidad acarrea penalizaciones en el par·metro del juzgado.'},
+        {k:'K.O. por HAX Prohib.', v:'Usar un HAX marcado como PROHIBIDO en el nivel activo puede resultar en K.O. inmediato por decisiÛn del juez.'},
+        {k:'FÌsica natural',      v:'Solo limitada por sus propias leyes. Sin sustento fÌsico demostrable, la habilidad es tratada como HAX.'},
+        {k:'Necesidad del SC',    v:'Sin sistema, los jugadores asumen consecuencias garantizadas sin contemplar reacciÛn del oponente, rompiendo la lÛgica narrativa del combate.'},
       ],
       combate: [
-        {k:'Primer Turno',        v:'Exclusivamente presentaci√≥n y llegada al escenario. Prohibido atacar, defender con efectos, preparar ataque o hacer cualquier acci√≥n de combate.'},
+        {k:'Primer Turno',        v:'Exclusivamente presentaciÛn y llegada al escenario. Prohibido atacar, defender con efectos, preparar ataque o hacer cualquier acciÛn de combate.'},
         {k:'Escenario',           v:'El primero en publicar decide lugar, clima y condiciones. El segundo debe respetarlos. En torneos puede ser asignado por el juez.'},
-        {k:'Segundo Turno',       v:'Tras el turno de presentaci√≥n, el combate se habilita por completo. El segundo turno puede ser directamente ofensivo.'},
-        {k:'Verbo pasado',        v:'Usar pasado para afirmar que un ataque YA impact√≥ al rival = Manipulaci√≥n Negra. Correcto: narrar consecuencias de TU propia acci√≥n, nunca del rival.'},
-        {k:'Verbo presente',      v:'El recurso principal del combate narrativo. La acci√≥n est√° ocurriendo ‚Äî puede ser interrumpida. El tiempo m√°s seguro para narrar.'},
-        {k:'Verbo futuro',        v:'El m√°s seguro para atacar. La acci√≥n no ocurri√≥ a√∫n ‚Äî el rival tiene cabida de reacci√≥n total.'},
-        {k:'Acciones v√°lidas',    v:'Atacar, defender, esquivar, evolucionar, transformarse, invocar, usar efectos de campo, activar t√©cnicas. Caminar NO cuenta como acci√≥n.'},
-        {k:'Acciones ilimitadas', v:'La cantidad de acciones es ilimitada por turno, pero exceder un l√≠mite l√≥gico del contexto puede calificarse negativamente por el juez.'},
-        {k:'Invocaci√≥n',          v:'Al invocar un ser, las acciones del invocador y del invocado se interpretan de forma independiente.'},
-        {k:'Inmortalidad',        v:'HAX PROHIBIDO. Toda forma de inmortalidad est√° eliminada del formato ‚Äî incluyendo condici√≥n No-muerto / No poseer vida.'},
-        {k:'BFR',                 v:'HAX PROHIBIDO. Manipulaci√≥n del espacio para sacar al oponente del campo de batalla est√° totalmente prohibida.'},
-        {k:'Incorporeidad Activa', v:'Pasiva: totalmente anulada salvo que el oponente posea medios de interacci√≥n con entidades incorp√≥reas. Activa: permitida solo defensivamente.'},
-        {k:'Acasualidad',         v:'HAX PROHIBIDO completamente en combate. La naturaleza Acasual de cualquier personaje est√° totalmente prohibida.'},
-        {k:'Cronolog√≠a',          v:'La cronolog√≠a del tiempo en battle es sagrada. Romperla equivale a derrota inmediata.'},
-        {k:'Escalada',            v:'La defensa de cada intercambio sigue el nivel ANTERIOR; el nuevo ataque inicia en el nivel ACTUAL. T1:BESTIA‚ÜíBESTIA ¬∑ T2:def.BESTIA/atq.OGRO...'},
-        {k:'Suplente en combate', v:'Al entrar debe realizar una acci√≥n de defensa para relevar al compa√±ero. No puede prolongar un combate ya concluido por default.'},
+        {k:'Segundo Turno',       v:'Tras el turno de presentaciÛn, el combate se habilita por completo. El segundo turno puede ser directamente ofensivo.'},
+        {k:'Verbo pasado',        v:'Usar pasado para afirmar que un ataque YA impactÛ al rival = ManipulaciÛn Negra. Correcto: narrar consecuencias de TU propia acciÛn, nunca del rival.'},
+        {k:'Verbo presente',      v:'El recurso principal del combate narrativo. La acciÛn est· ocurriendo ó puede ser interrumpida. El tiempo m·s seguro para narrar.'},
+        {k:'Verbo futuro',        v:'El m·s seguro para atacar. La acciÛn no ocurriÛ a˙n ó el rival tiene cabida de reacciÛn total.'},
+        {k:'Acciones v·lidas',    v:'Atacar, defender, esquivar, evolucionar, transformarse, invocar, usar efectos de campo, activar tÈcnicas. Caminar NO cuenta como acciÛn.'},
+        {k:'Acciones ilimitadas', v:'La cantidad de acciones es ilimitada por turno, pero exceder un lÌmite lÛgico del contexto puede calificarse negativamente por el juez.'},
+        {k:'InvocaciÛn',          v:'Al invocar un ser, las acciones del invocador y del invocado se interpretan de forma independiente.'},
+        {k:'Inmortalidad',        v:'HAX PROHIBIDO. Toda forma de inmortalidad est· eliminada del formato ó incluyendo condiciÛn No-muerto / No poseer vida.'},
+        {k:'BFR',                 v:'HAX PROHIBIDO. ManipulaciÛn del espacio para sacar al oponente del campo de batalla est· totalmente prohibida.'},
+        {k:'Incorporeidad Activa', v:'Pasiva: totalmente anulada salvo que el oponente posea medios de interacciÛn con entidades incorpÛreas. Activa: permitida solo defensivamente.'},
+        {k:'Acasualidad',         v:'HAX PROHIBIDO completamente en combate. La naturaleza Acasual de cualquier personaje est· totalmente prohibida.'},
+        {k:'CronologÌa',          v:'La cronologÌa del tiempo en battle es sagrada. Romperla equivale a derrota inmediata.'},
+        {k:'Escalada',            v:'La defensa de cada intercambio sigue el nivel ANTERIOR; el nuevo ataque inicia en el nivel ACTUAL. T1:BESTIA?BESTIA ∑ T2:def.BESTIA/atq.OGRO...'},
+        {k:'Suplente en combate', v:'Al entrar debe realizar una acciÛn de defensa para relevar al compaÒero. No puede prolongar un combate ya concluido por default.'},
       ],
       poderes: [
-        {k:'HAX ‚Äî Definici√≥n',    v:'Habilidades que ignoran o superan estad√≠sticas naturales; son antinaturales. Toda habilidad basada en Magia es HAX. Sus l√≠mites: los demostrados en el material original.'},
-        {k:'HAX Activos',         v:'Todo HAX activo y directo entra obligatoriamente en Cooldown tras su uso. Durante el CD: TODO HAX PROHIBIDO, sin excepci√≥n.'},
-        {k:'HAX Pasivos',         v:'Los HAX que dejan efectos en el √°rea o en el usuario quedan libres de CD tras su activaci√≥n. Armas con efectos HAX pasivos: misma regla.'},
-        {k:'Regeneraci√≥n',        v:'M√°x. 3 usos por combate, recuperando solo el 30% del da√±o de un ataque espec√≠fico. Con inhibici√≥n activa, debe demostrarse resistencia expl√≠cita.'},
-        {k:'Inmortalidades anuladas', v:'Tipos 5, 8 y 10 de inmortalidad est√°n anuladas en formato de combate. Toda forma de inmortalidad est√° PROHIBIDA.'},
+        {k:'HAX ó DefiniciÛn',    v:'Habilidades que ignoran o superan estadÌsticas naturales; son antinaturales. Toda habilidad basada en Magia es HAX. Sus lÌmites: los demostrados en el material original.'},
+        {k:'HAX Activos',         v:'Todo HAX activo y directo entra obligatoriamente en Cooldown tras su uso. Durante el CD: TODO HAX PROHIBIDO, sin excepciÛn.'},
+        {k:'HAX Pasivos',         v:'Los HAX que dejan efectos en el ·rea o en el usuario quedan libres de CD tras su activaciÛn. Armas con efectos HAX pasivos: misma regla.'},
+        {k:'RegeneraciÛn',        v:'M·x. 3 usos por combate, recuperando solo el 30% del daÒo de un ataque especÌfico. Con inhibiciÛn activa, debe demostrarse resistencia explÌcita.'},
+        {k:'Inmortalidades anuladas', v:'Tipos 5, 8 y 10 de inmortalidad est·n anuladas en formato de combate. Toda forma de inmortalidad est· PROHIBIDA.'},
         {k:'Manip. del Tiempo',   v:'LIMITADO: solo para beneficio propio. Comprometer al oponente (ej. Time Stop dirigido al rival) puede penalizarse como Sello Obligatorio.'},
-        {k:'Manip. de Realidad',  v:'No puede afectar al oponente directamente ni alterar completamente el campo. Violarlo = Manipulaci√≥n Negra o Sello Obligatorio.'},
+        {k:'Manip. de Realidad',  v:'No puede afectar al oponente directamente ni alterar completamente el campo. Violarlo = ManipulaciÛn Negra o Sello Obligatorio.'},
         {k:'Law Manipulation',    v:'LIMITADO: solo controlar reglas generales del universo. Nunca comprometer directamente al oponente.'},
-        {k:'Plot Manipulation',   v:'LIMITADO: solo controlar el plot propio. Comprometer el plot del oponente = penalizaci√≥n o descalificaci√≥n.'},
+        {k:'Plot Manipulation',   v:'LIMITADO: solo controlar el plot propio. Comprometer el plot del oponente = penalizaciÛn o descalificaciÛn.'},
         {k:'Dim. Espaciales',     v:'Los personajes permanecen en 3D. Evadir ataques apelando a dimensiones superiores = Sello Obligatorio.'},
-        {k:'Manip. del Destino',  v:'LIMITADO: solo afecta al personaje propio o excluye al rival en su totalidad. Manipular el destino del oponente = Manip. Negra ‚Üí descalificaci√≥n.'},
-        {k:'Manip. Conceptos',    v:'LIMITADO: solo como ataque o defensa, nunca directamente sobre el oponente. De hacerlo: Manipulaci√≥n Negra / Sello Obligatorio.'},
-        {k:'Ignorar Resistencias', v:'SOLO UN OBJETIVO. Da√±os en √°rea con este HAX activo est√°n PROHIBIDOS.'},
-        {k:'Control Mental',      v:'M√°ximo 1 objetivo. Requiere explicar con coherencia la cadena Causa-Efecto que conduce al control.'},
-        {k:'Manip. del Alma',     v:'LIMITADO: solo dentro de haza√±as del material original. No incurrir en Manip. Negra, Negada ni Sello Obligatorio.'},
+        {k:'Manip. del Destino',  v:'LIMITADO: solo afecta al personaje propio o excluye al rival en su totalidad. Manipular el destino del oponente = Manip. Negra ? descalificaciÛn.'},
+        {k:'Manip. Conceptos',    v:'LIMITADO: solo como ataque o defensa, nunca directamente sobre el oponente. De hacerlo: ManipulaciÛn Negra / Sello Obligatorio.'},
+        {k:'Ignorar Resistencias', v:'SOLO UN OBJETIVO. DaÒos en ·rea con este HAX activo est·n PROHIBIDOS.'},
+        {k:'Control Mental',      v:'M·ximo 1 objetivo. Requiere explicar con coherencia la cadena Causa-Efecto que conduce al control.'},
+        {k:'Manip. del Alma',     v:'LIMITADO: solo dentro de hazaÒas del material original. No incurrir en Manip. Negra, Negada ni Sello Obligatorio.'},
         {k:'Ilusiones',           v:'LIMITADAS al rango del nivel de poder activo en el turno.'},
-        {k:'Borrado Existencial', v:'Un solo uso por batalla. Usarlo directamente vs el oponente = Manipulaci√≥n Negra ‚Üí descalificaci√≥n inmediata.'},
+        {k:'Borrado Existencial', v:'Un solo uso por batalla. Usarlo directamente vs el oponente = ManipulaciÛn Negra ? descalificaciÛn inmediata.'},
         {k:'Acasualidad',         v:'HAX PROHIBIDO completamente en combate.'},
-        {k:'Power Nullification', v:'M√°ximo 2 usos por batalla. Si la habilidad se pierde durante el combate, queda prohibida para el resto.'},
-        {k:'Fisio. No Existente', v:'HAX PROHIBIDO. Todos los personajes est√°n obligados a EXISTIR en combate.'},
-        {k:'Crecimiento Acelerado', v:'Evoluci√≥n, adaptabilidad e inmunidad progresiva: 1 solo uso por batalla.'},
-        {k:'Libres de CD',        v:'SUMMON / Bolsillo Dimensional / Refuerzo de caracter√≠sticas f√≠sicas propias est√°n libres de Cooldown.'},
-        {k:'Infracciones de nivel', v:'Romper reglas de Nivel de Poder no resulta en p√©rdida autom√°tica ‚Äî se juzgan al final. Interrumpir para acusar es Rule-Sharking.'},
+        {k:'Power Nullification', v:'M·ximo 2 usos por batalla. Si la habilidad se pierde durante el combate, queda prohibida para el resto.'},
+        {k:'Fisio. No Existente', v:'HAX PROHIBIDO. Todos los personajes est·n obligados a EXISTIR en combate.'},
+        {k:'Crecimiento Acelerado', v:'EvoluciÛn, adaptabilidad e inmunidad progresiva: 1 solo uso por batalla.'},
+        {k:'Libres de CD',        v:'SUMMON / Bolsillo Dimensional / Refuerzo de caracterÌsticas fÌsicas propias est·n libres de Cooldown.'},
+        {k:'Infracciones de nivel', v:'Romper reglas de Nivel de Poder no resulta en pÈrdida autom·tica ó se juzgan al final. Interrumpir para acusar es Rule-Sharking.'},
       ],
       redaccion: [
-        {k:'Manipulaci√≥n Negra',  v:'"Voy y te golpeo y te mueres" ‚Äî da√±o + consecuencia en presente sobre el rival = descalificaci√≥n. La infracci√≥n m√°s severa del reglamento narrativo.'},
-        {k:'Man. Negada',         v:'"Un corte tan mort√≠fero que no habr√° Dios ni Demonio capaz de curar" ‚Äî sin fuerza, sin propiedades, asumiendo resultado inevitable.'},
-        {k:'Sello Obligatorio',   v:'No depende de la potencia ‚Äî depende de si la redacci√≥n le deja opciones al oponente o lo encierra en un √∫nico resultado posible.'},
-        {k:'Manipulaci√≥n Blanca', v:'Aprovechar los huecos del rival: si no describi√≥ dimensiones, masa o fuerza ‚Äî tienes derecho a interpretar esa ausencia a tu favor.'},
+        {k:'ManipulaciÛn Negra',  v:'"Voy y te golpeo y te mueres" ó daÒo + consecuencia en presente sobre el rival = descalificaciÛn. La infracciÛn m·s severa del reglamento narrativo.'},
+        {k:'Man. Negada',         v:'"Un corte tan mortÌfero que no habr· Dios ni Demonio capaz de curar" ó sin fuerza, sin propiedades, asumiendo resultado inevitable.'},
+        {k:'Sello Obligatorio',   v:'No depende de la potencia ó depende de si la redacciÛn le deja opciones al oponente o lo encierra en un ˙nico resultado posible.'},
+        {k:'ManipulaciÛn Blanca', v:'Aprovechar los huecos del rival: si no describiÛ dimensiones, masa o fuerza ó tienes derecho a interpretar esa ausencia a tu favor.'},
         {k:'Rol Espejo',          v:'Plasmar las mismas acciones del oponente con palabras equivalentes. No descalifica, pero reduce puntaje de estrategia.'},
         {k:'Relleno',             v:'Extender con narrativa que no aporta al combate puede calificarse negativamente. Calidad supera a cantidad.'},
-        {k:'Regresi√≥n',           v:'V√ÅLIDA: regresar a un espacio de tiempo del rival no ocupado para insertar tu acci√≥n defensiva. Requiere verbos correctos.'},
-        {k:'Adelanto',            v:'PROHIBIDO: anticipar e interrumpir una acci√≥n ya en ejecuci√≥n del rival. Se puede interferir en sus consecuencias, no en la acci√≥n misma.'},
-        {k:'Tecnicismos',         v:'Se permite conocimiento profesional (f√≠sica, qu√≠mica) pero se juzga con mayor rigor. Una explicaci√≥n incorrecta puede derivar en Super-Rol.'},
-        {k:'Meta-Rol',            v:'Usar conocimiento que el personaje no deber√≠a poseer sin justificaci√≥n coherente. Solo se permite saber que participan en un torneo.'},
-        {k:'Super-Rol',           v:'Haza√±as que superan el material original. Las herramientas existentes + l√≥gica = haza√±a v√°lida. Wiki sin respaldo = riesgo de penalizaci√≥n.'},
-        {k:'Verbo Pasado',        v:'V√°lido para describir consecuencias de TU propia acci√≥n. Usarlo para afirmar que el ataque impact√≥ al rival sin cabida de reacci√≥n = Manip. Negra.'},
-        {k:'S√≠mbolos / Formato',  v:'Queda a criterio del jugador con aclaraci√≥n previa. No puede usarse como argumento negativo en el an√°lisis del juez.'},
+        {k:'RegresiÛn',           v:'V¡LIDA: regresar a un espacio de tiempo del rival no ocupado para insertar tu acciÛn defensiva. Requiere verbos correctos.'},
+        {k:'Adelanto',            v:'PROHIBIDO: anticipar e interrumpir una acciÛn ya en ejecuciÛn del rival. Se puede interferir en sus consecuencias, no en la acciÛn misma.'},
+        {k:'Tecnicismos',         v:'Se permite conocimiento profesional (fÌsica, quÌmica) pero se juzga con mayor rigor. Una explicaciÛn incorrecta puede derivar en Super-Rol.'},
+        {k:'Meta-Rol',            v:'Usar conocimiento que el personaje no deberÌa poseer sin justificaciÛn coherente. Solo se permite saber que participan en un torneo.'},
+        {k:'Super-Rol',           v:'HazaÒas que superan el material original. Las herramientas existentes + lÛgica = hazaÒa v·lida. Wiki sin respaldo = riesgo de penalizaciÛn.'},
+        {k:'Verbo Pasado',        v:'V·lido para describir consecuencias de TU propia acciÛn. Usarlo para afirmar que el ataque impactÛ al rival sin cabida de reacciÛn = Manip. Negra.'},
+        {k:'SÌmbolos / Formato',  v:'Queda a criterio del jugador con aclaraciÛn previa. No puede usarse como argumento negativo en el an·lisis del juez.'},
       ],
       juez: [
-        {k:'5 Par√°metros',        v:'1. Normas b√°sicas ¬∑ 2. L√≥gica/Estrategia ¬∑ 3. Interpretaci√≥n ¬∑ 4. Legibilidad ¬∑ 5. Extensi√≥n. Escala 1‚Äì5 por par√°metro. M√°ximo 25 puntos.'},
-        {k:'Escala de puntaje',   v:'1=Lastre/Mediocre ¬∑ 2=Est√°ndar ¬∑ 3=B√°sico ¬∑ 4=Aceptable ¬∑ 5=Impecable. M√°x. 25 pts (5 turnos √ó 5 pts). Calificaci√≥n perfecta = indiscutible.'},
-        {k:'Interpretaci√≥n',      v:'Fidelidad a la personalidad del personaje. Comportamientos antinaturales perjudican. OC: proporcionar ficha de personalidad al juez antes del combate.'},
-        {k:'Legibilidad',         v:'El turno debe ser comprensible. Errores leves tolerados si las ideas son claras. Ilegibilidad total acarrea penalizaci√≥n directa.'},
-        {k:'Reglas Primarias',    v:'Manip. Negra, Negada, Sello, Meta-Rol, Super-Rol gravitante y editar/borrar turno pueden resultar en descalificaci√≥n inmediata si se prueban.'},
-        {k:'Rule-Sharking',       v:'Prohibido presionar al juez. Solo 1 notificaci√≥n por turno. Se√±alar errores del rival o exigir penalizaciones puede costar hasta 1 punto en el veredicto.'},
-        {k:'Pausa de Batalla',    v:'Solo con: (1) aprobaci√≥n un√°nime de jueces; (2) ruptura de regla primaria aprobada por todo el equipo; (3) 3 faltas menores acumuladas.'},
-        {k:'3 faltas menores',    v:'Tres faltas menores acumuladas al reglamento de Niveles de Poder activan la condici√≥n de pausa de batalla autorizada.'},
-        {k:'Pausa de Turno',      v:'Rol Pausa: 1 sola vez por intercambio. Publicar "parte 1", esperar 24h y publicar "parte 2" = descalificaci√≥n autom√°tica.'},
-        {k:'Acusaci√≥n falsa',     v:'Un jugador que provoque a un juez a deliberar en solitario mediante acusaci√≥n falsa es descalificado por Rule-Sharking.'},
-        {k:'Llamada al juez',     v:'Cada jugador puede llamar al juez solo 1 vez por turno ‚Äî no acumulable. Solo para contabilizar golpe/da√±o si el oponente omiti√≥ el turno.'},
-        {k:'Declaraci√≥n Inicio',  v:'Obligatoria antes de cualquier turno en combate oficial. Ambos jugadores deben publicar declaraci√≥n de aceptaci√≥n. Sin ella = no se puede publicar.'},
-        {k:'Criterio final',      v:'El juez eval√∫a: qui√©n domin√≥ la escena, aplic√≥ mejor las herramientas de su personaje e interpret√≥ con mayor fidelidad al personaje original.'},
+        {k:'5 Par·metros',        v:'1. Normas b·sicas ∑ 2. LÛgica/Estrategia ∑ 3. InterpretaciÛn ∑ 4. Legibilidad ∑ 5. ExtensiÛn. Escala 1ñ5 por par·metro. M·ximo 25 puntos.'},
+        {k:'Escala de puntaje',   v:'1=Lastre/Mediocre ∑ 2=Est·ndar ∑ 3=B·sico ∑ 4=Aceptable ∑ 5=Impecable. M·x. 25 pts (5 turnos ◊ 5 pts). CalificaciÛn perfecta = indiscutible.'},
+        {k:'InterpretaciÛn',      v:'Fidelidad a la personalidad del personaje. Comportamientos antinaturales perjudican. OC: proporcionar ficha de personalidad al juez antes del combate.'},
+        {k:'Legibilidad',         v:'El turno debe ser comprensible. Errores leves tolerados si las ideas son claras. Ilegibilidad total acarrea penalizaciÛn directa.'},
+        {k:'Reglas Primarias',    v:'Manip. Negra, Negada, Sello, Meta-Rol, Super-Rol gravitante y editar/borrar turno pueden resultar en descalificaciÛn inmediata si se prueban.'},
+        {k:'Rule-Sharking',       v:'Prohibido presionar al juez. Solo 1 notificaciÛn por turno. SeÒalar errores del rival o exigir penalizaciones puede costar hasta 1 punto en el veredicto.'},
+        {k:'Pausa de Batalla',    v:'Solo con: (1) aprobaciÛn un·nime de jueces; (2) ruptura de regla primaria aprobada por todo el equipo; (3) 3 faltas menores acumuladas.'},
+        {k:'3 faltas menores',    v:'Tres faltas menores acumuladas al reglamento de Niveles de Poder activan la condiciÛn de pausa de batalla autorizada.'},
+        {k:'Pausa de Turno',      v:'Rol Pausa: 1 sola vez por intercambio. Publicar "parte 1", esperar 24h y publicar "parte 2" = descalificaciÛn autom·tica.'},
+        {k:'AcusaciÛn falsa',     v:'Un jugador que provoque a un juez a deliberar en solitario mediante acusaciÛn falsa es descalificado por Rule-Sharking.'},
+        {k:'Llamada al juez',     v:'Cada jugador puede llamar al juez solo 1 vez por turno ó no acumulable. Solo para contabilizar golpe/daÒo si el oponente omitiÛ el turno.'},
+        {k:'DeclaraciÛn Inicio',  v:'Obligatoria antes de cualquier turno en combate oficial. Ambos jugadores deben publicar declaraciÛn de aceptaciÛn. Sin ella = no se puede publicar.'},
+        {k:'Criterio final',      v:'El juez eval˙a: quiÈn dominÛ la escena, aplicÛ mejor las herramientas de su personaje e interpretÛ con mayor fidelidad al personaje original.'},
       ],
       crossover: [
-        {k:'Cosmolog√≠as',         v:'Todas las cosmolog√≠as son del mismo tama√±o en entorno neutral. No importa cu√°n masivo sea el verso de origen.'},
-        {k:'Potencia en crossover', v:'Un da√±o de edificio se resiste con defensa equivalente; da√±o planetario con defensa igual o superior. La magnitud escala de forma equivalente entre universos.'},
-        {k:'HAX ‚Äî Sem√°ntica',     v:'El HAX no se juzga por la cosmolog√≠a del verso sino por la sem√°ntica: el significado preciso del concepto y la evidencia de sus haza√±as can√≥nicas.'},
-        {k:'Sin resistencia',     v:'Sin resistencia a ciertos HAX, se busca la posibilidad m√°s l√≥gica de supervivencia sin incurrir en Super-Rol. Sin posibilidad coherente = derrotado en ese aspecto.'},
-        {k:'Powerscaling',        v:'V√°lido si es demostrable. Una Falacia de L√≠mites o inconsistencia l√≥gica penaliza como Super-Rol con posible descalificaci√≥n.'},
-        {k:'Energ√≠a',             v:'Ki, Mana, Nen, Chakra, Cosmo, Reatsu, Haki ‚Äî equivalentes y pueden interactuar entre s√≠. Toda energ√≠a puede ser afectada por su contraria.'},
-        {k:'Excepciones energ√≠a', v:'Artefacto externo ¬∑ Herramienta sobrenatural ¬∑ Dones del alma ¬∑ Anormalidades absolutas ¬∑ Magia aut√≥noma ‚Äî la fuente no es interna al personaje.'},
-        {k:'Energ√≠a ilimitada',   v:'Debe justificarse narrativamente. Abusar puede derivar en Super-Rol / God-Rol.'},
-        {k:'Canon externo',       v:'El SC eval√∫a el rol escrito, no el lore del universo de origen. Los argumentos "en su mundo..." no son v√°lidos en el campo de batalla.'},
+        {k:'CosmologÌas',         v:'Todas las cosmologÌas son del mismo tamaÒo en entorno neutral. No importa cu·n masivo sea el verso de origen.'},
+        {k:'Potencia en crossover', v:'Un daÒo de edificio se resiste con defensa equivalente; daÒo planetario con defensa igual o superior. La magnitud escala de forma equivalente entre universos.'},
+        {k:'HAX ó Sem·ntica',     v:'El HAX no se juzga por la cosmologÌa del verso sino por la sem·ntica: el significado preciso del concepto y la evidencia de sus hazaÒas canÛnicas.'},
+        {k:'Sin resistencia',     v:'Sin resistencia a ciertos HAX, se busca la posibilidad m·s lÛgica de supervivencia sin incurrir en Super-Rol. Sin posibilidad coherente = derrotado en ese aspecto.'},
+        {k:'Powerscaling',        v:'V·lido si es demostrable. Una Falacia de LÌmites o inconsistencia lÛgica penaliza como Super-Rol con posible descalificaciÛn.'},
+        {k:'EnergÌa',             v:'Ki, Mana, Nen, Chakra, Cosmo, Reatsu, Haki ó equivalentes y pueden interactuar entre sÌ. Toda energÌa puede ser afectada por su contraria.'},
+        {k:'Excepciones energÌa', v:'Artefacto externo ∑ Herramienta sobrenatural ∑ Dones del alma ∑ Anormalidades absolutas ∑ Magia autÛnoma ó la fuente no es interna al personaje.'},
+        {k:'EnergÌa ilimitada',   v:'Debe justificarse narrativamente. Abusar puede derivar en Super-Rol / God-Rol.'},
+        {k:'Canon externo',       v:'El SC eval˙a el rol escrito, no el lore del universo de origen. Los argumentos "en su mundo..." no son v·lidos en el campo de batalla.'},
         {k:'Divisiones Bellator', v:'Ciudad (7-B) y Universal (3-A). Arsenal completo desde el primer intercambio. No hay escalada por etapas.'},
       ],
       tiempos: [
-        {k:'24h por turno',       v:'Tiempo m√°ximo desde la publicaci√≥n del spam correspondiente. Al finalizar las 24h se activa el Punto Muerto autom√°ticamente.'},
+        {k:'24h por turno',       v:'Tiempo m·ximo desde la publicaciÛn del spam correspondiente. Al finalizar las 24h se activa el Punto Muerto autom·ticamente.'},
         {k:'Punto Muerto',        v:'Se activa al finalizar las 24h. Otorga 12h adicionales antes de la tolerancia final.'},
-        {k:'Tolerancia final',    v:'5 minutos tras el punto muerto. Pasado este tiempo, se llama al suplente o se pierde de forma autom√°tica.'},
-        {k:'Rol Pausa',           v:'Puede activarse en cualquier momento, incluso antes del turno del rival. Si se coloca despu√©s de 24h vencidas, el personaje queda en K.O.'},
-        {k:'Rol Pausa ‚Äî 1 uso',   v:'Solo una vez por intercambio. Usarlo dos veces en el mismo intercambio = descalificaci√≥n directa.'},
-        {k:'Parte 1 / Parte 2',   v:'PROHIBIDO: publicar parte 1, esperar 24h y publicar parte 2 = descalificaci√≥n autom√°tica sin excepciones.'},
+        {k:'Tolerancia final',    v:'5 minutos tras el punto muerto. Pasado este tiempo, se llama al suplente o se pierde de forma autom·tica.'},
+        {k:'Rol Pausa',           v:'Puede activarse en cualquier momento, incluso antes del turno del rival. Si se coloca despuÈs de 24h vencidas, el personaje queda en K.O.'},
+        {k:'Rol Pausa ó 1 uso',   v:'Solo una vez por intercambio. Usarlo dos veces en el mismo intercambio = descalificaciÛn directa.'},
+        {k:'Parte 1 / Parte 2',   v:'PROHIBIDO: publicar parte 1, esperar 24h y publicar parte 2 = descalificaciÛn autom·tica sin excepciones.'},
         {k:'Suplente',            v:'Debe llamarse dentro de las 24h o durante el Rol Pausa activo. Tiene 24h + 12h de Rol Pausa (solo una vez). OBLIGATORIO avisar al juez.'},
         {k:'AS / JUNGLE',         v:'Al relevar un intercambio tiene 24h sin posibilidad de Rol Pausa disponible.'},
         {k:'Aviso al juez',       v:'Todo suplente debe avisar al juez a cargo antes de publicar. Sin aviso al juez = K.O. directo.'},
-        {k:'Stats (formato)',     v:'No obligatorios. Si se usan: Pasivas Activas / Energ. F√≠sica / Reserva de Energ√≠a / Energ√≠a. En porcentajes, reducciones l√≥gicas (-5/-6 ataques masivos, -3 menores).'},
-        {k:'Aclaraciones',        v:'Deben ser breves y resumidas. Si hay m√°s narrativa en las Aclaraciones que en el turno mismo, esa informaci√≥n NO ser√° considerada por el juez.'},
+        {k:'Stats (formato)',     v:'No obligatorios. Si se usan: Pasivas Activas / Energ. FÌsica / Reserva de EnergÌa / EnergÌa. En porcentajes, reducciones lÛgicas (-5/-6 ataques masivos, -3 menores).'},
+        {k:'Aclaraciones',        v:'Deben ser breves y resumidas. Si hay m·s narrativa en las Aclaraciones que en el turno mismo, esa informaciÛn NO ser· considerada por el juez.'},
       ],
       niveles: [
-        {k:'Divisi√≥n Ciudad (7-B)',   v:'City Level. Da√±o: 6.3‚Äì100 megatones TNT ¬∑ Velocidad: Massively Hypersonic hasta Mach 1 000 ¬∑ Alcance: 50 km de di√°metro.'},
-        {k:'Ciudad ‚Äî Temperatura',    v:'Natural: ~30 000 ¬∞C (rayo) ¬∑ Fr√≠o: ‚àí196 ¬∞C (nitr√≥geno l√≠quido). Si se excede sin soporte f√≠sico real, se eval√∫a como HAX.'},
-        {k:'Divisi√≥n Universal (3-A)', v:'Universe Level. Masa referencial: ~1.46√ó10‚Åµ¬≥ kg ¬∑ Velocidad: Massively FTL+ desde √ó1 000 SoL ¬∑ Alcance: 93 000 M a√±os luz (universo observable).'},
-        {k:'Universal ‚Äî Contexto',    v:'Sin techo t√©rmico cl√°sico. Justificaci√≥n con procesos astron√≥micos o cosmol√≥gicos. No presupone infinitud ni omnipotencia por defecto.'},
-        {k:'Arsenal completo',         v:'Cada jugador entra con su arsenal completo desde el inicio. No existe liberaci√≥n de poder por etapas en Bellator.'},
-        {k:'HAX ‚Äî aplicaci√≥n',        v:'Los HAX del Registro HAX aplican con los mismos usos y l√≠mites sin importar la divisi√≥n activa. La escala no anula la econom√≠a interna.'},
-        {k:'Armamento f√≠sico',         v:'Las armas que respetan leyes de la f√≠sica no son ajustadas por el reglamento. Solo donde sus propiedades naturales encajen.'},
-        {k:'Estructura de batalla',    v:'1 turno de llegada (presentaci√≥n, sin acci√≥n de combate) + 4 intercambios de combate libre con arsenal activo.'},
+        {k:'DivisiÛn Ciudad (7-B)',   v:'City Level. DaÒo: 6.3ñ100 megatones TNT ∑ Velocidad: Massively Hypersonic hasta Mach 1 000 ∑ Alcance: 50 km de di·metro.'},
+        {k:'Ciudad ó Temperatura',    v:'Natural: ~30 000 ∞C (rayo) ∑ FrÌo: -196 ∞C (nitrÛgeno lÌquido). Si se excede sin soporte fÌsico real, se eval˙a como HAX.'},
+        {k:'DivisiÛn Universal (3-A)', v:'Universe Level. Masa referencial: ~1.46◊105≥ kg ∑ Velocidad: Massively FTL+ desde ◊1 000 SoL ∑ Alcance: 93 000 M aÒos luz (universo observable).'},
+        {k:'Universal ó Contexto',    v:'Sin techo tÈrmico cl·sico. JustificaciÛn con procesos astronÛmicos o cosmolÛgicos. No presupone infinitud ni omnipotencia por defecto.'},
+        {k:'Arsenal completo',         v:'Cada jugador entra con su arsenal completo desde el inicio. No existe liberaciÛn de poder por etapas en Bellator.'},
+        {k:'HAX ó aplicaciÛn',        v:'Los HAX del Registro HAX aplican con los mismos usos y lÌmites sin importar la divisiÛn activa. La escala no anula la economÌa interna.'},
+        {k:'Armamento fÌsico',         v:'Las armas que respetan leyes de la fÌsica no son ajustadas por el reglamento. Solo donde sus propiedades naturales encajen.'},
+        {k:'Estructura de batalla',    v:'1 turno de llegada (presentaciÛn, sin acciÛn de combate) + 4 intercambios de combate libre con arsenal activo.'},
       ],
       cooldown: [
-        {k:'Cooldown (CD)',        v:'Tiempo de espera que un HAX debe respetar tras ser utilizado. Solo puede reactivarse despu√©s de 1 turno de espera completo.'},
-        {k:'Turno en CD',         v:'Durante el turno de Cooldown: TODO HAX QUEDA PROHIBIDO sin excepci√≥n ninguna.'},
-        {k:'Turno activo',        v:'En el turno activo (sin CD vigente): TODO HAX PERMITIDO dentro de los l√≠mites del nivel de poder activo.'},
-        {k:'Ejemplo A',           v:'T1: HAX USADO ‚Üí T2: HAX EN CD ‚Üí T3: HAX USADO ‚Üí T4: HAX EN CD. Alternancia estricta.'},
-        {k:'Ejemplo B (guardado)', v:'T1 y T2 sin HAX ‚Üí T3: HAX USADO ‚Üí T4: HAX EN CD. El CD aplica inmediatamente tras el primer uso.'},
-        {k:'An√°lisis de Info.',   v:'Habilidades que revelan ubicaci√≥n, estad√≠sticas o historial del rival. Entra en CD/TURNO obligatorio tras su uso.'},
-        {k:'Clarividencia',       v:'Percepci√≥n del futuro cercano. Entra en CD/TURNO tras su uso.'},
+        {k:'Cooldown (CD)',        v:'Tiempo de espera que un HAX debe respetar tras ser utilizado. Solo puede reactivarse despuÈs de 1 turno de espera completo.'},
+        {k:'Turno en CD',         v:'Durante el turno de Cooldown: TODO HAX QUEDA PROHIBIDO sin excepciÛn ninguna.'},
+        {k:'Turno activo',        v:'En el turno activo (sin CD vigente): TODO HAX PERMITIDO dentro de los lÌmites del nivel de poder activo.'},
+        {k:'Ejemplo A',           v:'T1: HAX USADO ? T2: HAX EN CD ? T3: HAX USADO ? T4: HAX EN CD. Alternancia estricta.'},
+        {k:'Ejemplo B (guardado)', v:'T1 y T2 sin HAX ? T3: HAX USADO ? T4: HAX EN CD. El CD aplica inmediatamente tras el primer uso.'},
+        {k:'An·lisis de Info.',   v:'Habilidades que revelan ubicaciÛn, estadÌsticas o historial del rival. Entra en CD/TURNO obligatorio tras su uso.'},
+        {k:'Clarividencia',       v:'PercepciÛn del futuro cercano. Entra en CD/TURNO tras su uso.'},
         {k:'Power Mimicry',       v:'Copiar habilidades cuando no hay CD activo y las condiciones lo permiten. CD/TURNO obligatorio.'},
-        {k:'Teletransportaci√≥n',  v:'Desplazamiento instant√°neo a trav√©s del espacio. CD/TURNO obligatorio tras su uso.'},
-        {k:'Recuperaci√≥n Energ√≠a', v:'Recuperaci√≥n instant√°nea o progresiva de energ√≠a. 1 TURNO de CD obligatorio.'},
-        {k:'Manip. At√≥mica',      v:'Solo dentro del rango del nivel de poder activo. LIMITADO: requiere sustento por nivel y entra en CD/TURNO.'},
-        {k:'Libres de CD',        v:'SUMMON (invocaciones) ¬∑ Bolsillo Dimensional ¬∑ Refuerzo de caracter√≠sticas f√≠sicas propias ‚Äî todos libres de Cooldown. Las inv. respetan su propio CD.'},
+        {k:'TeletransportaciÛn',  v:'Desplazamiento instant·neo a travÈs del espacio. CD/TURNO obligatorio tras su uso.'},
+        {k:'RecuperaciÛn EnergÌa', v:'RecuperaciÛn instant·nea o progresiva de energÌa. 1 TURNO de CD obligatorio.'},
+        {k:'Manip. AtÛmica',      v:'Solo dentro del rango del nivel de poder activo. LIMITADO: requiere sustento por nivel y entra en CD/TURNO.'},
+        {k:'Libres de CD',        v:'SUMMON (invocaciones) ∑ Bolsillo Dimensional ∑ Refuerzo de caracterÌsticas fÌsicas propias ó todos libres de Cooldown. Las inv. respetan su propio CD.'},
       ],
     };
 
@@ -1219,19 +1220,19 @@
       listenBtn.classList.remove('speaking');
       listenLbl.textContent = 'LEER TEXTO';
       textEl.value = '';
-      counterEl.textContent = '0 palabras ¬∑ 0 car.';
-      orthBody.innerHTML = emptyState('Esperando an√°lisis...');
-      ruleBody.innerHTML = emptyState('Esperando an√°lisis...');
-      orthCount.textContent = '‚Äî';
-      ruleCount.textContent = '‚Äî';
-      if (varCard) { varBody.innerHTML = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Escribe tu rol para detectar repeticiones...</div>'; varCount.textContent = '‚Äî'; }
+      counterEl.textContent = '0 palabras ∑ 0 car.';
+      orthBody.innerHTML = emptyState('Esperando an·lisis...');
+      ruleBody.innerHTML = emptyState('Esperando an·lisis...');
+      orthCount.textContent = 'ó';
+      ruleCount.textContent = 'ó';
+      if (varCard) { varBody.innerHTML = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Escribe tu rol para detectar repeticiones...</div>'; varCount.textContent = 'ó'; }
       scoreBar.style.width = '0%';
-      scoreVal.textContent = '‚Äî';
+      scoreVal.textContent = 'ó';
       scoreVerd.textContent = 'Escribe y analiza tu rol para ver el resultado';
       textEl.focus();
     };
 
-    /* ‚îÄ‚îÄ HELPERS ‚îÄ‚îÄ */
+    /* -- HELPERS -- */
     function he(s) {
       return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
@@ -1253,331 +1254,331 @@
       container.appendChild(frag);
     }
 
-    /* ‚îÄ‚îÄ SPELL PATTERNS ‚îÄ‚îÄ */
+    /* -- SPELL PATTERNS -- */
     /* Nota: usamos patrones sin \b cuando la palabra tiene tildes,
        porque \b en JS no reconoce caracteres Unicode acentuados.     */
     var ORTH = [
-      /* Imperfecto sin tilde ‚Äî estas palabras sin tilde son siempre errores */
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])habia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"hab√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])habian(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"hab√≠an"', why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])tenia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"ten√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])venia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"ven√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])sabia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"sab√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])queria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"quer√≠a"', why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])podia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"pod√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])debia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"deb√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])veia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,   sug:'"ve√≠a"',   why:'Imperfecto ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])vivia(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"viv√≠a"',  why:'Imperfecto ‚Äî falta tilde'},
+      /* Imperfecto sin tilde ó estas palabras sin tilde son siempre errores */
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])habia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"habÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])habian(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"habÌan"', why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])tenia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"tenÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])venia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"venÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])sabia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"sabÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])queria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"querÌa"', why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])podia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"podÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])debia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"debÌa"',  why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])veia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,   sug:'"veÌa"',   why:'Imperfecto ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])vivia(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"vivÌa"',  why:'Imperfecto ó falta tilde'},
       /* Condicional sin tilde */
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])haria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,   sug:'"har√≠a"',   why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])podria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,  sug:'"podr√≠a"',  why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])tendria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"tendr√≠a"', why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])estaria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"estar√≠a"', why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])diria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,   sug:'"dir√≠a"',   why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])vendria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"vendr√≠a"', why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])seria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi,   sug:'"ser√≠a"',   why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])pondria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"pondr√≠a"', why:'Condicional ‚Äî falta tilde'},
-      {re:/(?<![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])saldria(?![a-z√°√©√≠√≥√∫√º√±A-Z√Å√â√ç√ì√ö√ú√ë])/gi, sug:'"saldr√≠a"', why:'Condicional ‚Äî falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])haria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,   sug:'"harÌa"',   why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])podria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,  sug:'"podrÌa"',  why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])tendria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"tendrÌa"', why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])estaria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"estarÌa"', why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])diria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,   sug:'"dirÌa"',   why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])vendria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"vendrÌa"', why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])seria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi,   sug:'"serÌa"',   why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])pondria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"pondrÌa"', why:'Condicional ó falta tilde'},
+      {re:/(?<![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])saldria(?![a-z·ÈÌÛ˙¸ÒA-Z¡…Õ”⁄‹—])/gi, sug:'"saldrÌa"', why:'Condicional ó falta tilde'},
       /* Palabras comunes sin tilde */
-      {re:/\btambien\b/gi,  sug:'"tambi√©n"',  why:'Siempre lleva tilde'},
-      {re:/\bjamas\b/gi,    sug:'"jam√°s"',    why:'Siempre lleva tilde'},
-      {re:/\bquizas\b/gi,   sug:'"quiz√°s"',   why:'Siempre lleva tilde'},
-      {re:/\brapido\b/gi,   sug:'"r√°pido"',   why:'Esdr√∫jula ‚Äî falta tilde'},
-      {re:/\bfacil\b/gi,    sug:'"f√°cil"',    why:'Llana en consonante ‚Äî falta tilde'},
-      {re:/\bdificil\b/gi,  sug:'"dif√≠cil"',  why:'Llana en consonante ‚Äî falta tilde'},
-      {re:/\binutil\b/gi,   sug:'"in√∫til"',   why:'Llana en consonante ‚Äî falta tilde'},
-      {re:/\benergia\b/gi,  sug:'"energ√≠a"',  why:'Hiato ‚Äî falta tilde'},
-      {re:/\bmagica\b/gi,   sug:'"m√°gica"',   why:'Esdr√∫jula ‚Äî falta tilde'},
-      {re:/\bfisica\b/gi,   sug:'"f√≠sica"',   why:'Esdr√∫jula ‚Äî falta tilde'},
-      {re:/\btecnica\b/gi,  sug:'"t√©cnica"',  why:'Esdr√∫jula ‚Äî falta tilde'},
-      {re:/\bcaracter\b/gi, sug:'"car√°cter"', why:'Llana en consonante ‚Äî falta tilde'},
+      {re:/\btambien\b/gi,  sug:'"tambiÈn"',  why:'Siempre lleva tilde'},
+      {re:/\bjamas\b/gi,    sug:'"jam·s"',    why:'Siempre lleva tilde'},
+      {re:/\bquizas\b/gi,   sug:'"quiz·s"',   why:'Siempre lleva tilde'},
+      {re:/\brapido\b/gi,   sug:'"r·pido"',   why:'Esdr˙jula ó falta tilde'},
+      {re:/\bfacil\b/gi,    sug:'"f·cil"',    why:'Llana en consonante ó falta tilde'},
+      {re:/\bdificil\b/gi,  sug:'"difÌcil"',  why:'Llana en consonante ó falta tilde'},
+      {re:/\binutil\b/gi,   sug:'"in˙til"',   why:'Llana en consonante ó falta tilde'},
+      {re:/\benergia\b/gi,  sug:'"energÌa"',  why:'Hiato ó falta tilde'},
+      {re:/\bmagica\b/gi,   sug:'"m·gica"',   why:'Esdr˙jula ó falta tilde'},
+      {re:/\bfisica\b/gi,   sug:'"fÌsica"',   why:'Esdr˙jula ó falta tilde'},
+      {re:/\btecnica\b/gi,  sug:'"tÈcnica"',  why:'Esdr˙jula ó falta tilde'},
+      {re:/\bcaracter\b/gi, sug:'"car·cter"', why:'Llana en consonante ó falta tilde'},
       /* Formas incorrectas */
-      {re:/\bhaver\b/gi,  sug:'"haber"',  why:'"Haver" no existe en espa√±ol'},
+      {re:/\bhaver\b/gi,  sug:'"haber"',  why:'"Haver" no existe en espaÒol'},
       {re:/\bhaiga\b/gi,  sug:'"haya"',   why:'Forma verbal incorrecta'},
-      {re:/\bvalla\b/gi,  sug:'"vaya"',   why:'Confusi√≥n vaya/valla'},
+      {re:/\bvalla\b/gi,  sug:'"vaya"',   why:'ConfusiÛn vaya/valla'},
       /* Abreviaturas informales */
       {re:/\b(xq|xk|x q|porq)\b/gi, sug:'"porque"',  why:'Abreviatura informal'},
-      {re:/\btb\b/gi,                sug:'"tambi√©n"', why:'Abreviatura informal'},
-      {re:/\bjajaj+|jejeje+|jajaje+/gi, sug:'(risa informal)', why:'L√©xico informal ‚Äî no tiene cabida en combate narrativo'},
-      {re:/\bxd\b/gi, sug:'(emoticono)', why:'L√©xico informal'},
+      {re:/\btb\b/gi,                sug:'"tambiÈn"', why:'Abreviatura informal'},
+      {re:/\bjajaj+|jejeje+|jajaje+/gi, sug:'(risa informal)', why:'LÈxico informal ó no tiene cabida en combate narrativo'},
+      {re:/\bxd\b/gi, sug:'(emoticono)', why:'LÈxico informal'},
     ];
 
-    /* ‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê
-       REGLAS B.R.B. ‚Äî patrones sin \b en palabras
+    /* ------------------------------------------
+       REGLAS B.R.B. ó patrones sin \b en palabras
        acentuadas (JS no las reconoce como \w).
-       Cada patr√≥n es lo m√°s simple posible para
+       Cada patrÛn es lo m·s simple posible para
        capturar texto real de combate narrativo.
-    ‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê‚ïê */
+    ------------------------------------------ */
     var RULES = {
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         UNIVERSAL ‚Äî aplica en todas las categor√≠as
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         UNIVERSAL ó aplica en todas las categorÌas
+      ---------------------------------------- */
       universal: [
 
         /* SELLO OBLIGATORIO
-           Frases que eliminan toda posibilidad de reacci√≥n del rival */
+           Frases que eliminan toda posibilidad de reacciÛn del rival */
         {re:/sin que (pueda|puedas|logre|logres) (reaccionar|esquivar|evitar|bloquear|defenderse|hacer nada)/gi,
-         msg:'SELLO OBLIGATORIO ‚Äî Eliminas toda posibilidad de reacci√≥n del rival. Frase prohibida: el oponente siempre puede describir su respuesta.', lvl:'err'},
-        {re:/sin (posibilidad de|escapatoria|forma de esquivar|manera de evitar|opci√≥n de defensa)/gi,
-         msg:'SELLO OBLIGATORIO ‚Äî Declaras que el rival no tiene ninguna opci√≥n. El rival siempre conserva la capacidad de responder.', lvl:'err'},
+         msg:'SELLO OBLIGATORIO ó Eliminas toda posibilidad de reacciÛn del rival. Frase prohibida: el oponente siempre puede describir su respuesta.', lvl:'err'},
+        {re:/sin (posibilidad de|escapatoria|forma de esquivar|manera de evitar|opciÛn de defensa)/gi,
+         msg:'SELLO OBLIGATORIO ó Declaras que el rival no tiene ninguna opciÛn. El rival siempre conserva la capacidad de responder.', lvl:'err'},
         {re:/imposible (de evitar|esquivarlo|bloquearlo|detenerse|para (el|la|tu|su) rival)/gi,
-         msg:'SELLO OBLIGATORIO ‚Äî Afirmas que la acci√≥n es imposible de evitar para el rival. Frase prohibida.', lvl:'err'},
+         msg:'SELLO OBLIGATORIO ó Afirmas que la acciÛn es imposible de evitar para el rival. Frase prohibida.', lvl:'err'},
         {re:/no (hay|existe|tiene) (escapatoria|salida|defensa posible|forma de esquivar|manera de evitar)/gi,
-         msg:'SELLO OBLIGATORIO ‚Äî Anulas todas las opciones del rival forzando un resultado predeterminado.', lvl:'err'},
+         msg:'SELLO OBLIGATORIO ó Anulas todas las opciones del rival forzando un resultado predeterminado.', lvl:'err'},
 
-        /* MANIPULACI√ìN NEGRA
+        /* MANIPULACI”N NEGRA
            Narrar el resultado del rival como hecho consumado */
-        {re:/(cay[o√≥]|fue derribad|fue tumbad|qued[o√≥] inconsciente|qued[o√≥] sin sentido|qued[o√≥] derrotad)/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Est√°s narrando el estado del rival como hecho consumado. Eso le corresponde describirlo al oponente, no a ti.', lvl:'err'},
-        {re:/(muri[o√≥]|fue elimina|fue destruid|fue vencid|fue mata|fue aniquila)/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Declaras la eliminaci√≥n del rival como hecho. El resultado del rival solo lo puede confirmar el juez o el propio oponente.', lvl:'err'},
-        {re:/(el (rival|oponente|enemigo) (cae|cay|qued|fue|est√°|es herido|result))/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Est√°s describiendo el estado del personaje rival. Eso no te corresponde narrar.', lvl:'err'},
+        {re:/(cay[oÛ]|fue derribad|fue tumbad|qued[oÛ] inconsciente|qued[oÛ] sin sentido|qued[oÛ] derrotad)/gi,
+         msg:'MANIPULACI”N NEGRA ó Est·s narrando el estado del rival como hecho consumado. Eso le corresponde describirlo al oponente, no a ti.', lvl:'err'},
+        {re:/(muri[oÛ]|fue elimina|fue destruid|fue vencid|fue mata|fue aniquila)/gi,
+         msg:'MANIPULACI”N NEGRA ó Declaras la eliminaciÛn del rival como hecho. El resultado del rival solo lo puede confirmar el juez o el propio oponente.', lvl:'err'},
+        {re:/(el (rival|oponente|enemigo) (cae|cay|qued|fue|est·|es herido|result))/gi,
+         msg:'MANIPULACI”N NEGRA ó Est·s describiendo el estado del personaje rival. Eso no te corresponde narrar.', lvl:'err'},
 
         /* META-ROL */
-        {re:/(conozco tu (debilidad|punto d√©bil|vulnerabilidad)|s√© que eres (vulnerable|d√©bil|susceptible) a|s√© (que tienes|de tu) debilidad)/gi,
-         msg:'META-ROL ‚Äî Usas informaci√≥n del rival que tu personaje no ha descubierto durante el combate. Regla primaria.', lvl:'err'},
+        {re:/(conozco tu (debilidad|punto dÈbil|vulnerabilidad)|sÈ que eres (vulnerable|dÈbil|susceptible) a|sÈ (que tienes|de tu) debilidad)/gi,
+         msg:'META-ROL ó Usas informaciÛn del rival que tu personaje no ha descubierto durante el combate. Regla primaria.', lvl:'err'},
 
-        /* RULE-SHARKING ‚Äî citar el reglamento dentro del combate */
-        {re:/(seg[u√∫]n el reglamento|el reglamento (dice|estipula|proh[√≠i]be|establece)|eso viola (las reglas|el reglamento|la regla)|eso es Manipulaci[o√≥]n Negra|eso es Sello Obligatorio|eso es Meta.?Rol)/gi,
-         msg:'RULE-SHARKING ‚Äî No cites el reglamento dentro del combate narrativo. Si necesitas notificar una infracci√≥n, hazlo una sola vez y avisa al juez.', lvl:'err'},
+        /* RULE-SHARKING ó citar el reglamento dentro del combate */
+        {re:/(seg[u˙]n el reglamento|el reglamento (dice|estipula|proh[Ìi]be|establece)|eso viola (las reglas|el reglamento|la regla)|eso es Manipulaci[oÛ]n Negra|eso es Sello Obligatorio|eso es Meta.?Rol)/gi,
+         msg:'RULE-SHARKING ó No cites el reglamento dentro del combate narrativo. Si necesitas notificar una infracciÛn, hazlo una sola vez y avisa al juez.', lvl:'err'},
 
-        /* MANIPULACI√ìN NEGRA ‚Äî verbo de contacto + al rival/oponente */
-        {re:/(golpe[oa]|apu√±al[oa]|clav[oa]|hund[oa]|perforo|cort[oa]|impact[oa]|alcanz[oa]|atravies[oa]|tumb[oa]|derribo|peg[oa]|lanz[oa]) (al|a (mi|tu|su)) (rival|oponente|enemigo)/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Usas un verbo que confirma que tu ataque contact√≥ al rival. Eso le quita la capacidad de reacci√≥n. En su lugar describe la trayectoria o intenci√≥n del ataque sin afirmar que lleg√≥: "lanzo un golpe HACIA su pecho", "dirijo la hoja AL pecho del rival".', lvl:'err'},
+        /* MANIPULACI”N NEGRA ó verbo de contacto + al rival/oponente */
+        {re:/(golpe[oa]|apuÒal[oa]|clav[oa]|hund[oa]|perforo|cort[oa]|impact[oa]|alcanz[oa]|atravies[oa]|tumb[oa]|derribo|peg[oa]|lanz[oa]) (al|a (mi|tu|su)) (rival|oponente|enemigo)/gi,
+         msg:'MANIPULACI”N NEGRA ó Usas un verbo que confirma que tu ataque contactÛ al rival. Eso le quita la capacidad de reacciÛn. En su lugar describe la trayectoria o intenciÛn del ataque sin afirmar que llegÛ: "lanzo un golpe HACIA su pecho", "dirijo la hoja AL pecho del rival".', lvl:'err'},
 
-        /* MANIPULACI√ìN NEGRA ‚Äî descripci√≥n de contacto directo en parte del cuerpo del rival */
-        {re:/(directo (en|al) su (pecho|cuerpo|cuello|cabeza|torso|espalda|abdomen|coraz[o√≥]n|cara|rostro|costado|flanco)|(en|al) su (pecho|cuello|cabeza|torso|espalda|abdomen|coraz[o√≥]n|cara|rostro|costado) (directo|de lleno|de frente|limpio|sin falla|exacto))/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Describes tu ataque llegando a una parte espec√≠fica del cuerpo del rival. Eso confirma contacto sin darle oportunidad de esquivar. Describe hacia d√≥nde apuntas, no d√≥nde conecta.', lvl:'err'},
+        /* MANIPULACI”N NEGRA ó descripciÛn de contacto directo en parte del cuerpo del rival */
+        {re:/(directo (en|al) su (pecho|cuerpo|cuello|cabeza|torso|espalda|abdomen|coraz[oÛ]n|cara|rostro|costado|flanco)|(en|al) su (pecho|cuello|cabeza|torso|espalda|abdomen|coraz[oÛ]n|cara|rostro|costado) (directo|de lleno|de frente|limpio|sin falla|exacto))/gi,
+         msg:'MANIPULACI”N NEGRA ó Describes tu ataque llegando a una parte especÌfica del cuerpo del rival. Eso confirma contacto sin darle oportunidad de esquivar. Describe hacia dÛnde apuntas, no dÛnde conecta.', lvl:'err'},
 
         /* RELLENO */
         {re:/\.{5,}/g,
-         msg:'RELLENO ‚Äî Cadena excesiva de "..." sin contenido narrativo. El turno debe tener desarrollo real de acciones.', lvl:'warn'},
-        {re:/\b(etc\.|etc |etc√©tera)\b/gi,
-         msg:'RELLENO ‚Äî "Etc." no reemplaza la descripci√≥n de acciones. El juez eval√∫a lo que escribes, no lo que sobreentiendes.', lvl:'warn'},
+         msg:'RELLENO ó Cadena excesiva de "..." sin contenido narrativo. El turno debe tener desarrollo real de acciones.', lvl:'warn'},
+        {re:/\b(etc\.|etc |etcÈtera)\b/gi,
+         msg:'RELLENO ó "Etc." no reemplaza la descripciÛn de acciones. El juez eval˙a lo que escribes, no lo que sobreentiendes.', lvl:'warn'},
         {re:/bla bla|blah blah|lorem ipsum/gi,
-         msg:'RELLENO ‚Äî Texto de marcador de posici√≥n detectado. No aporta al combate narrativo.', lvl:'err'},
+         msg:'RELLENO ó Texto de marcador de posiciÛn detectado. No aporta al combate narrativo.', lvl:'err'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         COMBATE ‚Äî HAX prohibidos y reglas de turno
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         COMBATE ó HAX prohibidos y reglas de turno
+      ---------------------------------------- */
       combate: [
 
-        /* Inmortalidad ‚Äî PROHIBIDA */
-        {re:/(soy inmortal|es inmortal|tengo inmortalidad|no puedo morir|es imposible matarme|jam√°s (podr[e√©]|podr[√≠i]a) morir|no poseo vida)/gi,
-         msg:'HAX PROHIBIDO ‚Äî INMORTALIDAD: Toda forma de inmortalidad est√° completamente prohibida. Todos los personajes pueden ser eliminados en combate.', lvl:'err'},
+        /* Inmortalidad ó PROHIBIDA */
+        {re:/(soy inmortal|es inmortal|tengo inmortalidad|no puedo morir|es imposible matarme|jam·s (podr[eÈ]|podr[Ìi]a) morir|no poseo vida)/gi,
+         msg:'HAX PROHIBIDO ó INMORTALIDAD: Toda forma de inmortalidad est· completamente prohibida. Todos los personajes pueden ser eliminados en combate.', lvl:'err'},
 
-        /* BFR ‚Äî PROHIBIDO */
-        {re:/(fuera del campo de batalla|fuera del (√°rea|campo|escenario) de combate|BFR|battlefield removal|lo (env√≠o|mando|lanzo|teletransporto) fuera)/gi,
-         msg:'HAX PROHIBIDO ‚Äî BFR: Enviar al rival fuera del campo de batalla est√° completamente prohibido.', lvl:'err'},
+        /* BFR ó PROHIBIDO */
+        {re:/(fuera del campo de batalla|fuera del (·rea|campo|escenario) de combate|BFR|battlefield removal|lo (envÌo|mando|lanzo|teletransporto) fuera)/gi,
+         msg:'HAX PROHIBIDO ó BFR: Enviar al rival fuera del campo de batalla est· completamente prohibido.', lvl:'err'},
 
-        /* Acasualidad ‚Äî PROHIBIDA */
+        /* Acasualidad ó PROHIBIDA */
         {re:/(naturaleza acausal|soy acausal|existencia acausal|no me afectan las causas|soy inmune a la causalidad)/gi,
-         msg:'HAX PROHIBIDO ‚Äî ACASUALIDAD: La naturaleza acausal de cualquier personaje est√° prohibida en este formato.', lvl:'err'},
+         msg:'HAX PROHIBIDO ó ACASUALIDAD: La naturaleza acausal de cualquier personaje est· prohibida en este formato.', lvl:'err'},
 
-        /* Fisiolog√≠a No Existente ‚Äî PROHIBIDA */
-        {re:/(no (tengo|poseo) fisiolog[√≠i]a|fisiolog[√≠i]a no existente|no existo (f[√≠i]sicamente|en este plano)|carece de existencia|no tengo cuerpo (f[√≠i]sico|real))/gi,
-         msg:'HAX PROHIBIDO ‚Äî FISIOLOG√çA NO EXISTENTE: Todos los personajes deben existir f√≠sicamente en el combate. No puedes declarar que "no tienes fisiolog√≠a".', lvl:'err'},
+        /* FisiologÌa No Existente ó PROHIBIDA */
+        {re:/(no (tengo|poseo) fisiolog[Ìi]a|fisiolog[Ìi]a no existente|no existo (f[Ìi]sicamente|en este plano)|carece de existencia|no tengo cuerpo (f[Ìi]sico|real))/gi,
+         msg:'HAX PROHIBIDO ó FISIOLOGÕA NO EXISTENTE: Todos los personajes deben existir fÌsicamente en el combate. No puedes declarar que "no tienes fisiologÌa".', lvl:'err'},
 
-        /* Manipulaci√≥n Negra ‚Äî verbo pasado narrando el impacto en el rival */
-        {re:/(lo (atraves[o√≥]|destruy[o√≥]|impac t[o√≥]|impact[o√≥]|elimin[o√≥]|hiri[o√≥]|tumb[o√≥]|mata|aniqui)|le (atraves[o√≥]|impact[o√≥]|hiri[o√≥]|destruy[o√≥]))/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Narras que tu ataque ya afect√≥ al rival usando verbo en pasado. Usa tiempo presente o futuro y deja los datos para que el juez eval√∫e el impacto.', lvl:'err'},
+        /* ManipulaciÛn Negra ó verbo pasado narrando el impacto en el rival */
+        {re:/(lo (atraves[oÛ]|destruy[oÛ]|impac t[oÛ]|impact[oÛ]|elimin[oÛ]|hiri[oÛ]|tumb[oÛ]|mata|aniqui)|le (atraves[oÛ]|impact[oÛ]|hiri[oÛ]|destruy[oÛ]))/gi,
+         msg:'MANIPULACI”N NEGRA ó Narras que tu ataque ya afectÛ al rival usando verbo en pasado. Usa tiempo presente o futuro y deja los datos para que el juez eval˙e el impacto.', lvl:'err'},
 
-        /* Adelanto ‚Äî interrumpir la acci√≥n en curso del rival */
-        {re:/(antes de que (lance|ataque|golpee|dispare|active|complete).{3,60}(ya |cort√©|destru√≠|elimino|bloque[e√©]|intercepto|detengo su))/gi,
-         msg:'ADELANTO PROHIBIDO ‚Äî Interrumpes la acci√≥n en curso del rival, no su consecuencia. Solo puedes responder a lo que ya describi√≥, no a lo que a√∫n no sucede.', lvl:'err'},
+        /* Adelanto ó interrumpir la acciÛn en curso del rival */
+        {re:/(antes de que (lance|ataque|golpee|dispare|active|complete).{3,60}(ya |cortÈ|destruÌ|elimino|bloque[eÈ]|intercepto|detengo su))/gi,
+         msg:'ADELANTO PROHIBIDO ó Interrumpes la acciÛn en curso del rival, no su consecuencia. Solo puedes responder a lo que ya describiÛ, no a lo que a˙n no sucede.', lvl:'err'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         PODERES ‚Äî Energ√≠a, Regeneraci√≥n y HAX limitados
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         PODERES ó EnergÌa, RegeneraciÛn y HAX limitados
+      ---------------------------------------- */
       poderes: [
 
-        /* Regeneraci√≥n excesiva ‚Äî m√°ximo 30% / 3 usos */
-        {re:/(me (regenero|curo|recupero) (completamente|por completo|todo el da√±o|al 100|en su totalidad|totalmente)|regenerac[i√≠][o√≥]n (infinita|ilimitada|absoluta|total|completa|al 100))/gi,
-         msg:'REGENERACI√ìN ‚Äî REGLA VIOLADA: Solo puedes recuperar hasta el 30% del da√±o de un ataque espec√≠fico. La regeneraci√≥n completa o total est√° prohibida. M√°ximo 3 usos por combate.', lvl:'err'},
+        /* RegeneraciÛn excesiva ó m·ximo 30% / 3 usos */
+        {re:/(me (regenero|curo|recupero) (completamente|por completo|todo el daÒo|al 100|en su totalidad|totalmente)|regenerac[iÌ][oÛ]n (infinita|ilimitada|absoluta|total|completa|al 100))/gi,
+         msg:'REGENERACI”N ó REGLA VIOLADA: Solo puedes recuperar hasta el 30% del daÒo de un ataque especÌfico. La regeneraciÛn completa o total est· prohibida. M·ximo 3 usos por combate.', lvl:'err'},
 
-        /* Borrado existencial ‚Äî solo 1 uso, nunca directo vs rival */
+        /* Borrado existencial ó solo 1 uso, nunca directo vs rival */
         {re:/(borro (su|tu|la) existencia|borro (tu|su|al) (rival|oponente)|eraso (al|a) (rival|oponente|enemigo)|lo borro de la existencia|elimino su existencia)/gi,
-         msg:'BORRADO EXISTENCIAL ‚Äî Solo 1 uso por batalla y nunca puede aplicarse directamente al rival como acci√≥n instant√°nea. Usarlo as√≠ es Manipulaci√≥n Negra + descalificaci√≥n.', lvl:'err'},
+         msg:'BORRADO EXISTENCIAL ó Solo 1 uso por batalla y nunca puede aplicarse directamente al rival como acciÛn instant·nea. Usarlo asÌ es ManipulaciÛn Negra + descalificaciÛn.', lvl:'err'},
 
-        /* Energ√≠a ilimitada sin sustento */
-        {re:/(energ[√≠i]a (infinita|ilimitada|inagotable|sin l[√≠i]mite)|poder[√≠i]o infinito|fuerza ilimitada)/gi,
-         msg:'ENERG√çA ILIMITADA ‚Äî Debes justificar narrativamente la fuente de esa energ√≠a. Sin sustento descriptivo puede clasificar como Super-Rol o God-Rol.', lvl:'warn'},
+        /* EnergÌa ilimitada sin sustento */
+        {re:/(energ[Ìi]a (infinita|ilimitada|inagotable|sin l[Ìi]mite)|poder[Ìi]o infinito|fuerza ilimitada)/gi,
+         msg:'ENERGÕA ILIMITADA ó Debes justificar narrativamente la fuente de esa energÌa. Sin sustento descriptivo puede clasificar como Super-Rol o God-Rol.', lvl:'warn'},
 
-        /* Power Nullification excesivo ‚Äî m√°ximo 2 usos */
+        /* Power Nullification excesivo ó m·ximo 2 usos */
         {re:/(anulo (todos? los?|sus?|tus?) (poderes?|habilidades?|capacidades?)|neutralizo (todos? los?|sus?|tus?) (poderes?|habilidades?))/gi,
-         msg:'POWER NULLIFICATION ‚Äî Permitida un m√°ximo de 2 veces por combate. Anular todos los poderes del rival de forma general puede ser Sello Obligatorio.', lvl:'warn'},
+         msg:'POWER NULLIFICATION ó Permitida un m·ximo de 2 veces por combate. Anular todos los poderes del rival de forma general puede ser Sello Obligatorio.', lvl:'warn'},
 
         /* Incorporeidad pasiva */
-        {re:/(soy (intangible|incorp[o√≥]reo) (por naturaleza|de forma pasiva|siempre)|incorporeidad pasiva|intangibilidad natural|siempre soy intangible)/gi,
-         msg:'INCORPOREIDAD PASIVA ‚Äî Esta capacidad queda anulada en combate salvo que el rival posea medios de interacci√≥n con entidades incorp√≥reas.', lvl:'err'},
+        {re:/(soy (intangible|incorp[oÛ]reo) (por naturaleza|de forma pasiva|siempre)|incorporeidad pasiva|intangibilidad natural|siempre soy intangible)/gi,
+         msg:'INCORPOREIDAD PASIVA ó Esta capacidad queda anulada en combate salvo que el rival posea medios de interacciÛn con entidades incorpÛreas.', lvl:'err'},
 
-        /* Manipulaci√≥n del tiempo contra el rival */
+        /* ManipulaciÛn del tiempo contra el rival */
         {re:/(detengo el tiempo (del|de tu|de su) (rival|oponente|personaje)|el tiempo del (rival|oponente) (se detiene|queda congelado|es detenido))/gi,
-         msg:'MANIPULACI√ìN DEL TIEMPO ‚Äî Usar Time Stop dirigido al rival puede clasificar como Sello Obligatorio o HAX prohibido seg√∫n el contexto.', lvl:'err'},
+         msg:'MANIPULACI”N DEL TIEMPO ó Usar Time Stop dirigido al rival puede clasificar como Sello Obligatorio o HAX prohibido seg˙n el contexto.', lvl:'err'},
 
         /* Rol Espejo */
-        {re:/(hago (exactamente lo mismo|lo mismo que (t√∫|tu|√©l)|lo propio)|replico (su|tu) (ataque|movimiento|t√©cnica) (exactamente|de forma id√©ntica)|copio (exactamente|tu|su) (t√©cnica|ataque|movimiento))/gi,
-         msg:'POSIBLE ROL ESPEJO ‚Äî Reproducir las acciones del rival palabra por palabra reduce tu puntaje de originalidad e interpretaci√≥n.', lvl:'warn'},
+        {re:/(hago (exactamente lo mismo|lo mismo que (t˙|tu|Èl)|lo propio)|replico (su|tu) (ataque|movimiento|tÈcnica) (exactamente|de forma idÈntica)|copio (exactamente|tu|su) (tÈcnica|ataque|movimiento))/gi,
+         msg:'POSIBLE ROL ESPEJO ó Reproducir las acciones del rival palabra por palabra reduce tu puntaje de originalidad e interpretaciÛn.', lvl:'warn'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         REDACCI√ìN ‚Äî Normas narrativas del combate
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         REDACCI”N ó Normas narrativas del combate
+      ---------------------------------------- */
       redaccion: [
 
-        /* Manipulaci√≥n Negra ‚Äî verbos en primera persona pasado + rival */
-        {re:/(te (golpe√©|impact√©|atraves√©|her√≠|destru√≠|elimin√©|mat√©|tumb√©)|lo (golpe√©|impact√©|atraves√©|destru√≠|elimin√©))/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Usas primera persona en pasado afirmando que TU acci√≥n ya afect√≥ al rival. El pasado sobre el rival casi siempre es infracci√≥n.', lvl:'err'},
+        /* ManipulaciÛn Negra ó verbos en primera persona pasado + rival */
+        {re:/(te (golpeÈ|impactÈ|atravesÈ|herÌ|destruÌ|eliminÈ|matÈ|tumbÈ)|lo (golpeÈ|impactÈ|atravesÈ|destruÌ|eliminÈ))/gi,
+         msg:'MANIPULACI”N NEGRA ó Usas primera persona en pasado afirmando que TU acciÛn ya afectÛ al rival. El pasado sobre el rival casi siempre es infracciÛn.', lvl:'err'},
 
         /* Consecuencia inmediata declarada en presente */
         {re:/(te (mato|destruyo|elimino|aniquilo|liquido) (ahora|al instante|de inmediato|en este momento))/gi,
-         msg:'MANIPULACI√ìN NEGRA ‚Äî Declaras el resultado del rival en presente inmediato sin margen para que reaccione.', lvl:'err'},
+         msg:'MANIPULACI”N NEGRA ó Declaras el resultado del rival en presente inmediato sin margen para que reaccione.', lvl:'err'},
 
-        /* Super-Rol ‚Äî alegar poder nuevo en plena batalla */
-        {re:/(revelo (un|este|mi) (poder|habilidad|capacidad) (que nunca|que jam√°s|oculto|secreto|que nadie conoce)|suelto (todo|mi) (poder real|verdadero poder|poder completo) (que|el cual) (nunca|jam√°s))/gi,
-         msg:'POSIBLE SUPER-ROL ‚Äî Presentar un poder nuevo sin feat can√≥nico previo puede ser Super-Rol. El juez pedir√° sustento.', lvl:'warn'},
+        /* Super-Rol ó alegar poder nuevo en plena batalla */
+        {re:/(revelo (un|este|mi) (poder|habilidad|capacidad) (que nunca|que jam·s|oculto|secreto|que nadie conoce)|suelto (todo|mi) (poder real|verdadero poder|poder completo) (que|el cual) (nunca|jam·s))/gi,
+         msg:'POSIBLE SUPER-ROL ó Presentar un poder nuevo sin feat canÛnico previo puede ser Super-Rol. El juez pedir· sustento.', lvl:'warn'},
 
-        /* Texto menor a 25 palabras por categor√≠a ‚Äî ya lo maneja el analyzer */
+        /* Texto menor a 25 palabras por categorÌa ó ya lo maneja el analyzer */
 
         /* Continuar el turno del rival sin permiso */
-        {re:/(mi rival (no logra|no puede|no alcanza|falla en|fracasa en)|el (ataque|golpe|t√©cnica) (del|de tu|de su) rival (no logra|falla|miss))/gi,
-         msg:'POSIBLE SELLO ‚Äî Describes el resultado de la acci√≥n del rival antes de que √©l lo haga. Eso corresponde al oponente o al juez.', lvl:'warn'},
+        {re:/(mi rival (no logra|no puede|no alcanza|falla en|fracasa en)|el (ataque|golpe|tÈcnica) (del|de tu|de su) rival (no logra|falla|miss))/gi,
+         msg:'POSIBLE SELLO ó Describes el resultado de la acciÛn del rival antes de que Èl lo haga. Eso corresponde al oponente o al juez.', lvl:'warn'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         JUEZ ‚Äî Normas de comunicaci√≥n con el juzgado
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         JUEZ ó Normas de comunicaciÛn con el juzgado
+      ---------------------------------------- */
       juez: [
-        {re:/(el juez (est√° equivocado|es parcial|deber√≠a reconsiderar|favorece al otro|no es imparcial)|el √°rbitro (est√° equivocado|es injusto))/gi,
-         msg:'RULE-SHARKING ‚Äî Presionar al juez puede resultar en descalificaci√≥n. El juzgado delibera en equipo; no est√° obligado a modificar su criterio bajo presi√≥n.', lvl:'err'},
-        {re:/(solicito (pausa|suspensi√≥n del combate)|pido que (pausen|detengan|suspendan) el combate)/gi,
-         msg:'RULE-SHARKING ‚Äî Solo el juzgado puede pausar el combate. Un jugador no puede hacer efectiva una pausa unilateral.', lvl:'warn'},
-        {re:/(acuso (a mi|al) (rival|oponente) de|el otro (jugador|participante) (hizo infracci√≥n|viol√≥|est√° haciendo)|denuncio que (mi rival|el otro))/gi,
-         msg:'RULE-SHARKING ‚Äî Acusar al rival dentro del turno puede ser Rule-Sharking. Notifica al juez una sola vez, fuera del turno narrativo.', lvl:'warn'},
-        {re:/(seg[u√∫]n las reglas|el reglamento te (proh[√≠i]be|impide|dice)|eso que hiciste es infracci√≥n|eso (est√°|es) prohibido (en|por) las reglas)/gi,
-         msg:'RULE-SHARKING ‚Äî Citar las reglas como argumento dentro del combate est√° prohibido. Solo el juez puede declarar infracciones.', lvl:'err'},
+        {re:/(el juez (est· equivocado|es parcial|deberÌa reconsiderar|favorece al otro|no es imparcial)|el ·rbitro (est· equivocado|es injusto))/gi,
+         msg:'RULE-SHARKING ó Presionar al juez puede resultar en descalificaciÛn. El juzgado delibera en equipo; no est· obligado a modificar su criterio bajo presiÛn.', lvl:'err'},
+        {re:/(solicito (pausa|suspensiÛn del combate)|pido que (pausen|detengan|suspendan) el combate)/gi,
+         msg:'RULE-SHARKING ó Solo el juzgado puede pausar el combate. Un jugador no puede hacer efectiva una pausa unilateral.', lvl:'warn'},
+        {re:/(acuso (a mi|al) (rival|oponente) de|el otro (jugador|participante) (hizo infracciÛn|violÛ|est· haciendo)|denuncio que (mi rival|el otro))/gi,
+         msg:'RULE-SHARKING ó Acusar al rival dentro del turno puede ser Rule-Sharking. Notifica al juez una sola vez, fuera del turno narrativo.', lvl:'warn'},
+        {re:/(seg[u˙]n las reglas|el reglamento te (proh[Ìi]be|impide|dice)|eso que hiciste es infracciÛn|eso (est·|es) prohibido (en|por) las reglas)/gi,
+         msg:'RULE-SHARKING ó Citar las reglas como argumento dentro del combate est· prohibido. Solo el juez puede declarar infracciones.', lvl:'err'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         CROSSOVER ‚Äî Restricciones de formato
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         CROSSOVER ó Restricciones de formato
+      ---------------------------------------- */
       crossover: [
-        {re:/(en su (anime|manga|serie|historia oficial|universo original|canon)|seg[u√∫]n (su (canon|lore|historia)|el (anime|manga|lore) (de|del) personaje))/gi,
-         msg:'CROSSOVER ‚Äî El SC eval√∫a el rol escrito en este combate, no el lore del universo de origen. Los argumentos de canon externo no son v√°lidos aqu√≠.', lvl:'err'},
-        {re:/(en mi (universo|mundo) (original|de origen)|en el mundo (de|del) personaje|seg[u√∫]n (la historia|el canon) (de mi|de su|de este) personaje)/gi,
-         msg:'CROSSOVER ‚Äî Argumento de universo de origen no v√°lido en formato Crossover. Todo se juzga exclusivamente por lo narrado en el combate.', lvl:'err'},
+        {re:/(en su (anime|manga|serie|historia oficial|universo original|canon)|seg[u˙]n (su (canon|lore|historia)|el (anime|manga|lore) (de|del) personaje))/gi,
+         msg:'CROSSOVER ó El SC eval˙a el rol escrito en este combate, no el lore del universo de origen. Los argumentos de canon externo no son v·lidos aquÌ.', lvl:'err'},
+        {re:/(en mi (universo|mundo) (original|de origen)|en el mundo (de|del) personaje|seg[u˙]n (la historia|el canon) (de mi|de su|de este) personaje)/gi,
+         msg:'CROSSOVER ó Argumento de universo de origen no v·lido en formato Crossover. Todo se juzga exclusivamente por lo narrado en el combate.', lvl:'err'},
         {re:/(mi (personaje|poder) (es|supera|equivale) (al de|a) (Goku|Naruto|Luffy|Saitama|Giorno|Rimuru|Yhwach|Anos|Sukuna|Zeno))/gi,
-         msg:'CROSSOVER ‚Äî Comparar tu personaje con otro can√≥nico no es argumento de rol v√°lido. Demu√©stralo con acciones narradas, no con nombres.', lvl:'warn'},
+         msg:'CROSSOVER ó Comparar tu personaje con otro canÛnico no es argumento de rol v·lido. DemuÈstralo con acciones narradas, no con nombres.', lvl:'warn'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         COMBATE EXTRA ‚Äî HAX prohibidos ampliados
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         COMBATE EXTRA ó HAX prohibidos ampliados
+      ---------------------------------------- */
       combate_hax: [
 
-        /* Primer Turno ‚Äî atacar en presentaci√≥n */
-        {re:/(ataco|golpeo|lanzo (un|mi)|disparo|activo|invoco).{0,80}(llegar|llegando|al entrar|presentaci[o√≥]n|primer turno|turno de inicio)/gi,
-         msg:'PRIMER TURNO ‚Äî Est√° prohibido atacar, usar habilidades activas o preparar combos en el turno de presentaci√≥n. El T1 es para presentar al personaje y describir el escenario neutral.', lvl:'err'},
+        /* Primer Turno ó atacar en presentaciÛn */
+        {re:/(ataco|golpeo|lanzo (un|mi)|disparo|activo|invoco).{0,80}(llegar|llegando|al entrar|presentaci[oÛ]n|primer turno|turno de inicio)/gi,
+         msg:'PRIMER TURNO ó Est· prohibido atacar, usar habilidades activas o preparar combos en el turno de presentaciÛn. El T1 es para presentar al personaje y describir el escenario neutral.', lvl:'err'},
 
         /* Escenario ventajoso en T1 */
-        {re:/(el (lugar|escenario|campo) (tiene|cuenta con|posee|presenta) (ventaja|beneficio|potencia|poder|refuerzo|plus) (para (m[√≠i]|mi personaje)))/gi,
-         msg:'ESCENARIO VENTAJOSO ‚Äî El escenario del Turno 1 debe ser neutral. No puedes establecer condiciones que favorezcan a tu personaje.', lvl:'warn'},
+        {re:/(el (lugar|escenario|campo) (tiene|cuenta con|posee|presenta) (ventaja|beneficio|potencia|poder|refuerzo|plus) (para (m[Ìi]|mi personaje)))/gi,
+         msg:'ESCENARIO VENTAJOSO ó El escenario del Turno 1 debe ser neutral. No puedes establecer condiciones que favorezcan a tu personaje.', lvl:'warn'},
 
-        /* Plot / Narrative Manipulation ‚Äî HAX prohibido absoluto */
-        {re:/(manipulo (el gui[o√≥]n|la (historia|narrativa|trama)|el destino narrativo)|la narrativa (me favorece|me protege|dicta que)|soy (el protagonista|el h[e√©]roe de esta historia|inmune a perder))/gi,
-         msg:'HAX PROHIBIDO ‚Äî PLOT/NARRATIVE MANIPULATION: Manipular la narrativa, el gui√≥n o el destino narrativo est√° completamente prohibido en Bellator.', lvl:'err'},
+        /* Plot / Narrative Manipulation ó HAX prohibido absoluto */
+        {re:/(manipulo (el gui[oÛ]n|la (historia|narrativa|trama)|el destino narrativo)|la narrativa (me favorece|me protege|dicta que)|soy (el protagonista|el h[eÈ]roe de esta historia|inmune a perder))/gi,
+         msg:'HAX PROHIBIDO ó PLOT/NARRATIVE MANIPULATION: Manipular la narrativa, el guiÛn o el destino narrativo est· completamente prohibido en Bellator.', lvl:'err'},
 
-        /* Arquetipos ‚Äî HAX prohibido absoluto */
-        {re:/(soy el arquetipo|mi arquetipo (me protege|niega|cancela|garantiza)|por ser (el h[e√©]roe|el protagonista|el archetype)|invoco (mi|el) arquetipo)/gi,
-         msg:'HAX PROHIBIDO ‚Äî MANIPULACI√ìN DE ARQUETIPOS: Invocar la condici√≥n de arquetipo como defensa, escudo o ventaja est√° completamente prohibido.', lvl:'err'},
+        /* Arquetipos ó HAX prohibido absoluto */
+        {re:/(soy el arquetipo|mi arquetipo (me protege|niega|cancela|garantiza)|por ser (el h[eÈ]roe|el protagonista|el archetype)|invoco (mi|el) arquetipo)/gi,
+         msg:'HAX PROHIBIDO ó MANIPULACI”N DE ARQUETIPOS: Invocar la condiciÛn de arquetipo como defensa, escudo o ventaja est· completamente prohibido.', lvl:'err'},
 
-        /* Cronolog√≠a ‚Äî anular acciones ya ejecutadas */
-        {re:/(regreso (al|al momento|al instante) (anterior|en que|antes de|previo)|vuelvo al (momento|instante) (en que|donde|antes|previo)|anulo (lo que (hizo|lanz[o√≥]|ejecut[o√≥]|accion√≥)|su (ataque|movimiento) ya (descrito|publicado))|retrocedo en el tiempo del combate)/gi,
-         msg:'CRONOLOG√çA VIOLADA ‚Äî La cronolog√≠a del combate es sagrada. No puedes retroceder para anular o borrar acciones ya ejecutadas por el rival. Solo puedes responder a sus consecuencias.', lvl:'err'},
+        /* CronologÌa ó anular acciones ya ejecutadas */
+        {re:/(regreso (al|al momento|al instante) (anterior|en que|antes de|previo)|vuelvo al (momento|instante) (en que|donde|antes|previo)|anulo (lo que (hizo|lanz[oÛ]|ejecut[oÛ]|accionÛ)|su (ataque|movimiento) ya (descrito|publicado))|retrocedo en el tiempo del combate)/gi,
+         msg:'CRONOLOGÕA VIOLADA ó La cronologÌa del combate es sagrada. No puedes retroceder para anular o borrar acciones ya ejecutadas por el rival. Solo puedes responder a sus consecuencias.', lvl:'err'},
 
         /* Stats infinitos / omnipotencia / invulnerabilidad absoluta */
-        {re:/(poder infinito|fuerza infinita|stats infinitos|omnipotente|todopoderoso|invulnerable (absoluto|completamente|en su totalidad|total)|da[√±n]o infinito|resistencia infinita|velocidad infinita)/gi,
-         msg:'GOD-ROL ‚Äî Stats infinitos, omnipotencia o invulnerabilidad absoluta est√°n completamente prohibidos. Todo personaje opera bajo l√≠mites medibles en Bellator.', lvl:'err'},
+        {re:/(poder infinito|fuerza infinita|stats infinitos|omnipotente|todopoderoso|invulnerable (absoluto|completamente|en su totalidad|total)|da[Òn]o infinito|resistencia infinita|velocidad infinita)/gi,
+         msg:'GOD-ROL ó Stats infinitos, omnipotencia o invulnerabilidad absoluta est·n completamente prohibidos. Todo personaje opera bajo lÌmites medibles en Bellator.', lvl:'err'},
 
-        /* Transmutaci√≥n como cierre inmediato del rival */
+        /* TransmutaciÛn como cierre inmediato del rival */
         {re:/(convierto (al|a (tu|su)) (rival|oponente|enemigo) en|transmuto al? (rival|oponente) en|el (rival|oponente) se convierte en (piedra|polvo|nada|agua|metal|cristal|hielo) (para siempre|sin retorno|permanentemente|de inmediato))/gi,
-         msg:'TRANSMUTACI√ìN ‚Äî Declarar la transmutaci√≥n final del rival como hecho consumado es Manipulaci√≥n Negra. Solo 1 uso y no puede cerrar el combate de forma autom√°tica.', lvl:'err'},
+         msg:'TRANSMUTACI”N ó Declarar la transmutaciÛn final del rival como hecho consumado es ManipulaciÛn Negra. Solo 1 uso y no puede cerrar el combate de forma autom·tica.', lvl:'err'},
 
-        /* Petrificaci√≥n como estado absoluto e irreversible */
+        /* PetrificaciÛn como estado absoluto e irreversible */
         {re:/(queda (petrificado|paralizado|congelado) (completamente|para siempre|sin posibilidad|de forma absoluta|permanentemente|sin poder|irremediablemente))/gi,
-         msg:'PETRIFICACI√ìN ‚Äî No puede declararse como estado absoluto e irreversible. El rival siempre mantiene posibilidad de resistencia o ruptura (HAX limitado ‚Äî 1 uso, no directo).', lvl:'err'},
+         msg:'PETRIFICACI”N ó No puede declararse como estado absoluto e irreversible. El rival siempre mantiene posibilidad de resistencia o ruptura (HAX limitado ó 1 uso, no directo).', lvl:'err'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         PODERES EXTRA ‚Äî HAX limitados ampliados
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         PODERES EXTRA ó HAX limitados ampliados
+      ---------------------------------------- */
       poderes_hax: [
 
-        /* Regeneraci√≥n ‚Äî COMPLETAMENTE PROHIBIDA en Bellator */
-        {re:/(me (regenero|curo|recupero|sano|restituyo).{0,40}(da[√±n]o|herida|lesi[o√≥]n|[o√≥]rgano|cuerpo|tejido|miembro|extremidad)|regenero (el|mi) (cuerpo|brazo|pierna|[o√≥]rgano|tejido)|rehago (mi|el) (cuerpo|[o√≥]rgano))/gi,
-         msg:'HAX PROHIBIDO ‚Äî REGENERACI√ìN: En Bellator la regeneraci√≥n est√° completamente prohibida. No puedes restaurar da√±o recibido, rehacer √≥rganos ni recomponer el cuerpo bajo ninguna forma.', lvl:'err'},
+        /* RegeneraciÛn ó COMPLETAMENTE PROHIBIDA en Bellator */
+        {re:/(me (regenero|curo|recupero|sano|restituyo).{0,40}(da[Òn]o|herida|lesi[oÛ]n|[oÛ]rgano|cuerpo|tejido|miembro|extremidad)|regenero (el|mi) (cuerpo|brazo|pierna|[oÛ]rgano|tejido)|rehago (mi|el) (cuerpo|[oÛ]rgano))/gi,
+         msg:'HAX PROHIBIDO ó REGENERACI”N: En Bellator la regeneraciÛn est· completamente prohibida. No puedes restaurar daÒo recibido, rehacer Ûrganos ni recomponer el cuerpo bajo ninguna forma.', lvl:'err'},
 
-        /* Manipulaci√≥n Realidad directa al rival */
+        /* ManipulaciÛn Realidad directa al rival */
         {re:/(reescribo (la realidad|el espacio) (de|del) (rival|oponente)|la realidad (aplasta|destruye|niega|elimina) (al|a (tu|su)) (rival|oponente)|altero la realidad (del|de (tu|su)) (rival|oponente))/gi,
-         msg:'MANIPULACI√ìN DE REALIDAD ‚Äî No puede afectar al rival directamente. Solo deformaci√≥n del entorno inmediato (1 uso). Aplicarla al rival es Manipulaci√≥n Negra.', lvl:'err'},
+         msg:'MANIPULACI”N DE REALIDAD ó No puede afectar al rival directamente. Solo deformaciÛn del entorno inmediato (1 uso). Aplicarla al rival es ManipulaciÛn Negra.', lvl:'err'},
 
         /* Incorporeidad activa como estado continuo */
-        {re:/(mantengo (la incorporeidad|intangibilidad|mi estado intangible)|permanezco (intangible|incorp[o√≥]reo) (durante|por|todo|el resto|siempre|mientras)|soy intangible (todo el tiempo|durante el combate|permanentemente))/gi,
-         msg:'INCORPOREIDAD ACTIVA ‚Äî No puede mantenerse como estado continuo. Solo 1 uso defensivo por combate (HAX limitado).', lvl:'err'},
+        {re:/(mantengo (la incorporeidad|intangibilidad|mi estado intangible)|permanezco (intangible|incorp[oÛ]reo) (durante|por|todo|el resto|siempre|mientras)|soy intangible (todo el tiempo|durante el combate|permanentemente))/gi,
+         msg:'INCORPOREIDAD ACTIVA ó No puede mantenerse como estado continuo. Solo 1 uso defensivo por combate (HAX limitado).', lvl:'err'},
 
-        /* Precognici√≥n como omnisciencia t√°ctica total */
-        {re:/(veo (todo|cada|todos) (los|sus|tus) (movimientos|ataques|habilidades|acciones) (futuros?|del combate|que (har[a√°]|vendr[a√°]|ejecutar[a√°]))|predigo (todo|cada movimiento|el combate entero|todos tus movimientos))/gi,
-         msg:'PRECOGNICI√ìN ‚Äî No puede usarse como omnisciencia t√°ctica total. Solo 2 lecturas breves de amenaza puntual por combate (HAX defensas extraordinarias).', lvl:'warn'},
+        /* PrecogniciÛn como omnisciencia t·ctica total */
+        {re:/(veo (todo|cada|todos) (los|sus|tus) (movimientos|ataques|habilidades|acciones) (futuros?|del combate|que (har[a·]|vendr[a·]|ejecutar[a·]))|predigo (todo|cada movimiento|el combate entero|todos tus movimientos))/gi,
+         msg:'PRECOGNICI”N ó No puede usarse como omnisciencia t·ctica total. Solo 2 lecturas breves de amenaza puntual por combate (HAX defensas extraordinarias).', lvl:'warn'},
 
-        /* Manipulaci√≥n Vectorial total ‚Äî devolver toda la ofensiva del rival */
-        {re:/(devuelvo (todo|todos) (lo|los) (que (ataca|lanza|dispara|env√≠a))|reflejo (toda|cualquier|cada) (su|tu) (ofensiva|ataque|habilidad) (de forma permanente|siempre|sin l√≠mite|por siempre))/gi,
-         msg:'MANIPULACI√ìN VECTORIAL ‚Äî Devolver absolutamente toda la ofensiva rival de forma permanente excede el l√≠mite legal (3 usos por combate, rango de combate cuerpo a cuerpo o corto).', lvl:'warn'},
+        /* ManipulaciÛn Vectorial total ó devolver toda la ofensiva del rival */
+        {re:/(devuelvo (todo|todos) (lo|los) (que (ataca|lanza|dispara|envÌa))|reflejo (toda|cualquier|cada) (su|tu) (ofensiva|ataque|habilidad) (de forma permanente|siempre|sin lÌmite|por siempre))/gi,
+         msg:'MANIPULACI”N VECTORIAL ó Devolver absolutamente toda la ofensiva rival de forma permanente excede el lÌmite legal (3 usos por combate, rango de combate cuerpo a cuerpo o corto).', lvl:'warn'},
 
         /* Manip. Memoria total */
         {re:/(borro (toda|la totalidad de) (su|tu) (memoria|mente|recuerdo|conciencia|identidad)|elimino (su|tu) (memoria|mente) (por completo|completamente|totalmente|de forma total))/gi,
-         msg:'MANIPULACI√ìN DE MEMORIA TOTAL ‚Äî Borrar la memoria completa del rival est√° completamente prohibido. Solo alteraciones parciales y puntuales (m√°x 1 uso).', lvl:'err'},
+         msg:'MANIPULACI”N DE MEMORIA TOTAL ó Borrar la memoria completa del rival est· completamente prohibido. Solo alteraciones parciales y puntuales (m·x 1 uso).', lvl:'err'},
 
         /* Borrado Existencial extendido */
         {re:/(lo (borro|eraso|elimino) (de la existencia|de la realidad|de toda realidad|de este plano)|la existencia (del|de (tu|su)) (rival|oponente|enemigo) (desaparece|se borra|es erasa))/gi,
-         msg:'BORRADO EXISTENCIAL ‚Äî HAX completamente prohibido como acci√≥n directa al rival. Solo afecta objetos o √°rea peque√±a, nunca al oponente directamente.', lvl:'err'},
+         msg:'BORRADO EXISTENCIAL ó HAX completamente prohibido como acciÛn directa al rival. Solo afecta objetos o ·rea pequeÒa, nunca al oponente directamente.', lvl:'err'},
 
-        /* Power Mimicry sin justificaci√≥n */
-        {re:/(copio (todos?|sus?|tus?) (poderes?|habilidades?|capacidades?|t√©cnicas?) (autom√°ticamente|al instante|al verlos?|solo (con|al) (verlos?|percibirlos?)))/gi,
-         msg:'POWER MIMICRY ‚Äî Copiar poderes del rival requiere justificaci√≥n narrativa y can√≥nica previa. Sin sustento es Super-Rol.', lvl:'warn'},
+        /* Power Mimicry sin justificaciÛn */
+        {re:/(copio (todos?|sus?|tus?) (poderes?|habilidades?|capacidades?|tÈcnicas?) (autom·ticamente|al instante|al verlos?|solo (con|al) (verlos?|percibirlos?)))/gi,
+         msg:'POWER MIMICRY ó Copiar poderes del rival requiere justificaciÛn narrativa y canÛnica previa. Sin sustento es Super-Rol.', lvl:'warn'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         SC ‚Äî Sustento y evidencia
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         SC ó Sustento y evidencia
+      ---------------------------------------- */
       sc: [
-        {re:/(seg[u√∫]n (la wiki|wikipedia|wikia|el wiki)|la (wiki|wikipedia|wikia) (dice|indica|establece|confirma|se√±ala|menciona) que)/gi,
-         msg:'SUSTENTO D√âBIL ‚Äî Wikipedia/Wikia es editable y puede ser invalidada por el juez. Usa scans directos del manga, anime o ficha oficial como respaldo.', lvl:'warn'},
-        {re:/(edit[e√©]|borr[e√©]|modifiqu[e√©]|cambi[e√©]) (mi|el) turno/gi,
-         msg:'EDITAR/BORRAR TURNO ‚Äî Cualquier modificaci√≥n de un turno ya publicado se clasifica como Manipulaci√≥n Negra. Consecuencia: descalificaci√≥n inmediata.', lvl:'err'},
+        {re:/(seg[u˙]n (la wiki|wikipedia|wikia|el wiki)|la (wiki|wikipedia|wikia) (dice|indica|establece|confirma|seÒala|menciona) que)/gi,
+         msg:'SUSTENTO D…BIL ó Wikipedia/Wikia es editable y puede ser invalidada por el juez. Usa scans directos del manga, anime o ficha oficial como respaldo.', lvl:'warn'},
+        {re:/(edit[eÈ]|borr[eÈ]|modifiqu[eÈ]|cambi[eÈ]) (mi|el) turno/gi,
+         msg:'EDITAR/BORRAR TURNO ó Cualquier modificaciÛn de un turno ya publicado se clasifica como ManipulaciÛn Negra. Consecuencia: descalificaciÛn inmediata.', lvl:'err'},
         {re:/(no tengo (scans?|evidencia|prueba|respaldo)|sin (scans?|evidencia|prueba))/gi,
-         msg:'SIN SUSTENTO ‚Äî Declarar que no tienes scans o evidencia invalida la acci√≥n de gran escala. El juez puede anular el argumento.', lvl:'warn'},
+         msg:'SIN SUSTENTO ó Declarar que no tienes scans o evidencia invalida la acciÛn de gran escala. El juez puede anular el argumento.', lvl:'warn'},
       ],
 
-      /* ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
-         TIEMPOS ‚Äî Rol Pausa y ciclo de respuesta
-      ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+      /* ----------------------------------------
+         TIEMPOS ó Rol Pausa y ciclo de respuesta
+      ---------------------------------------- */
       tiempos: [
-        {re:/(parte\s*1.{1,80}parte\s*2|parte\s*uno.{1,80}parte\s*dos|publico (la |esta )?(primera|primera parte|parte 1).{1,60}(despu[e√©]s|ma[√±n]ana|luego) (publico|termino|completo))/gi,
-         msg:'ROL PAUSA PROHIBIDO ‚Äî Publicar fragmentado en Parte 1 + Parte 2 para detener el reloj es una infracci√≥n grave. El fraccionamiento del turno conlleva descalificaci√≥n inmediata.', lvl:'err'},
+        {re:/(parte\s*1.{1,80}parte\s*2|parte\s*uno.{1,80}parte\s*dos|publico (la |esta )?(primera|primera parte|parte 1).{1,60}(despu[eÈ]s|ma[Òn]ana|luego) (publico|termino|completo))/gi,
+         msg:'ROL PAUSA PROHIBIDO ó Publicar fragmentado en Parte 1 + Parte 2 para detener el reloj es una infracciÛn grave. El fraccionamiento del turno conlleva descalificaciÛn inmediata.', lvl:'err'},
         {re:/(solicito (rol pausa|rp|pausa del combate|pausa de combate)|pido (rol pausa|pausa urgente))/gi,
-         msg:'ROL PAUSA ‚Äî Solo el juzgado puede autorizar la pausa. Recuerda: solo 1 uso por intercambio y debe solicitarse antes de que venzan las primeras 24 horas.', lvl:'warn'},
+         msg:'ROL PAUSA ó Solo el juzgado puede autorizar la pausa. Recuerda: solo 1 uso por intercambio y debe solicitarse antes de que venzan las primeras 24 horas.', lvl:'warn'},
       ],
 
       niveles: [],
     };
     window._BELLATOR_RULES = RULES; /* expose for ejercicios engine */
 
-    /* ‚îÄ‚îÄ ANALYZE ‚îÄ‚îÄ */
-    /* ‚îÄ‚îÄ SCORE RENDERER (shared) ‚îÄ‚îÄ */
+    /* -- ANALYZE -- */
+    /* -- SCORE RENDERER (shared) -- */
     function renderScore(ruleErrors, ltCount) {
       var wc     = textEl.value.trim().split(/\s+/).length;
       var errW   = ruleErrors.filter(function(e){ return e.lvl === 'err'; }).length;
@@ -1588,11 +1589,11 @@
       scoreVal.textContent = score + '/100';
       scoreVal.style.color = score >= 80 ? '#3fb950' : score >= 50 ? '#f59e0b' : '#ef4444';
       var verdicts = [
-        [90, '#3fb950', 'ROL EXCELENTE ‚Äî Nivel competitivo'],
-        [75, '#3fb950', 'ROL S√ìLIDO ‚Äî Muy pocas observaciones'],
-        [55, '#f59e0b', 'ROL ACEPTABLE ‚Äî Revisar advertencias'],
-        [35, '#f59e0b', 'ROL CON PROBLEMAS ‚Äî Correcciones necesarias'],
-        [0,  '#ef4444', 'ROL INV√ÅLIDO ‚Äî Infracciones graves detectadas'],
+        [90, '#3fb950', 'ROL EXCELENTE ó Nivel competitivo'],
+        [75, '#3fb950', 'ROL S”LIDO ó Muy pocas observaciones'],
+        [55, '#f59e0b', 'ROL ACEPTABLE ó Revisar advertencias'],
+        [35, '#f59e0b', 'ROL CON PROBLEMAS ó Correcciones necesarias'],
+        [0,  '#ef4444', 'ROL INV¡LIDO ó Infracciones graves detectadas'],
       ];
       for (var i = 0; i < verdicts.length; i++) {
         if (score >= verdicts[i][0]) {
@@ -1603,13 +1604,13 @@
       }
     }
 
-    /* ‚îÄ‚îÄ SIN√ìNIMOS DE COMBATE ‚Äî dict plano para sugerencias ‚îÄ‚îÄ */
+    /* -- SIN”NIMOS DE COMBATE ó dict plano para sugerencias -- */
     var SYNS = {
       'golpear':  ['impactar','proyectar','descargar','comprimir','sacudir'],
-      'golpe':    ['impacto','descarga','colisi√≥n','proyecci√≥n','cizalla'],
+      'golpe':    ['impacto','descarga','colisiÛn','proyecciÛn','cizalla'],
       'pegar':    ['impactar','descargar','comprimir','sacudir','conectar'],
-      'atacar':   ['avanzar','interceptar','flanquear','ejercer presi√≥n','expandir'],
-      'ataque':   ['ofensiva','descarga','proyecci√≥n','saturaci√≥n','cizalla'],
+      'atacar':   ['avanzar','interceptar','flanquear','ejercer presiÛn','expandir'],
+      'ataque':   ['ofensiva','descarga','proyecciÛn','saturaciÛn','cizalla'],
       'cortar':   ['seccionar','perforar','fraccionar','rebanar','dislocar'],
       'mover':    ['desplazar','avanzar','flanquear','pivotear','acelerar'],
       'llegar':   ['alcanzar','cerrar distancia','interceptar','posicionarse'],
@@ -1622,7 +1623,7 @@
       'defender': ['interponer','disipar','cubrir','absorber','contener'],
       'hacer':    ['ejecutar','desplegar','proyectar','dirigir','realizar'],
       'tener':    ['poseer','contar con','disponer de','portar','cargar'],
-      'decir':    ['narrar','describir','se√±alar','indicar','exponer'],
+      'decir':    ['narrar','describir','seÒalar','indicar','exponer'],
       'saber':    ['detectar','percibir','calcular','anticipar','estimar'],
       'ver':      ['percibir','detectar','rastrear','calcular','anticipar'],
       'estar':    ['posicionarse','mantenerse','hallarse','situarse','encontrarse'],
@@ -1631,10 +1632,10 @@
       'avanzar':  ['interceptar','flanquear','pivotear','precipitarse','acelerar'],
       'expandir': ['irradiar','liberar','descargar','saturar','propagar'],
       'grande':   ['de alta densidad','de escala masiva','de radio amplio','colosal'],
-      'rapido':   ['a alta velocidad','explosivo','subs√≥nico','de reacci√≥n inmediata'],
+      'rapido':   ['a alta velocidad','explosivo','subsÛnico','de reacciÛn inmediata'],
       'fuerte':   ['de alta densidad','de gran potencia','concentrado','comprimido'],
       'enemigo':  ['rival','oponente','adversario','contendiente'],
-      'poder':    ['capacidad','recurso t√©cnico','mecanismo','habilidad'],
+      'poder':    ['capacidad','recurso tÈcnico','mecanismo','habilidad'],
     };
 
     window.prInsertWord = function(btn) {
@@ -1653,7 +1654,7 @@
       if (!text.trim()) return;
       var wc = text.trim().split(/\s+/).length;
 
-      /* ‚îÄ‚îÄ 1. REGLAS B.R.B. (s√≠ncrono, regex) ‚îÄ‚îÄ */
+      /* -- 1. REGLAS B.R.B. (sÌncrono, regex) -- */
       var ruleErrors = [];
       var cats = (!activeCat || activeCat === 'all')
         ? ['universal','combate','combate_hax','poderes','poderes_hax','redaccion','juez','crossover','sc','tiempos']
@@ -1668,28 +1669,28 @@
           }
         });
       });
-      if (wc < 25) ruleErrors.push({found: wc + ' palabras', msg:'Turno muy corto ‚Äî el m√≠nimo recomendado en competencia son 25 palabras.', lvl:'warn'});
+      if (wc < 25) ruleErrors.push({found: wc + ' palabras', msg:'Turno muy corto ó el mÌnimo recomendado en competencia son 25 palabras.', lvl:'warn'});
 
-      /* Render reglas inmediatamente ‚Äî batch (un solo reflow) */
+      /* Render reglas inmediatamente ó batch (un solo reflow) */
       var ruleNodes = [];
       if (ruleErrors.length === 0) {
-        ruleNodes.push(makeItem('ok','‚úì','Sin infracciones B.R.B. detectadas. ¬°Buen rol!',''));
+        ruleNodes.push(makeItem('ok','?','Sin infracciones B.R.B. detectadas. °Buen rol!',''));
       } else {
-        ruleErrors.forEach(function(e){ ruleNodes.push(makeItem(e.lvl==='err'?'err':'warn', e.lvl==='err'?'‚úó':'‚ö†', e.found, e.msg)); });
+        ruleErrors.forEach(function(e){ ruleNodes.push(makeItem(e.lvl==='err'?'err':'warn', e.lvl==='err'?'?':'?', e.found, e.msg)); });
       }
       batchRender(ruleBody, ruleNodes);
-      ruleCount.textContent = ruleErrors.length === 0 ? '‚úì 0' : ruleErrors.length + ' flag' + (ruleErrors.length !== 1 ? 's' : '');
+      ruleCount.textContent = ruleErrors.length === 0 ? '? 0' : ruleErrors.length + ' flag' + (ruleErrors.length !== 1 ? 's' : '');
 
-      /* ‚îÄ‚îÄ 2. ORTOGRAF√çA ‚Äî LanguageTool API (as√≠ncrono) ‚îÄ‚îÄ */
-      orthBody.innerHTML = '<div class="pr-lt-loading"><div class="pr-lt-spinner"></div>Consultando LanguageTool (ortograf√≠a y gram√°tica)‚Ä¶</div>';
-      orthCount.textContent = '‚Ä¶';
+      /* -- 2. ORTOGRAFÕA ó LanguageTool API (asÌncrono) -- */
+      orthBody.innerHTML = '<div class="pr-lt-loading"><div class="pr-lt-spinner"></div>Consultando LanguageTool (ortografÌa y gram·tica)Ö</div>';
+      orthCount.textContent = 'Ö';
       renderScore(ruleErrors, 0); /* score parcial mientras carga */
 
       var LT_URL = 'https://api.languagetool.org/v2/check';
       var params = new URLSearchParams();
       params.append('language', 'es');
       params.append('text', text);
-      /* categor√≠as relevantes para combate narrativo */
+      /* categorÌas relevantes para combate narrativo */
       params.append('enabledCategories', 'TYPOS,GRAMMAR,PUNCTUATION,STYLE,REDUNDANCY,TYPOGRAPHY');
       params.append('enabledOnly', 'false');
 
@@ -1711,28 +1712,28 @@
           return ignored.indexOf((m.rule && m.rule.id) || '') === -1;
         });
 
-        /* Batch render con items compactos ‚Äî un solo reflow */
+        /* Batch render con items compactos ó un solo reflow */
         var orthNodes = [];
         if (filtered.length === 0) {
-          orthNodes.push(makeItem('ok','‚úì','LanguageTool no detect√≥ errores de ortograf√≠a ni gram√°tica. ¬°Excelente!',''));
+          orthNodes.push(makeItem('ok','?','LanguageTool no detectÛ errores de ortografÌa ni gram·tica. °Excelente!',''));
         } else {
           filtered.forEach(function(m) {
             var word   = text.substring(m.offset, m.offset + m.length);
             var sugs   = (m.replacements||[]).slice(0,3).map(function(r){ return r.value; });
-            var sugTxt = sugs.length ? '‚Üí ' + sugs.join(' / ') : '';
+            var sugTxt = sugs.length ? '? ' + sugs.join(' / ') : '';
             var cat    = (m.rule && m.rule.issueType) || 'grammar';
             var lvl    = cat === 'misspelling' ? 'err' : 'warn';
             var detail = m.message + (sugTxt ? '  ' + sugTxt : '');
-            orthNodes.push(makeItem(lvl, lvl==='err'?'‚úó':'‚ö†', '"'+word+'"', detail, true));
+            orthNodes.push(makeItem(lvl, lvl==='err'?'?':'?', '"'+word+'"', detail, true));
           });
         }
         batchRender(orthBody, orthNodes);
         var n = filtered.length;
-        orthCount.textContent = n === 0 ? '‚úì 0' : n + ' issue' + (n !== 1 ? 's' : '') + ' ¬∑ LT';
+        orthCount.textContent = n === 0 ? '? 0' : n + ' issue' + (n !== 1 ? 's' : '') + ' ∑ LT';
         renderScore(ruleErrors, n);
       })
       .catch(function() {
-        /* Fallback a regex si la API falla (sin conexi√≥n, rate-limit, etc.) */
+        /* Fallback a regex si la API falla (sin conexiÛn, rate-limit, etc.) */
         var orthErrors = [];
         ORTH.forEach(function(rule) {
           var re = new RegExp(rule.re.source, 'gi'), found = [], m;
@@ -1744,14 +1745,14 @@
         });
         orthBody.innerHTML = '';
         var fbNodes = [];
-        fbNodes.push(makeItem('warn','‚ö†','Sin conexi√≥n a LanguageTool ‚Äî usando detector local','Los resultados son parciales. Verifica tu conexi√≥n a internet.'));
+        fbNodes.push(makeItem('warn','?','Sin conexiÛn a LanguageTool ó usando detector local','Los resultados son parciales. Verifica tu conexiÛn a internet.'));
         if (orthErrors.length === 0) {
-          fbNodes.push(makeItem('ok','‚úì','Sin errores detectados por el motor local.',''));
+          fbNodes.push(makeItem('ok','?','Sin errores detectados por el motor local.',''));
         } else {
-          orthErrors.forEach(function(e){ fbNodes.push(makeItem('warn','‚ö†', e.found+' ‚Üí '+e.sug, e.why, true)); });
+          orthErrors.forEach(function(e){ fbNodes.push(makeItem('warn','?', e.found+' ? '+e.sug, e.why, true)); });
         }
         batchRender(orthBody, fbNodes);
-        orthCount.textContent = orthErrors.length === 0 ? '‚úì 0 (local)' : orthErrors.length + ' issues (local)';
+        orthCount.textContent = orthErrors.length === 0 ? '? 0 (local)' : orthErrors.length + ' issues (local)';
         renderScore(ruleErrors, orthErrors.length);
       });
     };
@@ -1759,7 +1760,7 @@
   })();
   </script>
 
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 
 </body>
 </html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmologías — BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=5">
+  <style>
+    .bl-cosmo-stage{
+      max-width:1320px;
+      margin:0 auto;
+      padding:36px 24px 72px;
+    }
+    .bl-cosmo-hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:28px;
+      padding:34px;
+      border:1px solid rgba(99,102,241,.22);
+      background:
+        radial-gradient(circle at top right, rgba(99,102,241,.24), transparent 34%),
+        radial-gradient(circle at 20% 70%, rgba(212,175,55,.16), transparent 36%),
+        linear-gradient(135deg, rgba(14,18,28,.97), rgba(7,10,15,.97));
+      box-shadow:0 28px 70px rgba(0,0,0,.44);
+    }
+    .bl-cosmo-hero::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.26));
+    }
+    .bl-cosmo-copy{
+      position:relative;
+      z-index:1;
+      max-width:760px;
+      display:grid;
+      gap:18px;
+    }
+    .bl-cosmo-kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid rgba(99,102,241,.28);
+      background:rgba(99,102,241,.10);
+      color:#a5b4fc;
+      font-family:'Teko',sans-serif;
+      font-size:.95rem;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .bl-cosmo-title{
+      font-family:'Teko',sans-serif;
+      font-size:clamp(3.4rem, 9vw, 6.6rem);
+      line-height:.82;
+      letter-spacing:-1px;
+      color:#fff;
+    }
+    .bl-cosmo-title span{
+      color:#a5b4fc;
+    }
+    .bl-cosmo-desc{
+      font-size:1.04rem;
+      line-height:1.6;
+      color:rgba(238,244,255,.78);
+      max-width:680px;
+    }
+    .bl-cosmo-callout{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    .bl-cosmo-pill{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      color:#e5e7eb;
+      font-size:.88rem;
+    }
+    .bl-cosmo-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:16px;
+      margin-top:22px;
+    }
+    .bl-cosmo-card{
+      padding:22px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(16,20,29,.96), rgba(8,11,16,.96));
+      box-shadow:0 18px 44px rgba(0,0,0,.3);
+    }
+    .bl-cosmo-card h3{
+      font-family:'Teko',sans-serif;
+      font-size:1.9rem;
+      letter-spacing:1px;
+      color:#fff;
+      line-height:.92;
+      margin-bottom:10px;
+    }
+    .bl-cosmo-card p{
+      color:rgba(238,244,255,.72);
+      font-size:.94rem;
+      line-height:1.55;
+    }
+    .bl-cosmo-note{
+      margin-top:18px;
+      padding:18px 20px;
+      border-radius:20px;
+      border:1px solid rgba(212,175,55,.2);
+      background:rgba(212,175,55,.06);
+      color:rgba(238,244,255,.78);
+      line-height:1.65;
+    }
+  </style>
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; META VERSES LAB</span>
+        <a href="/">HOME</a>
+        <a href="/reglamento">RULES</a>
+        <a href="/clasificacion">STANDINGS</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink active" href="/cosmologias.html" style="display:inline-flex;align-items:center;gap:6px">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">META</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">SOON</span>
+      <span class="bl-event-name">Cosmologías meta Bellator</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <section class="bl-cosmo-stage">
+      <div class="bl-cosmo-hero">
+        <div class="bl-cosmo-copy">
+          <div class="bl-cosmo-kicker">Nueva pestaña · Disponible pronto</div>
+          <h1 class="bl-cosmo-title">COSMOLOGÍAS<br><span>META</span></h1>
+          <p class="bl-cosmo-desc">Esta sección va a centralizar equivalencias entre versos meta, marcos de escala, lectura de energías y compatibilidades de reglas entre universos. Todavía no está abierta al público final.</p>
+          <div class="bl-cosmo-callout">
+            <div class="bl-cosmo-pill">Versos meta en desarrollo</div>
+            <div class="bl-cosmo-pill">Matrices de equivalencia</div>
+            <div class="bl-cosmo-pill">Criterios de lectura compartidos</div>
+          </div>
+          <div class="bl-cosmo-note">Se está trabajando con los mejores analistas de ficción de Discord para construir una base más sólida, útil y consistente que no se sienta improvisada. La idea es publicar una pestaña que realmente sirva para debate, escalado y lectura competitiva.</div>
+        </div>
+      </div>
+
+      <div class="bl-cosmo-grid">
+        <article class="bl-cosmo-card">
+          <h3>Versos Meta</h3>
+          <p>Catálogo de cosmologías que aparecen con más frecuencia en cruces de Bellator, con criterios unificados de lectura y equivalencias base.</p>
+        </article>
+        <article class="bl-cosmo-card">
+          <h3>Escalado Claro</h3>
+          <p>Resumen de marcos de tamaño, energía y jerarquía cosmológica para evitar discusiones repetidas y comparaciones sin método común.</p>
+        </article>
+        <article class="bl-cosmo-card">
+          <h3>Analistas</h3>
+          <p>Trabajo curado junto a analistas de ficción y comunidades de Discord para que la sección tenga nivel real y no sea solo un cartel vacío.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <script src="/tracker.js?v=8"></script>
+  <script src="/app.js?v=19"></script>
+  <script src="/translate.js?v=4"></script>
+</body>
+</html>

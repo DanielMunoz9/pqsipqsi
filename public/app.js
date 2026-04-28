@@ -166,6 +166,22 @@
     const INTRO_STATE_KEY     = 'bellatorIntroState';
     const INTRO_ALLOWED_KEY   = 'bellatorIntroInteractionGranted';
     const INTRO_TIMES_KEY     = 'bellatorIntroTrackTimes';
+    const INTRO_PLAYLIST_VERSION_KEY = 'bellatorIntroPlaylistVersion';
+    const INTRO_PLAYLIST_VERSION = 'playlist-v4';
+    const TRACKS = ['intro', 'letsgo', 'goth'];
+    const NEXT_TRACK_MAP = { intro: 'letsgo', letsgo: 'goth', goth: 'intro' };
+    const TRACK_SOURCES = {
+        intro: '/audio/bellator-intro.mp3',
+        letsgo: '/audio/let-go.mp3',
+        goth: '/audio/goth-slowed.mp3',
+    };
+    const TRACK_LABELS = {
+        intro: 'B · INTRO',
+        letsgo: 'B · LET GO',
+        goth: 'B · GOTH',
+    };
+    const normalizeTrack = (track) => TRACK_SOURCES[track] ? track : 'intro';
+    const nextTrack = (track) => NEXT_TRACK_MAP[normalizeTrack(track)] || TRACKS[0];
 
     // Clear legacy dismissed flags so widget always reappears on reload
     localStorage.removeItem('bellatorIntroDismissed');
@@ -195,6 +211,8 @@
     function initSharedIntroWidget() {
         const widget = buildIntroWidget();
         if (!widget) return;
+        if (widget.dataset.audioWidgetBound === '1') return;
+        widget.dataset.audioWidgetBound = '1';
 
         const audio     = document.getElementById('bellator-intro-audio');
         const toggle    = document.getElementById('bellator-intro-toggle');
@@ -202,18 +220,28 @@
         const labelEl   = widget.querySelector('.bl-ap-label');
         if (!audio || !toggle || !closeBtn) return;
 
+        function ensurePlaylistStateVersion() {
+            try {
+                if (localStorage.getItem(INTRO_PLAYLIST_VERSION_KEY) === INTRO_PLAYLIST_VERSION) return;
+                localStorage.setItem(INTRO_PLAYLIST_VERSION_KEY, INTRO_PLAYLIST_VERSION);
+                localStorage.setItem(INTRO_TIMES_KEY, JSON.stringify({ intro: 0, letsgo: 0, goth: 0 }));
+                localStorage.setItem(INTRO_STATE_KEY, JSON.stringify({ track: 'intro', time: 0, playing: false, updatedAt: Date.now() }));
+            } catch (_) {}
+        }
+
         function readState() {
             try {
                 const parsed = JSON.parse(localStorage.getItem(INTRO_STATE_KEY) || '{}');
                 const trackTimes = readTrackTimes();
-                const parsedTrack = parsed.track === 'goth' ? 'goth' : 'intro';
+                const parsedTrack = normalizeTrack(parsed.track);
                 const fallbackTime = Number(trackTimes[parsedTrack]) || 0;
+                const parsedTime = Number.isFinite(parsed.time)
+                    ? Number(parsed.time)
+                    : parseFloat(parsed.time || '');
+                const safeParsedTime = Number.isFinite(parsedTime) ? Math.max(0, parsedTime) : null;
                 return {
                     track: parsedTrack,
-                    time: Math.max(
-                        Number.isFinite(parsed.time) ? parsed.time : parseFloat(parsed.time || '0') || 0,
-                        fallbackTime,
-                    ),
+                    time: safeParsedTime === null ? fallbackTime : safeParsedTime,
                     playing: Boolean(parsed.playing),
                     volume: Number.isFinite(parsed.volume) ? parsed.volume : parseFloat(parsed.volume || localStorage.getItem(INTRO_VOLUME_KEY) || '0.18') || 0.18,
                 };
@@ -233,17 +261,26 @@
                 const parsed = JSON.parse(localStorage.getItem(INTRO_TIMES_KEY) || '{}');
                 return {
                     intro: Math.max(0, Number(parsed.intro) || 0),
+                    letsgo: Math.max(0, Number(parsed.letsgo) || 0),
                     goth: Math.max(0, Number(parsed.goth) || 0),
                 };
             } catch (_) {
-                return { intro: 0, goth: 0 };
+                return { intro: 0, letsgo: 0, goth: 0 };
             }
         }
 
         function writeTrackTime(track, time) {
             if (time <= 0) return;
             const next = readTrackTimes();
-            next[track === 'goth' ? 'goth' : 'intro'] = Math.max(Number(next[track]) || 0, Number(time) || 0);
+            const key = normalizeTrack(track);
+            next[key] = Math.max(0, Number(time) || 0);
+            localStorage.setItem(INTRO_TIMES_KEY, JSON.stringify(next));
+        }
+
+        function clearTrackTime(track) {
+            const next = readTrackTimes();
+            const key = normalizeTrack(track);
+            next[key] = 0;
             localStorage.setItem(INTRO_TIMES_KEY, JSON.stringify(next));
         }
 
@@ -261,8 +298,10 @@
             return merged;
         }
 
+        ensurePlaylistStateVersion();
+
         const initialState = readState();
-        const shouldAttemptInitialAutoplay = !sessionStorage.getItem('bellatorInitialAutoplayAttempted');
+        let shouldAttemptInitialAutoplay = !sessionStorage.getItem('bellatorInitialAutoplayAttempted');
         if (shouldAttemptInitialAutoplay) {
             sessionStorage.setItem('bellatorInitialAutoplayAttempted', 'true');
         }
@@ -280,25 +319,28 @@
         const claimTab  = () => localStorage.setItem(ACTIVE_TAB_KEY, TAB_ID);
         const releaseTab = () => { if (localStorage.getItem(ACTIVE_TAB_KEY) === TAB_ID) localStorage.removeItem(ACTIVE_TAB_KEY); };
 
-        let currentTrack = initialState.track; // 'intro' | 'goth'
+        let currentTrack = normalizeTrack(initialState.track);
         let pendingAutoplay = false;
         let lastKnownTime = Math.max(0, initialState.time || 0);
 
         const setIcon = (playing) => { toggle.innerHTML = playing ? ICON_PAUSE : ICON_PLAY; };
-        const setLabel = () => { if (labelEl) labelEl.textContent = currentTrack === 'goth' ? 'B · GOTH' : 'B · INTRO'; };
-        const sourceForTrack = (track) => track === 'goth' ? '/audio/goth-slowed.mp3' : '/audio/bellator-intro.mp3';
+        const setLabel = () => { if (labelEl) labelEl.textContent = TRACK_LABELS[currentTrack] || TRACK_LABELS.intro; };
+        const sourceForTrack = (track) => TRACK_SOURCES[normalizeTrack(track)] || TRACK_SOURCES.intro;
 
         function loadTrack(track) {
-            currentTrack = track === 'goth' ? 'goth' : 'intro';
+            currentTrack = normalizeTrack(track);
             setLabel();
             const nextSrc = sourceForTrack(currentTrack);
-            if (!audio.src || !audio.src.endsWith(nextSrc)) {
+            if (!audio.src || !audio.src.includes(nextSrc)) {
                 audio.src = nextSrc;
                 audio.load();
             }
         }
 
         function getResumeTime() {
+            if (_forceStartTrack && _forceStartTrack === currentTrack) {
+                return 0;
+            }
             const state = readState();
             const stateTime = state.track === currentTrack ? Number(state.time) || 0 : 0;
             const trackTimes = readTrackTimes();
@@ -336,24 +378,51 @@
             });
         }
 
+        let _playInFlight = null;
+        async function playSafelyOnce() {
+            if (!audio.paused && !audio.ended) return;
+            if (_playInFlight) {
+                await _playInFlight;
+                return;
+            }
+            _playInFlight = audio.play();
+            try {
+                await _playInFlight;
+            } finally {
+                _playInFlight = null;
+            }
+        }
+
         async function resumePlayback() {
             localStorage.setItem(INTRO_ALLOWED_KEY, 'true');
             await ensureMediaReady();
             restoreTimeBeforePlay();
             _wantsPlay = false;
             claimTab();
-            await audio.play();
+            await playSafelyOnce();
+            _isSwitchingTrack = false;
+            _forceStartTrack = '';
             _pendingSavedTime = 0;
             setIcon(true);
             persistState();
         }
 
         async function attemptAutoplay() {
+            if (isAnotherTabActive()) {
+                setIcon(false);
+                return;
+            }
+            if (document.hidden) {
+                setIcon(false);
+                return;
+            }
             try {
                 await ensureMediaReady();
                 restoreTimeBeforePlay();
                 claimTab();
-                await audio.play();
+                await playSafelyOnce();
+                _isSwitchingTrack = false;
+                _forceStartTrack = '';
                 _wantsPlay = false;
                 _pendingSavedTime = 0;
                 setIcon(true);
@@ -364,7 +433,11 @@
             }
         }
 
-        const persistState = () => {
+        let _lastPersistAt = 0;
+        const persistState = (force) => {
+            const now = Date.now();
+            if (!force && now - _lastPersistAt < 900) return;
+            _lastPersistAt = now;
             const currentTime = Number(audio.currentTime) || 0;
             if (currentTime > 0) {
                 lastKnownTime = currentTime;
@@ -379,22 +452,23 @@
             });
         };
 
-        function playGoth() {
+        function playTrack(track) {
             pendingAutoplay = true;
+            _isSwitchingTrack = true;
             lastKnownTime = 0;
-            writeState({track: 'goth', time: 0, playing: true, volume: audio.volume});
-            loadTrack('goth');
-        }
-
-        function playIntro() {
-            pendingAutoplay = true;
-            lastKnownTime = 0;
-            writeState({track: 'intro', time: 0, playing: true, volume: audio.volume});
-            loadTrack('intro');
+            _pendingSavedTime = 0;
+            const next = normalizeTrack(track);
+            _forceStartTrack = next;
+            clearTrackTime(next);
+            writeState({track: next, time: 0, playing: true, volume: audio.volume});
+            loadTrack(next);
         }
 
         let _wantsPlay = false;
         let _pendingSavedTime = 0;
+        let _resumeAfterVisibility = false;
+        let _forceStartTrack = '';
+        let _isSwitchingTrack = false;
 
         // Primera interacción del usuario → reanuda desde la posición correcta
         // IMPORTANTE: ignorar clics sobre el toggle (ese handler lo gestiona él mismo)
@@ -417,9 +491,10 @@
             }
             // Restaurar posición ANTES de intentar play
             restoreTimeBeforePlay();
-            const shouldResume = shouldAttemptInitialAutoplay || pendingAutoplay || state.playing || localStorage.getItem(INTRO_ALLOWED_KEY) === 'true';
+            const shouldResume = shouldAttemptInitialAutoplay || pendingAutoplay || state.playing;
+            shouldAttemptInitialAutoplay = false;
             pendingAutoplay = false;
-            if (shouldResume && !isAnotherTabActive()) {
+            if (shouldResume && !document.hidden && !isAnotherTabActive()) {
                 attemptAutoplay();
             } else {
                 setIcon(false);
@@ -432,37 +507,58 @@
                     await resumePlayback();
                 } else {
                     audio.pause();
+                    _isSwitchingTrack = false;
+                    _resumeAfterVisibility = false;
                     setIcon(false);
-                    persistState();
+                    persistState(true);
                 }
             } catch (_) { setIcon(false); }
         });
 
         closeBtn.addEventListener('click', () => {
             audio.pause();
-            persistState();
+            _isSwitchingTrack = false;
+            _resumeAfterVisibility = false;
+            persistState(true);
             widget.style.display = 'none';
         });
 
-        audio.addEventListener('play',  () => { claimTab(); setIcon(true);  persistState(); });
-        audio.addEventListener('pause', () => { releaseTab(); setIcon(false); persistState(); });
+        audio.addEventListener('play',  () => {
+            _isSwitchingTrack = false;
+            _forceStartTrack = '';
+            claimTab();
+            setIcon(true);
+            persistState(true);
+        });
+        audio.addEventListener('pause', () => {
+            if (_isSwitchingTrack) {
+                setIcon(false);
+                return;
+            }
+            releaseTab();
+            setIcon(false);
+            persistState(true);
+        });
         audio.addEventListener('timeupdate', () => {
             const currentTime = Number(audio.currentTime) || 0;
             if (currentTime > 0) {
                 lastKnownTime = currentTime;
-                writeTrackTime(currentTrack, currentTime);
             }
             persistState();
         });
         audio.addEventListener('ended', () => {
-            if (currentTrack === 'intro') {
-                playGoth();
-            } else {
-                playIntro();
-            }
+            playTrack(nextTrack(currentTrack));
         });
 
         window.addEventListener('storage', (event) => {
+            if (event.key === ACTIVE_TAB_KEY) {
+                const activeTab = event.newValue || '';
+                if (activeTab && activeTab !== TAB_ID && !audio.paused) {
+                    _resumeAfterVisibility = false;
+                    audio.pause();
+                }
+                return;
+            }
             if (event.key !== INTRO_STATE_KEY) return;
             const next = readState();
             if (next.track !== currentTrack && audio.paused) loadTrack(next.track);
@@ -474,17 +570,30 @@
         if (!initialState.playing) setIcon(false);
 
         window.addEventListener('pageshow', () => {
-            if (audio.paused && !isAnotherTabActive()) {
+            const next = readState();
+            if (audio.paused && !document.hidden && !isAnotherTabActive() && (next.playing || _resumeAfterVisibility)) {
+                _resumeAfterVisibility = false;
                 attemptAutoplay();
             }
         });
 
-        // Guardar posición cada 500ms como respaldo (por si beforeunload no dispara)
-        setInterval(() => { if (!audio.paused) persistState(); }, 500);
-        // Guardar cuando la pestaña se oculta (navegación SPA, cambio de tab)
-        document.addEventListener('visibilitychange', () => { if (document.hidden) persistState(); });
-        window.addEventListener('pagehide', persistState);
-        window.addEventListener('beforeunload', () => { persistState(); releaseTab(); });
+        // Guardar posición periódicamente sin saturar el hilo principal
+        setInterval(() => { if (!audio.paused) persistState(); }, 2000);
+        // Pausar al ocultar pestaña y reanudar al volver para mantener coherencia
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                _resumeAfterVisibility = !audio.paused && !audio.ended;
+                persistState(true);
+                if (_resumeAfterVisibility) audio.pause();
+                return;
+            }
+            if (_resumeAfterVisibility && audio.paused && !isAnotherTabActive()) {
+                _resumeAfterVisibility = false;
+                attemptAutoplay();
+            }
+        });
+        window.addEventListener('pagehide', () => { persistState(true); });
+        window.addEventListener('beforeunload', () => { persistState(true); releaseTab(); });
     }
 
     initSharedIntroWidget();

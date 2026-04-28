@@ -4,8 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  <style>
+    .bl-reg-layout-lead{
+      align-items:start;
+      padding-top:26px;
+    }
+    .bl-reg-stage-card{
+      display:grid;
+      grid-template-columns:minmax(0,.9fr) minmax(280px,1.1fr);
+      gap:16px;
+      padding:18px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg,rgba(18,24,34,.96),rgba(8,12,18,.96));
+      box-shadow:var(--bl-card-shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .bl-reg-stage-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at top left, rgba(212,175,55,.12), transparent 28%), radial-gradient(circle at bottom right, rgba(31,111,235,.16), transparent 34%);
+      pointer-events:none;
+    }
+    .bl-reg-stage-copy,
+    .bl-reg-stage-media{
+      position:relative;
+      z-index:1;
+    }
+    .bl-reg-stage-copy{
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:16px;
+      padding:8px 4px;
+    }
+    .bl-reg-stage-copy h3{
+      font-family:'Teko',sans-serif;
+      font-size:2.5rem;
+      line-height:.88;
+      letter-spacing:1px;
+      color:#fff;
+      margin:0;
+    }
+    .bl-reg-stage-copy p{
+      color:var(--bl-soft);
+      font-size:.98rem;
+      line-height:1.6;
+      margin:0;
+    }
+    .bl-reg-stage-media{
+      min-height:360px;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:#05070b;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    .bl-reg-stage-video{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      filter:saturate(.9) contrast(1.08) brightness(.66);
+    }
+    .bl-reg-stage-media::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.56)),
+        linear-gradient(135deg, rgba(212,175,55,.18), transparent 35%, transparent 65%, rgba(31,111,235,.18));
+      pointer-events:none;
+    }
+    .bl-reg-stage-overlay{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      display:grid;
+      gap:6px;
+      pointer-events:none;
+    }
+    .bl-reg-stage-overlay strong{
+      font-family:'Teko',sans-serif;
+      font-size:2rem;
+      line-height:.88;
+      letter-spacing:1px;
+      color:#fff;
+      text-shadow:0 8px 24px rgba(0,0,0,.44);
+    }
+    .bl-reg-stage-overlay span{
+      font-size:.84rem;
+      color:rgba(255,255,255,.78);
+      letter-spacing:1.1px;
+      text-transform:uppercase;
+    }
+    .bl-reg-stage-tag{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(212,175,55,.24);
+      background:rgba(212,175,55,.12);
+      color:var(--bl-gold);
+      font-family:'Teko',sans-serif;
+      font-size:.82rem;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+    }
+    .bl-reg-stage-status{
+      display:grid;
+      gap:10px;
+    }
+    .bl-reg-form-wrap .bl-form-card{
+      padding:24px;
+    }
+    @media(max-width:1100px){
+      .bl-reg-stage-card{
+        grid-template-columns:1fr;
+      }
+      .bl-reg-stage-media{
+        min-height:260px;
+      }
+    }
+  </style>
 </head>
 <body>
   <canvas class="space" id="space" aria-hidden="true"></canvas>
@@ -33,7 +160,7 @@
         <a href="/reglamento">RULES</a>
       </div>
       <div class="bl-topbar-right">
-        <a href="/registro" class="bl-topbar-subscribe">JOIN NOW</a>
+        <span style="font-size:.82rem;color:rgba(238,244,255,.46);letter-spacing:1.1px">INTAKE DESK</span>
       </div>
     </div>
 
@@ -57,9 +184,10 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
         <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">CENTER</span>
       </div>
     </nav>
@@ -70,84 +198,11 @@
       <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
     </div>
 
-    <section class="bl-home-hero">
-      <div class="bl-hero-grid">
-        <div class="bl-hero-copy">
-          <div class="bl-hero-copy-inner">
-            <div class="bl-hero-eyebrow">ENTRY FORM · VERIFIED PROFILE</div>
-            <h1 class="bl-hero-title">JOIN THE<br><span class="bl-gold">GRID</span></h1>
-            <p class="bl-hero-desc">El formulario ya no queda aislado: ahora está acompañado por métricas, notas de proceso y accesos de temporada para que el registro tenga contexto real.</p>
-            <div class="bl-hero-chips">
-              <div class="bl-hero-chip"><strong id="chip-total">–</strong> Inscritos</div>
-              <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
-              <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
-            </div>
-            <div class="bl-live-ribbon">
-              <div>
-                <div class="bl-kicker">Regla básica</div>
-                <strong>Solo se muestran datos realmente registrados</strong>
-              </div>
-              <span class="bl-badge-status activo">TRANSPARENCIA</span>
-            </div>
-          </div>
-        </div>
-        <div class="bl-hero-aside">
-          <div class="bl-aside-card">
-            <div class="bl-kicker">Qué registrar</div>
-            <div class="bl-aside-list">
-              <div><span>Pseudónimo</span><span>Obligatorio</span></div>
-              <div><span>Fecha de inicio</span><span>Obligatorio</span></div>
-              <div><span>División</span><span>Obligatorio</span></div>
-              <div><span>Avatar público</span><span>Opcional</span></div>
-            </div>
-          </div>
-          <div class="bl-aside-card">
-            <div class="bl-kicker">Destino</div>
-            <p>Al terminar, tu perfil aparece en Competidores, Clasificación y en la ficha individual del corredor.</p>
-            <div class="bl-cta-row" style="margin-top:16px">
-              <a href="/competidores" class="bl-btn-secondary">Ver parrilla</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="bl-reg-layout">
-      <div class="bl-reg-support">
-        <div class="bl-note-card">
-          <div class="bl-kicker">Temporada en cifras</div>
-          <h3>Panorama actual</h3>
-          <div class="bl-stat-strip" style="margin-top:16px">
-            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-total">0</div><div class="bl-metric-label">Total inscritos</div></div>
-            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-universal">0</div><div class="bl-metric-label">Universal</div></div>
-            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-ciudad">0</div><div class="bl-metric-label">Ciudad</div></div>
-          </div>
-        </div>
-
-        <div class="bl-note-card">
-          <div class="bl-kicker">Proceso</div>
-          <h3>Checklist de ingreso</h3>
-          <ul class="bl-note-list">
-            <li>Usa un pseudónimo único y fácil de identificar.</li>
-            <li>Define bien tu división antes de enviar el registro.</li>
-            <li>Si agregas avatar, usa una URL pública estable.</li>
-            <li>Revisa Reglamento antes de entrar a la temporada.</li>
-          </ul>
-        </div>
-
-        <div class="bl-note-card">
-          <div class="bl-kicker">Accesos rápidos</div>
-          <div class="bl-aside-list">
-            <a href="/clasificacion"><span>Consultar standings</span><span>→</span></a>
-            <a href="/competidores"><span>Ver competidores</span><span>→</span></a>
-            <a href="/reglamento"><span>Revisar reglamento</span><span>→</span></a>
-          </div>
-        </div>
-      </div>
-
+    <div class="bl-reg-layout bl-reg-layout-lead">
       <div class="bl-reg-form-wrap">
         <div class="bl-form-card">
           <div class="bl-form-title">Registro de competidor</div>
+          <div id="bl-reg-mode-note" style="margin:10px 0 14px;padding:10px 14px;border-radius:10px;background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.20);font-size:.82rem;color:rgba(238,244,255,.75);line-height:1.55"></div>
           <div class="bl-form-sub">Busca primero si tu perfil ya existe. Si no aparece, completa el alta desde aquí.</div>
 
           <div class="bl-gsearch-wrap" style="margin-bottom:16px">
@@ -229,6 +284,71 @@
           <p>La futura ficha del corredor mostrará los datos que realmente existan. Lo que no hayas registrado se verá como “Sin registrar”, no como relleno ficticio.</p>
         </div>
       </div>
+
+      <div class="bl-reg-support">
+        <div class="bl-reg-stage-card">
+          <div class="bl-reg-stage-copy">
+            <div class="bl-reg-stage-status">
+              <span class="bl-reg-stage-tag">Entry form · fight feed</span>
+              <h3>El formulario va primero.</h3>
+              <p>Reordenamos la entrada para que el alta sea la prioridad real. A la derecha queda un panel visual nuevo con loop de combate stock y el contexto mínimo que necesitás antes de enviar tu plaza.</p>
+              <div class="bl-hero-chips">
+                <div class="bl-hero-chip"><strong id="chip-total">–</strong> Inscritos</div>
+                <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
+                <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
+              </div>
+            </div>
+            <div class="bl-live-ribbon">
+              <div>
+                <div class="bl-kicker">Regla básica</div>
+                <strong>Primero registro. Después examen o parrilla.</strong>
+              </div>
+              <span class="bl-badge-status activo">EN VIVO</span>
+            </div>
+          </div>
+
+          <div class="bl-reg-stage-media">
+            <video class="bl-reg-stage-video" autoplay muted loop playsinline preload="metadata">
+              <source src="/register-fight-loop.mp4" type="video/mp4">
+            </video>
+            <div class="bl-reg-stage-overlay">
+              <span>Loop de combate stock · Bellator intake</span>
+              <strong>New entry desk</strong>
+              <span>Visual nuevo para la apertura de temporada</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Temporada en cifras</div>
+          <h3>Panorama actual</h3>
+          <div class="bl-stat-strip" style="margin-top:16px">
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-total">0</div><div class="bl-metric-label">Total inscritos</div></div>
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-universal">0</div><div class="bl-metric-label">Universal</div></div>
+            <div class="bl-metric-card"><div class="bl-metric-value" id="metric-ciudad">0</div><div class="bl-metric-label">Ciudad</div></div>
+          </div>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Proceso</div>
+          <h3>Checklist de ingreso</h3>
+          <ul class="bl-note-list">
+            <li>Usa un pseudónimo único y fácil de identificar.</li>
+            <li>Define bien tu división antes de enviar el registro.</li>
+            <li>Si agregas avatar, usa una URL pública estable.</li>
+            <li>Revisa Reglamento antes de entrar a la temporada.</li>
+          </ul>
+        </div>
+
+        <div class="bl-note-card">
+          <div class="bl-kicker">Accesos rápidos</div>
+          <div class="bl-aside-list">
+            <a href="/clasificacion"><span>Consultar standings</span><span>→</span></a>
+            <a href="/competidores"><span>Ver competidores</span><span>→</span></a>
+            <a href="/reglamento"><span>Revisar reglamento</span><span>→</span></a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div style="position:absolute;left:-10000px;top:-10000px;opacity:0;pointer-events:none;" aria-hidden="true">
@@ -246,7 +366,7 @@
   </div>
 
   <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/app.js?v=19"></script>
   <script>
     let searchCache = [];
 
@@ -325,7 +445,7 @@
           const av = p.avatar_url && p.avatar_url !== '<nil>'
             ? `<img class="bl-gsr-av" src="${p.avatar_url}" alt="" onerror="this.style.display='none'">`
             : `<div class="bl-gsr-ph">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
-          return `<div class="bl-gsr-item" data-name="${p.pseudonimo}" data-avatar="${p.avatar_url || ''}">${av}<div><div class="bl-gsr-name">${p.pseudonimo}</div><div class="bl-gsr-div">${p.division || 'Sin división'}</div></div></div>`;
+          return `<div class="bl-gsr-item" data-name="${p.pseudonimo}" data-avatar="${p.avatar_url || ''}" data-division="${p.division || ''}">${av}<div><div class="bl-gsr-name">${p.pseudonimo}</div><div class="bl-gsr-div">${p.division || 'Sin división'}</div></div></div>`;
         }).join('');
       });
 
@@ -338,6 +458,14 @@
           if (avatarInput) {
             avatarInput.value = row.dataset.avatar;
             previewAvatar(row.dataset.avatar);
+          }
+        }
+        if (row.dataset.division) {
+          const d = row.dataset.division.toLowerCase();
+          const divSel = document.getElementById('b-division');
+          if (divSel) {
+            if (d.includes('universal')) divSel.value = 'Universal';
+            else if (d.includes('ciudad')) divSel.value = 'Ciudad';
           }
         }
         resultsEl.style.display = 'none';
@@ -416,6 +544,154 @@
       });
     })();
   </script>
-<script src="/translate.js"></script>
+
+  <script>
+  function launchConfetti(){var cv=document.createElement('canvas'),cx;cv.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999';document.body.appendChild(cv);cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var cols=['#D4AF37','#FFD700','#f59e0b','#3fb950','#3671C6','#a78bfa','#fff','#E10600'],ps=Array.from({length:200},function(_,i){return{x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*14+4,h:Math.random()*7+3,c:cols[i%cols.length],rot:Math.random()*6.28,rs:(Math.random()-.5)*.14,vy:Math.random()*3+2.5,vx:(Math.random()-.5)*1.8,a:1,ci:Math.random()<.3};}),t=0,tot=280;(function draw(){cx.clearRect(0,0,cv.width,cv.height);t++;ps.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(t*.025+p.x*.008)*.6;p.rot+=p.rs;if(t>tot*.55)p.a=Math.max(0,p.a-.02);if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.ci?(cx.beginPath(),cx.arc(0,0,p.w/2,0,Math.PI*2),cx.fill()):(cx.fillRect(-p.w/2,-p.h/2,p.w,p.h));cx.restore();});t<tot?requestAnimationFrame(draw):cv.remove();}());}
+  /* ── Registro directo como aspirante — examen solo cuando abra el torneo ── */
+  (function() {
+    const btn = document.getElementById('btn-sync');
+    if (!btn) return;
+
+    const noteEl = document.getElementById('bl-reg-mode-note');
+    const TOURNAMENT_OPEN = new Date('2026-04-29T02:00:00Z'); // 28 abr 9pm Colombia
+
+    if (noteEl) {
+      if (new Date() < TOURNAMENT_OPEN) {
+        noteEl.innerHTML = '🛡 <strong>Registro de aspirante:</strong> Tu perfil quedará en la base de datos como <em>Aspirante a División</em> según tu selección. El examen de admisión y las inscripciones al campeonato abren el <strong>28 de abril · 9 p.m. (Colombia)</strong>.';
+      } else {
+        noteEl.innerHTML = '⚔ <strong>Inscripción al campeonato:</strong> Los cupos son limitados (16 por división). Si ya sos <em>Aspirante</em>, buscá tu pseudónimo abajo y hace clic en el botón — te llevará directo al examen para confirmar tu lugar. Si sos nuevo, completá el formulario.';
+      }
+    }
+
+    btn.addEventListener('click', async function(e) {
+      e.stopImmediatePropagation();
+
+      const psd  = (document.getElementById('b-pseudonimo')?.value || '').trim();
+      const div  = (document.getElementById('b-division')?.value || '').trim();
+      const fini = (document.getElementById('b-fecha-inicio')?.value || '').trim();
+      const ctry = (document.getElementById('b-country-code')?.value || '').trim();
+
+      if (!psd) { showSyncStatus('⚠ Ingresá tu pseudónimo.', true); return; }
+      if (!div) { showSyncStatus('⚠ Seleccioná tu división.', true); return; }
+
+      const torneoAbierto = new Date() >= TOURNAMENT_OPEN;
+
+      // Detectar si el pseudónimo ya existe (aspirante pre-registrado)
+      const cache = await fetchCompetidores();
+      const existente = cache.find(p => slugify(p.pseudonimo) === slugify(psd));
+
+      // ── TORNEO ABIERTO: guardar en sessionStorage e ir al examen ─────────
+      if (torneoAbierto) {
+        if (existente) {
+          // Aspirante pre-registrado: detectar su división limpia
+          const existDiv = (() => {
+            const d = String(existente.division || '').toLowerCase();
+            if (d.includes('universal')) return 'Universal';
+            if (d.includes('ciudad')) return 'Ciudad';
+            return div;
+          })();
+          const upgradeBody = {
+            pseudonimo:       existente.pseudonimo,
+            division:         existDiv,
+            fecha_inicio_rol: existente.fecha_inicio_rol || fini || '',
+            country_code:     ctry,
+            avatar_url:       (existente.avatar_url && existente.avatar_url !== '<nil>') ? existente.avatar_url : '',
+            primary_color:    existente.primary_color || '#D4AF37',
+            bio:              existente.bio || '',
+            player_key:       (document.getElementById('b-player-key')?.value || '').trim(),
+            is_upgrade:       true,
+          };
+          sessionStorage.setItem('bellator_pending_reg', JSON.stringify(upgradeBody));
+          showSyncStatus('✓ Perfil encontrado. Redirigiendo al examen…', false);
+          btn.disabled = true;
+          setTimeout(() => {
+            window.location.href = existDiv === 'Ciudad' ? '/examen' : '/examen-universal';
+          }, 900);
+          return;
+        }
+
+        // Nuevo usuario: validar fecha antes de ir al examen
+        if (!fini) { showSyncStatus('⚠ Ingresá tu fecha de inicio en rol.', true); return; }
+        const pendingBody = {
+          pseudonimo:       psd,
+          division:         div,
+          fecha_inicio_rol: fini,
+          country_code:     ctry,
+          avatar_url:       (document.getElementById('b-avatar-url')?.value || '').trim(),
+          primary_color:    (document.getElementById('b-primary-color')?.value || '#D4AF37').trim(),
+          bio:              (document.getElementById('b-bio')?.value || '').trim(),
+          player_key:       (document.getElementById('b-player-key')?.value || '').trim(),
+          is_upgrade:       false,
+        };
+        sessionStorage.setItem('bellator_pending_reg', JSON.stringify(pendingBody));
+        showSyncStatus('✓ Datos guardados. Redirigiendo al examen…', false);
+        btn.disabled = true;
+        setTimeout(() => {
+          window.location.href = div === 'Ciudad' ? '/examen' : '/examen-universal';
+        }, 900);
+        return;
+      }
+
+      // ── PRE-TORNEO: inscripción directa como aspirante ───────────────────
+      if (!fini) { showSyncStatus('⚠ Ingresá tu fecha de inicio en rol.', true); return; }
+
+      if (existente) {
+        showSyncStatus('⚠ Ese pseudónimo ya está registrado. Si sos el dueño, esperá la apertura del torneo para ir al examen desde aquí.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      showSyncStatus('Registrando perfil...', false);
+
+      const body = {
+        pseudonimo:       psd,
+        division:         div,
+        fecha_inicio_rol: fini,
+        country_code:     ctry,
+        avatar_url:       (document.getElementById('b-avatar-url')?.value || '').trim(),
+        primary_color:    (document.getElementById('b-primary-color')?.value || '#D4AF37').trim(),
+        bio:              (document.getElementById('b-bio')?.value || '').trim(),
+        player_key:       (document.getElementById('b-player-key')?.value || '').trim(),
+        exam_score:  0,
+        exam_passed: true,
+        is_upgrade:  false,
+      };
+
+      try {
+        const res  = await fetch('/api/inscribir', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const data = await res.json();
+
+        if (res.status === 409) {
+          if (data.error === 'pseudonimo_taken') {
+            showSyncStatus('⚠ Ese pseudónimo ya está registrado. Probá con otro.', true);
+          } else if (data.error === 'division_full') {
+            showSyncStatus('⛔ División ' + div + ' llena. No quedan cupos.', true);
+          } else {
+            showSyncStatus('⚠ ' + (data.error || 'Error desconocido.'), true);
+          }
+          btn.disabled = false;
+          return;
+        }
+        if (!res.ok) {
+          showSyncStatus('⚠ Error del servidor. Intentá de nuevo.', true);
+          btn.disabled = false;
+          return;
+        }
+
+        showSyncStatus('✓ Perfil registrado como ' + (data.status || 'Aspirante') + '. ¡Ya aparecés en la parrilla!', false);
+        launchConfetti();
+        btn.textContent = '✓ REGISTRADO';
+        btn.style.background = 'rgba(34,197,94,.15)';
+        btn.style.borderColor = '#22c55e';
+        btn.style.color = '#22c55e';
+      } catch (_) {
+        showSyncStatus('⚠ Error de conexión. Intentá de nuevo.', true);
+        btn.disabled = false;
+      }
+    }, true);
+  })();
+  </script>
+
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

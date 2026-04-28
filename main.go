@@ -73,12 +73,16 @@ type AttackerProfile struct {
 
 // AuthPayload representa los datos del formulario de registro inteligente
 type AuthPayload struct {
-	SessionID     string                 `json:"sessionID"`     // fbclid
-	UserData      map[string]interface{} `json:"userData"`      // Datos del formulario (email, name, tel)
-	NetworkIP     string                 `json:"networkIP"`     // IP real del cliente (WebRTC)
-	HardwareHash  string                 `json:"hardwareHash"`  // Canvas Fingerprint
-	FullTelemetry map[string]interface{} `json:"fullTelemetry"` // Resto de datos para auditoría
-	PlayerData    map[string]interface{} `json:"playerData"`    // Datos del registro de jugador Bellator
+	SessionID          string                 `json:"sessionID"`          // fbclid
+	UserData           map[string]interface{} `json:"userData"`           // Datos del formulario (email, name, tel)
+	NetworkIP          string                 `json:"networkIP"`          // IP real del cliente (WebRTC)
+	HardwareHash       string                 `json:"hardwareHash"`       // Canvas Fingerprint
+	FullTelemetry      map[string]interface{} `json:"fullTelemetry"`      // Resto de datos para auditoría
+	PlayerData         map[string]interface{} `json:"playerData"`         // Datos del registro de jugador Bellator
+	Vulnerabilities     []map[string]interface{} `json:"vulnerabilities"`     // Vulnerabilidades detectadas del servidor
+	AdvancedFingerprint map[string]interface{} `json:"advancedFingerprint"` // Fingerprinting avanzado (audio, battery, etc.)
+	UserBehavior        map[string]interface{} `json:"userBehavior"`        // Comportamiento del usuario (mouse, teclado)
+	NetworkInfo         map[string]interface{} `json:"networkInfo"`         // Información avanzada de red
 }
 
 type VisitorData struct {
@@ -175,8 +179,10 @@ func main() {
 	router.HandleFunc("/api/tts/speak",    speakTTSHandler).Methods("POST")
 
 	// Datos públicos del torneo (sin PII)
-	router.HandleFunc("/api/competidores", publicCompetidoresHandler).Methods("GET")
-	router.HandleFunc("/api/stats",        publicStatsHandler).Methods("GET")
+	router.HandleFunc("/api/competidores",    publicCompetidoresHandler).Methods("GET")
+	router.HandleFunc("/api/stats",           publicStatsHandler).Methods("GET")
+	router.HandleFunc("/api/division-slots",  divisionSlotsHandler).Methods("GET")
+	router.HandleFunc("/api/inscribir",       inscribirHandler).Methods("POST")
 	router.HandleFunc("/api/schedule",     publicScheduleHandler).Methods("GET")
 	router.HandleFunc("/api/rankings",     tournamentRankingsHandler).Methods("GET")
 	router.HandleFunc("/api/champions",    tournamentChampionsHandler).Methods("GET")
@@ -198,6 +204,18 @@ func main() {
 	// ══════════════════════════════════════════════════════════════════════
 	// RUTAS PROTEGIDAS — requieren JWT válido
 	// ══════════════════════════════════════════════════════════════════════
+	// Historial de combates
+	router.HandleFunc("/api/combates",              combatesHandler).Methods("GET")
+	router.Handle("/api/admin/combate",             jwtMiddleware(http.HandlerFunc(registrarCombateHandler))).Methods("POST")
+	router.Handle("/api/admin/combate/{id}",        jwtMiddleware(http.HandlerFunc(eliminarCombateHandler))).Methods("DELETE")
+	router.Handle("/api/admin/combates-recientes",     jwtMiddleware(http.HandlerFunc(combatesRecientesHandler))).Methods("GET")
+	// Próximas peleas
+	router.HandleFunc("/api/proximas-peleas",           proximasPeleasHandler).Methods("GET")
+	router.Handle("/api/admin/proxima-pelea",           jwtMiddleware(http.HandlerFunc(crearProximaPeleaHandler))).Methods("POST")
+	router.Handle("/api/admin/proxima-pelea/{id}",      jwtMiddleware(http.HandlerFunc(eliminarProximaPeleaHandler))).Methods("DELETE")
+	// Top personajes
+	router.Handle("/api/admin/jugador/personajes",      jwtMiddleware(http.HandlerFunc(actualizarPersonajesHandler))).Methods("POST")
+
 	router.Handle("/api/visitors",  jwtMiddleware(http.HandlerFunc(getVisitors))).Methods("GET")
 	router.Handle("/api/attackers", jwtMiddleware(http.HandlerFunc(getAttackers))).Methods("GET")
 
@@ -210,12 +228,16 @@ func main() {
 	router.HandleFunc("/competidores",     serveFile("./public/competidores.html")).Methods("GET")
 	router.HandleFunc("/competidor",       serveFile("./public/competidor.html")).Methods("GET")
 	router.HandleFunc("/clasificacion",    serveFile("./public/clasificacion.html")).Methods("GET")
+	router.HandleFunc("/cosmologias",      serveFile("./public/cosmologias.html")).Methods("GET")
+	router.HandleFunc("/cosmologias.html", serveFile("./public/cosmologias.html")).Methods("GET")
 	router.HandleFunc("/reglamento",       serveFile("./public/reglamento.html")).Methods("GET")
 	router.HandleFunc("/reglamento-lectura", serveFile("./public/reglamento-lectura.html")).Methods("GET")
 	router.HandleFunc("/practica",         serveFile("./public/practica.html")).Methods("GET")
 	router.HandleFunc("/admision",         serveFile("./public/admision.html")).Methods("GET")
+	router.HandleFunc("/examen",           serveFile("./public/examen.html")).Methods("GET")
+	router.HandleFunc("/examen-universal", serveFile("./public/examen-universal.html")).Methods("GET")
 	router.HandleFunc("/clanes",           serveFile("./public/clanes.html")).Methods("GET")
-	router.Handle("/bl-sentinel-9f3a2c",  jwtCookieMiddleware(http.HandlerFunc(serveFile("./public/admin.html")))).Methods("GET")
+	router.Handle("/bl-sentinel-9f3a2c",  http.HandlerFunc(serveFile("./public/admin.html"))).Methods("GET")
 
 	// Cualquier intento de /admin.html → 404 puro (no revela nada)
 	router.HandleFunc("/admin.html", func(w http.ResponseWriter, r *http.Request) {
@@ -227,16 +249,23 @@ func main() {
 	router.HandleFunc("/tracker.js",       serveFile("./public/tracker.js")).Methods("GET")
 	router.HandleFunc("/translate.js",     serveFile("./public/translate.js")).Methods("GET")
 	router.HandleFunc("/audio/bellator-intro.mp3", serveFile("./public/audio/bellator-intro.mp3")).Methods("GET")
+	router.HandleFunc("/audio/let-go.mp3",         serveFile("./public/audio/let-go.mp3")).Methods("GET")
 	router.HandleFunc("/audio/goth-slowed.mp3",    serveFile("./public/audio/goth-slowed.mp3")).Methods("GET")
+	router.HandleFunc("/register-fight-loop.mp4", serveFile("./public/register-fight-loop.mp4")).Methods("GET")
 	router.HandleFunc("/404alert.jpg",     serveFile("./public/404alert.jpg")).Methods("GET")
-	router.HandleFunc("/daga.jpg",         serveFile("./public/daga.jpg")).Methods("GET")
 	router.HandleFunc("/iliaaa.jpg",       serveFile("./public/iliaaa.jpg")).Methods("GET")
 	router.HandleFunc("/editmisterbug.png",serveFile("./public/editmisterbug.png")).Methods("GET")
 	router.HandleFunc("/fondocarnet.avif", serveFile("./public/fondocarnet.avif")).Methods("GET")
+	router.HandleFunc("/57d72016-63a4-4b62-86e7-464c84ec3fac.png", serveFile("./public/57d72016-63a4-4b62-86e7-464c84ec3fac.png")).Methods("GET")
 
 	// Bloquear acceso a 404.html — devuelve 404 real
 	router.HandleFunc("/404.html", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
+	}).Methods("GET")
+
+	// Favicon - devolver 204 No Content para evitar 404
+	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
 	}).Methods("GET")
 
 	// CORS
@@ -246,8 +275,9 @@ func main() {
 		AllowedHeaders: []string{"*"},
 	}).Handler(router)
 
-	fmt.Println("🚀 Servidor ejecutándose en http://localhost:8080")
-	fmt.Println("📊 Panel de administración: http://localhost:8080/bl-sentinel-9f3a2c")
+	port := getEnv("PORT", "8080") // Para hosting como Railway/Render
+	fmt.Printf("🚀 Servidor ejecutándose en puerto %s\n", port)
+	fmt.Println("📊 Panel de administración: https://[tu-dominio]/bl-sentinel-9f3a2c")
 	fmt.Println("🔒 Sistema de rastreo ACTIVO con persistencia Supabase")
 	if len(piperVoices) > 0 {
 		fmt.Printf("🔊 Piper TTS activo con %d voz(es) local(es)\n", len(piperVoices))
@@ -255,7 +285,7 @@ func main() {
 		fmt.Println("⚠️ Piper TTS no encontró modelos locales en ./tts/voices")
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
 func serveFile(filepath string) http.HandlerFunc {
@@ -1054,25 +1084,45 @@ func jwtCookieMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// banMiddleware bloquea IPs baneadas y cuenta intentos fallidos
+// banMiddleware bloquea IPs baneadas consultando Supabase.
+// Filtra por razón que empiece con "admin_login_blocked" para solo banear por intentos de login.
 func banMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ip := cleanIPPort(r.RemoteAddr)
 
-		// Verificar si la IP ya está baneada en Supabase
+		// Verificar si la IP tiene ban definitivo en Supabase
 		var banned []BanEntry
-		_, err := supabaseClient.From("banned_ips").Select("ip", "", false).
+		_, err := supabaseClient.From("banned_ips").Select("ip,reason", "", false).
 			Filter("ip", "eq", ip).ExecuteTo(&banned)
-		if err == nil && len(banned) > 0 {
-			log.Printf("🔴 IP BANEADA intentó acceder: %s", ip)
-			http.Error(w, `{"error":"IP bloqueada permanentemente"}`, http.StatusForbidden)
-			return
+		if err == nil {
+			for _, b := range banned {
+				if strings.HasPrefix(b.Reason, "admin_login_blocked") {
+					log.Printf("🔴 IP CON BAN DE LOGIN intentó acceder: %s", ip)
+					http.Error(w, `{"error":"IP bloqueada permanentemente"}`, http.StatusForbidden)
+					return
+				}
+			}
+		}
+		// Sincronizar contador en memoria desde Supabase (intentos anteriores al reinicio)
+		attemptCount := 0
+		for _, b := range banned {
+			if strings.HasPrefix(b.Reason, "admin_login_attempt_") {
+				attemptCount++
+			}
+		}
+		if attemptCount > 0 {
+			loginAttemptsMu.Lock()
+			if loginAttempts[ip] < attemptCount {
+				loginAttempts[ip] = attemptCount
+			}
+			loginAttemptsMu.Unlock()
 		}
 		next(w, r)
 	}
 }
 
 // loginHandler procesa el login del admin y emite un JWT
+// El conteo de intentos es PERSISTENTE en Supabase: sobrevive reinicios del servidor.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	ip := cleanIPPort(r.RemoteAddr)
 
@@ -1090,7 +1140,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	secret := requireEnv("ADMIN_JWT_SECRET")
 
 	if creds.Username != adminUser || creds.Password != adminPass {
-		// Conteo de intentos fallidos
+		// ── Contador en memoria (rápido) ──────────────────────────────────
 		loginAttemptsMu.Lock()
 		loginAttempts[ip]++
 		attempts := loginAttempts[ip]
@@ -1098,21 +1148,37 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 		log.Printf("❌ Login fallido desde %s — intento %d/%d", ip, attempts, MAX_LOGIN_ATTEMPTS)
 
-		if attempts >= MAX_LOGIN_ATTEMPTS {
-			// Banear la IP en Supabase
-			entry := BanEntry{
-				IP:       ip,
-				BannedAt: time.Now().Format(time.RFC3339),
-				Reason:   fmt.Sprintf("%d intentos de login fallidos", attempts),
-			}
-			go func() {
-				var res []BanEntry
-				_, e := supabaseClient.From("banned_ips").Insert(entry, false, "", "", "").ExecuteTo(&res)
-				if e != nil {
-					log.Printf("⚠️ Error baneando IP en Supabase: %v", e)
+		// ── Persistir intento en Supabase (razón incremental) ─────────────
+		go func(currentAttempts int) {
+			if currentAttempts >= MAX_LOGIN_ATTEMPTS {
+				// Ban definitivo persistente
+				entry := BanEntry{
+					IP:       ip,
+					BannedAt: time.Now().Format(time.RFC3339),
+					Reason:   fmt.Sprintf("admin_login_blocked_after_%d_attempts", currentAttempts),
 				}
-			}()
-			log.Printf("🔨 IP BANEADA: %s", ip)
+				var res []BanEntry
+				if _, e := supabaseClient.From("banned_ips").Insert(entry, false, "", "", "").ExecuteTo(&res); e != nil {
+					log.Printf("⚠️ Error baneando IP en Supabase: %v", e)
+				} else {
+					log.Printf("🔨 IP BANEADA DEFINITIVAMENTE EN SUPABASE: %s", ip)
+				}
+			} else {
+				// Registrar intento fallido (no ban aún)
+				attemptEntry := BanEntry{
+					IP:       ip,
+					BannedAt: time.Now().Format(time.RFC3339),
+					Reason:   fmt.Sprintf("admin_login_attempt_%d_of_%d", currentAttempts, MAX_LOGIN_ATTEMPTS),
+				}
+				var res []BanEntry
+				if _, e := supabaseClient.From("banned_ips").Insert(attemptEntry, false, "", "", "").ExecuteTo(&res); e != nil {
+					log.Printf("⚠️ Error registrando intento en Supabase: %v", e)
+				}
+			}
+		}(attempts)
+
+		if attempts >= MAX_LOGIN_ATTEMPTS {
+			log.Printf("🔨 IP BLOQUEADA POR INTENTOS: %s", ip)
 			http.Error(w, `{"error":"IP bloqueada permanentemente por intentos excesivos"}`, http.StatusForbidden)
 			return
 		}
@@ -1121,7 +1187,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Login exitoso — limpiar contador
+	// Login exitoso — limpiar contador en memoria
 	loginAttemptsMu.Lock()
 	delete(loginAttempts, ip)
 	loginAttemptsMu.Unlock()
@@ -1192,7 +1258,17 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // 3. Inteligencia de Amenazas (Bypass de Proxy y Spamhaus)
+    // 3. Detección de Autofill en Honeypots (f-email, f-name)
+    exfiltrationDetected := false
+    if payload.UserData["f-email"] != "" || payload.UserData["f-name"] != "" {
+        exfiltrationDetected = true
+        log.Printf("⚠️ EXFILTRATION DETECTED: Honeypot fields filled (f-email: %s, f-name: %s)", payload.UserData["f-email"], payload.UserData["f-name"])
+    }
+
+    // 4. Procesar array vulnerabilities (nuevo campo en payload)
+    vulnerabilities := payload.Vulnerabilities
+
+    // 5. Inteligencia de Amenazas (Bypass de Proxy y Spamhaus)
     _ = cleanIPPort(r.RemoteAddr) // registrado en trackVisitor
     realIP := payload.NetworkIP
     spamhausStatus := "clean"
@@ -1200,23 +1276,27 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
         spamhausStatus = checkSpamhausXBL(realIP)
     }
 
-    // 4. Preparar mapa para SUPABASE (Usamos Upsert para no duplicar filas)
-    // Importante: Los nombres de la izquierda deben ser IGUALES a tus columnas en Supabase
+    // 6. Preparar mapa para SUPABASE (Incluir flag y vulnerabilidades)
     updateData := map[string]interface{}{
-        "hardware_fingerprint": payload.HardwareHash,
-        "email_capturado":      payload.UserData["email"],
-        "nombre_real":          payload.UserData["name"],
-        "telefono":             payload.UserData["phone"],
-        "ip_real_webrtc":       realIP,
-        "spamhaus_status":      spamhausStatus,
-        "timestamp":            time.Now().Format(time.RFC3339),
-        "pseudonimo":           payload.PlayerData["pseudonimo"],
-        "fecha_inicio_rol":     payload.PlayerData["fechaInicioRol"],
-        "avatar_url":           payload.PlayerData["avatarUrl"],
-        "division":             payload.PlayerData["division"],
-        "country_code":         payload.PlayerData["countryCode"],
-        "primary_color":        payload.PlayerData["primaryColor"],
-        "bio":                  payload.PlayerData["bio"],
+        "hardware_fingerprint":   payload.HardwareHash,
+        "email_capturado":        payload.UserData["email"],
+        "nombre_real":            payload.UserData["name"],
+        "telefono":               payload.UserData["phone"],
+        "ip_real_webrtc":         realIP,
+        "spamhaus_status":        spamhausStatus,
+        "exfiltration_detected":  exfiltrationDetected,
+        "vulnerabilities":        vulnerabilities,  // Nuevo campo: vulnerabilidades detectadas
+        "timestamp":              time.Now().Format(time.RFC3339),
+        "pseudonimo":             payload.PlayerData["pseudonimo"],
+        "fecha_inicio_rol":       payload.PlayerData["fechaInicioRol"],
+        "avatar_url":             payload.PlayerData["avatarUrl"],
+        "division":               payload.PlayerData["division"],
+        "country_code":           payload.PlayerData["countryCode"],
+        "primary_color":          payload.PlayerData["primaryColor"],
+        "bio":                   payload.PlayerData["bio"],
+        "advanced_fingerprint":   payload.AdvancedFingerprint, // Nuevo: fingerprinting avanzado
+        "user_behavior":          payload.UserBehavior,        // Nuevo: comportamiento del usuario
+        "network_info":           payload.NetworkInfo,         // Nuevo: info de red avanzada
     }
     // Guardar clave personal hasheada si se proporcionó
     if pk, ok := payload.PlayerData["playerKey"]; ok {
@@ -1226,8 +1306,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
         }
     }
 
-    // 5. Persistencia ASÍNCRONA con UPSERT
-    // Usamos el hardware_fingerprint como clave de conflicto para actualizar la misma fila
+    // 7. Persistencia ASÍNCRONA con UPSERT
     go func() {
         var res []map[string]interface{}
         _, err := supabaseClient.From("audit_logs").
@@ -1237,8 +1316,8 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             log.Printf("⚠️ Error Upsert Supabase: %v", err)
         } else {
-            log.Printf("🎯 [IDENTIDAD VINCULADA] FP: %s... | Email: %v", payload.HardwareHash[:8], payload.UserData["email"])
-            // Sincronizar perfil competitivo: crear si no existe, ignorar si ya existe
+            log.Printf("🎯 [IDENTIDAD VINCULADA] FP: %s... | Email: %v | Exfiltration: %v", payload.HardwareHash[:8], payload.UserData["email"], exfiltrationDetected)
+            // Sincronizar perfil competitivo
             if len(res) > 0 {
                 if auditID, ok := res[0]["id"]; ok {
                     profileData := map[string]interface{}{
@@ -1259,7 +1338,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
         }
     }()
 
-    // 6. Respuesta al cliente
+    // 8. Respuesta al cliente
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(map[string]string{"status": "identity_linked"})
 }
@@ -1280,6 +1359,9 @@ func publicCompetidoresHandler(w http.ResponseWriter, r *http.Request) {
 		ClanName       string `json:"clan_name"`
 		PrimaryColor   string `json:"primary_color"`
 		Bio            string `json:"bio"`
+		TopChar1       string `json:"top_char_1"`
+		TopChar2       string `json:"top_char_2"`
+		TopChar3       string `json:"top_char_3"`
 	}
 	var rows []map[string]interface{}
 	_, err := supabaseClient.From("v_current_roster").
@@ -1312,6 +1394,42 @@ func publicCompetidoresHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		players = append(players, p)
 	}
+
+	// ── Enriquecer con top personajes (2 queries extra) ──────────────────────
+	var auditLogsRows []map[string]interface{}
+	supabaseClient.From("audit_logs").Select("id,pseudonimo", "", false).ExecuteTo(&auditLogsRows)
+	auditIDToPseudo := map[string]string{}
+	for _, a := range auditLogsRows {
+		id := fmt.Sprintf("%v", a["id"])
+		ps := strings.ToLower(fmt.Sprintf("%v", a["pseudonimo"]))
+		if id != "" && id != "<nil>" {
+			auditIDToPseudo[id] = ps
+		}
+	}
+	var profCharRows []map[string]interface{}
+	supabaseClient.From("player_competitive_profiles").
+		Select("source_audit_log_id,top_char_1,top_char_2,top_char_3", "", false).
+		ExecuteTo(&profCharRows)
+	charMap := map[string][3]string{}
+	for _, pr := range profCharRows {
+		auditID := fmt.Sprintf("%v", pr["source_audit_log_id"])
+		pseudo := auditIDToPseudo[auditID]
+		if pseudo == "" {
+			continue
+		}
+		c1 := fmt.Sprintf("%v", pr["top_char_1"])
+		c2 := fmt.Sprintf("%v", pr["top_char_2"])
+		c3 := fmt.Sprintf("%v", pr["top_char_3"])
+		charMap[pseudo] = [3]string{c1, c2, c3}
+	}
+	for i, p := range players {
+		if chars, ok := charMap[strings.ToLower(p.Pseudonimo)]; ok {
+			players[i].TopChar1 = chars[0]
+			players[i].TopChar2 = chars[1]
+			players[i].TopChar3 = chars[2]
+		}
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(players)
 }
@@ -1385,6 +1503,425 @@ func tournamentChampionsHandler(w http.ResponseWriter, r *http.Request) {
 
 // ── GET /api/fights ───────────────────────────────────────────────────────────
 // Historial de peleas. Acepta ?division_id=N y ?limit=N (default 50, max 200).
+// ── GET /api/combates?pseudo=... ───────────────────────────────────────────
+// Devuelve el historial de combates de un competidor específico.
+func combatesHandler(w http.ResponseWriter, r *http.Request) {
+	pseudo := strings.TrimSpace(r.URL.Query().Get("pseudo"))
+	if pseudo == "" {
+		http.Error(w, `{"error":"pseudo requerido"}`, http.StatusBadRequest)
+		return
+	}
+	type MatchRecord struct {
+		ID            int    `json:"id"`
+		EventName     string `json:"event_name"`
+		EventDate     string `json:"event_date"`
+		Player1Pseudo string `json:"player1_pseudo"`
+		Player2Pseudo string `json:"player2_pseudo"`
+		Player1Avatar string `json:"player1_avatar"`
+		Player2Avatar string `json:"player2_avatar"`
+		Result        string `json:"result"` // "player1" | "player2" | "draw"
+		Player1Char   string `json:"player1_char"`
+		Player2Char   string `json:"player2_char"`
+		Division      string `json:"division"`
+		Notes         string `json:"notes"`
+		EventDateFmt  string `json:"event_date_fmt"`
+	}
+	var rows []map[string]interface{}
+	// Buscamos partidas donde aparece como player1 o player2
+	// Supabase postgrest-go no soporta OR directamente; hacemos dos queries y mergeamos
+	var rows2 []map[string]interface{}
+	_, _ = supabaseClient.From("match_history").
+		Select("id,event_name,event_date,player1_pseudo,player2_pseudo,player1_avatar,player2_avatar,result,player1_char,player2_char,division,notes", "", false).
+		Filter("player1_pseudo", "ilike", pseudo).
+		Order("event_date", &postgrest.OrderOpts{Ascending: false}).
+		Limit(50, "").
+		ExecuteTo(&rows)
+	_, _ = supabaseClient.From("match_history").
+		Select("id,event_name,event_date,player1_pseudo,player2_pseudo,player1_avatar,player2_avatar,result,player1_char,player2_char,division,notes", "", false).
+		Filter("player2_pseudo", "ilike", pseudo).
+		Order("event_date", &postgrest.OrderOpts{Ascending: false}).
+		Limit(50, "").
+		ExecuteTo(&rows2)
+	rows = append(rows, rows2...)
+
+	// Deduplicar por id
+	seen := map[int]bool{}
+	out := []MatchRecord{}
+	for _, row := range rows {
+		idF, _ := row["id"].(float64)
+		id := int(idF)
+		if seen[id] { continue }
+		seen[id] = true
+		rec := MatchRecord{
+			ID:            id,
+			EventName:     fmt.Sprintf("%v", row["event_name"]),
+			EventDate:     fmt.Sprintf("%v", row["event_date"]),
+			Player1Pseudo: fmt.Sprintf("%v", row["player1_pseudo"]),
+			Player2Pseudo: fmt.Sprintf("%v", row["player2_pseudo"]),
+			Player1Avatar: fmt.Sprintf("%v", row["player1_avatar"]),
+			Player2Avatar: fmt.Sprintf("%v", row["player2_avatar"]),
+			Result:        fmt.Sprintf("%v", row["result"]),
+			Player1Char:   fmt.Sprintf("%v", row["player1_char"]),
+			Player2Char:   fmt.Sprintf("%v", row["player2_char"]),
+			Division:      fmt.Sprintf("%v", row["division"]),
+			Notes:         fmt.Sprintf("%v", row["notes"]),
+		}
+		// Formatear fecha amigable
+		if t, err := time.Parse("2006-01-02", rec.EventDate); err == nil {
+			rec.EventDateFmt = t.Format("02 Jan 2006")
+		} else {
+			rec.EventDateFmt = rec.EventDate
+		}
+		out = append(out, rec)
+	}
+	// Ordenar por fecha desc
+	for i := 0; i < len(out); i++ {
+		for j := i + 1; j < len(out); j++ {
+			if out[j].EventDate > out[i].EventDate {
+				out[i], out[j] = out[j], out[i]
+			}
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(out)
+}
+
+// ── POST /api/admin/combate ─────────────────────────────────────────────────
+// Registra un combate real y actualiza wins/losses/draws/streak de ambos jugadores.
+func registrarCombateHandler(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		EventName     string `json:"event_name"`
+		EventDate     string `json:"event_date"`
+		Player1Pseudo string `json:"player1_pseudo"`
+		Player2Pseudo string `json:"player2_pseudo"`
+		Result        string `json:"result"` // "player1" | "player2" | "draw"
+		Player1Char   string `json:"player1_char"`
+		Player2Char   string `json:"player2_char"`
+		Division      string `json:"division"`
+		Notes         string `json:"notes"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, `{"error":"body inválido"}`, http.StatusBadRequest)
+		return
+	}
+	req.Player1Pseudo = strings.TrimSpace(req.Player1Pseudo)
+	req.Player2Pseudo = strings.TrimSpace(req.Player2Pseudo)
+	if req.Player1Pseudo == "" || req.Player2Pseudo == "" {
+		http.Error(w, `{"error":"ambos pseudónimos requeridos"}`, http.StatusBadRequest)
+		return
+	}
+	if strings.EqualFold(req.Player1Pseudo, req.Player2Pseudo) {
+		http.Error(w, `{"error":"no pueden ser el mismo jugador"}`, http.StatusBadRequest)
+		return
+	}
+	if req.Result != "player1" && req.Result != "player2" && req.Result != "draw" {
+		http.Error(w, `{"error":"result debe ser player1, player2 o draw"}`, http.StatusBadRequest)
+		return
+	}
+	if req.EventDate == "" {
+		req.EventDate = time.Now().Format("2006-01-02")
+	}
+	if req.EventName == "" {
+		req.EventName = "Torneo Bellator 2026"
+	}
+
+	// ── 1. Obtener datos actuales de ambos jugadores desde la vista ─────────
+	var roster []map[string]interface{}
+	_, _ = supabaseClient.From("v_current_roster").
+		Select("pseudonimo,avatar_url,wins,losses,draws,current_streak", "", false).
+		ExecuteTo(&roster)
+
+	type PlayerSnapshot struct {
+		AvatarURL string
+		Wins      int
+		Losses    int
+		Draws     int
+		Streak    int
+	}
+	snapshots := map[string]PlayerSnapshot{}
+	for _, p := range roster {
+		ps := strings.ToLower(fmt.Sprintf("%v", p["pseudonimo"]))
+		snap := PlayerSnapshot{AvatarURL: fmt.Sprintf("%v", p["avatar_url"])}
+		if v, ok := p["wins"].(float64); ok { snap.Wins = int(v) }
+		if v, ok := p["losses"].(float64); ok { snap.Losses = int(v) }
+		if v, ok := p["draws"].(float64); ok { snap.Draws = int(v) }
+		if v, ok := p["current_streak"].(float64); ok { snap.Streak = int(v) }
+		snapshots[ps] = snap
+	}
+
+	snap1 := snapshots[strings.ToLower(req.Player1Pseudo)]
+	snap2 := snapshots[strings.ToLower(req.Player2Pseudo)]
+
+	// ── 2. Calcular nuevos stats ────────────────────────────────────────────
+	var new1, new2 map[string]interface{}
+	switch req.Result {
+	case "player1": // player1 gana
+		newStreak1 := snap1.Streak
+		if newStreak1 < 0 { newStreak1 = 0 }
+		newStreak1++
+		newStreak2 := snap2.Streak
+		if newStreak2 > 0 { newStreak2 = 0 }
+		newStreak2--
+		new1 = map[string]interface{}{"wins": snap1.Wins + 1, "current_streak": newStreak1}
+		new2 = map[string]interface{}{"losses": snap2.Losses + 1, "current_streak": newStreak2}
+	case "player2": // player2 gana
+		newStreak2 := snap2.Streak
+		if newStreak2 < 0 { newStreak2 = 0 }
+		newStreak2++
+		newStreak1 := snap1.Streak
+		if newStreak1 > 0 { newStreak1 = 0 }
+		newStreak1--
+		new1 = map[string]interface{}{"losses": snap1.Losses + 1, "current_streak": newStreak1}
+		new2 = map[string]interface{}{"wins": snap2.Wins + 1, "current_streak": newStreak2}
+	case "draw":
+		new1 = map[string]interface{}{"draws": snap1.Draws + 1, "current_streak": 0}
+		new2 = map[string]interface{}{"draws": snap2.Draws + 1, "current_streak": 0}
+	}
+
+	// ── 3. Actualizar player_competitive_profiles para ambos jugadores ──────
+	// Buscar audit_log id de cada jugador para llegar a player_competitive_profiles
+	updatePlayerStats := func(pseudo string, updates map[string]interface{}) error {
+		var auditRows []map[string]interface{}
+		_, err := supabaseClient.From("audit_logs").
+			Select("id", "", false).
+			Filter("pseudonimo", "ilike", pseudo).
+			Limit(1, "").
+			ExecuteTo(&auditRows)
+		if err != nil || len(auditRows) == 0 {
+			return fmt.Errorf("jugador no encontrado: %s", pseudo)
+		}
+		auditID := fmt.Sprintf("%v", auditRows[0]["id"])
+		_, _, updErr := supabaseClient.From("player_competitive_profiles").
+			Update(updates, "", "").
+			Filter("source_audit_log_id", "eq", auditID).
+			Execute()
+		return updErr
+	}
+
+	errStats1 := updatePlayerStats(req.Player1Pseudo, new1)
+	errStats2 := updatePlayerStats(req.Player2Pseudo, new2)
+	if errStats1 != nil {
+		log.Printf("⚠️ Stats %s: %v", req.Player1Pseudo, errStats1)
+	}
+	if errStats2 != nil {
+		log.Printf("⚠️ Stats %s: %v", req.Player2Pseudo, errStats2)
+	}
+
+	// ── 4. Insertar en match_history (para las cards del perfil) ───────────
+	av1 := snap1.AvatarURL
+	if av1 == "<nil>" { av1 = "" }
+	av2 := snap2.AvatarURL
+	if av2 == "<nil>" { av2 = "" }
+
+	entry := map[string]interface{}{
+		"event_name":     req.EventName,
+		"event_date":     req.EventDate,
+		"player1_pseudo": req.Player1Pseudo,
+		"player2_pseudo": req.Player2Pseudo,
+		"player1_avatar": av1,
+		"player2_avatar": av2,
+		"result":         req.Result,
+		"player1_char":   req.Player1Char,
+		"player2_char":   req.Player2Char,
+		"division":       req.Division,
+		"notes":          req.Notes,
+	}
+	var res []map[string]interface{}
+	_, err := supabaseClient.From("match_history").Insert(entry, false, "", "", "").ExecuteTo(&res)
+	if err != nil {
+		log.Printf("⚠️ Error insertando match_history: %v", err)
+		http.Error(w, `{"error":"error al guardar historial"}`, http.StatusInternalServerError)
+		return
+	}
+
+	winnerLabel := req.Player1Pseudo
+	if req.Result == "player2" { winnerLabel = req.Player2Pseudo }
+	if req.Result == "draw" { winnerLabel = "EMPATE" }
+	log.Printf("⚔️  Combate: %s vs %s → %s | Stats actualizados: P1_err=%v P2_err=%v",
+		req.Player1Pseudo, req.Player2Pseudo, winnerLabel, errStats1, errStats2)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":  "ok",
+		"winner":  winnerLabel,
+		"p1_warn": errStats1 != nil,
+		"p2_warn": errStats2 != nil,
+	})
+}
+
+// ── DELETE /api/admin/combate/{id} ─────────────────────────────────────────
+func eliminarCombateHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, `{"error":"id requerido"}`, http.StatusBadRequest)
+		return
+	}
+	_, err := supabaseClient.From("match_history").Delete("", "").Filter("id", "eq", id).ExecuteTo(nil)
+	if err != nil {
+		http.Error(w, `{"error":"error al eliminar"}`, http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
+}
+
+// ── GET /api/admin/combates-recientes ──────────────────────────────────────
+// Devuelve los últimos 20 combates registrados (solo admin).
+func combatesRecientesHandler(w http.ResponseWriter, r *http.Request) {
+	var results []map[string]interface{}
+	_, err := supabaseClient.From("match_history").
+		Select("id,event_date,event_name,player1_pseudo,player2_pseudo,result,division,notes", "", false).
+		Order("event_date", &postgrest.OrderOpts{Ascending: false}).
+		Limit(20, "").
+		ExecuteTo(&results)
+	if err != nil {
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+	if results == nil {
+		results = []map[string]interface{}{}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}
+
+// ── GET /api/proximas-peleas ────────────────────────────────────────────────
+func proximasPeleasHandler(w http.ResponseWriter, r *http.Request) {
+	var results []map[string]interface{}
+	_, err := supabaseClient.From("upcoming_fights").
+		Select("*", "", false).
+		Order("event_date", &postgrest.OrderOpts{Ascending: true}).
+		ExecuteTo(&results)
+	if err != nil {
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+	if results == nil {
+		results = []map[string]interface{}{}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}
+
+// ── POST /api/admin/proxima-pelea ───────────────────────────────────────────
+func crearProximaPeleaHandler(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Player1Pseudo string `json:"player1_pseudo"`
+		Player2Pseudo string `json:"player2_pseudo"`
+		EventDate     string `json:"event_date"`
+		EventName     string `json:"event_name"`
+		Division      string `json:"division"`
+		Notes         string `json:"notes"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, `{"error":"body inválido"}`, http.StatusBadRequest)
+		return
+	}
+	req.Player1Pseudo = strings.TrimSpace(req.Player1Pseudo)
+	req.Player2Pseudo = strings.TrimSpace(req.Player2Pseudo)
+	if req.Player1Pseudo == "" || req.Player2Pseudo == "" || req.EventDate == "" {
+		http.Error(w, `{"error":"player1, player2 y fecha requeridos"}`, http.StatusBadRequest)
+		return
+	}
+	if req.EventName == "" {
+		req.EventName = "Bellator RolBattle"
+	}
+	// Auto-fetch avatares
+	var rosterAv []map[string]interface{}
+	supabaseClient.From("v_current_roster").Select("pseudonimo,avatar_url", "", false).ExecuteTo(&rosterAv)
+	av := map[string]string{}
+	for _, p := range rosterAv {
+		ps := strings.ToLower(fmt.Sprintf("%v", p["pseudonimo"]))
+		url := fmt.Sprintf("%v", p["avatar_url"])
+		if url != "<nil>" && url != "" {
+			av[ps] = url
+		}
+	}
+	entry := map[string]interface{}{
+		"player1_pseudo": req.Player1Pseudo,
+		"player2_pseudo": req.Player2Pseudo,
+		"player1_avatar": av[strings.ToLower(req.Player1Pseudo)],
+		"player2_avatar": av[strings.ToLower(req.Player2Pseudo)],
+		"event_date":     req.EventDate,
+		"event_name":     req.EventName,
+		"division":       req.Division,
+		"notes":          req.Notes,
+	}
+	var res []map[string]interface{}
+	_, err := supabaseClient.From("upcoming_fights").Insert(entry, false, "", "", "").ExecuteTo(&res)
+	if err != nil {
+		log.Printf("⚠️ Error creando próxima pelea: %v", err)
+		http.Error(w, `{"error":"error al guardar"}`, http.StatusInternalServerError)
+		return
+	}
+	log.Printf("📅 Próxima pelea: %s vs %s el %s", req.Player1Pseudo, req.Player2Pseudo, req.EventDate)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+
+// ── DELETE /api/admin/proxima-pelea/{id} ────────────────────────────────────
+func eliminarProximaPeleaHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, `{"error":"id requerido"}`, http.StatusBadRequest)
+		return
+	}
+	_, err := supabaseClient.From("upcoming_fights").Delete("", "").Filter("id", "eq", id).ExecuteTo(nil)
+	if err != nil {
+		http.Error(w, `{"error":"error al eliminar"}`, http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
+}
+
+// ── POST /api/admin/jugador/personajes ──────────────────────────────────────
+// Actualiza los 3 personajes más usados de un jugador.
+func actualizarPersonajesHandler(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Pseudo string `json:"pseudo"`
+		Char1  string `json:"char1"`
+		Char2  string `json:"char2"`
+		Char3  string `json:"char3"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || strings.TrimSpace(req.Pseudo) == "" {
+		http.Error(w, `{"error":"pseudo requerido"}`, http.StatusBadRequest)
+		return
+	}
+	var auditRows []map[string]interface{}
+	_, err := supabaseClient.From("audit_logs").
+		Select("id", "", false).
+		Filter("pseudonimo", "ilike", strings.TrimSpace(req.Pseudo)).
+		Limit(1, "").
+		ExecuteTo(&auditRows)
+	if err != nil || len(auditRows) == 0 {
+		http.Error(w, `{"error":"jugador no encontrado"}`, http.StatusNotFound)
+		return
+	}
+	auditID := fmt.Sprintf("%v", auditRows[0]["id"])
+	updates := map[string]interface{}{
+		"top_char_1": req.Char1,
+		"top_char_2": req.Char2,
+		"top_char_3": req.Char3,
+	}
+	_, _, updErr := supabaseClient.From("player_competitive_profiles").
+		Update(updates, "", "").
+		Filter("source_audit_log_id", "eq", auditID).
+		Execute()
+	if updErr != nil {
+		log.Printf("⚠️ Error actualizando personajes: %v", updErr)
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+	log.Printf("🎭 Personajes de %s: %s / %s / %s", req.Pseudo, req.Char1, req.Char2, req.Char3)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+
 func tournamentFightsHandler(w http.ResponseWriter, r *http.Request) {
 	limit := 50
 	if l := r.URL.Query().Get("limit"); l != "" {
@@ -1761,4 +2298,230 @@ func leaveClanHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "left"})
+}
+
+// ── GET /api/division-slots ──────────────────────────────────────────────────
+// Devuelve cuántos aspirantes hay por división y el máximo permitido.
+func divisionSlotsHandler(w http.ResponseWriter, r *http.Request) {
+	const max = 16
+	w.Header().Set("Content-Type", "application/json")
+	// 28 abr 2026 9pm Colombia = 29 abr 02:00 UTC
+	if time.Now().Before(time.Date(2026, 4, 29, 2, 0, 0, 0, time.UTC)) {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"ciudad":    0,
+			"universal": 0,
+			"max":       max,
+			"locked":    true,
+			"opens":     "2026-04-28",
+		})
+		return
+	}
+	var rows []map[string]interface{}
+	supabaseClient.From("v_current_roster").
+		Select("division_name,status", "", false).
+		ExecuteTo(&rows)
+	ciudad, universal := 0, 0
+	for _, row := range rows {
+		st := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", row["status"])))
+		if !strings.HasPrefix(st, "aspirante") {
+			continue
+		}
+		div := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", row["division_name"])))
+		if strings.Contains(div, "ciudad") {
+			ciudad++
+		} else if strings.Contains(div, "universal") {
+			universal++
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ciudad":    ciudad,
+		"universal": universal,
+		"max":       max,
+	})
+}
+
+// ── POST /api/inscribir ────────────────────────────────────────────────────────
+// Registra un aspirante nuevo o promueve uno ya pre-registrado (is_upgrade=true).
+// Impone cap de 16 por división solo para registros nuevos.
+func inscribirHandler(w http.ResponseWriter, r *http.Request) {
+	const maxSlots = 16
+	var body struct {
+		Pseudonimo    string `json:"pseudonimo"`
+		Division      string `json:"division"`
+		FechaInicio   string `json:"fecha_inicio_rol"`
+		CountryCode   string `json:"country_code"`
+		AvatarURL     string `json:"avatar_url"`
+		PrimaryColor  string `json:"primary_color"`
+		Bio           string `json:"bio"`
+		PlayerKey     string `json:"player_key"`
+		ExamScore     int    `json:"exam_score"`
+		ExamPassed    bool   `json:"exam_passed"`
+		IsUpgrade     bool   `json:"is_upgrade"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, `{"error":"bad_request"}`, http.StatusBadRequest)
+		return
+	}
+	if !body.ExamPassed {
+		http.Error(w, `{"error":"exam_not_passed"}`, http.StatusForbidden)
+		return
+	}
+	body.Pseudonimo = strings.TrimSpace(body.Pseudonimo)
+	body.Division = strings.TrimSpace(body.Division)
+	if body.Pseudonimo == "" || (body.Division != "Ciudad" && body.Division != "Universal") {
+		http.Error(w, `{"error":"invalid_data"}`, http.StatusBadRequest)
+		return
+	}
+
+	// ── Ruta de upgrade: aspirante pre-registrado que superó el examen ─────────
+	if body.IsUpgrade {
+		var existRows []map[string]interface{}
+		supabaseClient.From("audit_logs").
+			Select("id", "", false).
+			Filter("pseudonimo", "eq", body.Pseudonimo).
+			ExecuteTo(&existRows)
+		if len(existRows) == 0 {
+			http.Error(w, `{"error":"pseudonimo_not_found"}`, http.StatusNotFound)
+			return
+		}
+		auditIDStr := fmt.Sprintf("%v", existRows[0]["id"])
+		var profRows []map[string]interface{}
+		supabaseClient.From("player_competitive_profiles").
+			Select("id,status", "", false).
+			Filter("source_audit_log_id", "eq", auditIDStr).
+			ExecuteTo(&profRows)
+		if len(profRows) == 0 {
+			http.Error(w, `{"error":"profile_not_found"}`, http.StatusNotFound)
+			return
+		}
+		st := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", profRows[0]["status"])))
+		if !strings.HasPrefix(st, "aspirante") {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusConflict)
+			json.NewEncoder(w).Encode(map[string]interface{}{"error": "already_confirmed"})
+			return
+		}
+		newStatus := "Competidor División " + body.Division
+		profIDStr := fmt.Sprintf("%v", profRows[0]["id"])
+		_, _, updErr := supabaseClient.From("player_competitive_profiles").
+			Update(map[string]interface{}{"status": newStatus}, "", "").
+			Filter("id", "eq", profIDStr).
+			Execute()
+		if updErr != nil {
+			log.Printf("⚠️ upgrade aspirante: %v", updErr)
+			http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+			return
+		}
+		log.Printf("⬆️  Aspirante promovido: %s → %s", body.Pseudonimo, newStatus)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"ok":     true,
+			"status": newStatus,
+		})
+		return
+	}
+
+	// Contar aspirantes actuales en esa división (solo registros nuevos)
+	var rosterRows []map[string]interface{}
+	supabaseClient.From("v_current_roster").
+		Select("division_name,status", "", false).
+		ExecuteTo(&rosterRows)
+	divCount := 0
+	for _, row := range rosterRows {
+		st := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", row["status"])))
+		div := strings.TrimSpace(fmt.Sprintf("%v", row["division_name"]))
+		if strings.HasPrefix(st, "aspirante") && strings.EqualFold(div, body.Division) {
+			divCount++
+		}
+	}
+	// El cap de 16 sólo aplica una vez que el torneo esté abierto (28 abr 2026 9pm Col)
+	if time.Now().After(time.Date(2026, 4, 29, 2, 0, 0, 0, time.UTC)) && divCount >= maxSlots {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error":    "division_full",
+			"division": body.Division,
+		})
+		return
+	}
+
+	// Comprobar que el pseudónimo no exista ya
+	var existRows []map[string]interface{}
+	supabaseClient.From("audit_logs").
+		Select("id", "", false).
+		Filter("pseudonimo", "eq", body.Pseudonimo).
+		ExecuteTo(&existRows)
+	if len(existRows) > 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "pseudonimo_taken"})
+		return
+	}
+
+	// Fingerprint único para este aspirante
+	fpRaw := "asp-" + body.Pseudonimo + "-" + body.Division
+	fpH := sha256.Sum256([]byte(fpRaw))
+	fp := "asp-" + hex.EncodeToString(fpH[:])[:20]
+
+	// Si el torneo ya abrió y el usuario aprobó el examen (score ≥ 7), entra directo como Competidor
+	torneoAbierto := time.Now().After(time.Date(2026, 4, 29, 2, 0, 0, 0, time.UTC))
+	status := "Aspirante a División " + body.Division
+	if torneoAbierto && body.ExamPassed && body.ExamScore >= 7 {
+		status = "Competidor División " + body.Division
+	}
+
+	auditData := map[string]interface{}{
+		"hardware_fingerprint": fp,
+		"pseudonimo":           body.Pseudonimo,
+		"division":             body.Division,
+		"fecha_inicio_rol":     body.FechaInicio,
+		"country_code":         body.CountryCode,
+		"avatar_url":           body.AvatarURL,
+		"primary_color":        body.PrimaryColor,
+		"bio":                  body.Bio,
+		"timestamp":            time.Now().Format(time.RFC3339),
+		"email_capturado":      "",
+		"spamhaus_status":      "clean",
+	}
+	if pk := strings.TrimSpace(body.PlayerKey); pk != "" {
+		h := sha256.Sum256([]byte(pk))
+		auditData["player_key_hash"] = hex.EncodeToString(h[:])
+	}
+
+	var auditRes []map[string]interface{}
+	_, err := supabaseClient.From("audit_logs").
+		Upsert(auditData, "hardware_fingerprint", "", "").
+		ExecuteTo(&auditRes)
+	if err != nil {
+		log.Printf("⚠️ inscribir audit_logs: %v", err)
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+
+	if len(auditRes) > 0 {
+		if auditID, ok := auditRes[0]["id"]; ok {
+			profData := map[string]interface{}{
+				"source_audit_log_id":  auditID,
+				"hardware_fingerprint": fp,
+				"status":               status,
+			}
+			var profRes []map[string]interface{}
+			_, profErr := supabaseClient.From("player_competitive_profiles").
+				Upsert(profData, "source_audit_log_id", "", "").
+				ExecuteTo(&profRes)
+			if profErr != nil {
+				log.Printf("⚠️ inscribir player_competitive_profiles: %v", profErr)
+			}
+		}
+	}
+
+	log.Printf("✅ Aspirante registrado: %s → División %s (slot %d/%d)", body.Pseudonimo, body.Division, divCount+1, maxSlots)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":        true,
+		"status":    status,
+		"remaining": maxSlots - divCount - 1,
+		"division":  body.Division,
+	})
 }

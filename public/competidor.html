@@ -1,11 +1,141 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil del Competidor — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  <style>
+    /* ── FIGHT HISTORY CARDS ─────────────────────────────── */
+    .bl-fight-history-block { padding: 0 !important; overflow: hidden; }
+    .bl-fight-history-block > h3 { padding: 18px 20px 14px; margin: 0; }
+    .bl-fight-empty {
+      padding: 22px 20px;
+      color: rgba(255,255,255,.35);
+      font-size: .9rem;
+      font-style: italic;
+    }
+    .bl-fight-card {
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      padding: 0 20px 16px;
+      margin-bottom: 4px;
+    }
+    .bl-fight-card:last-child { border-bottom: none; }
+    .bl-fight-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-top: 4px;
+    }
+    .bl-fight-header-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,.25); flex-shrink: 0;
+    }
+    .bl-fight-matchup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bl-fight-fighter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .bl-fight-fighter.right {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .bl-fight-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,.12);
+      flex-shrink: 0;
+      background: rgba(255,255,255,.06);
+    }
+    .bl-fight-avatar-placeholder {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      border: 2px solid rgba(255,255,255,.12);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 1.3rem;
+      color: rgba(255,255,255,.5);
+      flex-shrink: 0;
+    }
+    .bl-fight-info { min-width: 0; }
+    .bl-fight-name {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+    .bl-fight-record {
+      font-size: .75rem;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .03em;
+      margin-top: 1px;
+    }
+    .bl-fight-result-badge {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      min-width: 52px;
+    }
+    .bl-fight-vs {
+      font-family: 'Teko', sans-serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,.3);
+      letter-spacing: .1em;
+    }
+    .bl-fight-result-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .bl-fight-result-pill.win  { background: rgba(34,197,94,.18); color: #4ade80; border: 1px solid rgba(34,197,94,.35); }
+    .bl-fight-result-pill.loss { background: rgba(239,68,68,.15); color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+    .bl-fight-result-pill.draw { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+    .bl-fight-char {
+      font-size: .7rem;
+      color: rgba(255,255,255,.32);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bl-fight-division-tag {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--bl-gold, #D4AF37);
+      border: 1px solid rgba(212,175,55,.25);
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: auto;
+    }
+    @media (max-width: 480px) {
+      .bl-fight-name { font-size: .82rem; }
+      .bl-fight-avatar, .bl-fight-avatar-placeholder { width: 34px; height: 34px; font-size: 1.1rem; }
+    }
+  </style>
 </head>
 <body>
   <canvas class="space" id="space" aria-hidden="true"></canvas>
@@ -57,9 +187,10 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
         <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">PROFILE</span>
       </div>
     </nav>
@@ -103,7 +234,7 @@
         </section>
 
         <section class="bl-stat-block">
-          <h3>Récord — Victorias · Derrotas · Empates</h3>
+          <h3>Récord — Victorias — Derrotas — Empates</h3>
           <div id="profile-record" style="display:grid;gap:14px">
             <div class="bl-record-row">
               <div class="bl-record-col rc-win"><div class="bl-record-num" id="rc-wins">0</div><div class="bl-record-label">Victorias</div></div>
@@ -111,6 +242,14 @@
               <div class="bl-record-col rc-draw"><div class="bl-record-num" id="rc-draws">0</div><div class="bl-record-label">Empates</div></div>
             </div>
             <div id="streak-wrap" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center"></div>
+          </div>
+        </section>
+
+        <!-- ── HISTORIAL DE COMBATES estilo card de evento ── -->
+        <section class="bl-stat-block bl-fight-history-block">
+          <h3>Historial de Combates</h3>
+          <div id="fight-history-list">
+            <div class="bl-fight-empty">Cargando historial...</div>
           </div>
         </section>
 
@@ -137,7 +276,7 @@
           <div id="profile-bio">
             <p>Esperando datos del competidor.</p>
           </div>
-          <button id="btn-edit-bio" style="margin-top:12px;display:none;padding:7px 18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;color:rgba(255,255,255,.7);cursor:pointer;font-size:.8rem">✎ Editar Bio</button>
+          <button id="btn-edit-bio" style="margin-top:12px;display:none;padding:7px 18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;color:rgba(255,255,255,.7);cursor:pointer;font-size:.8rem">? Editar Bio</button>
         </section>
       </div>
 
@@ -176,8 +315,8 @@
     </div>
   </div>
 
-  <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/tracker.js?v=8"></script>
+  <script src="/app.js?v=19"></script>
   <script>
     function slugify(value) {
       return String(value || '')
@@ -294,7 +433,7 @@
         if (streak !== 0) {
           const abs = Math.abs(streak);
           document.getElementById('streak-wrap').innerHTML =
-            `<span class="bl-streak-badge"><span class="bl-streak-dot"></span>${streak > 0 ? '🔥 ' + abs + ' victorias' : '❄️ ' + abs + ' derrotas'} en racha</span>`;
+            `<span class="bl-streak-badge"><span class="bl-streak-dot"></span>${streak > 0 ? '?? ' + abs + ' victorias' : '?? ' + abs + ' derrotas'} en racha</span>`;
         }
 
         document.getElementById('profile-clan').innerHTML = clanName
@@ -302,16 +441,20 @@
           : `<span style="color:rgba(255,255,255,.38);font-size:.9rem">Sin clan registrado</span>`;
 
         const td = document.getElementById('profile-titles');
-        if      (rankPoints >= 500) td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">🏆</span>${rankPoints} RP — Elite</span>`;
-        else if (rankPoints >= 200) td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">🥈</span>${rankPoints} RP — Veterano</span>`;
-        else if (rankPoints >  0)   td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">🎖️</span>${rankPoints} RP — Prospecto</span>`;
+        if      (rankPoints >= 500) td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">??</span>${rankPoints} RP — Elite</span>`;
+        else if (rankPoints >= 200) td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">??</span>${rankPoints} RP — Veterano</span>`;
+        else if (rankPoints >  0)   td.innerHTML = `<span class="bl-title-badge"><span class="bl-title-ico">???</span>${rankPoints} RP — Prospecto</span>`;
         else                        td.innerHTML = `<span style="color:rgba(255,255,255,.38);font-size:.9rem">Sin titulos aun</span>`;
 
         const charsDiv = document.getElementById('profile-chars');
-        ['Principal','Secundario','Alterno'].forEach(function(type, i) {
+        const charLabels = ['Principal','Secundario','Alterno'];
+        const charValues = [driver.top_char_1, driver.top_char_2, driver.top_char_3];
+        charLabels.forEach(function(type, i) {
+          const name = charValues[i] && charValues[i] !== '<nil>' && charValues[i].trim() !== '' ? charValues[i].trim() : null;
           const card = document.createElement('div');
           card.className = 'bl-char-card';
-          card.innerHTML = `<div class="bl-char-avatar">${driver.pseudonimo.charAt(0).toUpperCase()}${i+1}</div><div class="bl-char-name">Personaje ${i+1}</div><div class="bl-char-type">${type}</div>`;
+          const initial = name ? name.charAt(0).toUpperCase() : (driver.pseudonimo.charAt(0).toUpperCase() + (i+1));
+          card.innerHTML = `<div class="bl-char-avatar">${initial}</div><div class="bl-char-name">${name || 'Por definir'}</div><div class="bl-char-type">${type}</div>`;
           charsDiv.appendChild(card);
         });
 
@@ -354,6 +497,9 @@
           });
         }
 
+        // ── Cargar historial de combates ──────────────────────────────────
+        loadFightHistory(driver.pseudonimo);
+
       } catch (_) {
         document.getElementById('profile-name').textContent = 'Error cargando perfil';
         document.getElementById('profile-summary').textContent = 'No se pudieron obtener los datos.';
@@ -361,11 +507,88 @@
         document.getElementById('career-stats').innerHTML = statLine('Estado', 'Error');
       }
     })();
+
+    // ── Render historial de combates ──────────────────────────────────────
+    async function loadFightHistory(pseudonimo) {
+      const container = document.getElementById('fight-history-list');
+      if (!container) return;
+      try {
+        const fights = await fetch('/api/combates?pseudo=' + encodeURIComponent(pseudonimo)).then(r => r.json());
+        if (!Array.isArray(fights) || fights.length === 0) {
+          container.innerHTML = '<div class="bl-fight-empty">Sin combates registrados aún.</div>';
+          return;
+        }
+        container.innerHTML = fights.map(function(f) {
+          const mySlot    = f.player1_pseudo.toLowerCase() === pseudonimo.toLowerCase() ? 1 : 2;
+          const oppoSlot  = mySlot === 1 ? 2 : 1;
+          const myPseudo  = mySlot === 1 ? f.player1_pseudo : f.player2_pseudo;
+          const oppoPseudo= mySlot === 1 ? f.player2_pseudo : f.player1_pseudo;
+          const myAvatar  = (mySlot === 1 ? f.player1_avatar : f.player2_avatar);
+          const oppoAvatar= (mySlot === 1 ? f.player2_avatar : f.player1_avatar);
+          const myChar    = (mySlot === 1 ? f.player1_char : f.player2_char) || '';
+          const oppoChar  = (mySlot === 1 ? f.player2_char : f.player1_char) || '';
+
+          // Resultado desde la perspectiva del jugador actual
+          let resultLabel, resultClass;
+          if (f.result === 'draw')              { resultLabel = 'EMPATE'; resultClass = 'draw'; }
+          else if (
+            (f.result === 'player1' && mySlot === 1) ||
+            (f.result === 'player2' && mySlot === 2)
+          ) { resultLabel = 'VICTORIA'; resultClass = 'win'; }
+          else { resultLabel = 'DERROTA'; resultClass = 'loss'; }
+
+          function avatarEl(url, pseudo, side) {
+            const safe = String(url || '');
+            if (safe && safe !== '<nil>' && safe.startsWith('http')) {
+              return `<img class="bl-fight-avatar" src="${safe}" alt="${pseudo}" onerror="this.outerHTML='<div class=bl-fight-avatar-placeholder>${pseudo.charAt(0).toUpperCase()}</div>'">`;
+            }
+            return `<div class="bl-fight-avatar-placeholder">${pseudo.charAt(0).toUpperCase()}</div>`;
+          }
+
+          const divTag = f.division && f.division !== '<nil>'
+            ? `<span class="bl-fight-division-tag">${f.division}</span>` : '';
+
+          return `
+<div class="bl-fight-card">
+  <div class="bl-fight-header">
+    <div class="bl-fight-header-dot"></div>
+    <span>${f.event_date_fmt || f.event_date}</span>
+    <div class="bl-fight-header-dot"></div>
+    <span>${f.event_name}</span>
+    ${divTag}
+  </div>
+  <div class="bl-fight-matchup">
+    <div class="bl-fight-fighter">
+      ${avatarEl(myAvatar, myPseudo, 'left')}
+      <div class="bl-fight-info">
+        <div class="bl-fight-name">${myPseudo}</div>
+        ${myChar ? `<div class="bl-fight-char">${myChar}</div>` : ''}
+      </div>
+    </div>
+    <div class="bl-fight-result-badge">
+      <span class="bl-fight-result-pill ${resultClass}">${resultLabel}</span>
+      <span class="bl-fight-vs">VS</span>
+    </div>
+    <div class="bl-fight-fighter right">
+      ${avatarEl(oppoAvatar, oppoPseudo, 'right')}
+      <div class="bl-fight-info">
+        <div class="bl-fight-name">${oppoPseudo}</div>
+        ${oppoChar ? `<div class="bl-fight-char">${oppoChar}</div>` : ''}
+      </div>
+    </div>
+  </div>
+  ${f.notes && f.notes !== '<nil>' ? `<div style="margin-top:8px;font-size:.75rem;color:rgba(255,255,255,.35);padding-left:52px">${f.notes}</div>` : ''}
+</div>`;
+        }).join('');
+      } catch(e) {
+        container.innerHTML = '<div class="bl-fight-empty">No se pudo cargar el historial.</div>';
+      }
+    }
   </script>
   <!-- Modal editar bio -->
   <div id="bio-edit-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);align-items:center;justify-content:center">
     <div style="background:#0f141b;border:1px solid rgba(212,175,55,.28);border-radius:22px;padding:32px;max-width:440px;width:calc(100% - 32px);position:relative">
-      <button id="bio-edit-close" style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.2rem;cursor:pointer">✕</button>
+      <button id="bio-edit-close" style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.2rem;cursor:pointer">?</button>
       <h3 style="font-family:'Teko',sans-serif;font-size:2rem;margin-bottom:4px">Editar Bio</h3>
       <p style="font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:18px">Verifica con tu pseudónimo y clave personal.</p>
       <div style="display:grid;gap:10px;margin-bottom:18px">
@@ -400,7 +623,7 @@
       const player_key = document.getElementById('bio-edit-key').value.trim();
       const bio        = document.getElementById('bio-edit-text').value.trim();
       const msg        = document.getElementById('bio-edit-msg');
-      if (!pseudonimo || !player_key) { msg.style.color='#f87171'; msg.textContent='⚠ Ingresa pseudónimo y clave.'; return; }
+      if (!pseudonimo || !player_key) { msg.style.color='#f87171'; msg.textContent='? Ingresa pseudónimo y clave.'; return; }
       msg.style.color=''; msg.textContent='Guardando...';
       try {
         const res = await fetch('/api/players/bio', {
@@ -408,18 +631,18 @@
           body: JSON.stringify({ pseudonimo, player_key, bio })
         });
         if (res.ok) {
-          msg.style.color='#4ade80'; msg.textContent='✓ Bio actualizada.';
+          msg.style.color='#4ade80'; msg.textContent='? Bio actualizada.';
           const bioEl = document.getElementById('profile-bio');
           if (bioEl) bioEl.innerHTML = bio ? `<p>${bio.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>` : bioEl.innerHTML;
           setTimeout(() => { document.getElementById('bio-edit-modal').style.display='none'; }, 1400);
         } else {
           const err = await res.json().catch(()=>({}));
           msg.style.color='#f87171';
-          msg.textContent = err.error === 'clave_incorrecta' ? '⚠ Pseudónimo o clave incorrectos.' : '⚠ Error al guardar.';
+          msg.textContent = err.error === 'clave_incorrecta' ? '? Pseudónimo o clave incorrectos.' : '? Error al guardar.';
         }
-      } catch(_) { msg.style.color='#f87171'; msg.textContent='⚠ Error de conexión.'; }
+      } catch(_) { msg.style.color='#f87171'; msg.textContent='? Error de conexión.'; }
     });
   </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

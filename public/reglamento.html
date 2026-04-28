@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reglamento — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=4">
+  <link rel="stylesheet" href="/shared.css?v=5">
   <style>
   /* ── HERO ── */
   .rgl-hero{
@@ -759,9 +759,10 @@
             <span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span>
           </a>
         </li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
-        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">⚔ INSCRIBIRSE</a>
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
       </div>
     </nav>
 
@@ -2501,8 +2502,8 @@
   </div><!-- /.container -->
 
   <!-- ══ BANCO DE PRÁCTICA MODAL ══ -->
-  <script src="/tracker.js?v=7"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/tracker.js?v=8"></script>
+  <script src="/app.js?v=19"></script>
   <script>
   (function() {
     /* ── ACCORDION ── */
@@ -2684,6 +2685,27 @@
     updateSubtabs();
     filterSections(activeLayer, activeFilterByLayer[activeLayer], searchInput.value);
 
+    /* ── URL deep-link: /reglamento?q=TERM ── */
+    (function () {
+      var uq = new URLSearchParams(location.search).get('q');
+      if (!uq) return;
+      searchInput.value = uq;
+      var combateTab = document.querySelector('.rgl-layer-tab[data-layer="combate"]');
+      if (combateTab) {
+        document.querySelectorAll('.rgl-layer-tab').forEach(function (t) { t.classList.remove('active'); });
+        combateTab.classList.add('active');
+        activeLayer = 'combate';
+        activeFilterByLayer.combate = 'all';
+        updateSubtabs();
+      }
+      filterSections(activeLayer, activeFilterByLayer[activeLayer], uq);
+      setTimeout(function () {
+        var first = document.querySelector('.rgl-block:not([style*="none"])');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        else searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 420);
+    })();
+
     var haxSearchInput = document.getElementById('rgl-hax-search');
     var haxCount = document.getElementById('rgl-hax-count');
     var haxEmpty = document.getElementById('rgl-hax-empty');
@@ -2858,6 +2880,6 @@
 
   })();
   </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>

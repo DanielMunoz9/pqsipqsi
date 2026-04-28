@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examen de Admisión — Bellator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&family=Teko:wght@400;500;600;700&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --text: #eef4ff;
+      --muted: rgba(238,244,255,.65);
+      --bg: #060a12;
+      --card: rgba(10,16,26,.97);
+      --border: rgba(212,175,55,.18);
+      --green: #3fb950;
+      --red: #ef4444;
+      --warn: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      overflow: hidden;
+    }
+
+    /* scanline overlay — exam feel */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.04) 3px, rgba(0,0,0,.04) 4px);
+    }
+
+    /* ── HEADER ── */
+    .xh {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+      height: 50px;
+      background: rgba(6,10,18,.98);
+      border-bottom: 1px solid rgba(212,175,55,.14);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px;
+    }
+    .xh-logo {
+      font-family: 'Teko', sans-serif; font-size: 1rem;
+      letter-spacing: 5px; color: var(--gold); text-transform: uppercase;
+    }
+    .xh-title {
+      font-family: 'Teko', sans-serif; font-size: .78rem;
+      letter-spacing: 3px; color: rgba(238,244,255,.35); text-transform: uppercase;
+    }
+    .xh-clock {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .xh-clock-label {
+      font-family: 'Teko', sans-serif; font-size: .68rem;
+      letter-spacing: 2px; color: rgba(238,244,255,.3); text-transform: uppercase;
+    }
+    .xh-clock-val {
+      font-family: 'Teko', sans-serif; font-size: 1.05rem;
+      letter-spacing: 2px; color: var(--gold); min-width: 46px; text-align: right;
+      transition: color .3s;
+    }
+    .xh-clock-val.warn { color: var(--warn) !important; }
+    .xh-clock-val.crit { color: var(--red) !important; animation: blink .55s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* global timer bar */
+    .xgbar {
+      position: fixed; top: 50px; left: 0; right: 0; z-index: 29;
+      height: 3px; background: rgba(255,255,255,.06);
+    }
+    .xgbar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      transition: width 1s linear, background .5s;
+      width: 100%;
+    }
+    .xgbar-fill.warn { background: linear-gradient(90deg, var(--warn), var(--red)); }
+
+    /* warning banner */
+    .xwarn {
+      position: fixed; top: 53px; left: 0; right: 0; z-index: 28;
+      background: rgba(239,68,68,.1); border-bottom: 1px solid rgba(239,68,68,.22);
+      color: var(--red); font-size: .76rem; letter-spacing: .7px;
+      text-align: center; padding: 6px; display: none;
+    }
+    .xwarn.show { display: block; }
+
+    /* ── MAIN ── */
+    .xmain {
+      position: fixed; inset: 0;
+      padding-top: 60px;
+      display: flex; align-items: center; justify-content: center;
+      overflow-y: auto;
+      padding-left: 16px; padding-right: 16px; padding-bottom: 16px;
+    }
+
+    /* ── LAUNCH SCREEN ── */
+    .xl {
+      text-align: center; max-width: 500px; padding: 16px 0;
+    }
+    .xl-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .xl-title {
+      font-family: 'Teko', sans-serif; font-size: 2rem;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .xl-sub {
+      font-size: .87rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px;
+    }
+    .xl-rules {
+      background: rgba(212,175,55,.04);
+      border: 1px solid rgba(212,175,55,.13);
+      border-radius: 14px; padding: 16px 20px; margin-bottom: 26px;
+      text-align: left;
+    }
+    .xl-rules li {
+      font-size: .81rem; color: var(--muted); line-height: 2;
+      list-style: none;
+    }
+    .xl-rules li::before { content: '▸ '; color: var(--gold); }
+
+    /* ── EXAM CARD ── */
+    .xcard {
+      width: 100%; max-width: 670px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 30px 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    }
+
+    /* phase bar */
+    .xph-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .xph {
+      font-family: 'Teko', sans-serif; font-size: .7rem; letter-spacing: 2px;
+      text-transform: uppercase; padding: 3px 12px; border-radius: 99px;
+      border: 1px solid rgba(212,175,55,.35); color: var(--gold);
+      background: rgba(212,175,55,.07);
+    }
+    .xph.off { border-color: rgba(255,255,255,.08); color: rgba(238,244,255,.28); background: transparent; }
+    .xph-sep { width: 22px; height: 1px; background: rgba(255,255,255,.1); }
+
+    /* meta */
+    .xmeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .xmeta span { font-family: 'Teko', sans-serif; font-size: .72rem; letter-spacing: 2px; color: rgba(238,244,255,.4); text-transform: uppercase; }
+    #xScore { color: var(--gold) !important; }
+
+    /* prog bar */
+    .xprog { height: 3px; border-radius: 99px; background: rgba(255,255,255,.07); margin-bottom: 16px; overflow: hidden; }
+    .xprog > div { height: 100%; border-radius: 99px; background: linear-gradient(90deg,var(--gold),#f3e68a); transition: width .45s cubic-bezier(.2,1,.22,1); width: 0%; }
+
+    /* per-question timer */
+    .xqt { margin-bottom: 15px; }
+    .xqt-bar { height: 3px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden; margin-bottom: 4px; }
+    .xqt-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,var(--green),var(--gold)); transition: width .85s linear, background .5s; width: 100%; }
+    .xqt-fill.warn { background: linear-gradient(90deg,var(--warn),var(--red)) !important; }
+    .xqt-row { display: flex; justify-content: space-between; align-items: center; }
+    .xqt-label { font-family:'Teko',sans-serif;font-size:.63rem;letter-spacing:2px;color:rgba(238,244,255,.3);text-transform:uppercase; }
+    .xqt-val { font-family:'Teko',sans-serif;font-size:.77rem;letter-spacing:1px;color:var(--gold);transition:color .3s; }
+    .xqt-val.warn { color: var(--red) !important; }
+
+    /* question */
+    .xqtext { font-size: 1rem; line-height: 1.6; color: var(--text); margin-bottom: 17px; min-height: 46px; }
+    .xopts { display: flex; flex-direction: column; gap: 9px; margin-bottom: 15px; }
+    .xopt {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px; padding: 11px 16px;
+      color: var(--text); font-size: .91rem; line-height: 1.4;
+      cursor: pointer; text-align: left;
+      transition: all .18s; letter-spacing: .2px;
+    }
+    .xopt:hover:not([disabled]) { border-color: rgba(212,175,55,.4); background: rgba(212,175,55,.05); }
+    .xopt.correct { border-color: var(--green) !important; background: rgba(63,185,80,.1) !important; color: var(--green) !important; }
+    .xopt.wrong   { border-color: var(--red) !important; background: rgba(239,68,68,.08) !important; color: var(--red) !important; }
+    .xopt.reveal  { border-color: var(--green); background: rgba(63,185,80,.06); color: var(--green); }
+    .xfb { font-size: .78rem; line-height: 1.6; color: var(--muted); min-height: 20px; margin-bottom: 13px; padding: 0 2px; }
+    .xfb.ok { color: var(--green); }
+    .xfb.no { color: var(--red); }
+
+    /* combat */
+    .xct-title { font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:5px; }
+    .xct-brief { font-size:.81rem;color:var(--muted);line-height:1.5;margin-bottom:15px; }
+    .xct-rules { display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px; }
+    .xct-rule { font-size:.67rem;letter-spacing:.7px;padding:4px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(238,244,255,.4);transition:all .3s; }
+    .xct-rule.ok   { border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.07);color:var(--green); }
+    .xct-rule.fail { border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07);color:var(--red); }
+    .xct-ta {
+      width:100%; min-height:150px; resize:vertical;
+      background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.1);
+      border-radius:12px; color:var(--text);
+      font-family:'Barlow Semi Condensed',sans-serif; font-size:.92rem; line-height:1.65;
+      padding:13px 15px; outline:none; transition:border-color .2s;
+    }
+    .xct-ta:focus { border-color:rgba(212,175,55,.35); }
+    .xct-ortho { font-size:.71rem;color:var(--warn);margin:4px 0 10px;min-height:16px;line-height:1.4; }
+    .xct-counter { font-size:.7rem;color:var(--muted);text-align:right;margin:5px 0 13px;letter-spacing:.5px; }
+
+    /* result */
+    .xres { text-align: center; padding: 12px 0; }
+    .xres-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .xres-title { font-family:'Teko',sans-serif;font-size:1.8rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px; }
+    .xres-sub { font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:10px; }
+    .xres-score { font-family:'Teko',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--gold);margin-bottom:6px; }
+    .xres-redir { font-size:.78rem;color:rgba(238,244,255,.3);margin-bottom:18px; }
+
+    /* shared button */
+    .xbtn {
+      display: block; width: 100%;
+      padding: 12px 20px; border-radius: 99px; border: 0; cursor: pointer;
+      background: linear-gradient(135deg,var(--gold),#f3e68a);
+      color: #07100d; font-family: 'Teko', sans-serif; font-size: 1rem;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      box-shadow: 0 8px 28px rgba(212,175,55,.22); transition: all .2s;
+    }
+    .xbtn:hover:not([disabled]) { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(212,175,55,.32); }
+    .xbtn[disabled] { opacity: .35; cursor: default; }
+
+    @media(max-width:600px) {
+      .xcard { padding: 18px 16px 20px; border-radius: 14px; }
+      .xh-title { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Gate: verificar cupos División Ciudad al cargar ── -->
+  <script>
+  (async function gateCheck() {
+    try {
+      const s = await fetch('/api/division-slots').then(r => r.json());
+      const OPENS = new Date('2026-04-29T02:00:00Z');
+      const locked = s.locked || new Date() < OPENS;
+      const full   = !locked && (s.ciudad || 0) >= (s.max || 16);
+      if (!locked && !full) return; // todo OK, mostrar examen normal
+      document.body.innerHTML = `
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          html,body{width:100%;height:100%;background:#060a12;color:#eef4ff;
+            font-family:'Barlow Semi Condensed',sans-serif;
+            display:flex;align-items:center;justify-content:center}
+          .xgate{text-align:center;max-width:480px;padding:32px 24px}
+          .xgate-icon{font-size:3rem;margin-bottom:16px}
+          .xgate-title{font-family:'Teko',sans-serif;font-size:2.4rem;letter-spacing:4px;
+            text-transform:uppercase;color:${locked?'#d4af37':'#ef4444'};margin-bottom:10px}
+          .xgate-msg{font-size:.95rem;color:rgba(238,244,255,.72);line-height:1.6;margin-bottom:24px}
+          .xgate-btn{display:inline-block;padding:12px 32px;border-radius:99px;
+            background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);
+            color:#d4af37;font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:3px;
+            text-transform:uppercase;text-decoration:none;cursor:pointer;
+            transition:background .2s}
+          .xgate-btn:hover{background:rgba(212,175,55,.22)}
+        </style>
+        <div class="xgate">
+          <div class="xgate-icon">${locked ? '🔐' : '⛔'}</div>
+          <div class="xgate-title">${locked ? 'Próximamente' : 'División Ciudad — Llena'}</div>
+          <div class="xgate-msg">${locked
+            ? 'El examen de admisión aún no está disponible.<br>Las inscripciones al campeonato abren el <strong>28 de abril · 9 p.m. (Colombia)</strong>.'
+            : 'Los 16 cupos de División Ciudad ya fueron cubiertos.<br>No se aceptan más inscripciones para esta división.'}
+          </div>
+          <a href="/" class="xgate-btn">← Volver al inicio</a>
+        </div>`;
+    } catch(_) { /* si falla la API dejamos pasar */ }
+  })();
+  </script>
+
+  <!-- Header -->
+  <div class="xh">
+    <div class="xh-logo">⚔ Bellator</div>
+    <div class="xh-title">Examen de Admisión — División Ciudad</div>
+    <div class="xh-clock">
+      <span class="xh-clock-label">Tiempo</span>
+      <span class="xh-clock-val" id="xGVal">5:00</span>
+    </div>
+  </div>
+  <div class="xgbar"><div class="xgbar-fill" id="xGFill"></div></div>
+  <div class="xwarn" id="xWarn">⚠ ADVERTENCIA: Abandonaste pantalla completa o cambiaste de pestaña. Próxima infracción = descalificación.</div>
+
+  <div class="xmain">
+
+    <!-- Pantalla inicial -->
+    <div class="xl" id="panelLaunch">
+      <div class="xl-icon">⚔</div>
+      <div class="xl-title">Cámara de Admisión</div>
+      <div class="xl-sub">Estás a punto de iniciar el examen oficial de ingreso a División Ciudad.<br>Leé las condiciones antes de comenzar.</div>
+      <div class="xl-rules">
+        <ul>
+          <li>10 preguntas de reglamento con tiempo limitado por pregunta</li>
+          <li>Tiempo total máximo: <strong>5 minutos</strong> — si se agota, perdés</li>
+          <li>Fase de combate: turno ofensivo con mínimo 30 palabras distintas</li>
+          <li>No podés cambiar de pestaña ni salir de pantalla completa</li>
+          <li>La pantalla completa se activa al comenzar</li>
+        </ul>
+      </div>
+      <button class="xbtn" id="xBtnLaunch">COMENZAR EXAMEN →</button>
+    </div>
+
+    <!-- Quiz -->
+    <div class="xcard" id="panelQuiz" style="display:none">
+      <div class="xph-bar">
+        <div class="xph" id="xPh1">01 · Teoría</div>
+        <div class="xph-sep"></div>
+        <div class="xph off" id="xPh2">02 · Combate</div>
+      </div>
+      <div class="xmeta">
+        <span id="xNum">PREGUNTA 1 / 10</span>
+        <span id="xScore">✦ 0 / 10</span>
+      </div>
+      <div class="xprog"><div id="xProg"></div></div>
+      <div class="xqt">
+        <div class="xqt-bar"><div id="xQFill" class="xqt-fill"></div></div>
+        <div class="xqt-row">
+          <span class="xqt-label">tiempo por pregunta</span>
+          <span class="xqt-val" id="xQVal">—</span>
+        </div>
+      </div>
+      <div class="xqtext" id="xQText"></div>
+      <div class="xopts" id="xOpts"></div>
+      <div class="xfb" id="xFB"></div>
+      <button class="xbtn" id="xNext" disabled>SIGUIENTE →</button>
+    </div>
+
+    <!-- Combate -->
+    <div class="xcard" id="panelCombat" style="display:none">
+      <div class="xph-bar">
+        <div class="xph off">01 · Teoría</div>
+        <div class="xph-sep"></div>
+        <div class="xph">02 · Combate</div>
+      </div>
+      <div class="xct-title">Turno de Combate — División Ciudad · 7-B</div>
+      <div class="xct-brief">Redactá un turno ofensivo válido. Sin Manipulación Negra, Determinismo, God-Rol ni lenguaje informal. Mínimo 200 caracteres y vocabulario variado.</div>
+      <div class="xct-rules" id="xCRules">
+        <div class="xct-rule" data-key="len">📏 200 caracteres mín.</div>
+        <div class="xct-rule" data-key="words">📚 30+ palabras únicas</div>
+        <div class="xct-rule" data-key="diversity">🔠 10+ letras distintas</div>
+        <div class="xct-rule" data-key="intent">⚔ Verbo de intención</div>
+        <div class="xct-rule" data-key="mn">🚫 Sin Manipulación Negra</div>
+        <div class="xct-rule" data-key="det">🚫 Sin Determinismo</div>
+        <div class="xct-rule" data-key="god">🚫 Sin God-Rol</div>
+        <div class="xct-rule" data-key="informal">✍ Sin lenguaje informal</div>
+      </div>
+      <textarea class="xct-ta" id="xCTA" placeholder="Narra tu turno de combate aquí…" maxlength="3000"></textarea>
+      <div class="xct-ortho" id="xCOrtho"></div>
+      <div class="xct-counter" id="xCCounter">0 car.</div>
+      <button class="xbtn" id="xCSubmit" disabled>VERIFICAR TURNO →</button>
+    </div>
+
+    <!-- Resultado (redirige a /admision) -->
+    <div class="xcard" id="panelResult" style="display:none">
+      <div class="xres">
+        <div class="xres-icon" id="xRI"></div>
+        <div class="xres-title" id="xRT"></div>
+        <div class="xres-sub" id="xRS"></div>
+        <div class="xres-score" id="xRSc"></div>
+        <div class="xres-redir">Regresando a la sala de admisión…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════
+       BELLATOR EXAM ENGINE v3
+    ══════════════════════════════════════ */
+
+    /* ── Audio ── */
+    const _AC = window.AudioContext || window.webkitAudioContext;
+    let _actx = null;
+    function _gc() { if (!_actx) _actx = new _AC(); return _actx; }
+    function tone(freq, type, dur, gain) {
+      try {
+        const c = _gc(), o = c.createOscillator(), g = c.createGain();
+        o.type = type; o.frequency.setValueAtTime(freq, c.currentTime);
+        g.gain.setValueAtTime(gain || .15, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001, c.currentTime + dur);
+        o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + dur);
+      } catch(e) {}
+    }
+    const sfxClick   = () => tone(880, 'square', .08, .12);
+    const sfxCorrect = () => { tone(523,'square',.08,.14); setTimeout(()=>tone(659,'square',.08,.14),90); setTimeout(()=>tone(784,'square',.15,.14),180); };
+    const sfxWrong   = () => { tone(220,'sawtooth',.08,.14); setTimeout(()=>tone(196,'sawtooth',.15,.12),100); };
+    const sfxWarn    = () => tone(440, 'square', .06, .09);
+    const sfxPhase   = () => [523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,'square',.12,.1),i*110));
+
+    /* ── beforeunload ── */
+    let examRunning = false;
+    window.addEventListener('beforeunload', e => {
+      if (examRunning) { e.preventDefault(); e.returnValue = ''; return ''; }
+    });
+
+    /* ── Fullscreen + tab switching ── */
+    let infractions = 0;
+    const warnEl = document.getElementById('xWarn');
+
+    function requestFS() {
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+      } catch(e) {}
+    }
+
+    function onFSChange() {
+      const fs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
+      if (!fs && examRunning) {
+        infractions++;
+        warnEl.classList.add('show');
+        setTimeout(() => warnEl.classList.remove('show'), 5000);
+        if (infractions >= 2) autoFail('Descalificado: saliste de pantalla completa más de una vez.');
+      }
+    }
+    document.addEventListener('fullscreenchange', onFSChange);
+    document.addEventListener('webkitfullscreenchange', onFSChange);
+    document.addEventListener('mozfullscreenchange', onFSChange);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && examRunning) {
+        infractions++;
+        warnEl.classList.add('show');
+        setTimeout(() => warnEl.classList.remove('show'), 5000);
+        if (infractions >= 2) autoFail('Descalificado: cambiaste de pestaña más de una vez.');
+      }
+    });
+
+    /* ── Global 5-min timer ── */
+    const TOTAL = 300;
+    let gRemaining = TOTAL;
+    let gInterval = null;
+
+    function startGlobal() {
+      const fill = document.getElementById('xGFill');
+      const val  = document.getElementById('xGVal');
+      fill.style.transition = 'none'; fill.style.width = '100%';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.transition = 'width ' + (TOTAL - 1) + 's linear';
+        fill.style.width = '0%';
+      }));
+      gInterval = setInterval(() => {
+        gRemaining--;
+        const m = Math.floor(gRemaining / 60);
+        const s = gRemaining % 60;
+        val.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        if (gRemaining <= 60)  { fill.classList.add('warn'); val.classList.add('warn'); }
+        if (gRemaining <= 30)  { val.classList.remove('warn'); val.classList.add('crit'); sfxWarn(); }
+        if (gRemaining <= 0)   { clearInterval(gInterval); autoFail('Tiempo agotado.'); }
+      }, 1000);
+    }
+
+    function stopGlobal() { clearInterval(gInterval); }
+
+    function autoFail(reason) {
+      examRunning = false;
+      stopGlobal(); stopQTimer();
+      sessionStorage.setItem('bellator_exam_result', JSON.stringify({
+        passed: false, score: qScore, total: 10, reason
+      }));
+      exitAndRedirect();
+    }
+
+    function exitAndRedirect() {
+      try {
+        const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
+        if (ex) ex.call(document).catch(() => {});
+      } catch(e) {}
+      setTimeout(() => { window.location.href = '/admision'; }, 520);
+    }
+
+    /* ── Launch ── */
+    document.getElementById('xBtnLaunch').addEventListener('click', () => {
+      sfxClick();
+      requestFS();
+      document.getElementById('panelLaunch').style.display = 'none';
+      document.getElementById('panelQuiz').style.display = 'block';
+      examRunning = true;
+      startGlobal();
+      renderQuestion();
+    });
+
+    /* ── Questions ── */
+    const QUESTIONS = [
+      /* ── Q1 30s: ANÁLISIS DE PÁRRAFO — identificar infracciones ── */
+      {
+        text: 'Sukuna narra: <em>"Expando el territorio. Las cuchillas te seccionaron los tendones del hombro derecho antes de que pudieras reaccionar, dejándote el brazo inutilizado."</em> ¿Cuántas infracciones y de qué tipo?',
+        opts: [
+          'Ninguna — las cuchillas son parte del dominio de Sukuna y es narrativa válida',
+          'Una — solo Determinismo Narrativo porque asume que el rival no puede reaccionar',
+          'Una — solo Manipulación Negra: "te seccionaron" y "dejándote" usan pasado para imponer consecuencias sobre el rival',
+          'Dos — Manipulación Negra ("te seccionaron los tendones") + Determinismo Narrativo ("antes de que pudieras reaccionar")'
+        ],
+        correct: 3, time: 30,
+        fb_ok: 'Correcto. "Te seccionaron" = Manipulación Negra (pasado que impone resultado sobre el rival). "Antes de que pudieras reaccionar" = Determinismo Narrativo (clausura la ventana defensiva sin base técnica). Dos infracciones, sanción según gravedad.',
+        fb_no: 'Incorrecto — D. El párrafo tiene AMBAS: MN en "te seccionaron los tendones" (pasado sobre rival = acción ya consumada) y DN en "antes de que pudieras reaccionar" (cierra por decreto la posibilidad de defensa).'
+      },
+      /* ── Q2 30s: HAX — sinergia ilegal ── */
+      {
+        text: 'Jugador A usa Control Mental para que su rival camine hacia su zona de Borrado Existencial. ¿Por qué el juez debería invalidar esta secuencia aunque ambos HAX sean individualmete válidos?',
+        opts: [
+          'No debería; ambos HAX están en el registro y no hay regla que prohíba usarlos en el mismo turno',
+          'Porque Borrado Existencial solo puede ejecutarse al inicio del turno, nunca al final',
+          'Porque encadenar CM para forzar el movimiento del rival y BE para aprovechar esa posición convierte la combinación en Determinismo Narrativo encadenado: se cierra la defensa del rival por construcción narrativa',
+          'Porque Control Mental requiere turno de preparación previo y no puede activarse en el mismo post que el Borrado'
+        ],
+        correct: 2, time: 30,
+        fb_ok: 'Correcto. Aunque cada HAX es válido por separado, encadenarlos para garantizar que el rival no pueda evitar el BE equivale a Determinismo Narrativo: la construcción narrativa hace que la defensa sea imposible por diseño, no por fuerza.',
+        fb_no: 'Incorrecto — C. El problema no es la secuencia temporal sino que la combinación CIERRA por decreto la posibilidad de defensa del rival. Eso es DN encadenado, independientemente de que cada HAX sea válido individualmente.'
+      },
+      /* ── Q3 30s: SCORING — regla 5-3 vs DQ ── */
+      {
+        text: 'En un round, Personaje A escribe un turno perfecto (estrategia sólida, verbos correctos, scans). Personaje B responde con un turno que contiene una sola frase de Manipulación Negra al final. ¿Cuál es el veredicto correcto del juez?',
+        opts: [
+          '5–4 a favor de A: B tuvo mejor técnica general aunque cometió un error al final',
+          '5–3 a favor de A: dominación porque B cometió un error grave que comprometió la calidad técnica',
+          'DQ inmediata de B: la Manipulación Negra en cualquier punto del turno es motivo de detención sin round',
+          '5–5 empate: el juez no puede penalizar al jugador solo por una frase aislada'
+        ],
+        correct: 2, time: 30,
+        fb_ok: 'Correcto. El reglamento es explícito: el uso de Manipulación Negra (verbos en pasado para imponer daño) resulta en "detención inmediata por el réferi. Sin round: el combate termina en ese instante." No hay 5–3 para MN; es DQ directa.',
+        fb_no: 'Incorrecto — C. La MN no se gradúa; no importa que sea una sola frase ni que el resto del turno sea bueno. El reglamento dice "sin round: el combate termina en ese instante". Es DQ automática.'
+      },
+      /* ── Q4 45s: REGRESIÓN vs ADELANTO ── */
+      {
+        text: 'A carga su técnica durante 3 líneas de descripción. B escribe su turno antes de que A postee, y en él B ya describe estar esquivando "los cortes que A está lanzando". ¿Qué infracción comete B?',
+        opts: [
+          'Ninguna: B tiene derecho a responder a la intención de A basándose en telegrafía',
+          'Regresión inválida: B usa el tiempo de carga de A para interferir sobre la acción misma, no sobre sus consecuencias',
+          'Meta Rol: B usa información sobre la técnica de A que su personaje no podría conocer anticipadamente',
+          'Manipulación Blanca: B asume detalles de la técnica de A que no fueron descritos'
+        ],
+        correct: 1, time: 45,
+        fb_ok: 'Correcto. Regresión permite interferir en las CONSECUENCIAS de una acción rival, no en la acción misma. B está esquivando "los cortes que A está lanzando" = cancela la acción en curso = Adelanto, que el reglamento RV define como infracción grave que "roza la Manipulación Negra".',
+        fb_no: 'Incorrecto — B. La clave es: Regresión válida = prepararse en el mismo lapso sin cancelar la acción de A. Si B ya describe esquivar los cortes en curso, está cancelando la ejecución de A. Eso es Adelanto Forzado, no Regresión.'
+      },
+      /* ── Q5 45s: BFR — razonamiento de por qué está prohibido ── */
+      {
+        text: '¿Por qué el BFR (Battle Field Removal) está en la lista de Prohibiciones Absolutas de Bellator, aunque en otros sistemas de debate sea una técnica válida?',
+        opts: [
+          'Porque en Bellator no existen escenarios con portales o dimensiones alternas',
+          'Porque el BFR requiere velocidad superior a la del rival como prerrequisito y eso crea desequilibrio automático entre divisiones',
+          'Porque su efecto principal es sacar al rival del campo de combate sin resolución narrativa: anula la capacidad de respuesta del oponente sin necesidad de vencerlo en el intercambio, lo que viola el principio de acción-reacción del reglamento',
+          'Porque el BFR fue aprobado en Ciudad pero no en Universal, lo que generaría inconsistencias cross-división'
+        ],
+        correct: 2, time: 45,
+        fb_ok: 'Correcto. BFR viola el principio fundamental de Bellator: todo combate se resuelve por intercambio narrativo, no por eliminación de la posibilidad de participar. Remover al rival del escenario cancela su agencia sin derrotarlo en el terreno técnico.',
+        fb_no: 'Incorrecto — C. La razón técnica es filosófica: Bellator se basa en acción-reacción. BFR elimina al rival del combate evitando el intercambio. No es sobre velocidad ni sobre divisiones; es sobre que nadie puede ganar sacando al oponente del campo sin resolución técnica.'
+      },
+      /* ── Q6 45s: MANIPULACIÓN BLANCA — cuándo es legal vs ilegal ── */
+      {
+        text: 'Iron Man describe un "pulso de energía" sin especificar voltaje, radio ni potencia. Spider-Man responde: <em>"Dada la vaguedad del ataque, mi personaje lo interpreta como débil y lo absorbe con el traje."</em> ¿Cuándo exactamente esa respuesta pasa a ser Manipulación Blanca penalizable?',
+        opts: [
+          'Siempre es penalizable; el defensor nunca puede asumir que un ataque es débil',
+          'Solo si Spider-Man no tiene scans que justifiquen capacidad de absorción energética',
+          'Cuando Iron Man sí había descrito datos técnicos concretos (radio, potencia, duración) y Spider-Man los ignora deliberadamente para construir una defensa que los anula',
+          'Cuando Spider-Man hace esto más de dos veces en el mismo combate'
+        ],
+        correct: 2, time: 45,
+        fb_ok: 'Correcto. La sección MB establece que llenar huecos del rival SOLO se vuelve infracción "cuando el oponente sí describió con claridad su ofensiva". Si Iron Man fue vago, Spider-Man tiene derecho a interpretar dentro de la lógica. Si Iron Man fue preciso, usar esa precisión en contra es MB penalizable.',
+        fb_no: 'Incorrecto — C. La línea no está en los scans de Spider-Man ni en la frecuencia. Está en si Iron Man había dado datos claros. MB pasa a infracción exactamente cuando se usa para anular una ofensiva que SÍ tuvo descripción técnica concreta.'
+      },
+      /* ── Q7 60s: ANÁLISIS DE TURNO COMPLETO ── */
+      {
+        text: 'Turno completo: <em>"Mi personaje concentra energía en ambas manos durante las prime­ras líneas. En la segunda fase, lanzará una descarga que cubrirá el área, calculada en once megatones según sus scans. De no mediar una defensa equivalente o superior, el impacto podría destruir la zona de combate."</em> ¿Cuál es el veredicto técnico?',
+        opts: [
+          'Determinismo Narrativo: "podría destruir la zona" asume resultado inevitable',
+          'Turno válido: describe preparación, cuantifica con datos, usa futuro y condicional, deja abierta la defensa del rival',
+          'Manipulación Negra: mencionar "once megatones" equivale a imponer estadísticas sobre el rival',
+          'God-Rol: once megatones supera el límite de División Ciudad y es exceso de escala'
+        ],
+        correct: 1, time: 60,
+        fb_ok: 'Correcto. El turno cumple todas las condiciones: telegrafía la acción (preparación visible), cuantifica con scans, usa futuro ("lanzará") y condicional ("podría"), y deja explícita la condición defensiva del rival. Eso es narrativa limpia y técnicamente legal.',
+        fb_no: 'Incorrecto — B. "Podría destruir" es condicional, no determinismo; "de no mediar defensa equivalente" preserva la agencia del rival; once megatones con scans es cuantificación válida para Ciudad. El turno es 100 % legal.'
+      },
+      /* ── Q8 60s: SCORECARD — distribución de puntos ── */
+      {
+        text: 'El juez evalúa el round según tres criterios: ① Estrategia y Daño Lógico, ② Conocimiento y Defensa Técnica, ③ Redacción y Control de Tiempos. Jugador A domina en ① y ③ pero comete Sello Obligatorio. Jugador B es más flojo en ① pero presenta scans sólidos y redacción limpia. ¿Cuál es el resultado más probable?',
+        opts: [
+          '5–5 empate porque ambos tienen fortalezas compensadas',
+          '5–4 a favor de A porque dominó los dos parámetros más pesados aunque cometió un error',
+          '5–3 a favor de B porque el Sello Obligatorio de A es una infracción grave que afecta el criterio ③ directamente y compromete la legalidad del daño narrado',
+          'DQ de A: el Sello Obligatorio siempre produce descalificación inmediata'
+        ],
+        correct: 2, time: 60,
+        fb_ok: 'Correcto. Sello Obligatorio (presentar el golpe como inevitable sin argumentación técnica) equivale a un knockdown narrativo. El reglamento marca 5–3 para este tipo de error grave. No es DQ automática como la MN, pero sí "dominación" que pone a B adelante en el scorecard.',
+        fb_no: 'Incorrecto — C. Sello Obligatorio no es DQ inmediata (esa es solo Manipulación Negra). Es una infracción de categoría Dominación (5–3) porque compromete la legalidad de la ofensiva entera. B gana el round por superioridad técnica.'
+      },
+      /* ── Q9 60s: RAZONAMIENTO SOBRE ESCALA EN CIUDAD ── */
+      {
+        text: 'Personaje X tiene scans de "Planet Level" (destrucción planetaria). Quiere inscribirse en División Ciudad. Declara que usará solo efectos a escala ciudad. ¿Qué postura tomará el reglamento de Bellator?',
+        opts: [
+          'Aceptado sin condiciones: el reglamento solo pide que los efectos se limiten a escala ciudad independientemente de la fuente de poder',
+          'Rechazado: un personaje Planet Level no puede competir en Ciudad porque sus habilidades básicas superan el techo de la división',
+          'Aceptado condicionalmente: puede competir si cede estadísticas y presenta un techo operativo formal que acredite que sus ataques quedarán dentro del margen Ciudad durante el combate',
+          'Rechazado: los scans de Planet Level activan automáticamente la clasificación Universal y no se puede degradar de división'
+        ],
+        correct: 2, time: 60,
+        fb_ok: 'Correcto. Bellator no prohíbe que un personaje más poderoso baje de división, pero sí exige que el techo operativo quede formalmente acreditado. El reglamento requiere que toda acción se justifique dentro del marco de la división activa; si X opera al techo Ciudad y lo demuestra, puede jugar en Ciudad.',
+        fb_no: 'Incorrecto — C. La escala de habilidades base no descalifica automáticamente; lo que importa es la escala de los efectos narrados en combate. Si X presenta un techo Ciudad verificable y sostenido, puede competir. El reglamento evalúa lo que el personaje puede sostener y demostrar.'
+      },
+      /* ── Q10 90s: CRUCETA AVANZADA ── */
+      {
+        text: 'Cruceta avanzada: un turno incluye (I) Precognición activada para anticipar la secuencia completa del combate, (II) Incorporeidad usada para ignorar el ataque rival Y para atravesar su defensa, (III) Tiempo de Manipulación usado para congelar al rival 2 segundos, (IV) SUMMON de 80 entidades donde cada una genera 2 proyectiles. ¿Cuál análisis es completamente correcto?',
+        opts: [
+          'Todo es válido: cada HAX tiene su propia economía y pueden coexistir en el mismo turno sin conflicto',
+          '(I) excede los 2 usos permitidos si se usa para leer el combate entero; (II) Incorporeidad defensiva es válida pero ofensiva = uso dual ilegal; (III) viola la regla de 1 uso defensivo sobre sí mismo; (IV) 80 entidades × 2 proyectiles = 240 unidades → supera el máximo de 100',
+          '(I) solo es ilegal si el rival objeta; (II) legal porque Incorporeidad es pasiva; (III) válido con 2 usos restantes; (IV) 80 entidades = 80 unidades, los proyectiles no cuentan separado',
+          '(III) y (IV) son los únicos problemas: Tiempo solo permite 1 uso y el SUMMON debería contar proyectiles'
+        ],
+        correct: 1, time: 90,
+        fb_ok: 'Correcto. Análisis completo: (I) Precognición = máx. 2 lecturas BREVES, no lectura del combate entero; ilegal por exceso. (II) Incorporeidad activa = 1 defensa; usarla también para atravesar defensa rival = doble uso ilegal. (III) Tiempo solo es defensivo sobre el propio usuario, jamás para congelar al rival. (IV) 80×2+80=240 > 100 SUMMON. Los 4 puntos tienen problema.',
+        fb_no: 'Incorrecto — B. Los 4 puntos son problemáticos: Precognición no puede abarcar el combate completo (máx. 2 lecturas breves). Incorporeidad no puede ser defensiva Y ofensiva en el mismo turno. Tiempo es 1 uso, defensivo, solo sobre el propio usuario. SUMMON: cada proyectil cuenta = 240 unidades, supera el cap de 100.'
+      }
+    ];
+
+
+    /* ── Per-question timer ── */
+    let qInterval = null, qRem = 0;
+
+    function stopQTimer() { clearInterval(qInterval); qInterval = null; }
+
+    function startQTimer(secs) {
+      stopQTimer();
+      qRem = secs;
+      const fill = document.getElementById('xQFill');
+      const val  = document.getElementById('xQVal');
+      fill.classList.remove('warn'); val.classList.remove('warn');
+      fill.style.transition = 'none'; fill.style.width = '100%';
+      val.textContent = secs + 's';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.transition = 'width ' + (secs - .5) + 's linear, background .5s';
+        fill.style.width = '0%';
+      }));
+      qInterval = setInterval(() => {
+        qRem--;
+        val.textContent = qRem + 's';
+        if (qRem <= 5) { fill.classList.add('warn'); val.classList.add('warn'); sfxWarn(); }
+        if (qRem <= 0) { stopQTimer(); if (!answered) timeExpired(); }
+      }, 1000);
+    }
+
+    /* ── State ── */
+    let qIndex = 0, qScore = 0, answered = false;
+
+    function renderQuestion() {
+      const q = QUESTIONS[qIndex];
+      document.getElementById('xProg').style.width = (qIndex / QUESTIONS.length * 100) + '%';
+      document.getElementById('xNum').textContent = 'PREGUNTA ' + (qIndex + 1) + ' / ' + QUESTIONS.length;
+      document.getElementById('xScore').textContent = '✦ ' + qScore + ' / ' + QUESTIONS.length;
+      document.getElementById('xQText').innerHTML = q.text;
+      const fb = document.getElementById('xFB');
+      fb.textContent = ''; fb.className = 'xfb';
+      const optsEl = document.getElementById('xOpts');
+      optsEl.innerHTML = '';
+      q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'xopt'; btn.textContent = opt;
+        btn.addEventListener('click', () => { sfxClick(); pickAnswer(i); });
+        optsEl.appendChild(btn);
+      });
+      const next = document.getElementById('xNext');
+      next.disabled = true;
+      next.textContent = qIndex === QUESTIONS.length - 1 ? 'IR AL COMBATE →' : 'SIGUIENTE →';
+      answered = false;
+      startQTimer(q.time);
+    }
+
+    function pickAnswer(i) {
+      if (answered) return;
+      answered = true; stopQTimer();
+      const q = QUESTIONS[qIndex];
+      document.querySelectorAll('.xopt').forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === q.correct) b.classList.add('reveal');
+        if (idx === i && i !== q.correct) b.classList.add('wrong');
+        if (idx === i && i === q.correct) { b.classList.remove('reveal'); b.classList.add('correct'); }
+      });
+      const fb = document.getElementById('xFB');
+      if (i === q.correct) {
+        qScore++;
+        document.getElementById('xScore').textContent = '✦ ' + qScore + ' / ' + QUESTIONS.length;
+        fb.textContent = '✓ ' + q.fb_ok; fb.className = 'xfb ok'; sfxCorrect();
+      } else {
+        fb.textContent = '✗ ' + q.fb_no; fb.className = 'xfb no'; sfxWrong();
+      }
+      document.getElementById('xNext').disabled = false;
+    }
+
+    function timeExpired() {
+      answered = true; sfxWrong();
+      document.querySelectorAll('.xopt').forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === QUESTIONS[qIndex].correct) b.classList.add('reveal');
+      });
+      const fb = document.getElementById('xFB');
+      fb.textContent = '⏱ Tiempo agotado. ' + QUESTIONS[qIndex].fb_no;
+      fb.className = 'xfb no';
+      document.getElementById('xNext').disabled = false;
+    }
+
+    document.getElementById('xNext').addEventListener('click', () => {
+      sfxClick(); stopQTimer(); qIndex++;
+      if (qIndex >= QUESTIONS.length) {
+        document.getElementById('panelQuiz').style.display = 'none';
+        document.getElementById('panelCombat').style.display = 'block';
+        document.getElementById('xPh1').classList.add('off');
+        document.getElementById('xPh2').classList.remove('off');
+        sfxPhase();
+      } else {
+        renderQuestion();
+      }
+    });
+
+    /* ── Combat ── */
+    const TURN_RULES = [
+      {
+        key: 'mn',
+        re: /(te\s+(golpeé|partí|maté|destruí|noqué|herí|corté|alcancé|impacté|rompí|quemé|atravesé|lancé|tiré|mandé|noqueé)|quedaste\s+(sin|inconsciente|derrotad|lanzad)|caíste|moriste|perdiste\s+(la|el)|fuiste\s+(derrotad|vencid|lanzad|aplastado)|resultaste\s+(herido|muerto|noqueado))/gi,
+        label: '🚫 Sin Manipulación Negra'
+      },
+      {
+        key: 'det',
+        re: /(imposible\s+(de\s+)?(esquivar|evadir|evitar|detener|bloquear|sobrevivir)|sin\s+(posibilidad|escapatoria|salida|forma\s+de\s+(escapar|evitar|esquivar))|no\s+(hay|tienes|tiene|existe)\s+(forma|manera|opción|salida|escape)|nadie\s+puede\s+(evitar|esquivar|detener|sobrevivir)|no\s+puedes\s+(hacer\s+nada|sobrevivir|escapar|evadirlo))/gi,
+        label: '🚫 Sin Determinismo'
+      },
+      {
+        key: 'god',
+        re: /(fuerza\s+(infinita|ilimitada|absoluta|omnipotente)|poder\s+(infinito|ilimitado|absoluto|omnipotente)|invulnerable|indestructible|omnipotente|invencible|sin\s+límite|resistencia\s+(absoluta|infinita|ilimitada)|energía\s+(infinita|ilimitada|absoluta))/gi,
+        label: '🚫 Sin God-Rol'
+      },
+      {
+        key: 'informal',
+        re: /(\bxd\b|\blol\b|\bjajaj|\bajajaj|\bjeje\b|\bbro\b|\bxq\b|\bke\b|\bomg\b|\bwtf\b|\blmao\b|\bxfavor\b|\bporfavor\b|\bporfi\b|\bq\b(?=\s)|\bsii+\b|\bnoo+\b)/gi,
+        label: '✍ Sin lenguaje informal'
+      }
+    ];
+
+    function checkUniqueness(text) {
+      const clean = text.replace(/[^a-záéíóúñü\s]/gi, '').toLowerCase();
+      const uniqueLetters = new Set(clean.replace(/\s/g, '').split('')).size;
+      const words = clean.split(/\s+/).filter(w => w.length > 1);
+      const uniqueWords = new Set(words).size;
+      const maxRep = words.length > 0 ? Math.max(...[...new Set(words)].map(w => words.filter(x => x === w).length)) : 0;
+      const noSpam = words.length === 0 || (maxRep / words.length) <= 0.38;
+      return { uniqueLetters, uniqueWords, noSpam };
+    }
+
+    const INTENT_RE = /(buscará|intentará|lanzaré|lanzo|apunto|dirijo|impulso|busco|concentro|proyecto|extiendo|acelero|enfoco|descargo|activo|libero|desato|preparo|avanzo|cargo|inicio|propulso|disparo|desplazo|converjo|comprimo|expando|ejecuto|orienta|buscaré|intentaré|atacaré|golpearé|cortaré)/gi;
+
+    let _cDeb = null;
+    document.getElementById('xCTA').addEventListener('input', () => {
+      clearTimeout(_cDeb);
+      _cDeb = setTimeout(checkTurn, 280);
+    });
+
+    function checkTurn() {
+      const text = document.getElementById('xCTA').value;
+      const len = text.trim().length;
+      document.getElementById('xCCounter').textContent = len + ' car. ' + (len >= 200 ? '✓' : '(min 200)');
+      const { uniqueLetters, uniqueWords, noSpam } = checkUniqueness(text);
+      INTENT_RE.lastIndex = 0;
+      const hasIntent = INTENT_RE.test(text);
+      const checks = {
+        len:       len >= 200,
+        words:     uniqueWords >= 30 && noSpam,
+        diversity: uniqueLetters >= 10,
+        intent:    hasIntent
+      };
+      let msg = '';
+      TURN_RULES.forEach(rule => {
+        rule.re.lastIndex = 0;
+        const fail = rule.re.test(text);
+        rule.re.lastIndex = 0;
+        checks[rule.key] = !fail;
+        if (fail) msg = '⚠ ' + rule.label + ' detectado en el texto.';
+      });
+      if (!checks.words && uniqueWords < 30 && len >= 200) {
+        msg = '⚠ Vocabulario insuficiente: usá al menos 30 palabras distintas (' + uniqueWords + '/30).';
+      } else if (!checks.diversity && len >= 10) {
+        msg = '⚠ Texto muy repetitivo — pocas letras distintas (' + uniqueLetters + '/10).';
+      } else if (!checks.intent && len >= 200) {
+        msg = '⚠ No se detectan verbos de intención de combate (lanzo, cargo, busco…).';
+      }
+      document.getElementById('xCOrtho').textContent = msg;
+      Object.keys(checks).forEach(k => {
+        const el = document.querySelector('.xct-rule[data-key="' + k + '"]');
+        if (el) { el.classList.toggle('ok', checks[k]); el.classList.toggle('fail', !checks[k]); }
+      });
+      document.getElementById('xCSubmit').disabled = !Object.values(checks).every(Boolean);
+    }
+
+    document.getElementById('xCSubmit').addEventListener('click', () => {
+      sfxPhase();
+      finishExam();
+    });
+
+    /* ── Finish ── */
+    async function finishExam() {
+      examRunning = false;
+      stopGlobal(); stopQTimer();
+      const passed = qScore >= 7;
+
+      let regStatus = null;
+      let regError  = null;
+
+      if (passed) {
+        let pending = null;
+        try { pending = JSON.parse(sessionStorage.getItem('bellator_pending_reg')); } catch(_) {}
+        if (pending) {
+          try {
+            const resp = await fetch('/api/inscribir', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ ...pending, exam_score: qScore, exam_passed: true })
+            });
+            const data = await resp.json();
+            if (data.ok) {
+              regStatus = data.status;
+            } else {
+              if (data.error === 'division_full') {
+                regError = 'División Ciudad al límite — contactá a un administrador.';
+              } else if (data.error === 'pseudonimo_taken') {
+                regError = 'Ese pseudónimo ya está registrado.';
+              } else if (data.error === 'already_confirmed') {
+                regStatus = 'Competidor ya confirmado — bienvenido de vuelta.';
+              } else {
+                regError = 'Error al registrar. Contactá soporte.';
+              }
+            }
+          } catch(_) { regError = 'Error de red al registrar.'; }
+          sessionStorage.removeItem('bellator_pending_reg');
+        }
+      }
+
+      sessionStorage.setItem('bellator_exam_result', JSON.stringify({
+        passed, score: qScore, total: 10, reason: null, reg_status: regStatus, reg_error: regError
+      }));
+      document.getElementById('panelCombat').style.display = 'none';
+      const res = document.getElementById('panelResult');
+      res.style.display = 'block';
+      document.getElementById('xRI').textContent  = passed ? '🏆' : '⚔';
+      document.getElementById('xRT').textContent  = passed ? '¡ADMITIDO!' : 'INSUFICIENTE';
+      document.getElementById('xRT').style.color  = passed ? '#3fb950' : '#f59e0b';
+      if (passed) launchConfetti();
+      document.getElementById('xRS').textContent  = passed
+        ? (regStatus ? regStatus + ' — bienvenido a Bellator.' : 'Turno válido y teoría aprobada.')
+        : 'Turno válido, pero no alcanzaste 7/10 en teoría. Repasá el reglamento.';
+      document.getElementById('xRSc').textContent = 'TEORÍA: ' + qScore + ' / 10' + (passed ? '  ·  COMBATE: APROBADO' : '');
+      exitAndRedirect();
+    }
+  </script>
+  <script>function launchConfetti(){var cv=document.createElement('canvas'),cx;cv.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999';document.body.appendChild(cv);cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var cols=['#D4AF37','#FFD700','#f59e0b','#3fb950','#3671C6','#a78bfa','#fff','#E10600'],ps=Array.from({length:200},function(_,i){return{x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*14+4,h:Math.random()*7+3,c:cols[i%cols.length],rot:Math.random()*6.28,rs:(Math.random()-.5)*.14,vy:Math.random()*3+2.5,vx:(Math.random()-.5)*1.8,a:1,ci:Math.random()<.3};}),t=0,tot=280;(function draw(){cx.clearRect(0,0,cv.width,cv.height);t++;ps.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(t*.025+p.x*.008)*.6;p.rot+=p.rs;if(t>tot*.55)p.a=Math.max(0,p.a-.02);if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.ci?(cx.beginPath(),cx.arc(0,0,p.w/2,0,Math.PI*2),cx.fill()):(cx.fillRect(-p.w/2,-p.h/2,p.w,p.h));cx.restore();});t<tot?requestAnimationFrame(draw):cv.remove();}());}</script>
+  <script src="/translate.js?v=4"></script>
+</body>
+</html>

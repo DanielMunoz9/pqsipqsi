@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "dockerfile"
+  },
+  "deploy": {
+    "startCommand": "./main"
+  },
+  "env": {
+    "PORT": "8080"
+  }
+}

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dossier Editorial — BELLATOR ROLBATTLE</title>
+  <title>Dossier Editorial � BELLATOR ROLBATTLE</title>
   <style id="ro-base-styles">
     @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Teko:wght@400;500;600;700&display=swap');
 
@@ -27,7 +27,7 @@
     button,input{font:inherit;border:none;outline:none;background:none;cursor:pointer}
     img{display:block;max-width:100%}
 
-    /* ── LAYOUT ── */
+    /* -- LAYOUT -- */
     .ro-layout{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
     .ro-sidebar{
       position:sticky;top:0;height:100vh;overflow-y:auto;
@@ -108,10 +108,10 @@
     }
     .ro-back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 
-    /* ── MAIN ── */
+    /* -- MAIN -- */
     .ro-main{overflow-x:hidden;min-width:0}
 
-    /* ── MASTHEAD ── */
+    /* -- MASTHEAD -- */
     .ro-masthead{
       position:relative;overflow:hidden;
       min-height:400px;
@@ -182,7 +182,7 @@
       text-transform:uppercase;cursor:pointer;
     }
 
-    /* ── CREDITS ── */
+    /* -- CREDITS -- */
     .ro-credits{max-width:900px;margin:0 auto;padding:18px 28px 0}
     .ro-credits-inner{
       display:flex;align-items:flex-start;gap:12px;
@@ -205,7 +205,7 @@
     }
     .ro-media-duo.is-single{display:block}
 
-    /* ── STICKY TOOLBAR ── */
+    /* -- STICKY TOOLBAR -- */
     .ro-toolbar{
       position:sticky;top:0;z-index:40;
       display:flex;align-items:center;gap:12px;
@@ -220,7 +220,7 @@
     }
     .ro-toolbar-count{margin-left:auto;font-size:.8rem;color:var(--ro-gold);letter-spacing:1px}
 
-    /* ── SECTION COVER (portada por categoría, con GIF) ── */
+    /* -- SECTION COVER (portada por categor�a, con GIF) -- */
     .ro-cover{
       position:relative;overflow:hidden;
       margin:28px 44px 0;
@@ -257,10 +257,10 @@
       color:rgba(255,255,255,.72)
     }
 
-    /* ── ARTICLES WRAPPER ── */
+    /* -- ARTICLES WRAPPER -- */
     .ro-articles{padding:0 44px 60px;display:flex;flex-direction:column;gap:0}
 
-    /* ── SINGLE SHEET (el "papel") ── */
+    /* -- SINGLE SHEET (el "papel") -- */
     .ro-sheet{
       margin-top:20px;border-radius:14px;overflow:hidden;
       background:#f4f0e7;color:#141414;
@@ -352,7 +352,7 @@
     /* BODY */
     .ro-sheet-body{padding:24px 28px}
 
-    /* adaptar estilos canónicos a fondo claro */
+    /* adaptar estilos can�nicos a fondo claro */
     .ro-sheet-body .rgl-prose{color:#1b1b1b}
     .ro-sheet-body .rgl-prose p{color:#232323;margin-bottom:.7em}
     .ro-sheet-body .rgl-prose strong{color:#9f1313}
@@ -388,10 +388,10 @@
     .ro-sheet-body mark,.ro-sheet-body .ro-mark{
       background:#ffe566;color:#111;padding:0 .12em;border-radius:3px;
     }
-    /* ── NO COPY ── */
+    /* -- NO COPY -- */
     #ro-content{-webkit-user-select:none;user-select:none}
 
-    /* ── STATE CARDS ── */
+    /* -- STATE CARDS -- */
     .ro-state{
       margin:44px 44px;padding:52px 32px;
       border-radius:16px;text-align:center;
@@ -402,7 +402,7 @@
     .ro-state-copy{margin-top:10px;color:#6a7c8e;font-size:.96rem;line-height:1.6;max-width:520px;margin-inline:auto}
     .ro-state-copy a{color:var(--ro-gold);text-decoration:underline}
 
-    /* ── RESPONSIVE ── */
+    /* -- RESPONSIVE -- */
     @media(max-width:1100px){
       .ro-layout{grid-template-columns:1fr}
       .ro-sidebar{position:static;height:auto}
@@ -436,7 +436,7 @@
 <body>
 <div class="ro-layout">
 
-  <!-- ██ SIDEBAR ██ -->
+  <!-- �� SIDEBAR �� -->
   <aside class="ro-sidebar">
     <div class="ro-sidebar-logo">
       <a href="/reglamento">
@@ -451,7 +451,7 @@
     <div class="ro-search-panel">
       <label class="ro-search-wrap" for="ro-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="ro-search-input" id="ro-search" type="search" placeholder="Buscar regla, HAX, división…" autocomplete="off">
+        <input class="ro-search-input" id="ro-search" type="search" placeholder="Buscar regla, HAX, divisi�n�" autocomplete="off">
       </label>
     </div>
 
@@ -466,12 +466,12 @@
     </div>
 
     <div class="ro-side-section">
-      <div class="ro-side-label">Subcategorías</div>
+      <div class="ro-side-label">Subcategor�as</div>
       <div class="ro-cat-list" id="ro-cat-list"></div>
     </div>
 
     <div class="ro-side-section" style="padding-bottom:0">
-      <div class="ro-side-label">Índice</div>
+      <div class="ro-side-label">�ndice</div>
     </div>
     <nav class="ro-toc-wrap" id="ro-toc"></nav>
 
@@ -483,7 +483,7 @@
     </div>
   </aside>
 
-  <!-- ██ MAIN ██ -->
+  <!-- �� MAIN �� -->
   <main class="ro-main">
 
     <!-- MASTHEAD con GIF de fondo -->
@@ -494,18 +494,18 @@
       <div class="ro-masthead-inner">
         <div class="ro-masthead-badge">
           <svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="3.5" fill="currentColor"/></svg>
-          Archivo Oficial · Bellator RolBattle 2026
+          Archivo Oficial � Bellator RolBattle 2026
         </div>
         <h1 class="ro-masthead-title">Reglamento<br><em>Solo Lectura</em></h1>
-        <p class="ro-masthead-sub">Dossier editorial continuo — combate, HAX, convivencia, divisiones y juzgado en un solo flujo.</p>
+        <p class="ro-masthead-sub">Dossier editorial continuo � combate, HAX, convivencia, divisiones y juzgado en un solo flujo.</p>
         <div class="ro-masthead-tags">
-          <span class="ro-masthead-tag">Búsqueda activa</span>
-          <span class="ro-masthead-tag">Índice anclado</span>
+          <span class="ro-masthead-tag">B�squeda activa</span>
+          <span class="ro-masthead-tag">�ndice anclado</span>
           <span class="ro-masthead-tag">Filtro por capa</span>
           <span class="ro-masthead-tag">GIFs de ejemplo</span>
           <span class="ro-masthead-tag">Sincronizado</span>
         </div>
-        <div class="ro-masthead-count" id="ro-masthead-count">Cargando…</div>
+        <div class="ro-masthead-count" id="ro-masthead-count">Cargando�</div>
         <div class="ro-voice-box" aria-label="Voz del narrador del dossier">
           <span class="ro-voice-chip">Narrador Piper</span>
           <select class="ro-voice-select" id="ro-voice-select" data-tts-voice-select></select>
@@ -517,9 +517,9 @@
     <!-- CREDITS -->
     <div class="ro-credits">
       <div class="ro-credits-inner">
-        <span class="ro-credits-icon">⚔️</span>
+        <span class="ro-credits-icon">??</span>
         <div>
-          <span class="ro-credits-label">Créditos</span>
+          <span class="ro-credits-label">Cr�ditos</span>
           <span class="ro-credits-text">Reglamento y sistema de combate Bellator creado por <strong>Bandet</strong> y el <em>Odiado Clan Orochi</em>. Plataforma web y dossier digital desarrollados por <strong>Bandet</strong>.</span>
         </div>
       </div>
@@ -528,18 +528,18 @@
     <!-- TOOLBAR STICKY -->
     <div class="ro-toolbar">
       <span class="ro-toolbar-label">Dossier Bellator</span>
-      <span class="ro-toolbar-count" id="ro-count">—</span>
+      <span class="ro-toolbar-count" id="ro-count">�</span>
     </div>
 
-    <!-- CONTENIDO DINÁMICO -->
+    <!-- CONTENIDO DIN�MICO -->
     <div id="ro-content">
       <div class="ro-state" id="ro-loading">
-        <div class="ro-state-icon">⚙️</div>
+        <div class="ro-state-icon">??</div>
         <h2 class="ro-state-title">Montando el dossier</h2>
-        <p class="ro-state-copy">Se importa el reglamento canónico. Solo tarda un momento.</p>
+        <p class="ro-state-copy">Se importa el reglamento can�nico. Solo tarda un momento.</p>
       </div>
       <div class="ro-state" id="ro-empty" hidden>
-        <div class="ro-state-icon">🔍</div>
+        <div class="ro-state-icon">??</div>
         <h2 class="ro-state-title">Sin resultados</h2>
         <p class="ro-state-copy">Prueba con otra palabra o quita los filtros.</p>
       </div>
@@ -555,15 +555,32 @@
 
 var roActiveAudioBtn = null;
 var roVoiceSelect = null;
+var roSpeechSession = 0;
 
-/* ── META POR CATEGORÍA: color, GIF de portada, GIFs por sección ── */
+function resetAudioButton(btn, text){
+  if (!btn) return;
+  btn.classList.remove('is-speaking');
+  var label = btn.querySelector('span');
+  if (label) label.textContent = text || 'Escuchar';
+}
+
+function stopNarrationSession(){
+  roSpeechSession += 1;
+  if (window.BellatorTTS && window.BellatorTTS.isSpeaking()) window.BellatorTTS.stop();
+  if (roActiveAudioBtn) {
+    resetAudioButton(roActiveAudioBtn, 'Escuchar');
+    roActiveAudioBtn = null;
+  }
+}
+
+/* -- META POR CATEGOR�A: color, GIF de portada, GIFs por secci�n -- */
 var CAT = {
   convivencia:{layer:'convivencia',label:'Convivencia',color:'#3b82f6',
     coverGif:'https://media.giphy.com/media/nLJAs215zpyqA/giphy.gif',
     coverSource:'Utawarerumono via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/RK7d8948SrLpS4yZ8f/giphy.gif',cap:'Spam, apelación y escala disciplinaria',source:'Funimation via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/uD9ys1HkUSbuMJciFe/giphy.gif',cap:'Código de honor, rivalidad y conducta táctica',source:'Crunchyroll via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/RK7d8948SrLpS4yZ8f/giphy.gif',cap:'Spam, apelaci�n y escala disciplinaria',source:'Funimation via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/uD9ys1HkUSbuMJciFe/giphy.gif',cap:'C�digo de honor, rivalidad y conducta t�ctica',source:'Crunchyroll via Giphy'},
       {kind:'gif',url:'https://media.giphy.com/media/YaUOSO2UAix5r62vRB/giphy.gif',cap:'Disciplina mental y foco competitivo',source:'Baki via Giphy'}
     ]
   },
@@ -572,15 +589,15 @@ var CAT = {
     coverSource:'TVGalicia via Giphy',
     gifs:[
       {kind:'gif',url:'https://media.giphy.com/media/ZpOycNIkRTpsyDgdTG/giphy.gif',cap:'Escala divisional y territorio competitivo',source:'Marvel Studios via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/fytdvZKErZiwTLsZgA/giphy.gif',cap:'Ranking global — velocidad de Quicksilver',source:'Marvel Studios via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/JAk1MzuEvhSqTW66SB/giphy.gif',cap:'Ascenso y presión por escalón',source:'Dragon Ball Sparking Zero via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/fytdvZKErZiwTLsZgA/giphy.gif',cap:'Ranking global � velocidad de Quicksilver',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/JAk1MzuEvhSqTW66SB/giphy.gif',cap:'Ascenso y presi�n por escal�n',source:'Dragon Ball Sparking Zero via Giphy'}
     ]
   },
   sc:{layer:'combate',label:'Sistema',color:'#8b5cf6',
     coverGif:'https://media.giphy.com/media/YgM0iEEUr05NLaR0XO/giphy.gif',
     coverSource:'Jujutsu Kaisen via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/XpFcYeXZbRWeob95oI/giphy.gif',cap:'Mecánica base del sistema de combate',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/XpFcYeXZbRWeob95oI/giphy.gif',cap:'Mec�nica base del sistema de combate',source:'Marvel Studios via Giphy'},
       {kind:'gif',url:'https://media.giphy.com/media/o59XjVXy3dErtsT3Ei/giphy.gif',cap:'Intercambio, lectura y respuesta',source:'Jujutsu Kaisen via Giphy'}
     ]
   },
@@ -588,27 +605,27 @@ var CAT = {
     coverGif:'https://media.giphy.com/media/1xONKAmjT1GHFpkLRd/giphy.gif',
     coverSource:'Anime fight via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/BGZTfUlsBmgaPLmKiN/giphy.gif',cap:'Fase de apertura — ambientación narrativa',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/BGZTfUlsBmgaPLmKiN/giphy.gif',cap:'Fase de apertura � ambientaci�n narrativa',source:'Anime fight archive via Giphy'},
       {kind:'gif',url:'https://media.giphy.com/media/hYxfXTcDzwzUk/giphy.gif',cap:'Marco operativo y protocolo de etiqueta',source:'Anime fight archive via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/c4p59oQhRFE1W/giphy.gif',cap:'Política de integridad narrativa',source:'Anime fight archive via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/qsLVENvjyRHNu/giphy.gif',cap:'Gestión de acciones y dinámica de combate',source:'Anime fight archive via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/c4p59oQhRFE1W/giphy.gif',cap:'Pol�tica de integridad narrativa',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/qsLVENvjyRHNu/giphy.gif',cap:'Gesti�n de acciones y din�mica de combate',source:'Anime fight archive via Giphy'}
     ]
   },
   poderes:{layer:'combate',label:'HAX',color:'#f59e0b',
     coverGif:'https://media.giphy.com/media/n4lry0QHHlLVVaZWz4/giphy.gif',
     coverSource:'BANDAI NAMCO via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/l2JJHdKaR3agT2MVi/giphy.gif',cap:'Choque de titanes — Batman vs Superman',source:'Batman v Superman via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/KmG26GNmdWOUE/giphy.gif',cap:'HAX, presión y lectura de capacidades',source:'Funimation via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/FgiqVS360M3RGPjm9y/giphy.gif',cap:'Despliegue técnico y amenaza escalada',source:'Dragon Ball Super via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/l2JJHdKaR3agT2MVi/giphy.gif',cap:'Choque de titanes � Batman vs Superman',source:'Batman v Superman via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/KmG26GNmdWOUE/giphy.gif',cap:'HAX, presi�n y lectura de capacidades',source:'Funimation via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/FgiqVS360M3RGPjm9y/giphy.gif',cap:'Despliegue t�cnico y amenaza escalada',source:'Dragon Ball Super via Giphy'}
     ]
   },
-  redaccion:{layer:'combate',label:'Redacción',color:'#ec4899',
+  redaccion:{layer:'combate',label:'Redacci�n',color:'#ec4899',
     coverGif:'https://media.giphy.com/media/RDkH4q3dT6ACFMrCQO/giphy.gif',
     coverSource:'Jujutsu Kaisen via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/YlbpBydX5mlrgGHu4Y/giphy.gif',cap:'Meta-rol, presión y orden narrativo',source:'Marvel Studios via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/wiaoWlW17fqIo/giphy.gif',cap:'Pasividad, huida y defensa estéril',source:'Dragon Ball Z via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/YlbpBydX5mlrgGHu4Y/giphy.gif',cap:'Meta-rol, presi�n y orden narrativo',source:'Marvel Studios via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/wiaoWlW17fqIo/giphy.gif',cap:'Pasividad, huida y defensa est�ril',source:'Dragon Ball Z via Giphy'},
       {kind:'gif',url:'https://media.giphy.com/media/m0Q3puFE9wT8mpsME6/giphy.gif',cap:'Cierre narrativo y ajuste fino del texto',source:'Jujutsu Kaisen via Giphy'}
     ]
   },
@@ -616,9 +633,9 @@ var CAT = {
     coverGif:'https://media.giphy.com/media/U0eIOz45aRCH1pny2M/giphy.gif',
     coverSource:'Baki Hanma via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/9oWrLKc7ryOt3XvHZY/giphy.gif',cap:'Stats y aclaraciones de tiempo — Yujiro entra al dossier',source:'Baki via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/VDZDQWaCR2YhQ0qeUo/giphy.gif',cap:'Ritmo del intercambio y ventanas de acción',source:'Crunchyroll via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/Q61ar4HvKga83trZKs/giphy.gif',cap:'Tiempo de lectura y adaptación — Musashi',source:'Baki via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/9oWrLKc7ryOt3XvHZY/giphy.gif',cap:'Stats y aclaraciones de tiempo � Yujiro entra al dossier',source:'Baki via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/VDZDQWaCR2YhQ0qeUo/giphy.gif',cap:'Ritmo del intercambio y ventanas de acci�n',source:'Crunchyroll via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/Q61ar4HvKga83trZKs/giphy.gif',cap:'Tiempo de lectura y adaptaci�n � Musashi',source:'Baki via Giphy'}
     ]
   },
   niveles:{layer:'combate',label:'Niveles',color:'#a855f7',
@@ -626,15 +643,15 @@ var CAT = {
     coverSource:'Funimation via Giphy',
     gifs:[
       {kind:'gif',url:'https://media.giphy.com/media/FMhLMAVWdE1a0/giphy.gif',cap:'Escala, choque y cierre del veredicto',source:'Batman via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/A2w0A1JzVEW1G/giphy.gif',cap:'Escalado entre cortes y jerarquías',source:'Dragon Ball GT via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/A2w0A1JzVEW1G/giphy.gif',cap:'Escalado entre cortes y jerarqu�as',source:'Dragon Ball GT via Giphy'}
     ]
   },
   juez:{layer:'combate',label:'Jueces',color:'#f97316',
     coverGif:'https://media.giphy.com/media/06J6jhrtTu2hgJ4C3u/giphy.gif',
     coverSource:'Dragon Ball Z via Giphy',
     gifs:[
-      {kind:'gif',url:'https://media.giphy.com/media/h3Jxu7a7pd72w/giphy.gif',cap:'Criterios, lectura y veredicto técnico',source:'Anime fight archive via Giphy'},
-      {kind:'gif',url:'https://media.giphy.com/media/6D0tp2M0nBVkF0AP7T/giphy.gif',cap:'Revisión final y castigo del error',source:'Jujutsu Kaisen via Giphy'}
+      {kind:'gif',url:'https://media.giphy.com/media/h3Jxu7a7pd72w/giphy.gif',cap:'Criterios, lectura y veredicto t�cnico',source:'Anime fight archive via Giphy'},
+      {kind:'gif',url:'https://media.giphy.com/media/6D0tp2M0nBVkF0AP7T/giphy.gif',cap:'Revisi�n final y castigo del error',source:'Jujutsu Kaisen via Giphy'}
     ]
   },
   crossover:{layer:'combate',label:'Crossover',color:'#14b8a6',
@@ -650,17 +667,17 @@ var DEFAULT_CAT={layer:'combate',label:'Regla',color:'#ef4444',coverGif:'',gifs:
 function cm(cat){return CAT[cat]||DEFAULT_CAT;}
 function gifFor(cat,idx){var g=cm(cat).gifs;return idx<g.length?g[idx]:null;}
 
-/* ── STATE ── */
+/* -- STATE -- */
 var state={layer:'all',category:'all',query:'',sections:[]};
 
-/* ── UTILS ── */
+/* -- UTILS -- */
 function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function escRe(v){return v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 function slug(v){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')||'s';}
 function textOf(h){var d=document.createElement('div');d.innerHTML=h;return d.textContent||'';}
-function summaryOf(t){var s=String(t||'').replace(/\s+/g,' ').trim();return s.length<=260?s:s.slice(0,257)+'…';}
+function summaryOf(t){var s=String(t||'').replace(/\s+/g,' ').trim();return s.length<=260?s:s.slice(0,257)+'�';}
 
-/* ── EXTRACT ── */
+/* -- EXTRACT -- */
 function injectStyles(doc){
   var s=doc.querySelector('style');
   if(s) document.getElementById('ro-canonical-rules').textContent=s.textContent;
@@ -678,7 +695,7 @@ function extractSections(doc){
     var labelEl=sec.querySelector('.rgl-sec-label');
     var badgeEl=sec.querySelector('.rgl-sec-badge');
     var bodyEl=sec.querySelector('.rgl-sec-body');
-    var title=labelEl?labelEl.textContent.trim():'Sección '+(i+1);
+    var title=labelEl?labelEl.textContent.trim():'Secci�n '+(i+1);
     var badge=badgeEl?badgeEl.textContent.trim():m.label;
     var clone=bodyEl?bodyEl.cloneNode(true):document.createElement('div');
     normalizeBody(clone);
@@ -695,7 +712,7 @@ function extractSections(doc){
   });
 }
 
-/* ── FILTER ── */
+/* -- FILTER -- */
 function filtered(){
   var q=state.query.trim().toLowerCase();
   return state.sections.filter(function(s){
@@ -706,7 +723,7 @@ function filtered(){
   });
 }
 
-/* ── HIGHLIGHT ── */
+/* -- HIGHLIGHT -- */
 function highlight(root,query){
   if(!query) return;
   var safe=escRe(query);if(!safe) return;
@@ -725,7 +742,7 @@ function highlight(root,query){
   });
 }
 
-/* ── SIDEBAR FILTERS ── */
+/* -- SIDEBAR FILTERS -- */
 function updateLayerBtns(){
   document.querySelectorAll('[data-layer]').forEach(function(b){
     b.classList.toggle('active',b.getAttribute('data-layer')===state.layer);
@@ -754,7 +771,7 @@ function updateToc(sections){
   }).join('');
 }
 
-/* ── RENDER ── */
+/* -- RENDER -- */
 function render(){
   var sections=filtered();
   updateLayerBtns();
@@ -775,7 +792,7 @@ function render(){
   if(!sections.length){emptyEl.hidden=false;return;}
   emptyEl.hidden=true;
 
-  /* agrupar por categoría en orden de aparición */
+  /* agrupar por categor�a en orden de aparici�n */
   var groups=[];var gmap={};
   sections.forEach(function(s){
     if(!gmap[s.category]){gmap[s.category]={cat:s.category,items:[]};groups.push(gmap[s.category]);}
@@ -787,7 +804,7 @@ function render(){
   groups.forEach(function(g){
     var m=cm(g.cat);
 
-    /* ── PORTADA DE SECCIÓN ── */
+    /* -- PORTADA DE SECCI�N -- */
     var cover=document.createElement('div');
     cover.className='ro-cover';
     cover.style.background='linear-gradient(150deg,rgba(0,0,0,.64),rgba(0,0,0,.88)),linear-gradient(135deg,'+m.color+' 0%,#060c14 100%)';
@@ -800,13 +817,13 @@ function render(){
     coverHtml+='<div class="ro-cover-inner">';
     coverHtml+='<div class="ro-cover-chip" style="border-color:'+esc(m.color)+';color:'+esc(m.color)+'"><span class="ro-cover-dot" style="background:'+esc(m.color)+'"></span>'+esc(m.label)+'</div>';
     coverHtml+='<div class="ro-cover-title">'+esc(m.label)+'</div>';
-    coverHtml+='<div class="ro-cover-meta">'+g.items.length+' sección'+(g.items.length!==1?'es':'')+'</div>';
+    coverHtml+='<div class="ro-cover-meta">'+g.items.length+' secci�n'+(g.items.length!==1?'es':'')+'</div>';
     if(m.coverSource) coverHtml+='<div class="ro-cover-source">Fuente visual: '+esc(m.coverSource)+'</div>';
     coverHtml+='</div>';
     cover.innerHTML=coverHtml;
     contentEl.insertBefore(cover,emptyEl);
 
-    /* ── SHEETS ── */
+    /* -- SHEETS -- */
     var wrap=document.createElement('div');
     wrap.className='ro-articles';
 
@@ -841,14 +858,13 @@ function render(){
         '<div>',
         '<div class="ro-sheet-tag-row">',
         '<span class="ro-sheet-cat" style="background:'+esc(m.color)+'">'+esc(m.label)+'</span>',
-        '<span class="ro-sheet-num">'+esc(m.label)+' · '+(idx+1)+' / '+g.items.length+'</span>',
+        '<span class="ro-sheet-num">'+esc(m.label)+' � '+(idx+1)+' / '+g.items.length+'</span>',
         '</div>',
         '<h2 class="ro-sheet-title">'+esc(s.title)+'</h2>',
-        '<p class="ro-sheet-summary">'+esc(s.summary)+'</p>',
         '</div>',
         '<div class="ro-sheet-aside">',
         '<span class="ro-sheet-badge">'+esc(s.badge)+'</span>',
-        '<button class="ro-audio-btn" type="button" aria-label="Escuchar artículo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span>Escuchar</span></button>',
+        '<button class="ro-audio-btn" type="button" aria-label="Escuchar art�culo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span>Escuchar</span></button>',
         '<a class="ro-sheet-link" href="/reglamento">',
         '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
         'Fuente</a>',
@@ -872,78 +888,127 @@ function setupTts(){
   var stopBtn = document.getElementById('ro-voice-stop');
   if (stopBtn) {
     stopBtn.addEventListener('click', function(){
-      if (window.BellatorTTS && window.BellatorTTS.isSpeaking()) window.BellatorTTS.stop();
-      if (roActiveAudioBtn) {
-        roActiveAudioBtn.classList.remove('is-speaking');
-        var label = roActiveAudioBtn.querySelector('span');
-        if (label) label.textContent = 'Escuchar';
-        roActiveAudioBtn = null;
-      }
+      stopNarrationSession();
     });
   }
 }
 
-function speakSheetText(article, btn){
-  if (!window.BellatorTTS || !article) return;
-  var body = article.querySelector('.ro-sheet-body');
+function normalizeNarrationText(text){
+  return String(text || '')
+    .replace(/\u00A0/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/([:;,.!?])([^\s])/g, '$1 $2')
+    .trim();
+}
+
+function splitNarrationChunks(text, maxLen){
+  var clean = normalizeNarrationText(text);
+  if (!clean) return [];
+  if (clean.length <= maxLen) return [clean];
+  var sentences = clean.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [clean];
+  var out = [];
+  var current = '';
+  sentences.forEach(function(sentence){
+    var s = normalizeNarrationText(sentence);
+    if (!s) return;
+    if (s.length > maxLen) {
+      if (current) {
+        out.push(current);
+        current = '';
+      }
+      for (var i = 0; i < s.length; i += maxLen) {
+        out.push(s.slice(i, i + maxLen));
+      }
+      return;
+    }
+    if (!current) {
+      current = s;
+      return;
+    }
+    if (current.length + 1 + s.length <= maxLen) {
+      current += ' ' + s;
+    } else {
+      out.push(current);
+      current = s;
+    }
+  });
+  if (current) out.push(current);
+  return out;
+}
+
+function buildNarrationChunks(article){
+  if (!article) return [];
   var title = article.querySelector('.ro-sheet-title');
   var summary = article.querySelector('.ro-sheet-summary');
-  var chunks = [];
-  if (title && title.textContent) chunks.push(title.textContent.trim() + '.');
-  if (summary && summary.textContent) chunks.push(summary.textContent.trim());
+  var body = article.querySelector('.ro-sheet-body');
+  var parts = [];
+  if (title && title.textContent) parts.push(normalizeNarrationText(title.textContent) + '.');
+  if (summary && summary.textContent) parts.push(normalizeNarrationText(summary.textContent));
   if (body) {
-    Array.prototype.slice.call(body.querySelectorAll('p, li')).some(function(node, index){
-      var copy = String(node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
-      if (!copy) return false;
-      chunks.push(copy);
-      return index >= 2;
-    });
+    var bodyText = normalizeNarrationText(body.innerText || body.textContent || '');
+    if (bodyText) parts.push(bodyText);
   }
-  var txt = chunks.join(' ').replace(/\s+/g,' ').trim();
-  if (!txt) return;
-  if (txt.length > 900) txt = txt.slice(0, 900).trim() + '...';
+  return splitNarrationChunks(parts.join(' '), 580);
+}
 
-  if (roActiveAudioBtn && roActiveAudioBtn !== btn) {
-    roActiveAudioBtn.classList.remove('is-speaking');
-    var prevLabel = roActiveAudioBtn.querySelector('span');
-    if (prevLabel) prevLabel.textContent = 'Escuchar';
-  }
+function speakSheetText(article, btn){
+  if (!window.BellatorTTS || !article || !btn) return;
+
   if (window.BellatorTTS.isSpeaking() && roActiveAudioBtn === btn) {
-    window.BellatorTTS.stop();
-    btn.classList.remove('is-speaking');
-    var stopLabel = btn.querySelector('span');
-    if (stopLabel) stopLabel.textContent = 'Escuchar';
-    roActiveAudioBtn = null;
+    stopNarrationSession();
     return;
   }
 
+  var chunks = buildNarrationChunks(article);
+  if (!chunks.length) return;
+
+  stopNarrationSession();
   roActiveAudioBtn = btn;
   var label = btn.querySelector('span');
   btn.classList.add('is-speaking');
   if (label) label.textContent = 'Generando...';
-  window.BellatorTTS.speak(txt, {
-    voice: roVoiceSelect ? roVoiceSelect.value : '',
-    onPlay: function(){
-      if (label) label.textContent = 'Detener';
-    },
-    onEnd: function(){
-      btn.classList.remove('is-speaking');
-      if (label) label.textContent = 'Escuchar';
-      if (roActiveAudioBtn === btn) roActiveAudioBtn = null;
-    },
-    onError: function(message){
-      btn.classList.remove('is-speaking');
-      if (label) label.textContent = 'Error';
-      if (roActiveAudioBtn === btn) roActiveAudioBtn = null;
-      window.setTimeout(function(){
-        if (label) label.textContent = 'Escuchar';
-      }, 1600);
-      if (message) console.error(message);
+
+  var session = ++roSpeechSession;
+  var selectedVoice = roVoiceSelect ? roVoiceSelect.value : '';
+
+  function finishButton(text){
+    if (session !== roSpeechSession) return;
+    if (roActiveAudioBtn === btn) roActiveAudioBtn = null;
+    resetAudioButton(btn, text || 'Escuchar');
+  }
+
+  function playChunk(index){
+    if (session !== roSpeechSession) return;
+    if (index >= chunks.length) {
+      finishButton('Escuchar');
+      return;
     }
-  });
+    window.BellatorTTS.speak(chunks[index], {
+      voice: selectedVoice,
+      onPlay: function(){
+        if (session !== roSpeechSession) return;
+        if (label) label.textContent = 'Detener ' + (index + 1) + '/' + chunks.length;
+      },
+      onEnd: function(){
+        if (session !== roSpeechSession) return;
+        playChunk(index + 1);
+      },
+      onError: function(message){
+        if (session !== roSpeechSession) return;
+        finishButton('Error');
+        window.setTimeout(function(){
+          if (session !== roSpeechSession) return;
+          resetAudioButton(btn, 'Escuchar');
+        }, 1400);
+        if (message) console.error(message);
+      }
+    });
+  }
+
+  playChunk(0);
 }
 
-/* ── TOC SCROLL ── */
+/* -- TOC SCROLL -- */
 function tocScroll(){
   var links=Array.prototype.slice.call(document.querySelectorAll('.ro-toc-link'));
   var pairs=links.map(function(l){return{link:l,el:document.getElementById(l.getAttribute('href').slice(1))};}).filter(function(p){return!!p.el;});
@@ -957,7 +1022,7 @@ function tocScroll(){
   window.addEventListener('scroll',upd,{passive:true});
 }
 
-/* ── EVENTS ── */
+/* -- EVENTS -- */
 function wireEvents(){
   document.getElementById('ro-search').addEventListener('input',function(){
     state.query=this.value||'';render();tocScroll();
@@ -1000,7 +1065,7 @@ function wireEvents(){
   });
 }
 
-/* ── LOAD ── */
+/* -- LOAD -- */
 async function load(){
   try{
     var resp=await fetch('/reglamento',{cache:'no-store'});
@@ -1012,14 +1077,14 @@ async function load(){
     render();wireEvents();tocScroll();
   }catch(err){
     var el=document.getElementById('ro-loading');
-    if(el) el.innerHTML='<div class="ro-state-icon">⚠️</div><h2 class="ro-state-title">Error al cargar</h2><p class="ro-state-copy">No se pudo importar el reglamento. <a href="/reglamento">Abrir reglamento principal</a>.</p>';
+    if(el) el.innerHTML='<div class="ro-state-icon">??</div><h2 class="ro-state-title">Error al cargar</h2><p class="ro-state-copy">No se pudo importar el reglamento. <a href="/reglamento">Abrir reglamento principal</a>.</p>';
     console.error(err);
   }
 }
 
 updateCatList();
 setupTts();
-/* ── NO COPY ── */
+/* -- NO COPY -- */
 document.addEventListener('copy',function(e){e.preventDefault();});
 document.addEventListener('selectstart',function(e){
   if(e.target.closest('#ro-content'))e.preventDefault();
@@ -1028,6 +1093,6 @@ document.addEventListener('selectstart',function(e){
 load();
 })();
 </script>
-<script src="/translate.js"></script>
+<script src="/translate.js?v=4"></script>
 </body>
 </html>
