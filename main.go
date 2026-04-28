@@ -273,12 +273,24 @@ func main() {
 		w.WriteHeader(http.StatusNoContent)
 	}).Methods("GET")
 
+	// Algunos verificadores (Meta/Facebook) prueban primero con HEAD.
+	// Normalizamos HEAD->GET para evitar 405 en páginas estáticas.
+	headCompat := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodHead {
+			r2 := r.Clone(r.Context())
+			r2.Method = http.MethodGet
+			router.ServeHTTP(w, r2)
+			return
+		}
+		router.ServeHTTP(w, r)
+	})
+
 	// CORS
 	handler := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedMethods: []string{"GET", "HEAD", "POST", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"*"},
-	}).Handler(router)
+	}).Handler(headCompat)
 
 	port := getEnv("PORT", "8080") // Para hosting como Railway/Render
 	fmt.Printf("🚀 Servidor ejecutándose en puerto %s\n", port)
