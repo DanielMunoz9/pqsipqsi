@@ -293,9 +293,17 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
-func serveFile(filepath string) http.HandlerFunc {
+func serveFile(fp string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath)
+		switch {
+		case strings.HasSuffix(fp, ".html"):
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		case strings.HasSuffix(fp, ".css"):
+			w.Header().Set("Content-Type", "text/css; charset=utf-8")
+		case strings.HasSuffix(fp, ".js"):
+			w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+		}
+		http.ServeFile(w, r, fp)
 	}
 }
 
