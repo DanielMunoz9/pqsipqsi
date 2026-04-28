@@ -172,6 +172,11 @@ func main() {
 	// ══════════════════════════════════════════════════════════════════════
 	// RUTAS PÚBLICAS — acceso libre, sin autenticación
 	// ══════════════════════════════════════════════════════════════════════
+	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok"))
+	}).Methods("GET", "HEAD")
 	router.HandleFunc("/api/track",        trackVisitor).Methods("POST")
 	router.HandleFunc("/api/v1/auth",      authHandler).Methods("POST")
 	router.HandleFunc("/api/admin/login",  banMiddleware(loginHandler)).Methods("POST")
