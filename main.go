@@ -2407,42 +2407,79 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 	// ── Ruta de upgrade: aspirante pre-registrado que superó el examen ─────────
 	if body.IsUpgrade {
 		var existRows []map[string]interface{}
-		supabaseClient.From("audit_logs").
-			Select("id", "", false).
+		_, findErr := supabaseClient.From("audit_logs").
+			Select("id,hardware_fingerprint", "", false).
 			Filter("pseudonimo", "eq", body.Pseudonimo).
+			Order("timestamp", &postgrest.OrderOpts{Ascending: false}).
+			Limit(1, "").
 			ExecuteTo(&existRows)
+		if findErr != nil {
+			log.Printf("⚠️ upgrade aspirante lookup audit_logs: %v", findErr)
+			http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+			return
+		}
 		if len(existRows) == 0 {
 			http.Error(w, `{"error":"pseudonimo_not_found"}`, http.StatusNotFound)
 			return
 		}
 		auditIDStr := fmt.Sprintf("%v", existRows[0]["id"])
+		auditIDVal := existRows[0]["id"]
+		fp := strings.TrimSpace(fmt.Sprintf("%v", existRows[0]["hardware_fingerprint"]))
+		if fp == "" {
+			fpRaw := "asp-" + body.Pseudonimo + "-" + body.Division
+			fpH := sha256.Sum256([]byte(fpRaw))
+			fp = "asp-" + hex.EncodeToString(fpH[:])[:20]
+		}
+
 		var profRows []map[string]interface{}
-		supabaseClient.From("player_competitive_profiles").
+		_, profSelErr := supabaseClient.From("player_competitive_profiles").
 			Select("id,status", "", false).
 			Filter("source_audit_log_id", "eq", auditIDStr).
+			Limit(1, "").
 			ExecuteTo(&profRows)
-		if len(profRows) == 0 {
-			http.Error(w, `{"error":"profile_not_found"}`, http.StatusNotFound)
-			return
-		}
-		st := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", profRows[0]["status"])))
-		if !strings.HasPrefix(st, "aspirante") {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusConflict)
-			json.NewEncoder(w).Encode(map[string]interface{}{"error": "already_confirmed"})
-			return
-		}
-		newStatus := "Competidor División " + body.Division
-		profIDStr := fmt.Sprintf("%v", profRows[0]["id"])
-		_, _, updErr := supabaseClient.From("player_competitive_profiles").
-			Update(map[string]interface{}{"status": newStatus}, "", "").
-			Filter("id", "eq", profIDStr).
-			Execute()
-		if updErr != nil {
-			log.Printf("⚠️ upgrade aspirante: %v", updErr)
+		if profSelErr != nil {
+			log.Printf("⚠️ upgrade aspirante select profile: %v", profSelErr)
 			http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
 			return
 		}
+
+		if len(profRows) == 0 {
+			profData := map[string]interface{}{
+				"source_audit_log_id":  auditIDVal,
+				"hardware_fingerprint": fp,
+				"status":               "active",
+			}
+			var createRes []map[string]interface{}
+			_, createErr := supabaseClient.From("player_competitive_profiles").
+				Insert(profData, false, "", "", "").
+				ExecuteTo(&createRes)
+			if createErr != nil {
+				_, createErrNoStatus := supabaseClient.From("player_competitive_profiles").
+					Insert(map[string]interface{}{
+						"source_audit_log_id":  auditIDVal,
+						"hardware_fingerprint": fp,
+					}, false, "", "", "").
+					ExecuteTo(&createRes)
+				if createErrNoStatus != nil {
+					log.Printf("⚠️ upgrade aspirante create profile: insert=%v insert_no_status=%v", createErr, createErrNoStatus)
+					http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+					return
+				}
+			}
+		} else {
+			profIDStr := fmt.Sprintf("%v", profRows[0]["id"])
+			_, _, updErr := supabaseClient.From("player_competitive_profiles").
+				Update(map[string]interface{}{"status": "active", "hardware_fingerprint": fp}, "", "").
+				Filter("id", "eq", profIDStr).
+				Execute()
+			if updErr != nil {
+				log.Printf("⚠️ upgrade aspirante normalize profile: %v", updErr)
+				http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+				return
+			}
+		}
+
+		newStatus := "Competidor División " + body.Division
 		log.Printf("⬆️  Aspirante promovido: %s → %s", body.Pseudonimo, newStatus)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -2521,7 +2558,7 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 
 	var auditRes []map[string]interface{}
 	_, err := supabaseClient.From("audit_logs").
-		Upsert(auditData, "hardware_fingerprint", "", "").
+		Insert(auditData, false, "", "", "").
 		ExecuteTo(&auditRes)
 	if err != nil {
 		log.Printf("⚠️ inscribir audit_logs: %v", err)
@@ -2529,21 +2566,69 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var auditID interface{}
 	if len(auditRes) > 0 {
-		if auditID, ok := auditRes[0]["id"]; ok {
-			profData := map[string]interface{}{
-				"source_audit_log_id":  auditID,
-				"hardware_fingerprint": fp,
-				"status":               status,
-			}
-			var profRes []map[string]interface{}
-			_, profErr := supabaseClient.From("player_competitive_profiles").
-				Upsert(profData, "source_audit_log_id", "", "").
+		auditID = auditRes[0]["id"]
+	}
+	if auditID == nil {
+		var lookup []map[string]interface{}
+		_, lookupErr := supabaseClient.From("audit_logs").
+			Select("id", "", false).
+			Filter("pseudonimo", "eq", body.Pseudonimo).
+			Order("timestamp", &postgrest.OrderOpts{Ascending: false}).
+			Limit(1, "").
+			ExecuteTo(&lookup)
+		if lookupErr == nil && len(lookup) > 0 {
+			auditID = lookup[0]["id"]
+		}
+	}
+
+	if auditID != nil {
+		profileStatus := "active"
+		profData := map[string]interface{}{
+			"source_audit_log_id":  auditID,
+			"hardware_fingerprint": fp,
+			"status":               profileStatus,
+		}
+		var profRes []map[string]interface{}
+		_, profErr := supabaseClient.From("player_competitive_profiles").
+			Insert(profData, false, "", "", "").
+			ExecuteTo(&profRes)
+		if profErr != nil {
+			_, profErrNoStatus := supabaseClient.From("player_competitive_profiles").
+				Insert(map[string]interface{}{
+					"source_audit_log_id":  auditID,
+					"hardware_fingerprint": fp,
+				}, false, "", "", "").
 				ExecuteTo(&profRes)
-			if profErr != nil {
-				log.Printf("⚠️ inscribir player_competitive_profiles: %v", profErr)
+			if profErrNoStatus != nil {
+				log.Printf("⚠️ inscribir player_competitive_profiles: insert=%v insert_no_status=%v", profErr, profErrNoStatus)
 			}
 		}
+
+		var profCheck []map[string]interface{}
+		_, checkErr := supabaseClient.From("player_competitive_profiles").
+			Select("id", "", false).
+			Filter("source_audit_log_id", "eq", fmt.Sprintf("%v", auditID)).
+			Limit(1, "").
+			ExecuteTo(&profCheck)
+		if checkErr != nil || len(profCheck) == 0 {
+			log.Printf("⚠️ inscribir: perfil no persistido para audit_id=%v pseudo=%s (checkErr=%v)", auditID, body.Pseudonimo, checkErr)
+			http.Error(w, `{"error":"profile_persist_error"}`, http.StatusInternalServerError)
+			return
+		}
+
+		_, _, _ = supabaseClient.From("player_competitive_profiles").
+			Update(map[string]interface{}{
+				"hardware_fingerprint": fp,
+				"status":               profileStatus,
+			}, "", "").
+			Filter("source_audit_log_id", "eq", fmt.Sprintf("%v", auditID)).
+			Execute()
+	} else {
+		log.Printf("⚠️ inscribir: no se pudo resolver audit_log id para %s", body.Pseudonimo)
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
 	}
 
 	log.Printf("✅ Aspirante registrado: %s → División %s (slot %d/%d)", body.Pseudonimo, body.Division, divCount+1, maxSlots)
