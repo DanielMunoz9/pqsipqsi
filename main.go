@@ -295,6 +295,11 @@ func serveFile(filepath string) http.HandlerFunc {
 }
 
 func piperExecutablePath() string {
+	// Linux (Docker) uses binary without .exe
+	linuxPath := filepath.Join("tts", "piper", "piper", "piper")
+	if _, err := os.Stat(linuxPath); err == nil {
+		return linuxPath
+	}
 	return filepath.Join("tts", "piper", "piper", "piper.exe")
 }
 
