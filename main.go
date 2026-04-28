@@ -253,10 +253,10 @@ func main() {
 	router.HandleFunc("/tts-client.js",    serveFile("./public/tts-client.js")).Methods("GET")
 	router.HandleFunc("/tracker.js",       serveFile("./public/tracker.js")).Methods("GET")
 	router.HandleFunc("/translate.js",     serveFile("./public/translate.js")).Methods("GET")
-	router.HandleFunc("/audio/bellator-intro.mp3", serveFile("./public/audio/bellator-intro.mp3")).Methods("GET")
-	router.HandleFunc("/audio/let-go.mp3",         serveFile("./public/audio/let-go.mp3")).Methods("GET")
-	router.HandleFunc("/audio/goth-slowed.mp3",    serveFile("./public/audio/goth-slowed.mp3")).Methods("GET")
-	router.HandleFunc("/register-fight-loop.mp4", serveFile("./public/register-fight-loop.mp4")).Methods("GET")
+	router.HandleFunc("/audio/bellator-intro.mp3", serveFileOrCDN("./public/audio/bellator-intro.mp3", "/audio/bellator-intro.mp3")).Methods("GET")
+	router.HandleFunc("/audio/let-go.mp3",         serveFileOrCDN("./public/audio/let-go.mp3", "/audio/let-go.mp3")).Methods("GET")
+	router.HandleFunc("/audio/goth-slowed.mp3",    serveFileOrCDN("./public/audio/goth-slowed.mp3", "/audio/goth-slowed.mp3")).Methods("GET")
+	router.HandleFunc("/register-fight-loop.mp4",  serveFileOrCDN("./public/register-fight-loop.mp4", "/register-fight-loop.mp4")).Methods("GET")
 	router.HandleFunc("/404alert.jpg",     serveFile("./public/404alert.jpg")).Methods("GET")
 	router.HandleFunc("/iliaaa.jpg",       serveFile("./public/iliaaa.jpg")).Methods("GET")
 	router.HandleFunc("/editmisterbug.png",serveFile("./public/editmisterbug.png")).Methods("GET")
@@ -304,6 +304,18 @@ func serveFile(fp string) http.HandlerFunc {
 			w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		}
 		http.ServeFile(w, r, fp)
+	}
+}
+
+func serveFileOrCDN(localPath, cdnPath string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if _, err := os.Stat(localPath); err == nil {
+			http.ServeFile(w, r, localPath)
+			return
+		}
+
+		cdnURL := "https://cdn.jsdelivr.net/gh/DanielMunoz9/pqsipqsi@main/public" + cdnPath
+		http.Redirect(w, r, cdnURL, http.StatusFound)
 	}
 }
 
