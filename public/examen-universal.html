@@ -721,7 +721,23 @@
       return { uniqueLetters, uniqueWords, noSpam };
     }
 
-    const INTENT_RE = /(buscará|intentará|lanzaré|lanzo|apunto|dirijo|impulso|busco|concentro|proyecto|extiendo|acelero|enfoco|descargo|activo|libero|desato|preparo|avanzo|cargo|inicio|propulso|disparo|desplazo|converjo|comprimo|expando|ejecuto|orienta|buscaré|intentaré|atacaré|golpearé|cortaré)/gi;
+    function normalizeIntentText(text) {
+      return String(text || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    const INTENT_PATTERNS = [
+      /\b(?:intento|intentare|voy a intentar|lanzo|lanzare|voy a lanzar|apunto|apuntare|voy a apuntar|dirijo|dirigire|voy a dirigir|impulso|impulsare|busco|buscare|concentro|concentrare|proyecto|proyectare|extiendo|extendere|acelero|acelerare|enfoco|enfocare|descargo|descargare|activo|activare|libero|liberare|desato|desatare|preparo|preparare|avanzo|avanzare|cargo|cargare|inicio|iniciare|propulso|propulsare|disparo|disparare|desplazo|desplazare|converjo|convergere|comprimo|comprimire|expando|expandire|ejecuto|ejecutare|oriento|orientare|ataco|atacare|voy a atacar|golpeo|golpeare|voy a golpear|corto|cortare|voy a cortar|embisto|embestire|arremeto|arremetere|invoco|invocare|canalizo|canalizare|manifiesto|manifestare|despliego|desplegare)\b/,
+      /\b(?:mi tecnica|el ataque|la ofensiva|los cortes|la energia|la hoja|el golpe)\b.{0,80}\b(?:impactara|buscara|apuntara|se dirigira|comenzara a manifestarse|seccionara|atravesara|golpeara|cortara)\b/,
+      /\b(?:buscando|hacia (?:su|el|la)|con la intencion de|apuntando a)\b/
+    ];
+
+    function hasCombatIntent(text) {
+      const normalized = normalizeIntentText(text);
+      return INTENT_PATTERNS.some(re => re.test(normalized));
+    }
 
     let _cDeb = null;
     document.getElementById('xCTA').addEventListener('input', () => {
@@ -734,8 +750,7 @@
       const len = text.trim().length;
       document.getElementById('xCCounter').textContent = len + ' car. ' + (len >= 200 ? '✓' : '(min 200)');
       const { uniqueLetters, uniqueWords, noSpam } = checkUniqueness(text);
-      INTENT_RE.lastIndex = 0;
-      const hasIntent = INTENT_RE.test(text);
+      const hasIntent = hasCombatIntent(text);
       const checks = {
         len:       len >= 200,
         words:     uniqueWords >= 30 && noSpam,
@@ -755,7 +770,7 @@
       } else if (!checks.diversity && len >= 10) {
         msg = '⚠ Texto muy repetitivo — pocas letras distintas (' + uniqueLetters + '/10).';
       } else if (!checks.intent && len >= 200) {
-        msg = '⚠ No se detectan verbos de intención de combate (lanzo, cargo, busco…).';
+        msg = '⚠ No se detectan construcciones de intención válidas en presente o futuro (lanzo, avanzo, mi técnica impactará…).';
       }
       document.getElementById('xCOrtho').textContent = msg;
       Object.keys(checks).forEach(k => {
@@ -825,6 +840,7 @@
     }
   </script>
   <script>function launchConfetti(){var cv=document.createElement('canvas'),cx;cv.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999';document.body.appendChild(cv);cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var cols=['#D4AF37','#FFD700','#f59e0b','#3fb950','#3671C6','#a78bfa','#fff','#E10600'],ps=Array.from({length:200},function(_,i){return{x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*14+4,h:Math.random()*7+3,c:cols[i%cols.length],rot:Math.random()*6.28,rs:(Math.random()-.5)*.14,vy:Math.random()*3+2.5,vx:(Math.random()-.5)*1.8,a:1,ci:Math.random()<.3};}),t=0,tot=280;(function draw(){cx.clearRect(0,0,cv.width,cv.height);t++;ps.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(t*.025+p.x*.008)*.6;p.rot+=p.rs;if(t>tot*.55)p.a=Math.max(0,p.a-.02);if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.ci?(cx.beginPath(),cx.arc(0,0,p.w/2,0,Math.PI*2),cx.fill()):(cx.fillRect(-p.w/2,-p.h/2,p.w,p.h));cx.restore();});t<tot?requestAnimationFrame(draw):cv.remove();}());}</script>
+  <script src="/core.js?v=1"></script>
   <script src="/translate.js?v=4"></script>
 </body>
 </html>
