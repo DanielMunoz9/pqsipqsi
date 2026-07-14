@@ -15,6 +15,8 @@ WORKDIR /home/user/app
 COPY --from=builder --chown=user /app/main ./main
 COPY --from=builder --chown=user /app/public ./public
 
+RUN chmod +x ./main
+
 ENV PORT=8080
 EXPOSE 8080
 
