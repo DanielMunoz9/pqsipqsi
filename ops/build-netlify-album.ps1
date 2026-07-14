@@ -13,6 +13,13 @@ New-Item -ItemType Directory -Path $Output | Out-Null
 Copy-Item -Path (Join-Path $sourcePath 'album.html') -Destination (Join-Path $Output 'album.html')
 Copy-Item -Path (Join-Path $sourcePath '404.html') -Destination (Join-Path $Output '404.html') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'robots.txt') -Destination (Join-Path $Output 'robots.txt') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'apuestas.html') -Destination (Join-Path $Output 'apuestas.html') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'sorteo.html') -Destination (Join-Path $Output 'sorteo.html') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'admin.html') -Destination (Join-Path $Output 'admin.html') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'shared.css') -Destination (Join-Path $Output 'shared.css') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'sentinel.js') -Destination (Join-Path $Output 'sentinel.js') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'tracker.js') -Destination (Join-Path $Output 'tracker.js') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'core.js') -Destination (Join-Path $Output 'core.js') -ErrorAction SilentlyContinue
 
 Copy-Item -Path (Join-Path $sourcePath 'data') -Destination (Join-Path $Output 'data') -Recurse -Force -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'audio') -Destination (Join-Path $Output 'audio') -Recurse -Force -ErrorAction SilentlyContinue
