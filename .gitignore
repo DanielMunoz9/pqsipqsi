@@ -27,3 +27,9 @@ reporte_bytes.txt
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local Netlify folder
+.netlify
+
+# Album-only standalone deploy bundle
+.netlify-album-dist/

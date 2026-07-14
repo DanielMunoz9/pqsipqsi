@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -549,7 +549,9 @@
         const reason = result.reason || result.reg_error || ('No alcanzaste el mínimo de 7/10 en teoría. Repasá el reglamento y volvé a intentarlo.');
         const successCopy = result.reg_status
           ? ('Prueba superada. ' + result.reg_status + '.')
-          : ('Superaste la prueba teórica y tu turno de combate es técnicamente válido para División ' + division + '.');
+          : result.reg_error
+            ? ('Aprobaste el examen pero hubo un error al guardar tu perfil: ' + result.reg_error + ' Contactá a un administrador.')
+            : ('Superaste la prueba teórica y tu turno de combate es técnicamente válido para División ' + division + '.');
         card.innerHTML =
           '<div class="res-icon2">' + (p ? (division.includes('Universal') ? '🌌' : '🏆') : '⚔') + '</div>' +
           '<div class="res-title2" style="color:' + (p ? '#3fb950' : '#f59e0b') + '">' + (p ? '¡ADMITIDO!' : 'INSUFICIENTE') + '</div>' +
@@ -575,7 +577,7 @@
       }
     })();
   </script>
-<script src="/core.js?v=1"></script>
+<script src="/core.js?v=3"></script>
 <script src="/translate.js?v=4"></script>
 </body>
 </html>

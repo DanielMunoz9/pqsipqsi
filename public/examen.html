@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -207,6 +207,12 @@
     .xres-title { font-family:'Teko',sans-serif;font-size:1.8rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px; }
     .xres-sub { font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:10px; }
     .xres-score { font-family:'Teko',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--gold);margin-bottom:6px; }
+    .xres-best { margin-top: 14px; display: none; }
+    .xres-best-title { font-family:'Teko',sans-serif;font-size:.95rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px; }
+    .xres-best-list { display: grid; gap: 8px; }
+    .xres-best-item { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); }
+    .xres-best-name { font-size:.86rem; color: var(--text); font-weight:600; }
+    .xres-best-meta { font-family:'Teko',sans-serif;font-size:.76rem;letter-spacing:1.6px;color:rgba(238,244,255,.6);text-transform:uppercase; }
     .xres-redir { font-size:.78rem;color:rgba(238,244,255,.3);margin-bottom:18px; }
 
     /* shared button */
@@ -234,7 +240,7 @@
   (async function gateCheck() {
     try {
       const s = await fetch('/api/division-slots').then(r => r.json());
-      const OPENS = new Date('2026-04-29T02:00:00Z');
+      const OPENS = new Date('2026-05-10T05:00:00Z');
       const locked = s.locked || new Date() < OPENS;
       const full   = !locked && (s.ciudad || 0) >= (s.max || 16);
       if (!locked && !full) return; // todo OK, mostrar examen normal
@@ -260,7 +266,7 @@
           <div class="xgate-icon">${locked ? '🔐' : '⛔'}</div>
           <div class="xgate-title">${locked ? 'Próximamente' : 'División Ciudad — Llena'}</div>
           <div class="xgate-msg">${locked
-            ? 'El examen de admisión aún no está disponible.<br>Las inscripciones al campeonato abren el <strong>28 de abril · 9 p.m. (Colombia)</strong>.'
+            ? 'El examen de admisión aún no está disponible.<br>Las inscripciones al campeonato abren el <strong>domingo 10 de mayo (Colombia)</strong>.'
             : 'Los 16 cupos de División Ciudad ya fueron cubiertos.<br>No se aceptan más inscripciones para esta división.'}
           </div>
           <a href="/" class="xgate-btn">← Volver al inicio</a>
@@ -357,6 +363,10 @@
         <div class="xres-title" id="xRT"></div>
         <div class="xres-sub" id="xRS"></div>
         <div class="xres-score" id="xRSc"></div>
+        <div class="xres-best" id="xRBest">
+          <div class="xres-best-title">Mejores resultados</div>
+          <div class="xres-best-list" id="xRBestList"></div>
+        </div>
         <div class="xres-redir">Regresando a la sala de admisión…</div>
       </div>
     </div>
@@ -394,7 +404,9 @@
     });
 
     /* ── Fullscreen + tab switching ── */
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     let infractions = 0;
+    const maxInfractions = isMobile ? 3 : 2;
     const warnEl = document.getElementById('xWarn');
 
     function requestFS() {
@@ -407,24 +419,32 @@
     }
 
     function onFSChange() {
+      if (isMobile) return; // teclado virtual dispara fullscreenchange en móvil
       const fs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
       if (!fs && examRunning) {
         infractions++;
         warnEl.classList.add('show');
         setTimeout(() => warnEl.classList.remove('show'), 5000);
-        if (infractions >= 2) autoFail('Descalificado: saliste de pantalla completa más de una vez.');
+        if (infractions >= maxInfractions) autoFail('Descalificado: saliste de pantalla completa más de una vez.');
       }
     }
     document.addEventListener('fullscreenchange', onFSChange);
     document.addEventListener('webkitfullscreenchange', onFSChange);
     document.addEventListener('mozfullscreenchange', onFSChange);
 
+    let _visHiddenTimer = null;
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && examRunning) {
-        infractions++;
-        warnEl.classList.add('show');
-        setTimeout(() => warnEl.classList.remove('show'), 5000);
-        if (infractions >= 2) autoFail('Descalificado: cambiaste de pestaña más de una vez.');
+        const delay = isMobile ? 6000 : 0;
+        _visHiddenTimer = setTimeout(() => {
+          if (!document.hidden || !examRunning) return;
+          infractions++;
+          warnEl.classList.add('show');
+          setTimeout(() => warnEl.classList.remove('show'), 5000);
+          if (infractions >= maxInfractions) autoFail('Descalificado: cambiaste de pestaña más de una vez.');
+        }, delay);
+      } else {
+        if (_visHiddenTimer) { clearTimeout(_visHiddenTimer); _visHiddenTimer = null; }
       }
     });
 
@@ -460,15 +480,15 @@
       sessionStorage.setItem('bellator_exam_result', JSON.stringify({
         passed: false, score: qScore, total: 10, reason
       }));
-      exitAndRedirect();
+      exitAndRedirect(regError ? 5000 : 520);
     }
 
-    function exitAndRedirect() {
+    function exitAndRedirect(delay) {
       try {
         const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
         if (ex) ex.call(document).catch(() => {});
       } catch(e) {}
-      setTimeout(() => { window.location.href = '/admision'; }, 520);
+      setTimeout(() => { window.location.href = '/admision'; }, delay != null ? delay : 520);
     }
 
     /* ── Launch ── */
@@ -820,11 +840,26 @@
 
       let regStatus = null;
       let regError  = null;
+      let pendingPseudo = '';
+
+      // Mostrar panel resultado con estado de carga si aprobo
+      document.getElementById('panelCombat').style.display = 'none';
+      const res = document.getElementById('panelResult');
+      res.style.display = 'block';
+      const bestWrap = document.getElementById('xRBest');
+      if (bestWrap) bestWrap.style.display = 'none';
 
       if (passed) {
+        document.getElementById('xRI').textContent = String.fromCodePoint(0x23F3);
+        document.getElementById('xRT').textContent = 'REGISTRANDO\u2026';
+        document.getElementById('xRT').style.color = 'var(--gold)';
+        document.getElementById('xRS').textContent = 'Guardando tu perfil, no cierr\u00e9s la pantalla\u2026';
+        document.getElementById('xRS').style.color = '';
         let pending = null;
         try { pending = JSON.parse(sessionStorage.getItem('bellator_pending_reg')); } catch(_) {}
+        if (!pending) { try { pending = JSON.parse(localStorage.getItem('bellator_pending_reg')); } catch(_) {} }
         if (pending) {
+          pendingPseudo = String(pending.pseudonimo || '').trim();
           try {
             const resp = await fetch('/api/inscribir', {
               method: 'POST',
@@ -847,28 +882,55 @@
             }
           } catch(_) { regError = 'Error de red al registrar.'; }
           sessionStorage.removeItem('bellator_pending_reg');
+          try { localStorage.removeItem('bellator_pending_reg'); } catch(_) {}
         }
       }
 
       sessionStorage.setItem('bellator_exam_result', JSON.stringify({
         passed, score: qScore, total: 10, reason: null, reg_status: regStatus, reg_error: regError
       }));
-      document.getElementById('panelCombat').style.display = 'none';
-      const res = document.getElementById('panelResult');
-      res.style.display = 'block';
       document.getElementById('xRI').textContent  = passed ? '🏆' : '⚔';
       document.getElementById('xRT').textContent  = passed ? '¡ADMITIDO!' : 'INSUFICIENTE';
       document.getElementById('xRT').style.color  = passed ? '#3fb950' : '#f59e0b';
-      if (passed) launchConfetti();
+      if (passed && !regError) launchConfetti();
+      if (regError) {
+        document.getElementById('xRS').textContent = String.fromCharCode(9888) + ' ' + regError;
+        document.getElementById('xRS').style.color = 'var(--red)';
+      } else {
+        document.getElementById('xRS').style.color = '';
       document.getElementById('xRS').textContent  = passed
         ? (regStatus ? regStatus + ' — bienvenido a Bellator.' : 'Turno válido y teoría aprobada.')
         : 'Turno válido, pero no alcanzaste 7/10 en teoría. Repasá el reglamento.';
+      }
       document.getElementById('xRSc').textContent = 'TEORÍA: ' + qScore + ' / 10' + (passed ? '  ·  COMBATE: APROBADO' : '');
-      exitAndRedirect();
+      const bestList = document.getElementById('xRBestList');
+      if (bestWrap && bestList) {
+        if (passed) {
+          const entries = [
+            { name: 'Khamzat', score: '10/10', badge: 'MEJOR RESULTADO' }
+          ];
+          if (pendingPseudo && pendingPseudo.toLowerCase() !== 'khamzat') {
+            entries.push({ name: pendingPseudo, score: qScore + '/10', badge: 'TU RESULTADO' });
+          }
+          while (entries.length < 3) {
+            entries.push({ name: 'Ranking en revisión', score: '—', badge: 'EN PROCESO' });
+          }
+          bestList.innerHTML = entries.map(function(entry, index) {
+            return '<div class="xres-best-item">'
+              + '<span class="xres-best-name">' + (index + 1) + '. ' + entry.name + '</span>'
+              + '<span class="xres-best-meta">' + entry.score + ' · ' + entry.badge + '</span>'
+              + '</div>';
+          }).join('');
+          bestWrap.style.display = 'block';
+        } else {
+          bestWrap.style.display = 'none';
+        }
+      }
+      exitAndRedirect(regError ? 5000 : 520);
     }
   </script>
   <script>function launchConfetti(){var cv=document.createElement('canvas'),cx;cv.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:99999';document.body.appendChild(cv);cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var cols=['#D4AF37','#FFD700','#f59e0b','#3fb950','#3671C6','#a78bfa','#fff','#E10600'],ps=Array.from({length:200},function(_,i){return{x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*14+4,h:Math.random()*7+3,c:cols[i%cols.length],rot:Math.random()*6.28,rs:(Math.random()-.5)*.14,vy:Math.random()*3+2.5,vx:(Math.random()-.5)*1.8,a:1,ci:Math.random()<.3};}),t=0,tot=280;(function draw(){cx.clearRect(0,0,cv.width,cv.height);t++;ps.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(t*.025+p.x*.008)*.6;p.rot+=p.rs;if(t>tot*.55)p.a=Math.max(0,p.a-.02);if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.ci?(cx.beginPath(),cx.arc(0,0,p.w/2,0,Math.PI*2),cx.fill()):(cx.fillRect(-p.w/2,-p.h/2,p.w,p.h));cx.restore();});t<tot?requestAnimationFrame(draw):cv.remove();}());}</script>
-  <script src="/core.js?v=1"></script>
+  <script src="/core.js?v=3"></script>
   <script src="/translate.js?v=4"></script>
 </body>
 </html>

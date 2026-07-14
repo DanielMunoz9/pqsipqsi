@@ -4,18 +4,21 @@
    Colores: AZUL (#1f6feb) + DORADO (#D4AF37)
    ══════════════════════════════════════════════════════════════════════ */
 
-var BellatorCore = window.BellatorCore || {
-    safe: function(_name, fn, fallback) {
-        try {
-            return fn();
-        } catch (_error) {
-            return typeof fallback === 'function' ? fallback(_error) : (fallback === undefined ? null : fallback);
+if (!window.BellatorCore) {
+    window.BellatorCore = {
+        safe: function(_name, fn, fallback) {
+            try {
+                return fn();
+            } catch (_error) {
+                return typeof fallback === 'function' ? fallback(_error) : (fallback === undefined ? null : fallback);
+            }
         }
-    }
-};
+    };
+}
+var BellatorAppCore = window.BellatorCore;
 
 // ── BELLATOR SENTINEL — console honeypot ──
-BellatorCore.safe('app.legacySentinel', function bellatorSentinel() {
+BellatorAppCore.safe('app.legacySentinel', function bellatorSentinel() {
     if (window.BellatorSentinel && window.BellatorSentinel.__managed) return;
 
     const isTouchDevice = (window.matchMedia && window.matchMedia('(hover:none), (pointer:coarse)').matches) || navigator.maxTouchPoints > 0;
@@ -83,12 +86,6 @@ BellatorCore.safe('app.legacySentinel', function bellatorSentinel() {
         console.log('%c[HONEYPOT]%c     Trampa activa en /api/admin — esperando intrusos...', S1, S3);
         console.log('%c[FIREWALL]%c     2,847 IPs bloqueadas. Puerto ' + fakePort + ' monitorizado.', S0, S2);
         console.log('%c[WATCHDOG]%c     Consola bajo vigilancia activa. Cada comando es registrado.', S1, S3);
-        console.log('%c[LOG-REMOTE]%c   Actividad sincronizada con servidor de seguridad remoto.', S0, S2);
-
-        console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', S1);
-        console.log('%c[AVISO LEGAL]%c  Cualquier intento de acceso no autorizado, modificación o ataque a este sistema está sujeto a reporte inmediato. Tu actividad ha sido registrada.', S1, S2);
-        console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', S1);
-
         // ── NetExec Banner ──
         setTimeout(function() {
             const NXC  = 'background:#0d1117;color:#00ff41;font-size:11px;font-family:monospace;padding:1px 6px';
@@ -112,42 +109,40 @@ BellatorCore.safe('app.legacySentinel', function bellatorSentinel() {
             console.log('%c⚠  ATAQUE DE RED DETECTADO — CONTRAMEDIDAS ACTIVAS                              ⚠', NXCR);
             console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', NXCR);
 
-            // Simulated nxc command sequence — prints line by line
-            const fakeSubnet  = fakeIP.split('.').slice(0,3).join('.') + '.0/24';
+            const fakeSubnet  = fakeIP.split('.').slice(0, 3).join('.') + '.0/24';
             const fakeTarget  = fakeIP;
-            const fakeUser    = ['admin','root','Administrator','guest','daniel'][Math.floor(Math.random()*5)];
-            const fakePass    = ['Password1','123456','admin','Bellator2026!','letmein'][Math.floor(Math.random()*5)];
+            const fakeUser    = ['admin', 'root', 'Administrator', 'guest', 'daniel'][Math.floor(Math.random() * 5)];
+            const fakePass    = ['Password1', '123456', 'admin', 'Bellator2026!', 'letmein'][Math.floor(Math.random() * 5)];
 
             const nxcLines = [
-                { style: NXCB,  text: 'root@kali:~# nxc smb ' + fakeSubnet + ' --gen-relay-list targets.txt' },
-                { style: NXC,   text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [*] Windows 11 x64 (name:BELLATOR-SRV)' },
-                { style: NXC,   text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [*] Enumerating shares...' },
-                { style: NXCR,  text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [-] Acceso denegado — SENTINEL bloqueó SMB relay' },
-                { style: NXCB,  text: 'root@kali:~# nxc ssh ' + fakeTarget + ' -u ' + fakeUser + ' -p ' + fakePass },
-                { style: NXCR,  text: 'SSH    ' + fakeTarget + '   22  BELLATOR-SRV  [-] ' + fakeUser + ':' + fakePass + ' — AUTHENTICATION FAILED' },
-                { style: NXCR,  text: 'SSH    ' + fakeTarget + '   22  BELLATOR-SRV  [-] Intento registrado. IP añadida a lista negra.' },
-                { style: NXCB,  text: 'root@kali:~# nxc rdp ' + fakeTarget + ' -u ' + fakeUser + ' -p ' + fakePass + ' --screenshot' },
-                { style: NXCR,  text: 'RDP    ' + fakeTarget + ' 3389  BELLATOR-SRV  [-] CONEXIÓN RECHAZADA — puerto 3389 cerrado' },
-                { style: NXCB,  text: 'root@kali:~# nxc ldap ' + fakeTarget + ' -u \'\' -p \'\' --users' },
-                { style: NXCR,  text: 'LDAP   ' + fakeTarget + '  389  BELLATOR-SRV  [-] ACCESO ANÓNIMO BLOQUEADO — SENTINEL SHIELD' },
-                { style: NXCB,  text: 'root@kali:~# nxc ftp ' + fakeTarget + ' -u anonymous -p anonymous' },
-                { style: NXCR,  text: 'FTP    ' + fakeTarget + '   21  BELLATOR-SRV  [-] Puerto no activo en este servidor.' },
-                { style: NXCG,  text: '[ SENTINEL ] Todos los vectores de ataque bloqueados. ' + (5 + Math.floor(Math.random()*12)) + ' intentos registrados.' },
-                { style: NXCG,  text: '[ SENTINEL ] Hash del atacante: ' + fakeHash + ' — perfil guardado en base de datos.' },
-                { style: NXCG,  text: '[ SENTINEL ] Protocolo KILLSWITCH en espera. Próximo intento = BLOQUEO PERMANENTE.' },
-                { style: NXCR,  text: '[ BELLATOR ] The quieter you become, the more you are able to hear. — Kali Linux' },
+                { style: NXCB, text: 'root@kali:~# nxc smb ' + fakeSubnet + ' --gen-relay-list targets.txt' },
+                { style: NXC, text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [*] Windows 11 x64 (name:BELLATOR-SRV)' },
+                { style: NXC, text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [*] Enumerating shares...' },
+                { style: NXCR, text: 'SMB    ' + fakeTarget + '  445  BELLATOR-SRV  [-] Acceso denegado — SENTINEL bloqueó SMB relay' },
+                { style: NXCB, text: 'root@kali:~# nxc ssh ' + fakeTarget + ' -u ' + fakeUser + ' -p ' + fakePass },
+                { style: NXCR, text: 'SSH    ' + fakeTarget + '   22  BELLATOR-SRV  [-] ' + fakeUser + ':' + fakePass + ' — AUTHENTICATION FAILED' },
+                { style: NXCR, text: 'SSH    ' + fakeTarget + '   22  BELLATOR-SRV  [-] Intento registrado. IP añadida a lista negra.' },
+                { style: NXCB, text: 'root@kali:~# nxc rdp ' + fakeTarget + ' -u ' + fakeUser + ' -p ' + fakePass + ' --screenshot' },
+                { style: NXCR, text: 'RDP    ' + fakeTarget + ' 3389  BELLATOR-SRV  [-] CONEXIÓN RECHAZADA — puerto 3389 cerrado' },
+                { style: NXCB, text: 'root@kali:~# nxc ldap ' + fakeTarget + ' -u \'\' -p \'\' --users' },
+                { style: NXCR, text: 'LDAP   ' + fakeTarget + '  389  BELLATOR-SRV  [-] ACCESO ANÓNIMO BLOQUEADO — SENTINEL SHIELD' },
+                { style: NXCB, text: 'root@kali:~# nxc ftp ' + fakeTarget + ' -u anonymous -p anonymous' },
+                { style: NXCR, text: 'FTP    ' + fakeTarget + '   21  BELLATOR-SRV  [-] Puerto no activo en este servidor.' },
+                { style: NXCG, text: '[ SENTINEL ] Todos los vectores de ataque bloqueados. ' + (5 + Math.floor(Math.random() * 12)) + ' intentos registrados.' },
+                { style: NXCG, text: '[ SENTINEL ] Hash del atacante: ' + fakeHash + ' — perfil guardado en base de datos.' },
+                { style: NXCG, text: '[ SENTINEL ] Protocolo KILLSWITCH en espera. Próximo intento = BLOQUEO PERMANENTE.' },
+                { style: NXCR, text: '[ BELLATOR ] The quieter you become, the more you are able to hear. — Kali Linux' },
             ];
 
             let ni = 0;
             const nxcIv = setInterval(function() {
                 if (ni >= nxcLines.length) { clearInterval(nxcIv); return; }
                 console.log('%c' + nxcLines[ni].text, nxcLines[ni].style);
-                ni++;
+                ni += 1;
             }, 1800);
 
         }, 3000);
 
-        // Live fake scan feed
         const feed = [
             ['[SCAN]      ', ' Analizando paquetes entrantes... 0 amenazas activas.'],
             ['[AI-DETECT] ', ' Patrones de comportamiento sospechoso: ANALIZANDO...'],
@@ -166,18 +161,17 @@ BellatorCore.safe('app.legacySentinel', function bellatorSentinel() {
         const iv = setInterval(function() {
             if (i >= feed.length) { clearInterval(iv); return; }
             console.log('%c' + feed[i][0] + '%c' + feed[i][1], S0, S3);
-            i++;
+            i += 1;
         }, 2800);
 
     }, 300);
 });
 
 BellatorCore.safe('app.sharedUi', function() {
-    // ── Shared Bellator intro widget across all public pages ──
-    const INTRO_VOLUME_KEY    = 'bellatorIntroVolume';
-    const INTRO_STATE_KEY     = 'bellatorIntroState';
-    const INTRO_ALLOWED_KEY   = 'bellatorIntroInteractionGranted';
-    const INTRO_TIMES_KEY     = 'bellatorIntroTrackTimes';
+    const INTRO_VOLUME_KEY = 'bellatorIntroVolume';
+    const INTRO_STATE_KEY = 'bellatorIntroState';
+    const INTRO_ALLOWED_KEY = 'bellatorIntroInteractionGranted';
+    const INTRO_TIMES_KEY = 'bellatorIntroTrackTimes';
     const INTRO_PLAYLIST_VERSION_KEY = 'bellatorIntroPlaylistVersion';
     const INTRO_PLAYLIST_VERSION = 'playlist-v4';
     const TRACKS = ['intro', 'letsgo', 'goth'];
@@ -195,11 +189,10 @@ BellatorCore.safe('app.sharedUi', function() {
     const normalizeTrack = (track) => TRACK_SOURCES[track] ? track : 'intro';
     const nextTrack = (track) => NEXT_TRACK_MAP[normalizeTrack(track)] || TRACKS[0];
 
-    // Clear legacy dismissed flags so widget always reappears on reload
     localStorage.removeItem('bellatorIntroDismissed');
     sessionStorage.removeItem('bellatorIntroDismissed');
 
-    const ICON_PLAY  = `<svg width="13" height="14" viewBox="0 0 13 14" fill="#0d1117"><polygon points="0,0 13,7 0,14"/></svg>`;
+    const ICON_PLAY = `<svg width="13" height="14" viewBox="0 0 13 14" fill="#0d1117"><polygon points="0,0 13,7 0,14"/></svg>`;
     const ICON_PAUSE = `<svg width="13" height="14" viewBox="0 0 13 14" fill="#0d1117"><rect x="0" y="0" width="4" height="14" rx="1"/><rect x="9" y="0" width="4" height="14" rx="1"/></svg>`;
 
     function buildIntroWidget() {
@@ -226,10 +219,10 @@ BellatorCore.safe('app.sharedUi', function() {
         if (widget.dataset.audioWidgetBound === '1') return;
         widget.dataset.audioWidgetBound = '1';
 
-        const audio     = document.getElementById('bellator-intro-audio');
-        const toggle    = document.getElementById('bellator-intro-toggle');
-        const closeBtn  = document.getElementById('bellator-intro-close');
-        const labelEl   = widget.querySelector('.bl-ap-label');
+        const audio = document.getElementById('bellator-intro-audio');
+        const toggle = document.getElementById('bellator-intro-toggle');
+        const closeBtn = document.getElementById('bellator-intro-close');
+        const labelEl = widget.querySelector('.bl-ap-label');
         if (!audio || !toggle || !closeBtn) return;
 
         function ensurePlaylistStateVersion() {
@@ -241,15 +234,26 @@ BellatorCore.safe('app.sharedUi', function() {
             } catch (_) {}
         }
 
+        function readTrackTimes() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem(INTRO_TIMES_KEY) || '{}');
+                return {
+                    intro: Math.max(0, Number(parsed.intro) || 0),
+                    letsgo: Math.max(0, Number(parsed.letsgo) || 0),
+                    goth: Math.max(0, Number(parsed.goth) || 0),
+                };
+            } catch (_) {
+                return { intro: 0, letsgo: 0, goth: 0 };
+            }
+        }
+
         function readState() {
             try {
                 const parsed = JSON.parse(localStorage.getItem(INTRO_STATE_KEY) || '{}');
                 const trackTimes = readTrackTimes();
                 const parsedTrack = normalizeTrack(parsed.track);
                 const fallbackTime = Number(trackTimes[parsedTrack]) || 0;
-                const parsedTime = Number.isFinite(parsed.time)
-                    ? Number(parsed.time)
-                    : parseFloat(parsed.time || '');
+                const parsedTime = Number.isFinite(parsed.time) ? Number(parsed.time) : parseFloat(parsed.time || '');
                 const safeParsedTime = Number.isFinite(parsedTime) ? Math.max(0, parsedTime) : null;
                 return {
                     track: parsedTrack,
@@ -265,19 +269,6 @@ BellatorCore.safe('app.sharedUi', function() {
                     playing: false,
                     volume: parseFloat(localStorage.getItem(INTRO_VOLUME_KEY) || '0.18') || 0.18,
                 };
-            }
-        }
-
-        function readTrackTimes() {
-            try {
-                const parsed = JSON.parse(localStorage.getItem(INTRO_TIMES_KEY) || '{}');
-                return {
-                    intro: Math.max(0, Number(parsed.intro) || 0),
-                    letsgo: Math.max(0, Number(parsed.letsgo) || 0),
-                    goth: Math.max(0, Number(parsed.goth) || 0),
-                };
-            } catch (_) {
-                return { intro: 0, letsgo: 0, goth: 0 };
             }
         }
 
@@ -320,15 +311,14 @@ BellatorCore.safe('app.sharedUi', function() {
 
         audio.volume = Math.min(Math.max(initialState.volume, 0.05), 0.35);
 
-        // Cross-tab isolation — evita que varias pestañas reproduzcan a la vez
         const TAB_ID = sessionStorage.getItem('blTabId') || (() => {
             const id = Math.random().toString(36).slice(2, 10);
             sessionStorage.setItem('blTabId', id);
             return id;
         })();
         const ACTIVE_TAB_KEY = 'bellatorAudioActiveTab';
-        const isAnotherTabActive = () => { const t = localStorage.getItem(ACTIVE_TAB_KEY); return !!(t && t !== TAB_ID); };
-        const claimTab  = () => localStorage.setItem(ACTIVE_TAB_KEY, TAB_ID);
+        const isAnotherTabActive = () => { const tab = localStorage.getItem(ACTIVE_TAB_KEY); return !!(tab && tab !== TAB_ID); };
+        const claimTab = () => localStorage.setItem(ACTIVE_TAB_KEY, TAB_ID);
         const releaseTab = () => { if (localStorage.getItem(ACTIVE_TAB_KEY) === TAB_ID) localStorage.removeItem(ACTIVE_TAB_KEY); };
 
         let currentTrack = normalizeTrack(initialState.track);
@@ -472,7 +462,7 @@ BellatorCore.safe('app.sharedUi', function() {
             const next = normalizeTrack(track);
             _forceStartTrack = next;
             clearTrackTime(next);
-            writeState({track: next, time: 0, playing: true, volume: audio.volume});
+            writeState({ track: next, time: 0, playing: true, volume: audio.volume });
             loadTrack(next);
         }
 
@@ -482,15 +472,13 @@ BellatorCore.safe('app.sharedUi', function() {
         let _forceStartTrack = '';
         let _isSwitchingTrack = false;
 
-        // Primera interacción del usuario → reanuda desde la posición correcta
-        // IMPORTANTE: ignorar clics sobre el toggle (ese handler lo gestiona él mismo)
         function tryResumeOnInteraction(e) {
             if (!_wantsPlay || !audio.paused) return;
             if (e && e.target && (e.target === toggle || toggle.contains(e.target))) return;
             _wantsPlay = false;
             resumePlayback().catch(() => { setIcon(false); });
         }
-        ['click','keydown','touchstart'].forEach(ev =>
+        ['click', 'keydown', 'touchstart'].forEach((ev) =>
             document.addEventListener(ev, tryResumeOnInteraction, { once: false, capture: true })
         );
 
@@ -501,7 +489,6 @@ BellatorCore.safe('app.sharedUi', function() {
             if (_pendingSavedTime > 0) {
                 lastKnownTime = _pendingSavedTime;
             }
-            // Restaurar posición ANTES de intentar play
             restoreTimeBeforePlay();
             const shouldResume = shouldAttemptInitialAutoplay || pendingAutoplay || state.playing;
             shouldAttemptInitialAutoplay = false;
@@ -535,7 +522,7 @@ BellatorCore.safe('app.sharedUi', function() {
             widget.style.display = 'none';
         });
 
-        audio.addEventListener('play',  () => {
+        audio.addEventListener('play', () => {
             _isSwitchingTrack = false;
             _forceStartTrack = '';
             claimTab();
@@ -589,9 +576,7 @@ BellatorCore.safe('app.sharedUi', function() {
             }
         });
 
-        // Guardar posición periódicamente sin saturar el hilo principal
         setInterval(() => { if (!audio.paused) persistState(); }, 2000);
-        // Pausar al ocultar pestaña y reanudar al volver para mantener coherencia
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 _resumeAfterVisibility = !audio.paused && !audio.ended;
@@ -610,237 +595,12 @@ BellatorCore.safe('app.sharedUi', function() {
 
     initSharedIntroWidget();
 
-    // ── Shared Piper TTS client ──
-    window.BellatorTTS = window.BellatorTTS || (function() {
-        const VOICE_KEY = 'bellatorPiperVoice';
-        const LEGACY_VOICE_KEY = 'es_MX-claude-high';
-        const blobCache = new Map();
-        const blobPromiseCache = new Map();
-        let voicesPromise = null;
-        let currentRequest = null;
-        let audioEl = null;
-
-        function ensureAudio() {
-            if (audioEl) return audioEl;
-            audioEl = new Audio();
-            audioEl.preload = 'auto';
-            return audioEl;
-        }
-
-        function getStoredVoice() {
-            return localStorage.getItem(VOICE_KEY) || '';
-        }
-
-        function setStoredVoice(voiceID) {
-            if (!voiceID) return;
-            localStorage.setItem(VOICE_KEY, voiceID);
-            syncVoiceSelects();
-        }
-
-        function buildCacheKey(voiceID, text) {
-            return String(voiceID || '') + '::' + String(text || '').trim();
-        }
-
-        function storeBlob(cacheKey, blob) {
-            if (!cacheKey || !blob) return;
-            if (blobCache.has(cacheKey)) blobCache.delete(cacheKey);
-            blobCache.set(cacheKey, blob);
-            while (blobCache.size > 24) {
-                const oldestKey = blobCache.keys().next().value;
-                blobCache.delete(oldestKey);
-            }
-        }
-
-        function loadVoices() {
-            if (!voicesPromise) {
-                voicesPromise = fetch('/api/tts/voices', {cache: 'no-store'})
-                    .then(function(res) {
-                        if (!res.ok) throw new Error('No se pudo cargar Piper');
-                        return res.json();
-                    })
-                    .then(function(data) {
-                        data = data || {};
-                        data.voices = Array.isArray(data.voices) ? data.voices : [];
-                        data.defaultVoice = data.defaultVoice || (data.voices[0] && data.voices[0].id) || '';
-                        const storedVoice = getStoredVoice();
-                        const preferredStoredVoice = storedVoice === LEGACY_VOICE_KEY && data.defaultVoice && data.defaultVoice !== LEGACY_VOICE_KEY
-                            ? data.defaultVoice
-                            : storedVoice;
-                        const activeVoice = resolveVoice(data, preferredStoredVoice);
-                        if (activeVoice) setStoredVoice(activeVoice);
-                        return data;
-                    })
-                    .catch(function() {
-                        return { enabled: false, defaultVoice: '', voices: [] };
-                    });
-            }
-            return voicesPromise;
-        }
-
-        function resolveVoice(data, requestedVoice) {
-            const voices = (data && data.voices) || [];
-            if (!voices.length) return '';
-            if (requestedVoice && voices.some(function(voice) { return voice.id === requestedVoice; })) {
-                return requestedVoice;
-            }
-            return data.defaultVoice || voices[0].id || '';
-        }
-
-        function renderVoiceSelect(select, data) {
-            if (!select) return;
-            const activeVoice = resolveVoice(data, getStoredVoice());
-            if (!data.enabled || !data.voices.length) {
-                select.innerHTML = '<option value="">PIPER NO DISPONIBLE</option>';
-                select.disabled = true;
-                return;
-            }
-            select.innerHTML = data.voices.map(function(voice) {
-                return '<option value="' + voice.id + '">' + voice.label + '</option>';
-            }).join('');
-            select.disabled = false;
-            select.value = activeVoice;
-        }
-
-        function syncVoiceSelects() {
-            loadVoices().then(function(data) {
-                document.querySelectorAll('[data-tts-voice-select]').forEach(function(select) {
-                    renderVoiceSelect(select, data);
-                });
-            });
-        }
-
-        function populateSelect(select) {
-            if (!select) return Promise.resolve();
-            if (!select.dataset.ttsBound) {
-                select.dataset.ttsBound = '1';
-                select.addEventListener('change', function() {
-                    setStoredVoice(select.value);
-                });
-            }
-            return loadVoices().then(function(data) {
-                renderVoiceSelect(select, data);
-            });
-        }
-
-        async function fetchSpeechBlob(text, options) {
-            const data = await loadVoices();
-            if (!data.enabled || !data.voices.length) {
-                throw new Error('Piper no está disponible en este momento.');
-            }
-
-            const voiceID = resolveVoice(data, (options && options.voice) || getStoredVoice());
-            const cacheKey = buildCacheKey(voiceID, text);
-            if (blobCache.has(cacheKey)) {
-                return { blob: blobCache.get(cacheKey), voiceID: voiceID, cacheKey: cacheKey };
-            }
-            if (!blobPromiseCache.has(cacheKey)) {
-                const fetchPromise = fetch('/api/tts/speak', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    cache: 'force-cache',
-                    body: JSON.stringify({ text: text, voice: voiceID }),
-                })
-                    .then(async function(response) {
-                        if (!response.ok) {
-                            const message = await response.text();
-                            throw new Error(message || 'No se pudo generar el audio.');
-                        }
-                        const resolvedVoice = response.headers.get('X-TTS-Voice') || voiceID;
-                        const blob = await response.blob();
-                        const resolvedKey = buildCacheKey(resolvedVoice, text);
-                        storeBlob(resolvedKey, blob);
-                        if (resolvedVoice !== voiceID) storeBlob(cacheKey, blob);
-                        return { blob: blob, voiceID: resolvedVoice, cacheKey: resolvedKey };
-                    })
-                    .finally(function() {
-                        blobPromiseCache.delete(cacheKey);
-                    });
-                blobPromiseCache.set(cacheKey, fetchPromise);
-            }
-            return blobPromiseCache.get(cacheKey);
-        }
-
-        function finishRequest(request, kind, message) {
-            if (!request || currentRequest !== request) return;
-            const audio = ensureAudio();
-            currentRequest = null;
-            audio.onended = null;
-            audio.onerror = null;
-            if (!audio.paused) audio.pause();
-            audio.removeAttribute('src');
-            audio.load();
-            if (request.url) URL.revokeObjectURL(request.url);
-            if (kind === 'error') {
-                if (typeof request.onError === 'function') request.onError(message || 'No se pudo generar el audio.');
-                return;
-            }
-            if (typeof request.onEnd === 'function') request.onEnd();
-        }
-
-        function stop() {
-            if (!currentRequest) return;
-            const request = currentRequest;
-            if (request.controller) request.controller.abort();
-            finishRequest(request, 'end');
-        }
-
-        async function speak(text, options) {
-            const content = String(text || '').trim();
-            if (!content) return false;
-
-            stop();
-
-            const request = {
-                controller: new AbortController(),
-                onEnd: options && options.onEnd,
-                onError: options && options.onError,
-                url: '',
-            };
-            currentRequest = request;
-            if (options && typeof options.onStart === 'function') options.onStart();
-
-            try {
-                if (request.controller.signal.aborted) return false;
-                const result = await fetchSpeechBlob(content, { voice: options && options.voice });
-                if (currentRequest !== request) return false;
-                if (result.voiceID) setStoredVoice(result.voiceID);
-                request.url = URL.createObjectURL(result.blob);
-                const audio = ensureAudio();
-                audio.src = request.url;
-                audio.onended = function() { finishRequest(request, 'end'); };
-                audio.onerror = function() { finishRequest(request, 'error', 'No se pudo reproducir el audio.'); };
-                await audio.play();
-                if (options && typeof options.onPlay === 'function') options.onPlay();
-                return true;
-            } catch (error) {
-                if (error && error.name === 'AbortError') return false;
-                finishRequest(request, 'error', error && error.message ? error.message : 'No se pudo generar el audio.');
-                return false;
-            }
-        }
-
-        function prewarm(text, options) {
-            const content = String(text || '').trim();
-            if (!content) return Promise.resolve(false);
-            return fetchSpeechBlob(content, { voice: options && options.voice })
-                .then(function() { return true; })
-                .catch(function() { return false; });
-        }
-
-        document.addEventListener('DOMContentLoaded', syncVoiceSelects);
-        syncVoiceSelects();
-
-        return {
-            loadVoices: loadVoices,
-            populateSelect: populateSelect,
-            speak: speak,
-            prewarm: prewarm,
-            stop: stop,
-            isSpeaking: function() { return !!currentRequest; },
-            getVoice: getStoredVoice,
-            setVoice: setStoredVoice,
-        };
-    })();
+    if (!window.BellatorTTS && window.BellatorCore && typeof window.BellatorCore.createTTSClient === 'function') {
+        window.BellatorTTS = window.BellatorCore.createTTSClient();
+    }
+    if (window.BellatorTTS && typeof window.BellatorTTS.loadVoices === 'function') {
+        window.BellatorTTS.loadVoices();
+    }
 
     // ── Common UI: hamburger & clock ──
     document.getElementById('bl-burger')?.addEventListener('click', () => {
@@ -863,10 +623,121 @@ BellatorCore.safe('app.sharedUi', function() {
         if (hpath === path) el.classList.add('active');
     });
 
+    function escapeMarkup(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+    function safeLabel(value, fallback) {
+        const text = String(value || '').trim();
+        if (!text || text === '<nil>' || text === 'null') return fallback;
+        return text;
+    }
+    function slugifyName(value) {
+        return String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^\p{L}\p{N}]+/gu, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+    function bindCursorHotspots(root) {
+        const cursor = document.getElementById('cursor');
+        if (!cursor || !root) return;
+        root.querySelectorAll('a,button,.btn').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hot'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hot'));
+        });
+    }
+    function buildFlyoutCard(item) {
+        const media = item.image
+            ? `<div class="bl-nav-preview-avatar"><img src="${escapeMarkup(item.image)}" alt="${escapeMarkup(item.name)}"></div>`
+            : `<div class="bl-nav-preview-avatar"><span>${escapeMarkup((item.name || '?').charAt(0).toUpperCase())}</span></div>`;
+        return `<a class="bl-nav-preview-card" href="${escapeMarkup(item.href)}">${media}<div class="bl-nav-preview-copy"><div class="bl-nav-preview-name">${escapeMarkup(item.name)}</div><div class="bl-nav-preview-meta">${escapeMarkup(item.meta)}</div></div></a>`;
+    }
+    function buildFlyoutMarkup(config) {
+        const cards = config.items.map(buildFlyoutCard).join('');
+        return `<div class="bl-nav-flyout" role="presentation"><div class="bl-nav-flyout-inner"><div class="bl-nav-flyout-head"><div><div class="bl-nav-flyout-kicker">${escapeMarkup(config.kicker)}</div><div class="bl-nav-flyout-title">${escapeMarkup(config.title)}</div><div class="bl-nav-flyout-copy">${escapeMarkup(config.copy)}</div></div><div class="bl-nav-flyout-orbs" aria-hidden="true"><span class="bl-nav-orb"></span><span class="bl-nav-orb"></span><span class="bl-nav-orb"></span></div></div><div class="bl-nav-preview-grid">${cards}</div><a class="bl-nav-flyout-cta" href="${escapeMarkup(config.href)}"><strong>${escapeMarkup(config.ctaTitle)}</strong><span>${escapeMarkup(config.ctaLabel)}</span></a></div></div>`;
+    }
+    (function initNavFlyouts() {
+        const canUseFlyouts = window.innerWidth >= 1100 && (!window.matchMedia || window.matchMedia('(hover:hover) and (pointer:fine)').matches);
+        if (!canUseFlyouts) return;
+
+        const links = Array.from(document.querySelectorAll('.bl-navbar-links > li > a.bl-navlink, .bl-navbar-links > li > a'));
+        const competitorsLink = links.find(el => ((el.getAttribute('href') || '').replace(/\/$/, '') || '/') === '/competidores');
+        const clansLink = links.find(el => ((el.getAttribute('href') || '').replace(/\/$/, '') || '/') === '/clanes');
+        if (!competitorsLink && !clansLink) return;
+
+        function attachFlyout(anchor, markup) {
+            const navItem = anchor && anchor.parentElement;
+            if (!navItem || navItem.querySelector('.bl-nav-flyout')) return;
+            navItem.classList.add('bl-nav-has-flyout');
+            navItem.insertAdjacentHTML('beforeend', markup);
+            bindCursorHotspots(navItem);
+        }
+
+        const driversPromise = competitorsLink
+            ? fetch('/api/competidores').then(res => res.ok ? res.json() : []).catch(() => [])
+            : Promise.resolve([]);
+        const clansPromise = clansLink
+            ? fetch('/api/clanes').then(res => res.ok ? res.json() : []).catch(() => [])
+            : Promise.resolve([]);
+
+        Promise.all([driversPromise, clansPromise]).then(([driversRaw, clansRaw]) => {
+            if (competitorsLink) {
+                let driverItems = (Array.isArray(driversRaw) ? driversRaw : []).slice(0, 4).map(item => ({
+                    href: '/competidor?slug=' + encodeURIComponent(slugifyName(safeLabel(item.pseudonimo, 'competidor'))),
+                    name: safeLabel(item.pseudonimo, 'Competidor'),
+                    meta: safeLabel(item.division, 'Ficha de piloto'),
+                    image: safeLabel(item.avatar_url, '')
+                }));
+                if (!driverItems.length) {
+                    driverItems = [{ href: '/competidores', name: 'Roster Bellator', meta: 'Perfiles oficiales', image: '' }];
+                }
+                attachFlyout(competitorsLink, buildFlyoutMarkup({
+                    kicker: 'Grid Preview',
+                    title: 'Competidores',
+                    copy: 'Entrada rápida al line-up con esferas, retratos y acceso directo a cada ficha.',
+                    items: driverItems,
+                    href: '/competidores',
+                    ctaTitle: 'Abrir line-up',
+                    ctaLabel: 'ver parrilla'
+                }));
+            }
+
+            if (clansLink) {
+                let clanItems = (Array.isArray(clansRaw) ? clansRaw : []).slice(0, 4).map(item => ({
+                    href: '/clanes',
+                    name: safeLabel(item.name, 'Clan'),
+                    meta: 'Lidera ' + safeLabel(item.leader_pseudonimo, 'linaje sin líder'),
+                    image: safeLabel(item.logo_url, '')
+                }));
+                if (!clanItems.length) {
+                    clanItems = [{ href: '/clanes', name: 'Linajes Bellator', meta: 'Explora los clanes activos', image: '' }];
+                }
+                attachFlyout(clansLink, buildFlyoutMarkup({
+                    kicker: 'Sphere Preview',
+                    title: 'Clanes',
+                    copy: 'Linajes, escudos y atajos para entrar al tablero completo sin perder el ritmo del header.',
+                    items: clanItems,
+                    href: '/clanes',
+                    ctaTitle: 'Explorar clanes',
+                    ctaLabel: 'abrir tablero'
+                }));
+            }
+        });
+    })();
+
     // ── CURSOR SVG follow ──
-    if (window.innerWidth >= 768) {
+    const canUseCustomCursor = window.innerWidth >= 768 && (!window.matchMedia || window.matchMedia('(hover:hover) and (pointer:fine)').matches);
+    document.body.classList.remove('bl-custom-cursor-enabled');
+    if (canUseCustomCursor) {
         const cursor = document.getElementById('cursor');
         if (cursor) {
+            document.body.classList.add('bl-custom-cursor-enabled');
             let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
             let cx = tx, cy = ty;
             function onCursorMove(e) {
@@ -890,7 +761,7 @@ BellatorCore.safe('app.sharedUi', function() {
 });
 
 // ════════════════════════════════════════ ESPACIO ════════════════════
-BellatorCore.safe('app.spaceCanvas', function() {
+BellatorAppCore.safe('app.spaceCanvas', function() {
     const canvas = document.getElementById('space');
     if (!canvas) return;
     const ctx = canvas.getContext('2d', {alpha:true});
@@ -987,7 +858,7 @@ BellatorCore.safe('app.spaceCanvas', function() {
 });
 
 // ════════════════════════════════════════ CONSTELACIONES ════════════════
-BellatorCore.safe('app.constellationsCanvas', function() {
+BellatorAppCore.safe('app.constellationsCanvas', function() {
     const canvas = document.getElementById('constellations');
     if (!canvas) return;
     const isTouchDevice = (window.matchMedia && window.matchMedia('(hover:none), (pointer:coarse)').matches) || navigator.maxTouchPoints > 0;
@@ -1136,7 +1007,7 @@ BellatorCore.safe('app.constellationsCanvas', function() {
 });
 
 // ════════════════════════════════════════ CURSOR + CHISPAS ═══════════
-BellatorCore.safe('app.cursorFx', function() {
+BellatorAppCore.safe('app.cursorFx', function() {
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = (window.matchMedia && window.matchMedia('(hover:none), (pointer:coarse)').matches) || navigator.maxTouchPoints > 0;
     const fx = document.getElementById('fx');
@@ -1197,7 +1068,7 @@ BellatorCore.safe('app.cursorFx', function() {
 });
 
 // ── COUNTRY SELECTOR (registro.html) ─────────────────────────────────────
-BellatorCore.safe('app.countrySelector', function initCountrySelector() {
+BellatorAppCore.safe('app.countrySelector', function initCountrySelector() {
     const btn      = document.getElementById('bl-country-btn');
     const dropdown = document.getElementById('bl-country-dropdown');
     const search   = document.getElementById('bl-country-search');

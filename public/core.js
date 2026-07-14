@@ -272,13 +272,19 @@
   }
 
   function createTTSClient() {
-    var VOICE_KEY = 'bellatorPiperVoice';
-    var LEGACY_VOICE_KEY = 'es_MX-claude-high';
+    var VOICE_KEY = 'bellatorNarratorVoice';
+    var LEGACY_KEYS = ['bellatorPiperVoice'];
+    var LATAM_LOCALES = [
+      'es-CO', 'es-MX', 'es-US', 'es-AR', 'es-CL', 'es-PE', 'es-VE', 'es-UY',
+      'es-PA', 'es-CR', 'es-EC', 'es-DO', 'es-GT', 'es-HN', 'es-NI', 'es-PY',
+      'es-SV', 'es-BO', 'es-CU', 'es-PR', 'es-419'
+    ];
     var blobCache = new Map();
     var blobPromiseCache = new Map();
     var voicesPromise = null;
     var currentRequest = null;
     var audioEl = null;
+    var voiceListenerBound = false;
 
     function ensureAudio() {
       if (audioEl) return audioEl;
@@ -287,14 +293,111 @@
       return audioEl;
     }
 
+    function getSynth() {
+      return global.speechSynthesis || null;
+    }
+
+    function supportsBrowserNarrator() {
+      return Boolean(getSynth() && global.SpeechSynthesisUtterance);
+    }
+
+    function normalizeLang(lang) {
+      return String(lang || '').replace(/_/g, '-').trim();
+    }
+
+    function isSpanishVoice(voice) {
+      return /^es([_-]|$)/i.test(normalizeLang(voice && voice.lang));
+    }
+
+    function localePriority(lang) {
+      var normalized = normalizeLang(lang).toLowerCase();
+      var i;
+      for (i = 0; i < LATAM_LOCALES.length; i += 1) {
+        if (normalized === LATAM_LOCALES[i].toLowerCase()) return i;
+      }
+      if (normalized.indexOf('es-') === 0) return 200;
+      if (normalized === 'es') return 210;
+      return 1000;
+    }
+
+    function voiceId(voice, index) {
+      return (voice && (voice.voiceURI || voice.name)) || ('voice-' + String(index || 0));
+    }
+
+    function escapeHTML(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function buildBrowserVoiceLabel(voice) {
+      var lang = normalizeLang(voice && voice.lang) || 'SYSTEM';
+      var bucket = localePriority(lang) < 200 ? 'LATAM' : (isSpanishVoice(voice) ? 'ESPANOL' : 'SISTEMA');
+      return bucket + ' · ' + lang.toUpperCase() + ' · ' + String((voice && voice.name) || 'Narrador');
+    }
+
+    function compareBrowserVoices(a, b) {
+      var diff = localePriority(a.lang) - localePriority(b.lang);
+      if (diff !== 0) return diff;
+      if (a.default !== b.default) return a.default ? -1 : 1;
+      if (a.localService !== b.localService) return a.localService ? -1 : 1;
+      return String(a.name || '').localeCompare(String(b.name || ''));
+    }
+
+    function readAvailableBrowserVoices() {
+      if (!supportsBrowserNarrator()) return [];
+      return (getSynth().getVoices() || []).map(function(voice, index) {
+        return {
+          id: voiceId(voice, index),
+          label: buildBrowserVoiceLabel(voice),
+          lang: normalizeLang(voice.lang),
+          name: String(voice.name || ''),
+          default: Boolean(voice.default),
+          localService: Boolean(voice.localService),
+        };
+      }).sort(compareBrowserVoices);
+    }
+
+    function buildBrowserVoiceData() {
+      var allVoices = readAvailableBrowserVoices();
+      var voices = allVoices.filter(isSpanishVoice);
+      if (!voices.length) voices = allVoices;
+      return {
+        enabled: supportsBrowserNarrator() && voices.length > 0,
+        provider: 'browser',
+        defaultVoice: voices.length ? voices[0].id : '',
+        voices: voices,
+      };
+    }
+
+    function normalizeRemoteVoicesResponse(data) {
+      var normalized = data || {};
+      normalized.voices = Array.isArray(normalized.voices) ? normalized.voices : [];
+      normalized.defaultVoice = normalized.defaultVoice || (normalized.voices[0] && normalized.voices[0].id) || '';
+      normalized.enabled = Boolean(normalized.enabled && normalized.voices.length);
+      normalized.provider = normalized.provider || 'azure';
+      return normalized;
+    }
+
     function getStoredVoice() {
       return safe('tts.voice.get', function() {
-        return global.localStorage.getItem(VOICE_KEY) || '';
+        var stored = global.localStorage.getItem(VOICE_KEY) || '';
+        var i;
+        if (stored) return stored;
+        for (i = 0; i < LEGACY_KEYS.length; i += 1) {
+          stored = global.localStorage.getItem(LEGACY_KEYS[i]) || '';
+          if (stored) return stored;
+        }
+        return '';
       }, '');
     }
 
     function setStoredVoice(voiceID) {
       if (!voiceID) return;
+      if (voiceID === getStoredVoice()) return;
       safe('tts.voice.set', function() {
         global.localStorage.setItem(VOICE_KEY, voiceID);
       });
@@ -324,36 +427,104 @@
       return data.defaultVoice || voices[0].id || '';
     }
 
-    function normalizeVoicesResponse(data) {
-      var normalized = data || {};
-      normalized.voices = Array.isArray(normalized.voices) ? normalized.voices : [];
-      normalized.defaultVoice = normalized.defaultVoice || (normalized.voices[0] && normalized.voices[0].id) || '';
-      normalized.enabled = Boolean(normalized.enabled && normalized.voices.length);
-      return normalized;
+    function findVoiceByID(voiceID) {
+      var synth = getSynth();
+      var voices = synth ? (synth.getVoices() || []) : [];
+      var i;
+      for (i = 0; i < voices.length; i += 1) {
+        if (voiceId(voices[i], i) === voiceID) return voices[i];
+      }
+      return null;
     }
 
-    function loadVoices() {
-      if (!voicesPromise) {
+    function ensureVoiceListener() {
+      var synth = getSynth();
+      if (!supportsBrowserNarrator() || voiceListenerBound || !synth) return;
+
+      var refreshVoices = function() {
+        voicesPromise = Promise.resolve(buildBrowserVoiceData());
+        syncVoiceSelects();
+      };
+
+      if (typeof synth.addEventListener === 'function') {
+        synth.addEventListener('voiceschanged', refreshVoices);
+        voiceListenerBound = true;
+        return;
+      }
+
+      if ('onvoiceschanged' in synth) {
+        var previousHandler = synth.onvoiceschanged;
+        synth.onvoiceschanged = function(event) {
+          if (typeof previousHandler === 'function') previousHandler.call(this, event);
+          refreshVoices();
+        };
+        voiceListenerBound = true;
+      }
+    }
+
+    function waitForBrowserVoices(timeoutMs) {
+      return new Promise(function(resolve) {
+        var synth = getSynth();
+        var initialData;
+        var timer = null;
+
+        if (!supportsBrowserNarrator() || !synth) {
+          resolve({ enabled: false, provider: 'browser', defaultVoice: '', voices: [] });
+          return;
+        }
+
+        ensureVoiceListener();
+        initialData = buildBrowserVoiceData();
+        if (initialData.voices.length) {
+          resolve(initialData);
+          return;
+        }
+
+        function finalize() {
+          if (timer) global.clearTimeout(timer);
+          resolve(buildBrowserVoiceData());
+        }
+
+        timer = global.setTimeout(finalize, timeoutMs || 1600);
+        if (typeof synth.addEventListener === 'function') {
+          var once = function() {
+            synth.removeEventListener('voiceschanged', once);
+            finalize();
+          };
+          synth.addEventListener('voiceschanged', once);
+        }
+      });
+    }
+
+    function loadVoices(forceRefresh) {
+      if (!voicesPromise || forceRefresh) {
         voicesPromise = safeAsync('tts.loadVoices', async function() {
           var response = await safeFetch('/api/tts/voices', {
             cache: 'no-store',
             timeoutMs: 8000,
             label: 'tts.voices',
           });
-          if (!response) {
-            return { enabled: false, defaultVoice: '', voices: [] };
+
+          if (response) {
+            var remoteData = normalizeRemoteVoicesResponse(await readJSONSafe(response, {
+              enabled: false,
+              provider: 'azure',
+              defaultVoice: '',
+              voices: []
+            }));
+            if (remoteData.enabled && remoteData.voices.length) {
+              var remoteVoice = resolveVoice(remoteData, getStoredVoice());
+              if (remoteVoice) setStoredVoice(remoteVoice);
+              return remoteData;
+            }
           }
 
-          var data = normalizeVoicesResponse(await readJSONSafe(response, { enabled: false, defaultVoice: '', voices: [] }));
-          var storedVoice = getStoredVoice();
-          var preferredStoredVoice = storedVoice === LEGACY_VOICE_KEY && data.defaultVoice && data.defaultVoice !== LEGACY_VOICE_KEY
-            ? data.defaultVoice
-            : storedVoice;
-          var activeVoice = resolveVoice(data, preferredStoredVoice);
-          if (activeVoice) setStoredVoice(activeVoice);
-          return data;
+          var browserData = await waitForBrowserVoices(1800);
+          var browserVoice = resolveVoice(browserData, getStoredVoice());
+          if (browserVoice) setStoredVoice(browserVoice);
+          return browserData;
         }, function() {
-          return { enabled: false, defaultVoice: '', voices: [] };
+          return waitForBrowserVoices(1800);
         });
       }
       return voicesPromise;
@@ -363,12 +534,12 @@
       if (!select) return;
       var activeVoice = resolveVoice(data, getStoredVoice());
       if (!data.enabled || !data.voices.length) {
-        select.innerHTML = '<option value="">PIPER NO DISPONIBLE</option>';
+        select.innerHTML = '<option value="">NARRADOR NO DISPONIBLE</option>';
         select.disabled = true;
         return;
       }
       select.innerHTML = data.voices.map(function(voice) {
-        return '<option value="' + voice.id + '">' + voice.label + '</option>';
+        return '<option value="' + escapeHTML(voice.id) + '">' + escapeHTML(voice.label) + '</option>';
       }).join('');
       select.disabled = false;
       select.value = activeVoice;
@@ -401,9 +572,9 @@
         throw new Error('El texto esta vacio.');
       }
 
-      var data = await loadVoices();
-      if (!data.enabled || !data.voices.length) {
-        throw new Error('Piper no esta disponible en este momento.');
+      var data = options && options.data ? options.data : await loadVoices();
+      if (!data.enabled || data.provider !== 'azure' || !data.voices.length) {
+        throw new Error('Azure Speech no esta disponible en este momento.');
       }
 
       var voiceID = resolveVoice(data, (options && options.voice) || getStoredVoice());
@@ -423,14 +594,14 @@
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
             signal: options && options.signal,
-            timeoutMs: 20000,
-            allowStatuses: [400, 422, 429, 500, 503],
+            timeoutMs: 25000,
+            allowStatuses: [400, 422, 429, 500, 502, 503],
             label: 'tts.speak',
             body: JSON.stringify({ text: content, voice: voiceID }),
           });
 
           if (!response) {
-            throw new Error('No se pudo conectar con el servicio de voz.');
+            throw new Error('No se pudo conectar con Azure Speech.');
           }
           if (!response.ok) {
             var errorMessage = await readTextSafe(response, 'No se pudo generar el audio.');
@@ -455,16 +626,22 @@
       return blobPromiseCache.get(cacheKey);
     }
 
-    function finishRequest(request, kind, message) {
-      if (!request || currentRequest !== request) return;
+    function cleanupAzureAudio(request) {
       var audio = ensureAudio();
-      currentRequest = null;
       audio.onended = null;
       audio.onerror = null;
       if (!audio.paused) audio.pause();
       audio.removeAttribute('src');
       audio.load();
-      if (request.url) URL.revokeObjectURL(request.url);
+      if (request && request.url) URL.revokeObjectURL(request.url);
+    }
+
+    function finishRequest(request, kind, message) {
+      if (!request || currentRequest !== request) return;
+      currentRequest = null;
+      if (request.provider === 'azure') {
+        cleanupAzureAudio(request);
+      }
       if (kind === 'error') {
         if (typeof request.onError === 'function') request.onError(message || 'No se pudo generar el audio.');
         return;
@@ -475,34 +652,35 @@
     function stop() {
       if (!currentRequest) return;
       var request = currentRequest;
-      if (request.controller) request.controller.abort();
-      finishRequest(request, 'end');
+      currentRequest = null;
+      if (request.provider === 'azure') {
+        if (request.controller) request.controller.abort();
+        cleanupAzureAudio(request);
+      } else {
+        safe('tts.stop', function() {
+          var synth = getSynth();
+          if (synth) synth.cancel();
+        });
+      }
+      if (typeof request.onEnd === 'function') request.onEnd();
     }
 
-    async function speak(text, options) {
-      var content = String(text || '').trim();
-      if (!content) {
-        if (options && typeof options.onError === 'function') {
-          options.onError('El texto esta vacio.');
-        }
-        return false;
-      }
-
-      stop();
-
+    async function speakWithAzure(content, options, data) {
       var request = {
+        provider: 'azure',
         controller: typeof AbortController === 'function' ? new AbortController() : null,
         onEnd: options && options.onEnd,
         onError: options && options.onError,
+        onPlay: options && options.onPlay,
         url: '',
       };
       currentRequest = request;
-      if (options && typeof options.onStart === 'function') options.onStart();
 
       try {
         var result = await fetchSpeechBlob(content, {
           voice: options && options.voice,
           signal: request.controller ? request.controller.signal : null,
+          data: data,
         });
         if (currentRequest !== request) return false;
         if (result.voiceID) setStoredVoice(result.voiceID);
@@ -521,12 +699,107 @@
       }
     }
 
+    async function speakWithBrowser(content, options, data) {
+      if (!supportsBrowserNarrator()) {
+        if (options && typeof options.onError === 'function') {
+          options.onError('Este navegador no soporta narracion integrada.');
+        }
+        return false;
+      }
+
+      var selectedVoiceID = resolveVoice(data, (options && options.voice) || getStoredVoice());
+      var utterance = new global.SpeechSynthesisUtterance(content);
+      var selectedVoice = findVoiceByID(selectedVoiceID);
+      if (selectedVoiceID) setStoredVoice(selectedVoiceID);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = normalizeLang(selectedVoice.lang) || 'es-CO';
+      } else {
+        utterance.lang = 'es-CO';
+      }
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      var request = {
+        provider: 'browser',
+        onEnd: options && options.onEnd,
+        onError: options && options.onError,
+        onPlay: options && options.onPlay,
+      };
+      currentRequest = request;
+
+      try {
+        utterance.onstart = function() {
+          if (currentRequest !== request) return;
+          if (typeof request.onPlay === 'function') request.onPlay();
+        };
+        utterance.onend = function() {
+          finishRequest(request, 'end');
+        };
+        utterance.onerror = function(event) {
+          if (event && (event.error === 'canceled' || event.error === 'interrupted')) {
+            finishRequest(request, 'end');
+            return;
+          }
+          finishRequest(request, 'error', 'No se pudo reproducir el narrador.');
+        };
+        safe('tts.speak.browser', function() {
+          var synth = getSynth();
+          if (!synth) throw new Error('Narrador no disponible');
+          synth.cancel();
+          synth.speak(utterance);
+        });
+        return true;
+      } catch (error) {
+        finishRequest(request, 'error', error && error.message ? error.message : 'No se pudo reproducir el narrador.');
+        return false;
+      }
+    }
+
+    async function speak(text, options) {
+      var content = String(text || '').replace(/\s+/g, ' ').trim();
+      if (!content) {
+        if (options && typeof options.onError === 'function') {
+          options.onError('El texto esta vacio.');
+        }
+        return false;
+      }
+
+      stop();
+
+      if (options && typeof options.onStart === 'function') options.onStart();
+
+      var data = await loadVoices();
+      if (!data.enabled || !data.voices.length) {
+        if (options && typeof options.onError === 'function') {
+          options.onError('No se encontro un narrador disponible.');
+        }
+        return false;
+      }
+
+      if (data.provider === 'azure') {
+        return speakWithAzure(content, options, data);
+      }
+      return speakWithBrowser(content, options, data);
+    }
+
     function prewarm(text, options) {
-      var content = String(text || '').trim();
+      var content = String(text || '').replace(/\s+/g, ' ').trim();
       if (!content) return Promise.resolve(false);
-      return fetchSpeechBlob(content, { voice: options && options.voice })
-        .then(function() { return true; })
-        .catch(function() { return false; });
+      return loadVoices().then(function(data) {
+        if (!data.enabled || !data.voices.length) return false;
+        if (data.provider !== 'azure') return true;
+        return fetchSpeechBlob(content, { voice: options && options.voice, data: data })
+          .then(function() { return true; })
+          .catch(function() { return false; });
+      }).catch(function() {
+        return false;
+      });
+    }
+
+    if (supportsBrowserNarrator()) {
+      ensureVoiceListener();
     }
 
     document.addEventListener('DOMContentLoaded', syncVoiceSelects);

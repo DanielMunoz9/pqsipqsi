@@ -1,0 +1,256 @@
+Total stickers: 240
+
+Special types:
+  normal: 240
+
+Variants:
+  normal: 120
+  dorado: 120
+
+Rarities:
+  comun: 29
+  legendario: 123
+  raro: 87
+  epico: 1
+
+Stickers details:
+id=95855037-14ad-4116-889c-ba58f89acf33 pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=player variant=normal special_type=normal rarity=comun slot=10 name=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗
+id=650567c3-447d-428e-8731-ffcfa5462fec pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_1 variant=normal special_type=normal rarity=raro slot=11 name=Rune King Thor
+id=d436c71e-f447-4ba5-9b2c-63a6bce787f8 pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_2 variant=normal special_type=normal rarity=raro slot=12 name=Michael Korvac
+id=495f01a8-7463-4793-82d7-606d84ff31c8 pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_3 variant=normal special_type=normal rarity=raro slot=13 name=Mercurius
+id=d7d7ccd5-71c8-4b49-aa22-3cdcbe27e595 pseudo=Mel type=player variant=normal special_type=normal rarity=comun slot=20 name=Mel
+id=b54c4f9a-7e07-48db-a43a-f71e30bd4662 pseudo=Mel type=char_1 variant=normal special_type=normal rarity=raro slot=21 name=Illyasviel von Einzbern(Fate Kaleid)
+id=c85da3c8-8ea8-4eea-b150-2ebf9ed5ff88 pseudo=Mel type=char_2 variant=normal special_type=normal rarity=raro slot=22 name=Frisk(Undertale)
+id=91d97f2f-46cf-4c30-8fe7-9eab160d4c1f pseudo=Mel type=char_3 variant=normal special_type=normal rarity=raro slot=23 name=Kale(DBS)
+id=a76a7f9e-22cd-437a-8b02-44015b11f6e3 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=player variant=normal special_type=normal rarity=comun slot=30 name=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌
+id=3c2bc24d-1e09-4019-a751-260f6863fdf7 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_1 variant=normal special_type=normal rarity=raro slot=31 name=The Planeswalker
+id=cd6f3efd-5b4e-4a71-ab6e-6e642186bbc2 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_2 variant=normal special_type=normal rarity=raro slot=32 name=Durnehviir [OC]
+id=f4a24f33-23e1-4c2f-95cd-b9dffad70b93 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_3 variant=normal special_type=normal rarity=raro slot=33 name=El Rey Exánime
+id=84387a36-7588-4a28-a940-5a57c1667458 pseudo=Inverse Bernkastel type=player variant=normal special_type=normal rarity=comun slot=40 name=Inverse Bernkastel
+id=daa0c67d-071f-416e-916f-acb6c0d53b88 pseudo=Inverse Bernkastel type=char_1 variant=normal special_type=normal rarity=raro slot=41 name=Bernkastel
+id=45aa7abe-6f4a-432c-8905-dbde17fdd477 pseudo=Inverse Bernkastel type=char_2 variant=normal special_type=normal rarity=raro slot=42 name=Lambdadelta
+id=c2535d72-5549-4792-b53b-9f69a1328d82 pseudo=Inverse Bernkastel type=char_3 variant=normal special_type=normal rarity=raro slot=43 name=Erika
+id=10c1f73d-097f-4a0e-9b80-7bd21649c727 pseudo=Vertic type=player variant=normal special_type=normal rarity=comun slot=50 name=Vertic
+id=0d7248be-5e82-475c-8e79-65312e5f8b00 pseudo=Vertic type=char_1 variant=normal special_type=normal rarity=raro slot=51 name=Ctarrnid
+id=2bdd6c3e-76d8-4bd8-8114-cb93cb9e5e94 pseudo=Vertic type=char_2 variant=normal special_type=normal rarity=raro slot=52 name=Wezaemon
+id=380709af-bb85-42b2-9971-d2570e959938 pseudo=Vertic type=char_3 variant=normal special_type=normal rarity=raro slot=53 name=Lycaon
+id=a8a78e89-4b45-4c4c-8dd9-9506e0bbb441 pseudo=Amiya Arknights type=player variant=normal special_type=normal rarity=comun slot=60 name=Amiya Arknights
+id=93db8054-d626-4ae5-b440-ad7033824a01 pseudo=Amiya Arknights type=char_1 variant=normal special_type=normal rarity=raro slot=61 name=Ishmael
+id=a36f5ad1-5def-4a8c-8c5b-470b79a23ef8 pseudo=Amiya Arknights type=char_2 variant=normal special_type=normal rarity=raro slot=62 name=Bianca
+id=0df59646-2b81-47e6-ac2e-f05a75e5b942 pseudo=Amiya Arknights type=char_3 variant=normal special_type=normal rarity=raro slot=63 name=Amiya
+id=fd906cc6-0353-4973-bc04-106de330913b pseudo=𝕭andet type=player variant=normal special_type=normal rarity=comun slot=70 name=𝕭andet
+id=8936dc43-1ac1-41bb-8370-4cafcfe07bd5 pseudo=𝕭andet type=char_1 variant=normal special_type=normal rarity=raro slot=71 name=Doctor Strange
+id=879907ed-768b-44b4-ae3c-1c264df2d0b6 pseudo=𝕭andet type=char_2 variant=normal special_type=normal rarity=raro slot=72 name=Thanos
+id=454ef04b-abb3-4548-96c3-ab73915e25d7 pseudo=𝕭andet type=char_3 variant=normal special_type=normal rarity=raro slot=73 name=Jean Gray
+id=4ab546d9-bfad-4e8f-8183-41cbda279708 pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=player variant=normal special_type=normal rarity=comun slot=80 name=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗.
+id=770a290d-9809-4d20-b537-ea6756e2827c pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_1 variant=normal special_type=normal rarity=raro slot=81 name=Ywach
+id=0a7ff09d-adf2-45ad-a0ff-c0712384bcb6 pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_2 variant=normal special_type=normal rarity=raro slot=82 name=Son Goku
+id=2e33e9fc-63bb-4615-9500-9337ef348e1b pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_3 variant=normal special_type=normal rarity=raro slot=83 name=Dr. Fate
+id=75992fbb-9cc3-4a03-aaae-718331de59f6 pseudo=Lucifer Der Vosgrönne type=player variant=normal special_type=normal rarity=comun slot=90 name=Lucifer Der Vosgrönne
+id=184bb5f3-c647-4ce4-81fc-dca8667705d9 pseudo=Lucifer Der Vosgrönne type=char_1 variant=normal special_type=normal rarity=raro slot=91 name=Lucifer Morningstar
+id=353e5a59-5f8c-4ef9-8efe-7243c0bf124d pseudo=Lucifer Der Vosgrönne type=char_2 variant=normal special_type=normal rarity=raro slot=92 name=Zarathos (Ghost Rider)
+id=544a762f-0e89-45ae-bd6e-efe728fee0fd pseudo=Lucifer Der Vosgrönne type=char_3 variant=normal special_type=normal rarity=raro slot=93 name=Elric de Melniboné
+id=af2e0545-e1fe-4936-bfd6-251c64b39fc1 pseudo=𝗠𝐄𝐑𝐔𝐒 type=player variant=normal special_type=normal rarity=comun slot=100 name=𝗠𝐄𝐑𝐔𝐒
+id=5ccd2e21-8306-40d1-b8a5-fc090cf8500e pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_1 variant=normal special_type=normal rarity=raro slot=101 name=𝐑𝐈𝐌𝐔𝐑𝐔 𝐓𝐄𝐌𝐏𝐄𝐒𝐓
+id=52685c26-edee-45f3-8c06-6b3b13134226 pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_2 variant=normal special_type=normal rarity=raro slot=102 name=𝐒𝐇𝐀𝐊𝐀 𝐃𝐄 𝐕𝐈𝐑𝐆𝐎
+id=d9ea5e0e-c61e-43cc-aef8-6dff6d0871f7 pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_3 variant=normal special_type=normal rarity=raro slot=103 name=𝐒𝐎𝐍 𝐆𝐎𝐊𝐔
+id=0c30d319-a18d-49af-84a6-8592a12c5c54 pseudo=NeroAggelo type=player variant=normal special_type=normal rarity=comun slot=110 name=NeroAggelo
+id=17a54f90-52cb-4e7c-9628-17958aecfb85 pseudo=NeroAggelo type=char_1 variant=normal special_type=normal rarity=raro slot=111 name=Varhram, El Héroe de Cien Caras
+id=3b813087-4a80-4f13-aafb-fa67819fc8db pseudo=NeroAggelo type=char_2 variant=normal special_type=normal rarity=raro slot=112 name=Wang, el Pecador
+id=958d9266-7e60-48e0-9eb4-23822f4dd9de pseudo=NeroAggelo type=char_3 variant=normal special_type=normal rarity=raro slot=113 name=Blanco, el Color de la Realidad
+id=a45f6edf-c1a6-4750-8ceb-d23b66097382 pseudo=Prox type=player variant=normal special_type=normal rarity=comun slot=120 name=Prox
+id=d2e99fd7-0b1e-4014-95d8-717ebaa7a603 pseudo=Prox type=char_1 variant=normal special_type=normal rarity=raro slot=121 name=Kokushibo
+id=1ac73f67-e591-45a9-a43e-951c96ab446a pseudo=Prox type=char_2 variant=normal special_type=normal rarity=raro slot=122 name=Tristán liones
+id=e712f199-d820-447a-a6b3-c8225a05fc2f pseudo=Prox type=char_3 variant=normal special_type=normal rarity=raro slot=123 name=Itachi
+id=cf26da00-ce45-40d4-9ef8-6ef07828e6dc pseudo=RagnaKurenai type=player variant=normal special_type=normal rarity=comun slot=130 name=RagnaKurenai
+id=af5d4b42-c7aa-47e6-8a2b-b0ca4bbd7474 pseudo=RagnaKurenai type=char_1 variant=normal special_type=normal rarity=raro slot=131 name=Beatrice The Golden Wich
+id=cdb536d3-3048-4ac6-a933-cfeba36606f6 pseudo=RagnaKurenai type=char_2 variant=normal special_type=normal rarity=raro slot=132 name=Ragna
+id=23ffe039-5168-4e46-989d-5f75817e061b pseudo=RagnaKurenai type=char_3 variant=normal special_type=normal rarity=raro slot=133 name=Koujou Akatsuki
+id=dd83ad0a-cb02-4a3d-880e-ff77ba36ecb6 pseudo=Sak type=player variant=normal special_type=normal rarity=comun slot=140 name=Sak
+id=4b46d72f-0ba0-4659-bd35-f7a658c08860 pseudo=Sak type=char_1 variant=normal special_type=normal rarity=raro slot=141 name=Vegetto
+id=6cebcb60-5da5-4b6b-a8d0-5bcf29b93c11 pseudo=Sak type=char_2 variant=normal special_type=normal rarity=raro slot=142 name=Kyoraku
+id=9bdf2f4b-91b1-42e8-995f-a129fe3d4ae1 pseudo=Sak type=char_3 variant=normal special_type=normal rarity=raro slot=143 name=Zaraki
+id=f23c2dd9-5ded-4255-9ad3-18fe4a2cb2d7 pseudo=𝕭𝐚𝐚𝐥 type=player variant=normal special_type=normal rarity=comun slot=150 name=𝕭𝐚𝐚𝐥
+id=e2823d67-d341-4964-a90f-fbf71c875d1f pseudo=𝕭𝐚𝐚𝐥 type=char_1 variant=normal special_type=normal rarity=raro slot=151 name=𝕸𝐚𝐠𝐢𝐤 - Marvel
+id=92e2a5b7-ade7-43df-80e5-e179787a98ad pseudo=𝕭𝐚𝐚𝐥 type=char_2 variant=normal special_type=normal rarity=raro slot=152 name=𝕿𝐞𝐫𝐫𝐚 𝕭𝐫𝐚𝐧𝐟𝐨𝐫𝐝
+id=06d68600-4c9b-48c3-9a91-434e2c3c6802 pseudo=𝕭𝐚𝐚𝐥 type=char_3 variant=normal special_type=normal rarity=raro slot=153 name=𝕭𝐚𝐲𝐨𝐧𝐞𝐭𝐭𝐚
+id=c6dc5b24-3c25-416d-91d9-9b930e67bb36 pseudo=Soujiro Izanagi type=player variant=normal special_type=normal rarity=comun slot=160 name=Soujiro Izanagi
+id=7381c8a6-fb93-4994-9bb7-7e6c47e79e5c pseudo=Soujiro Izanagi type=char_1 variant=normal special_type=normal rarity=raro slot=161 name=Sung Jin Woo
+id=ba18d5b2-d2e5-4363-af26-c90dcd874c84 pseudo=Soujiro Izanagi type=char_2 variant=normal special_type=normal rarity=raro slot=162 name=Kevin Kaslana
+id=2819d713-f7b0-4b24-be34-89a741f21288 pseudo=Soujiro Izanagi type=char_3 variant=normal special_type=normal rarity=raro slot=163 name=Archer Emiya
+id=92f23afe-f27a-43db-9f29-b977ad0e212e pseudo=Dktosh Dmitriev type=player variant=normal special_type=normal rarity=comun slot=170 name=Dktosh Dmitriev
+id=f41b491b-a429-4655-abfe-bf0bc64ed6c4 pseudo=Dktosh Dmitriev type=char_1 variant=normal special_type=normal rarity=raro slot=171 name=Emiya
+id=fc53e731-3962-4244-8132-018c40957431 pseudo=Dktosh Dmitriev type=char_2 variant=normal special_type=normal rarity=raro slot=172 name=Vergil Sparda
+id=134bad67-6eb1-4c59-ae07-85bd5f2828b8 pseudo=Dktosh Dmitriev type=char_3 variant=normal special_type=normal rarity=raro slot=173 name=Hyodou Issei
+id=ca98c164-4b51-4988-ab28-f1868b1af8cc pseudo=Ohma type=player variant=normal special_type=normal rarity=comun slot=180 name=Ohma
+id=0dfb3017-33c7-44e0-b854-571148d467f8 pseudo=Ohma type=char_1 variant=normal special_type=normal rarity=raro slot=181 name=The Dark Lord (Alan becker)
+id=37597bcf-7968-4284-8dfd-7d6bace1fa88 pseudo=Ohma type=char_2 variant=normal special_type=normal rarity=raro slot=182 name=Yuki Tsukumo
+id=52df7d3e-1806-4bb5-855a-69e5917d6f3b pseudo=Ohma type=char_3 variant=normal special_type=normal rarity=raro slot=183 name=The Dark Lord
+id=51f5b9cf-a4d7-45eb-8c2e-3f85e42ed724 pseudo=Abssylum type=player variant=normal special_type=normal rarity=epico slot=190 name=Abssylum
+id=9d2acffa-6436-464d-8ff2-398564d2b89c pseudo=Abssylum type=char_1 variant=normal special_type=normal rarity=legendario slot=191 name=Arthur Leywin
+id=427ab477-20a8-4ca5-9a25-e921c96a24cd pseudo=Abssylum type=char_2 variant=normal special_type=normal rarity=legendario slot=192 name=Sung jin woo
+id=de6a0806-80e9-4ce8-9aea-e369ae2264b4 pseudo=Abssylum type=char_3 variant=normal special_type=normal rarity=legendario slot=193 name=Zhuo fan
+id=b2d60fd8-fe33-4e71-bad4-bf1a5c3551b2 pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=player variant=normal special_type=normal rarity=comun slot=200 name=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢
+id=f2e041f3-45ff-476f-ae1a-a7c05c98861f pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_1 variant=normal special_type=normal rarity=raro slot=201 name=Najimi Ajimu
+id=136caaf6-5a39-4f88-baee-c1d909fabb85 pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_2 variant=normal special_type=normal rarity=raro slot=202 name=Yoguruma Mugen
+id=146b5ed5-7fdf-4f8f-ab00-ec33dce60be0 pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_3 variant=normal special_type=normal rarity=raro slot=203 name=Frederica
+id=efd52118-3f1e-403b-ac4e-d619bdeaa993 pseudo=ARAKIEL type=player variant=normal special_type=normal rarity=comun slot=210 name=ARAKIEL
+id=a3165ae4-2116-4a3f-a7e7-445ad1110983 pseudo=ARAKIEL type=char_1 variant=normal special_type=normal rarity=raro slot=211 name=Bambietta Basterbine
+id=6d62be4e-066f-4107-a7ed-6a85fefe473a pseudo=ARAKIEL type=char_2 variant=normal special_type=normal rarity=raro slot=212 name=Mereoleona
+id=0f850a85-214f-4abc-b698-f6a3fec77ebb pseudo=ARAKIEL type=char_3 variant=normal special_type=normal rarity=raro slot=213 name=Esdeath
+id=d327ca6e-8356-4c6a-9209-e2f88b68cb1f pseudo=Dhaela type=player variant=normal special_type=normal rarity=comun slot=220 name=Dhaela
+id=c30a205d-cd19-4849-b4a5-89c34ba8a02f pseudo=Dhaela type=char_1 variant=normal special_type=normal rarity=raro slot=221 name=YorHa N°2 Tipo B
+id=44300982-30e6-4440-ae23-4185d1a82b2a pseudo=Dhaela type=char_2 variant=normal special_type=normal rarity=raro slot=222 name=Shu, la Sexta Sui
+id=afd3c986-f8e2-4999-9978-ab98458e8afe pseudo=Dhaela type=char_3 variant=normal special_type=normal rarity=raro slot=223 name=Astaroth , el Espejo Mágico
+id=2d14891a-d3c9-45e6-81c8-276626962ec3 pseudo=Fear. type=player variant=normal special_type=normal rarity=comun slot=230 name=Fear.
+id=0455dfdc-b68d-4498-84d3-1cac48e19702 pseudo=Fear. type=char_1 variant=normal special_type=normal rarity=raro slot=231 name=Gaku
+id=10be05df-4aa7-4a31-a1e1-f543bdf202d7 pseudo=Fear. type=char_2 variant=normal special_type=normal rarity=raro slot=232 name=Benimaru
+id=1d8462dc-3993-4a9a-a579-e3bc4ffca321 pseudo=Fear. type=char_3 variant=normal special_type=normal rarity=raro slot=233 name=Beelzebub
+id=e5a221be-0315-4174-b941-bdefd478b672 pseudo=GULTARD GABANNA type=player variant=normal special_type=normal rarity=comun slot=240 name=GULTARD GABANNA
+id=db2ed299-c042-4171-8885-e49265b4c5e8 pseudo=GULTARD GABANNA type=char_1 variant=normal special_type=normal rarity=raro slot=241 name=Arthur Boyle
+id=af258274-114b-4e01-ad43-47f59cd7e157 pseudo=GULTARD GABANNA type=char_2 variant=normal special_type=normal rarity=raro slot=242 name=Sinbad
+id=959d7746-3ecb-4b36-97ed-63c4d035605a pseudo=GULTARD GABANNA type=char_3 variant=normal special_type=normal rarity=raro slot=243 name=Verudora tempest
+id=3e22a296-10d4-4de8-ad79-9d421fc170ed pseudo=Heather Yack type=player variant=normal special_type=normal rarity=comun slot=250 name=Heather Yack
+id=52da3a19-84fb-46e8-993a-c690cfc107d3 pseudo=Heather Yack type=char_1 variant=normal special_type=normal rarity=raro slot=251 name=Shinmon Benimaru
+id=07cdb593-35a0-4df3-abad-426ae0ec099d pseudo=Heather Yack type=char_2 variant=normal special_type=normal rarity=raro slot=252 name=Uchiha Madara
+id=1952f7f8-a088-4af6-98e9-1fca8159bc33 pseudo=Heather Yack type=char_3 variant=normal special_type=normal rarity=raro slot=253 name=Oh Kang Woo
+id=70d76906-8584-48a4-83a4-bdba140b630c pseudo=Justice63 type=player variant=normal special_type=normal rarity=comun slot=260 name=Justice63
+id=9884b0ba-e56f-48d2-800a-e98992e08ada pseudo=Justice63 type=char_1 variant=normal special_type=normal rarity=raro slot=261 name=Mostima
+id=21e18d77-1d5b-494d-be6d-71b1d369db9f pseudo=Justice63 type=char_2 variant=normal special_type=normal rarity=raro slot=262 name=Saria
+id=e0107256-de4d-49f8-9fb5-b60133423103 pseudo=Justice63 type=char_3 variant=normal special_type=normal rarity=raro slot=263 name=Dusk
+id=42e09d79-4170-4c14-8758-cfcc93e1cbf9 pseudo=Musashi type=player variant=normal special_type=normal rarity=comun slot=270 name=Musashi
+id=46dfb537-20aa-4d1e-a43b-b96dc11c8e91 pseudo=Musashi type=char_1 variant=normal special_type=normal rarity=raro slot=271 name=Yuta Okkotsu
+id=ff794b77-d256-48aa-8a3f-5b30ca1556e9 pseudo=Musashi type=char_2 variant=normal special_type=normal rarity=raro slot=272 name=Chrollo Lucilfer
+id=8a48a5d4-867a-4d73-8643-ef9f4ac91512 pseudo=Musashi type=char_3 variant=normal special_type=normal rarity=raro slot=273 name=Hajime Kashimo
+id=4e57ed83-5005-485b-af8d-fd6e9aa00937 pseudo=𝕽𝐲𝐮𝐮. type=player variant=normal special_type=normal rarity=comun slot=280 name=𝕽𝐲𝐮𝐮.
+id=5a5a3a86-10b7-4425-9068-9ce3e78faac6 pseudo=𝕽𝐲𝐮𝐮. type=char_1 variant=normal special_type=normal rarity=raro slot=281 name=Sosuke Aizen.
+id=bb9f99de-536d-4e35-893d-8d3ea2e7263e pseudo=𝕽𝐲𝐮𝐮. type=char_2 variant=normal special_type=normal rarity=raro slot=282 name=Madara Uchiha.
+id=07c441b3-546b-4ddf-8569-cdd769e6a70f pseudo=𝕽𝐲𝐮𝐮. type=char_3 variant=normal special_type=normal rarity=raro slot=283 name=Gilgamesh.
+id=c7ce0f6d-f5b9-4e47-9d66-151852a90806 pseudo=Thunder     ¡ type=player variant=normal special_type=normal rarity=comun slot=290 name=Thunder     ¡
+id=618e9d8c-2377-49ce-9da6-b3fc563a3ffb pseudo=Thunder     ¡ type=char_1 variant=normal special_type=normal rarity=raro slot=291 name=Dabura
+id=93d53cb2-0e78-4119-971a-e018e704bd6c pseudo=Thunder     ¡ type=char_2 variant=normal special_type=normal rarity=raro slot=292 name=Gilgamesh
+id=1e96fc01-38d8-46a2-8728-ebacb32a67cf pseudo=Thunder     ¡ type=char_3 variant=normal special_type=normal rarity=raro slot=293 name=Sukuna
+id=a3d296b2-d4e4-4dd6-a6a6-2a1ade8877de pseudo=тєηкα type=player variant=normal special_type=normal rarity=comun slot=300 name=тєηкα
+id=39fc6110-5088-4a31-8e2c-82774b9b4c94 pseudo=тєηкα type=char_1 variant=normal special_type=normal rarity=raro slot=301 name=Shiraori – kumi desu GA Nani Ka.
+id=00c4b29e-1422-404f-98ad-326d08a454ba pseudo=тєηкα type=char_2 variant=normal special_type=normal rarity=raro slot=302 name=Tokisaki kurumi – date a live
+id=1604b75c-97d2-48f7-a02d-93c16eec7a87 pseudo=тєηкα type=char_3 variant=normal special_type=normal rarity=raro slot=303 name=Yatogami tenka – date a live
+id=af624906-9ee5-4b2b-b723-246e9215a2bf pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=player variant=dorado special_type=normal rarity=legendario slot=1010 name=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗
+id=6e6ca744-3679-4a01-8e42-39c474e34ab4 pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1011 name=Rune King Thor
+id=7c4b759e-db2a-447e-ab41-74b3705118da pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1012 name=Michael Korvac
+id=94298019-794e-4267-9d0e-9baa0cefd2fc pseudo=Khamzat 𝕿𝖍𝖊 𝕭𝖔𝖗𝖟 𝕽𝖊𝖆𝖕𝖕𝖊𝖗 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1013 name=Mercurius
+id=963bce39-cde4-4cbb-ae6e-99c9ddb7e13f pseudo=Mel type=player variant=dorado special_type=normal rarity=legendario slot=1020 name=Mel
+id=f8a31440-c1be-45c0-9d3d-cbc81dfad84b pseudo=Mel type=char_1 variant=dorado special_type=normal rarity=legendario slot=1021 name=Illyasviel von Einzbern(Fate Kaleid)
+id=4b2bb6a5-2226-4a45-a2ef-34077c203fcf pseudo=Mel type=char_2 variant=dorado special_type=normal rarity=legendario slot=1022 name=Frisk(Undertale)
+id=6da8eabc-0d52-4eab-8d0d-69c2d882519f pseudo=Mel type=char_3 variant=dorado special_type=normal rarity=legendario slot=1023 name=Kale(DBS)
+id=dbea9496-4475-43bf-96d9-ac051a8b9be5 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=player variant=dorado special_type=normal rarity=legendario slot=1030 name=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌
+id=0816b5ea-d952-4f0b-86d5-8d2437b44e22 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1031 name=The Planeswalker
+id=27d1dc3a-a2ef-4982-ad44-6610c90b9357 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1032 name=Durnehviir [OC]
+id=fae0bfaf-f1a6-4a9c-b356-0396ade3e901 pseudo=𝐍𝐄𝐏𝐇𝐀𝐋𝐄𝐌 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1033 name=El Rey Exánime
+id=a688027b-b4ed-4257-a9cf-ee2e33637d93 pseudo=Inverse Bernkastel type=player variant=dorado special_type=normal rarity=legendario slot=1040 name=Inverse Bernkastel
+id=2161754f-8b61-40c9-b69a-da90a105e76c pseudo=Inverse Bernkastel type=char_1 variant=dorado special_type=normal rarity=legendario slot=1041 name=Bernkastel
+id=a56375e1-7bcf-4cbb-9cca-0760d118e094 pseudo=Inverse Bernkastel type=char_2 variant=dorado special_type=normal rarity=legendario slot=1042 name=Lambdadelta
+id=8bd00219-38a4-4a59-9bc7-5549dda5d490 pseudo=Inverse Bernkastel type=char_3 variant=dorado special_type=normal rarity=legendario slot=1043 name=Erika
+id=9d1977ff-dbaf-4e2f-8fc4-f2a6b93d2081 pseudo=Vertic type=player variant=dorado special_type=normal rarity=legendario slot=1050 name=Vertic
+id=767aed0a-65fd-4c19-8fb9-0ef001f89ef9 pseudo=Vertic type=char_1 variant=dorado special_type=normal rarity=legendario slot=1051 name=Ctarrnid
+id=b3f66c42-4b7c-40fe-8a71-c0c1c7165b08 pseudo=Vertic type=char_2 variant=dorado special_type=normal rarity=legendario slot=1052 name=Wezaemon
+id=029d1986-7d02-440e-9e5a-5650bc2b0114 pseudo=Vertic type=char_3 variant=dorado special_type=normal rarity=legendario slot=1053 name=Lycaon
+id=464b81cb-fcdd-453a-abc6-eb833bc00c0a pseudo=Amiya Arknights type=player variant=dorado special_type=normal rarity=legendario slot=1060 name=Amiya Arknights
+id=7d45b821-eb89-4286-8a4a-f530dc35be4a pseudo=Amiya Arknights type=char_1 variant=dorado special_type=normal rarity=legendario slot=1061 name=Ishmael
+id=ad09c38f-925c-40eb-9f8b-3f7bc5667323 pseudo=Amiya Arknights type=char_2 variant=dorado special_type=normal rarity=legendario slot=1062 name=Bianca
+id=d2692e05-6903-4745-9312-be99c59b7255 pseudo=Amiya Arknights type=char_3 variant=dorado special_type=normal rarity=legendario slot=1063 name=Amiya
+id=6f03bcce-1398-48a8-a39c-a75b10180976 pseudo=𝕭andet type=player variant=dorado special_type=normal rarity=legendario slot=1070 name=𝕭andet
+id=25e04389-39d1-45a8-8d6e-154acb847cb9 pseudo=𝕭andet type=char_1 variant=dorado special_type=normal rarity=legendario slot=1071 name=Doctor Strange
+id=67ba4b75-0f9f-40af-826a-851e072a1708 pseudo=𝕭andet type=char_2 variant=dorado special_type=normal rarity=legendario slot=1072 name=Thanos
+id=c8d49507-2e40-467a-9e60-b26bf6e3678c pseudo=𝕭andet type=char_3 variant=dorado special_type=normal rarity=legendario slot=1073 name=Jean Gray
+id=97abd1d9-77b8-414e-ac9c-48926eeff5c4 pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=player variant=dorado special_type=normal rarity=legendario slot=1080 name=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗.
+id=fddeee3e-7e41-4356-be7a-1e5537190056 pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_1 variant=dorado special_type=normal rarity=legendario slot=1081 name=Ywach
+id=4cf63847-f3ae-442c-ab1e-7c7780410f3a pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_2 variant=dorado special_type=normal rarity=legendario slot=1082 name=Son Goku
+id=1d3245c5-0cd7-4425-b216-3b6b32565cad pseudo=𝐉𝐈𝐌 𝕸𝖊𝖗𝖚𝖘 𝕵𝖗. type=char_3 variant=dorado special_type=normal rarity=legendario slot=1083 name=Dr. Fate
+id=cabb53b2-271d-4ac5-96bb-b529ed7c24f3 pseudo=Lucifer Der Vosgrönne type=player variant=dorado special_type=normal rarity=legendario slot=1090 name=Lucifer Der Vosgrönne
+id=d93e8b84-66f7-452d-94e5-bc3e2ca7e85f pseudo=Lucifer Der Vosgrönne type=char_1 variant=dorado special_type=normal rarity=legendario slot=1091 name=Lucifer Morningstar
+id=77b7cd2b-8e50-45a8-a7d1-a6b43153f623 pseudo=Lucifer Der Vosgrönne type=char_2 variant=dorado special_type=normal rarity=legendario slot=1092 name=Zarathos (Ghost Rider)
+id=0ebc3c9f-185d-42be-900f-6a98db3ebf96 pseudo=Lucifer Der Vosgrönne type=char_3 variant=dorado special_type=normal rarity=legendario slot=1093 name=Elric de Melniboné
+id=ab159ea7-4525-4b3f-96ac-834fb40b545c pseudo=𝗠𝐄𝐑𝐔𝐒 type=player variant=dorado special_type=normal rarity=legendario slot=1100 name=𝗠𝐄𝐑𝐔𝐒
+id=03ebd315-ee05-46fa-86fe-2cd176f8063c pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1101 name=𝐑𝐈𝐌𝐔𝐑𝐔 𝐓𝐄𝐌𝐏𝐄𝐒𝐓
+id=852aff7c-d843-4939-a243-57cf5020d36b pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1102 name=𝐒𝐇𝐀𝐊𝐀 𝐃𝐄 𝐕𝐈𝐑𝐆𝐎
+id=ff7baa4b-e259-4045-a03d-1172b35a5e2a pseudo=𝗠𝐄𝐑𝐔𝐒 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1103 name=𝐒𝐎𝐍 𝐆𝐎𝐊𝐔
+id=7a086c0d-0e63-44e3-a439-abd42ae00fcb pseudo=NeroAggelo type=player variant=dorado special_type=normal rarity=legendario slot=1110 name=NeroAggelo
+id=f91449cb-2a79-44dd-a744-cefed4ac1d52 pseudo=NeroAggelo type=char_1 variant=dorado special_type=normal rarity=legendario slot=1111 name=Varhram, El Héroe de Cien Caras
+id=c945ca7d-c281-4f94-be53-59619ac84414 pseudo=NeroAggelo type=char_2 variant=dorado special_type=normal rarity=legendario slot=1112 name=Wang, el Pecador
+id=e729c0e9-c5f1-45a5-a1de-e27f0f1185fb pseudo=NeroAggelo type=char_3 variant=dorado special_type=normal rarity=legendario slot=1113 name=Blanco, el Color de la Realidad
+id=3f0fd685-82d0-4a07-90f0-94550e154025 pseudo=Prox type=player variant=dorado special_type=normal rarity=legendario slot=1120 name=Prox
+id=9239fa8f-ae13-446a-9fe9-e47f8f461c81 pseudo=Prox type=char_1 variant=dorado special_type=normal rarity=legendario slot=1121 name=Kokushibo
+id=993a6618-372c-46a6-8991-4fd05e6a1f65 pseudo=Prox type=char_2 variant=dorado special_type=normal rarity=legendario slot=1122 name=Tristán liones
+id=badb6d0b-108f-4fde-ac1d-d03e5a1155df pseudo=Prox type=char_3 variant=dorado special_type=normal rarity=legendario slot=1123 name=Itachi
+id=52158c72-a605-47f4-b8c2-364d0c66f0eb pseudo=RagnaKurenai type=player variant=dorado special_type=normal rarity=legendario slot=1130 name=RagnaKurenai
+id=055ec8c7-65b3-4648-b332-76142ff08ad9 pseudo=RagnaKurenai type=char_1 variant=dorado special_type=normal rarity=legendario slot=1131 name=Beatrice The Golden Wich
+id=a2a3564d-599a-45a6-9758-a9e6299b1fc3 pseudo=RagnaKurenai type=char_2 variant=dorado special_type=normal rarity=legendario slot=1132 name=Ragna
+id=074e9413-c744-42cb-8610-b6e9d7ac288e pseudo=RagnaKurenai type=char_3 variant=dorado special_type=normal rarity=legendario slot=1133 name=Koujou Akatsuki
+id=8e70d58a-5e31-4237-ae1b-0ab7afd50edd pseudo=Sak type=player variant=dorado special_type=normal rarity=legendario slot=1140 name=Sak
+id=16a03cdd-6a36-4f50-b63d-3efce90652bb pseudo=Sak type=char_1 variant=dorado special_type=normal rarity=legendario slot=1141 name=Vegetto
+id=a282a81c-ffd6-4300-81b7-65ed3e693889 pseudo=Sak type=char_2 variant=dorado special_type=normal rarity=legendario slot=1142 name=Kyoraku
+id=ddfdb35f-0a38-4f46-9f28-a9c0c658c511 pseudo=Sak type=char_3 variant=dorado special_type=normal rarity=legendario slot=1143 name=Zaraki
+id=899485d3-be65-4dbf-887e-a7bbf4055f9e pseudo=𝕭𝐚𝐚𝐥 type=player variant=dorado special_type=normal rarity=legendario slot=1150 name=𝕭𝐚𝐚𝐥
+id=731c7d7d-5b23-40b1-befd-d01d64d1eb00 pseudo=𝕭𝐚𝐚𝐥 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1151 name=𝕸𝐚𝐠𝐢𝐤 - Marvel
+id=7d5d4a52-f9eb-4fe9-9eb0-0aff48a50a3e pseudo=𝕭𝐚𝐚𝐥 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1152 name=𝕿𝐞𝐫𝐫𝐚 𝕭𝐫𝐚𝐧𝐟𝐨𝐫𝐝
+id=15be4295-4b29-404a-8594-32ebea6bfb5a pseudo=𝕭𝐚𝐚𝐥 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1153 name=𝕭𝐚𝐲𝐨𝐧𝐞𝐭𝐭𝐚
+id=5d09cee0-185d-4fcb-9b71-0378c9c27e28 pseudo=Soujiro Izanagi type=player variant=dorado special_type=normal rarity=legendario slot=1160 name=Soujiro Izanagi
+id=da3dce1c-15a9-4fdd-9c89-fe8fc1a94939 pseudo=Soujiro Izanagi type=char_1 variant=dorado special_type=normal rarity=legendario slot=1161 name=Sung Jin Woo
+id=6215d6f6-2aaa-4726-b026-450cc70d9a43 pseudo=Soujiro Izanagi type=char_2 variant=dorado special_type=normal rarity=legendario slot=1162 name=Kevin Kaslana
+id=3df6a760-f6fe-4eb2-95a7-048fd37b88cd pseudo=Soujiro Izanagi type=char_3 variant=dorado special_type=normal rarity=legendario slot=1163 name=Archer Emiya
+id=c86110ff-b662-475a-8151-8ba6b6d6571f pseudo=Dktosh Dmitriev type=player variant=dorado special_type=normal rarity=legendario slot=1170 name=Dktosh Dmitriev
+id=6c725539-8cc0-4606-aea9-002885eb6deb pseudo=Dktosh Dmitriev type=char_1 variant=dorado special_type=normal rarity=legendario slot=1171 name=Emiya
+id=15903ea4-afd7-4a5c-b862-cc4ab02d7c9e pseudo=Dktosh Dmitriev type=char_2 variant=dorado special_type=normal rarity=legendario slot=1172 name=Vergil Sparda
+id=20513956-baa2-4733-8265-0642c3688e72 pseudo=Dktosh Dmitriev type=char_3 variant=dorado special_type=normal rarity=legendario slot=1173 name=Hyodou Issei
+id=d9e900a3-e383-4e72-b592-4b7beb12a537 pseudo=Ohma type=player variant=dorado special_type=normal rarity=legendario slot=1180 name=Ohma
+id=06accdd9-8b16-4014-ae91-14d90b64d472 pseudo=Ohma type=char_1 variant=dorado special_type=normal rarity=legendario slot=1181 name=The Dark Lord (Alan becker)
+id=0b5aca4d-02e4-4d52-a876-c13a44ab18d5 pseudo=Ohma type=char_2 variant=dorado special_type=normal rarity=legendario slot=1182 name=Yuki Tsukumo
+id=7d978a7e-a851-4f3a-88de-4f222ae40650 pseudo=Ohma type=char_3 variant=dorado special_type=normal rarity=legendario slot=1183 name=The Dark Lord
+id=30f7a720-4901-46c4-8f71-ec5097e720c8 pseudo=Abssylum type=player variant=dorado special_type=normal rarity=legendario slot=1190 name=Abssylum
+id=d2830542-0a8a-47a7-a61b-9f443388e0c3 pseudo=Abssylum type=char_1 variant=dorado special_type=normal rarity=legendario slot=1191 name=Arthur Leywin
+id=661e9e6f-f63b-4723-b58c-eec184332479 pseudo=Abssylum type=char_2 variant=dorado special_type=normal rarity=legendario slot=1192 name=Sung jin woo
+id=3421e673-c705-473b-9995-fdbd61761bd0 pseudo=Abssylum type=char_3 variant=dorado special_type=normal rarity=legendario slot=1193 name=Zhuo fan
+id=cf11c6c3-79a1-476f-910d-2e020c26d223 pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=player variant=dorado special_type=normal rarity=legendario slot=1200 name=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢
+id=d9e3c60d-995f-4a19-896c-ab04b5c6a2fc pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1201 name=Najimi Ajimu
+id=d7eb25e1-dc99-4fec-b2fe-20a9dd1b7f5d pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1202 name=Yoguruma Mugen
+id=16cc5a4f-33d2-4fab-a9c3-1b1674b677e4 pseudo=永. 𝐇𝐚𝐭𝐬𝐮𝐦𝐢 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1203 name=Frederica
+id=59cac54a-d71f-4275-842d-2f98278f176d pseudo=ARAKIEL type=player variant=dorado special_type=normal rarity=legendario slot=1210 name=ARAKIEL
+id=4465f42e-c9af-4966-ab14-3d4cb16142f0 pseudo=ARAKIEL type=char_1 variant=dorado special_type=normal rarity=legendario slot=1211 name=Bambietta Basterbine
+id=14fbc2e5-a325-4c54-b5e9-0c362191b875 pseudo=ARAKIEL type=char_2 variant=dorado special_type=normal rarity=legendario slot=1212 name=Mereoleona
+id=9d292c85-f24d-4cf4-973e-04b869a40d7e pseudo=ARAKIEL type=char_3 variant=dorado special_type=normal rarity=legendario slot=1213 name=Esdeath
+id=aa7f1ba1-ff19-4705-a750-f7c0ebb5cea8 pseudo=Dhaela type=player variant=dorado special_type=normal rarity=legendario slot=1220 name=Dhaela
+id=c72bad41-f861-4c93-83b9-fe2f0997ff02 pseudo=Dhaela type=char_1 variant=dorado special_type=normal rarity=legendario slot=1221 name=YorHa N°2 Tipo B
+id=8f253824-333b-4fed-b248-3acbb6ffba13 pseudo=Dhaela type=char_2 variant=dorado special_type=normal rarity=legendario slot=1222 name=Shu, la Sexta Sui
+id=01c1726b-58a4-499f-8cd0-c43f20bf2850 pseudo=Dhaela type=char_3 variant=dorado special_type=normal rarity=legendario slot=1223 name=Astaroth , el Espejo Mágico
+id=2ea6503c-2c62-42f4-b335-bf5924b4d75a pseudo=Fear. type=player variant=dorado special_type=normal rarity=legendario slot=1230 name=Fear.
+id=dbd20691-c666-49bd-9285-a1b53f4e35bd pseudo=Fear. type=char_1 variant=dorado special_type=normal rarity=legendario slot=1231 name=Gaku
+id=c5769e57-a7dc-49fb-88f1-7a16da92af1e pseudo=Fear. type=char_2 variant=dorado special_type=normal rarity=legendario slot=1232 name=Benimaru
+id=03d41fe9-7699-4b68-8e70-c256ed37557e pseudo=Fear. type=char_3 variant=dorado special_type=normal rarity=legendario slot=1233 name=Beelzebub
+id=cec02338-6694-44cf-92ba-e8c4002da196 pseudo=GULTARD GABANNA type=player variant=dorado special_type=normal rarity=legendario slot=1240 name=GULTARD GABANNA
+id=34d378d2-df4d-4b7a-99a5-8b62454c3b8b pseudo=GULTARD GABANNA type=char_1 variant=dorado special_type=normal rarity=legendario slot=1241 name=Arthur Boyle
+id=c780bdfc-6e67-4fdc-898c-98733f92f4d5 pseudo=GULTARD GABANNA type=char_2 variant=dorado special_type=normal rarity=legendario slot=1242 name=Sinbad
+id=1af0591a-606a-412e-968f-cf169dd823b6 pseudo=GULTARD GABANNA type=char_3 variant=dorado special_type=normal rarity=legendario slot=1243 name=Verudora tempest
+id=a320c134-15a3-47b9-a847-0607c24e3082 pseudo=Heather Yack type=player variant=dorado special_type=normal rarity=legendario slot=1250 name=Heather Yack
+id=8fd9e91d-5160-408c-80ce-eb8989c057f6 pseudo=Heather Yack type=char_1 variant=dorado special_type=normal rarity=legendario slot=1251 name=Shinmon Benimaru
+id=3c7641ca-b5c6-46f8-9a96-3910e0b53c5c pseudo=Heather Yack type=char_2 variant=dorado special_type=normal rarity=legendario slot=1252 name=Uchiha Madara
+id=f2de70a2-b716-41ac-8e3e-0db06467c75c pseudo=Heather Yack type=char_3 variant=dorado special_type=normal rarity=legendario slot=1253 name=Oh Kang Woo
+id=60bb83a3-4f72-421b-93ac-6813de8afa39 pseudo=Justice63 type=player variant=dorado special_type=normal rarity=legendario slot=1260 name=Justice63
+id=9cf7462f-9bd3-4cb7-8311-c66ad1aa2016 pseudo=Justice63 type=char_1 variant=dorado special_type=normal rarity=legendario slot=1261 name=Mostima
+id=18749b18-4345-49d9-aa09-8fa4959640c6 pseudo=Justice63 type=char_2 variant=dorado special_type=normal rarity=legendario slot=1262 name=Saria
+id=5c38d4d2-dfb5-403b-ad84-3a5a8fa0bd45 pseudo=Justice63 type=char_3 variant=dorado special_type=normal rarity=legendario slot=1263 name=Dusk
+id=67a55df2-9e34-4a5f-a1c7-5f30f99d379b pseudo=Musashi type=player variant=dorado special_type=normal rarity=legendario slot=1270 name=Musashi
+id=b6a55b66-eea0-45ec-af42-b7955e7e20aa pseudo=Musashi type=char_1 variant=dorado special_type=normal rarity=legendario slot=1271 name=Yuta Okkotsu
+id=d7fa37c2-9830-4d83-9c1e-d7e35e964a05 pseudo=Musashi type=char_2 variant=dorado special_type=normal rarity=legendario slot=1272 name=Chrollo Lucilfer
+id=87b8b859-1eeb-4eda-a5ee-67ba0b30a614 pseudo=Musashi type=char_3 variant=dorado special_type=normal rarity=legendario slot=1273 name=Hajime Kashimo
+id=aeb4c819-0f5f-4e9b-bbac-bff8e2ee8237 pseudo=𝕽𝐲𝐮𝐮. type=player variant=dorado special_type=normal rarity=legendario slot=1280 name=𝕽𝐲𝐮𝐮.
+id=524e17af-078e-445d-8ba5-11f6e143998f pseudo=𝕽𝐲𝐮𝐮. type=char_1 variant=dorado special_type=normal rarity=legendario slot=1281 name=Sosuke Aizen.
+id=585b5646-6789-4a5d-a4b9-7f1f906b04d6 pseudo=𝕽𝐲𝐮𝐮. type=char_2 variant=dorado special_type=normal rarity=legendario slot=1282 name=Madara Uchiha.
+id=d3d616fb-801f-4dac-81c0-05bbdf1921d4 pseudo=𝕽𝐲𝐮𝐮. type=char_3 variant=dorado special_type=normal rarity=legendario slot=1283 name=Gilgamesh.
+id=2e3cfb78-03a0-4dca-a4be-7c64c6f9f45d pseudo=Thunder     ¡ type=player variant=dorado special_type=normal rarity=legendario slot=1290 name=Thunder     ¡
+id=9056d1a0-3749-4daa-a5d7-d365c3ce5e71 pseudo=Thunder     ¡ type=char_1 variant=dorado special_type=normal rarity=legendario slot=1291 name=Dabura
+id=c2ee094d-da33-4a5f-be4b-853adaa5285f pseudo=Thunder     ¡ type=char_2 variant=dorado special_type=normal rarity=legendario slot=1292 name=Gilgamesh
+id=bcccdf18-f6fe-40bd-947a-03085c51db0a pseudo=Thunder     ¡ type=char_3 variant=dorado special_type=normal rarity=legendario slot=1293 name=Sukuna
+id=38bfea5f-b1a6-4450-b335-a0e51558777c pseudo=тєηкα type=player variant=dorado special_type=normal rarity=legendario slot=1300 name=тєηкα
+id=4cdadcab-c2e1-4d48-bb0a-f9b980b1431f pseudo=тєηкα type=char_1 variant=dorado special_type=normal rarity=legendario slot=1301 name=Shiraori – kumi desu GA Nani Ka.
+id=9eb3d499-91e4-433b-aa61-1593bdfc8cb9 pseudo=тєηкα type=char_2 variant=dorado special_type=normal rarity=legendario slot=1302 name=Tokisaki kurumi – date a live
+id=b9d9ef3f-fa6f-456d-967a-7c6cd4e8a4f2 pseudo=тєηкα type=char_3 variant=dorado special_type=normal rarity=legendario slot=1303 name=Yatogami tenka – date a live

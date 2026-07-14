@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bellator · Álbum 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
+
+/* ─── VARS ─── */
+:root {
+  --gold: #d4af37; --gold2: #f3e68a;
+  --bg: #07090d;
+  --paper: #f4efe4; --paper2: #ece6d4; --ink: #18140f;
+  --red: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 32px 16px 80px;
+  overflow-x: hidden;
+}
+
+/* ─── NAV TABS ─── */
+.tabs {
+  display: flex; gap: 6px; margin-bottom: 28px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 99px;
+  padding: 5px;
+}
+.tab {
+  font-family: 'Teko', sans-serif;
+  font-size: .85rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 7px 22px; border-radius: 99px; cursor: pointer;
+  color: rgba(255,255,255,.35);
+  transition: all .25s;
+  border: none; background: transparent;
+}
+.tab.active {
+  background: linear-gradient(135deg, #b8960c, #f3e68a);
+  color: #000; font-weight: 700;
+}
+
+/* ─── VIEWS ─── */
+.view { display: none; width: 100%; max-width: 860px; }
+.view.show { display: block; }
+
+/* ══════════════════════════════════
+   PACK OPENING VIEW
+══════════════════════════════════ */
+#view-pack {
+  display: none;
+  flex-direction: column; align-items: center;
+  gap: 0;
+}
+#view-pack.show { display: flex; }
+
+.pack-scene {
+  position: relative;
+  width: 260px; height: 400px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ── sobre Panini-style ── */
+.pack-body {
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(160deg,
+    #0d0820 0%, #1a0d35 25%, #0b1530 50%, #150820 75%, #0d0820 100%);
+  border: 2px solid rgba(212,175,55,.35);
+  box-shadow:
+    0 0 0 1px #000,
+    0 30px 60px rgba(0,0,0,.7),
+    inset 0 0 40px rgba(100,60,200,.15);
+  overflow: hidden;
+  transition: transform .15s;
+}
+.pack-scene:hover .pack-body { transform: scale(1.015); }
+.pack-scene.tearing { pointer-events: none; }
+
+/* holographic overlay on pack */
+.pack-holo {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(115deg,
+    transparent 20%, rgba(255,215,0,.07) 30%,
+    rgba(130,255,180,.1) 42%, rgba(80,160,255,.09) 54%,
+    rgba(200,80,255,.07) 65%, transparent 75%);
+  background-size: 300% 300%;
+  animation: holo 3.5s ease infinite;
+  border-radius: 13px;
+}
+@keyframes holo {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* pack shine sweep */
+.pack-shine {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.06) 50%, transparent 60%);
+  background-size: 200% 200%;
+  animation: packshine 2.5s ease-in-out infinite;
+  border-radius: 13px;
+}
+@keyframes packshine {
+  0%,100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; }
+}
+
+/* pack art */
+.pack-art {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: space-between;
+  padding: 22px 18px 20px;
+}
+.pack-logo {
+  font-family: 'Teko', sans-serif; font-size: 2rem;
+  letter-spacing: 8px; text-transform: uppercase;
+  background: linear-gradient(135deg, #d4af37, #f3e68a, #b8960c, #f3e68a);
+  background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shine 3s linear infinite; text-align: center;
+}
+@keyframes shine { 0%{background-position:0%}100%{background-position:200%} }
+.pack-subtitle {
+  font-family: 'Teko', sans-serif; font-size: .65rem;
+  letter-spacing: 4px; color: rgba(212,175,55,.5); text-transform: uppercase;
+  text-align: center; margin-top: -12px;
+}
+.pack-image-area {
+  flex: 1; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 10px 0;
+  position: relative;
+}
+.pack-character-img {
+  width: 130px; height: 160px;
+  object-fit: cover; object-position: top;
+  border-radius: 8px;
+  filter: brightness(.9) contrast(1.1) saturate(1.2);
+  box-shadow: 0 0 30px rgba(130,80,255,.4);
+}
+.pack-glow {
+  position: absolute; width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(130,80,255,.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.pack-bottom {
+  text-align: center;
+}
+.pack-count {
+  font-family: 'Teko', sans-serif; font-size: .7rem;
+  letter-spacing: 3px; color: rgba(212,175,55,.4); text-transform: uppercase;
+}
+.pack-count span { color: var(--gold); font-size: .9rem; }
+
+/* tear perforation line */
+.pack-tear-line {
+  position: absolute; top: 30%; left: 0; right: 0; z-index: 4;
+  height: 1px;
+  background: repeating-linear-gradient(90deg,
+    rgba(255,255,255,.3) 0px, rgba(255,255,255,.3) 6px,
+    transparent 6px, transparent 12px);
+  pointer-events: none;
+}
+.pack-tear-triangle {
+  position: absolute; top: 28%; right: -1px; z-index: 5;
+  width: 0; height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 10px solid rgba(255,255,255,.25);
+  pointer-events: none;
+}
+
+/* pack: TOP FLAP tears away */
+.pack-top {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 30%;
+  border-radius: 14px 14px 0 0;
+  background: inherit;
+  background: linear-gradient(160deg, #1a0d35 0%, #0d0820 100%);
+  border: 2px solid rgba(212,175,55,.35);
+  border-bottom: none;
+  z-index: 6;
+  transform-origin: top center;
+  transition: none;
+  overflow: hidden;
+}
+.pack-top-holo {
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent, rgba(130,80,255,.15), transparent);
+  border-radius: 12px 12px 0 0;
+}
+
+/* TEAR ANIMATION */
+@keyframes tearUp {
+  0%   { transform: rotate(0deg) translateY(0); opacity: 1; }
+  40%  { transform: rotate(-18deg) translateY(-20px); opacity: 1; }
+  100% { transform: rotate(-30deg) translateY(-140px) translateX(-30px); opacity: 0; }
+}
+.pack-scene.tearing .pack-top {
+  animation: tearUp .55s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* cards spill out */
+.cards-spill {
+  position: absolute; top: 28%; left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  display: flex;
+  gap: -20px;
+  pointer-events: none;
+}
+.spill-card {
+  width: 80px; height: 115px;
+  border-radius: 7px;
+  border: 1.5px solid rgba(212,175,55,.5);
+  background: linear-gradient(135deg, #0a0812, #1a0d30);
+  box-shadow: 0 6px 20px rgba(0,0,0,.5);
+  position: absolute;
+  top: 0; left: 50%;
+  opacity: 0;
+}
+@keyframes cardSpill0 {
+  0%   { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(calc(-50% - 70px)) translateY(140px) rotate(-15deg); opacity: 1; }
+}
+@keyframes cardSpill1 {
+  0%   { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(calc(-50% - 25px)) translateY(130px) rotate(-5deg); opacity: 1; }
+}
+@keyframes cardSpill2 {
+  0%   { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(-50%) translateY(125px) rotate(3deg); opacity: 1; }
+}
+@keyframes cardSpill3 {
+  0%   { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(calc(-50% + 25px)) translateY(130px) rotate(12deg); opacity: 1; }
+}
+@keyframes cardSpill4 {
+  0%   { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(calc(-50% + 70px)) translateY(140px) rotate(20deg); opacity: 1; }
+}
+.pack-scene.tearing .spill-card:nth-child(1) { animation: cardSpill0 .7s .25s ease forwards; }
+.pack-scene.tearing .spill-card:nth-child(2) { animation: cardSpill1 .7s .3s  ease forwards; }
+.pack-scene.tearing .spill-card:nth-child(3) { animation: cardSpill2 .7s .32s ease forwards; }
+.pack-scene.tearing .spill-card:nth-child(4) { animation: cardSpill3 .7s .3s  ease forwards; }
+.pack-scene.tearing .spill-card:nth-child(5) { animation: cardSpill4 .7s .25s ease forwards; }
+
+/* CTA */
+.pack-cta {
+  font-family: 'Teko', sans-serif; font-size: .7rem;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(212,175,55,.35);
+  animation: blink 1.5s ease-in-out infinite;
+  margin-top: 6px;
+}
+@keyframes blink { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* ── REVEAL CARDS SECTION ── */
+.reveal-section {
+  width: 100%; max-width: 760px;
+  display: none; flex-direction: column; align-items: center;
+  gap: 20px;
+}
+.reveal-section.show { display: flex; }
+.reveal-title {
+  font-family: 'Teko', sans-serif; font-size: 1rem;
+  letter-spacing: 5px; color: rgba(212,175,55,.6); text-transform: uppercase;
+}
+.reveal-cards-row {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+
+/* ── FLIP REVEAL CARD ── */
+.rev-wrap {
+  perspective: 700px;
+  width: 130px;
+}
+.rev-inner {
+  width: 130px; height: 188px;
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+  border-radius: 9px;
+}
+.rev-wrap.flipped .rev-inner { transform: rotateY(180deg); }
+.rev-front, .rev-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  border-radius: 9px;
+  overflow: hidden;
+}
+.rev-back { transform: rotateY(180deg); }
+
+/* card front */
+.rev-front {
+  background: linear-gradient(135deg, #0a0812, #1a0d30);
+  border: 2px solid rgba(212,175,55,.4);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+}
+.rev-front-logo {
+  font-family: 'Teko', sans-serif; font-size: 1rem;
+  letter-spacing: 4px; color: rgba(212,175,55,.3); text-transform: uppercase;
+}
+.rev-front::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(130,80,255,.1) 50%, transparent 70%);
+  background-size: 300% 300%; animation: holo 3s ease infinite; border-radius: 8px;
+}
+
+/* rarity colors */
+.rev-back.rarity-legendario { border: 2px solid #f3e68a; box-shadow: 0 0 20px rgba(243,230,138,.3); }
+.rev-back.rarity-raro       { border: 2px solid #8ecae6; box-shadow: 0 0 16px rgba(142,202,230,.25); }
+.rev-back.rarity-comun      { border: 2px solid rgba(255,255,255,.25); }
+
+/* rarity bar */
+.rev-rarity-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 5;
+}
+.rarity-legendario .rev-rarity-bar {
+  background: linear-gradient(90deg, #b8960c, #f3e68a, #b8960c, #f3e68a);
+  background-size: 200% auto; animation: shine 2s linear infinite;
+}
+.rarity-raro .rev-rarity-bar { background: linear-gradient(90deg, #2196f3, #8ecae6, #2196f3); background-size: 200% auto; animation: shine 2s linear infinite; }
+.rarity-comun .rev-rarity-bar { background: rgba(255,255,255,.15); }
+
+.rev-img {
+  width: 100%; height: 68%;
+  object-fit: cover; object-position: top;
+  filter: brightness(.95) contrast(1.05);
+}
+.rev-img-fallback {
+  width: 100%; height: 68%;
+  background: linear-gradient(135deg, #1a0d30, #0a1520);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; color: rgba(255,255,255,.15);
+}
+.rev-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 14px 8px 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,.92) 40%);
+}
+.rev-name {
+  font-family: 'Teko', sans-serif; font-size: .82rem;
+  letter-spacing: 1px; color: #fff; line-height: 1.1;
+}
+.rev-badge {
+  position: absolute; top: 10px; left: 8px; z-index: 6;
+  font-family: 'Teko', sans-serif; font-size: .5rem;
+  letter-spacing: 2px; padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; font-weight: 700;
+}
+.rarity-legendario .rev-badge { background: linear-gradient(135deg,#b8960c,#f3e68a); color:#000; }
+.rarity-raro .rev-badge       { background: linear-gradient(135deg,#1565c0,#8ecae6); color:#fff; }
+.rarity-comun .rev-badge      { background: rgba(255,255,255,.15); color: rgba(255,255,255,.6); }
+
+.rev-holo {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: linear-gradient(115deg, transparent 20%, rgba(255,215,0,.07) 30%, rgba(130,255,180,.1) 42%, rgba(80,160,255,.09) 54%, rgba(200,80,255,.07) 65%, transparent 75%);
+  background-size: 300% 300%; animation: holo 3.5s ease infinite; border-radius: 8px;
+}
+.rarity-comun .rev-holo { display: none; }
+
+/* click hint */
+.rev-wrap .click-hint {
+  font-size: .55rem; letter-spacing: 2px; color: rgba(212,175,55,.3);
+  text-transform: uppercase; text-align: center; margin-top: 5px;
+  font-family: 'Teko', sans-serif;
+}
+
+/* stick to album button */
+.btn-stick {
+  font-family: 'Teko', sans-serif; font-size: .85rem;
+  letter-spacing: 4px; text-transform: uppercase;
+  background: linear-gradient(135deg, #b8960c, #f3e68a);
+  color: #000; font-weight: 700;
+  border: none; border-radius: 8px;
+  padding: 12px 32px; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(212,175,55,.3);
+  transition: transform .15s, box-shadow .15s;
+  display: none;
+}
+.btn-stick:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,175,55,.4); }
+.btn-stick.show { display: block; }
+
+/* ═══════════════════════════════════
+   ALBUM VIEW
+═══════════════════════════════════ */
+#view-album {
+  display: none;
+  flex-direction: column; align-items: center;
+}
+#view-album.show { display: flex; }
+
+.album-page {
+  position: relative;
+  width: min(820px, 100%);
+  background: var(--paper);
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.12), 8px 8px 0 rgba(0,0,0,.08), 0 30px 80px rgba(0,0,0,.7);
+  overflow: hidden;
+}
+.album-page::before {
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+.album-header {
+  position:relative; z-index:2;
+  background: linear-gradient(135deg,#0a0c10 0%,#1a1020 50%,#0a0c10 100%);
+  padding: 16px 26px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 3px solid var(--gold);
+}
+.alb-logo { font-family:'Teko',sans-serif; font-size:1.5rem; letter-spacing:6px; color:var(--gold); text-transform:uppercase; }
+.alb-season { font-family:'Teko',sans-serif; font-size:.7rem; letter-spacing:4px; color:rgba(212,175,55,.45); text-transform:uppercase; }
+.alb-badge { font-family:'Teko',sans-serif; font-size:.68rem; letter-spacing:3px; padding:4px 14px; border:1px solid var(--gold); color:var(--gold); border-radius:3px; text-transform:uppercase; background:rgba(212,175,55,.06); }
+
+/* album grid */
+.album-body { position:relative; z-index:2; padding:20px 24px 16px; }
+.album-section-label {
+  font-family:'Teko',sans-serif; font-size:.65rem; letter-spacing:4px;
+  color:rgba(26,22,18,.3); text-transform:uppercase; margin-bottom:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.album-section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(26,22,18,.15),transparent); }
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* empty slot */
+.alb-slot {
+  aspect-ratio: 130/188;
+  border-radius: 9px;
+  border: 1.5px dashed rgba(26,22,18,.15);
+  background: rgba(0,0,0,.025);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  position: relative; overflow: hidden;
+  transition: all .2s;
+}
+.alb-slot:hover { border-color: rgba(212,175,55,.3); background: rgba(212,175,55,.02); }
+.alb-slot-num { font-family:'Teko',sans-serif; font-size:.58rem; letter-spacing:1px; color:rgba(26,22,18,.18); }
+.alb-slot-q { font-size:1rem; color:rgba(26,22,18,.1); }
+.alb-slot-lock { font-size:1rem; opacity:.15; }
+
+/* filled slot */
+.alb-slot.filled {
+  border: 2px solid rgba(212,175,55,.5);
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  overflow: hidden; cursor: pointer; padding: 0;
+}
+.alb-slot.filled:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+.alb-slot.filled img {
+  width: 100%; height: 65%;
+  object-fit: cover; object-position: top;
+}
+.alb-slot.filled .alb-filled-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,.8));
+  padding: 16px 6px 6px;
+  font-family:'Teko',sans-serif; font-size:.6rem; letter-spacing:.5px;
+  color: #fff; text-align: center;
+}
+.alb-slot.filled.rarity-legendario { border-color: #f3e68a; box-shadow: 0 4px 16px rgba(243,230,138,.25); }
+.alb-slot.filled.rarity-raro       { border-color: #8ecae6; box-shadow: 0 4px 14px rgba(142,202,230,.2); }
+
+/* STICK ANIMATION */
+@keyframes stickIn {
+  0%   { transform: scale(1.4) rotate(var(--rot)) translateY(-20px); opacity: 0; }
+  60%  { transform: scale(1.05) rotate(calc(var(--rot) * .3)) translateY(2px); opacity: 1; }
+  80%  { transform: scale(.97) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.alb-slot.sticking { animation: stickIn .5s cubic-bezier(.4,0,.2,1) forwards; }
+
+/* album footer */
+.album-footer {
+  position: relative; z-index: 2;
+  border-top: 2px solid rgba(26,22,18,.08);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,.02);
+}
+.footer-progress { display:flex; align-items:center; gap:10px; }
+.footer-bar { width:130px; height:5px; background:rgba(26,22,18,.1); border-radius:99px; overflow:hidden; }
+.footer-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold2)); border-radius:99px; transition:width .5s ease; }
+.footer-text { font-family:'Teko',sans-serif; font-size:.65rem; letter-spacing:2px; color:rgba(26,22,18,.35); text-transform:uppercase; }
+.footer-tag  { font-family:'Teko',sans-serif; font-size:.6rem; letter-spacing:3px; color:rgba(212,175,55,.35); text-transform:uppercase; }
+
+/* toast */
+#toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: linear-gradient(135deg, #b8960c, #f3e68a);
+  color: #000; font-family:'Teko',sans-serif; font-size:.8rem;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 10px 28px; border-radius: 99px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  transition: transform .3s ease; z-index: 9999; pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─ responsive ─ */
+@media(max-width:520px){
+  .pack-scene{width:220px;height:340px;}
+  .album-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));}
+}
+</style>
+</head>
+<body>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('pack')">📦 Abrir Sobre</button>
+  <button class="tab" onclick="showTab('album')">📖 Mi Álbum</button>
+</div>
+
+<!-- ════════ PACK VIEW ════════ -->
+<div id="view-pack" class="view show">
+
+  <div id="pack-scene" class="pack-scene" onclick="openPack()">
+    <div class="pack-body">
+      <div class="pack-holo"></div>
+      <div class="pack-shine"></div>
+      <div class="pack-art">
+        <div>
+          <div class="pack-logo">Bellator</div>
+          <div class="pack-subtitle">Temporada 2026 · Colección Oficial</div>
+        </div>
+        <div class="pack-image-area">
+          <div class="pack-glow"></div>
+          <img class="pack-character-img"
+               src="https://animesher.com/orig/1/136/1362/13626/animesher.com_manga-tokyo-ghoul-kishou-arima-1362672.png"
+               alt=""
+               onerror="this.style.display='none'">
+        </div>
+        <div class="pack-bottom">
+          <div class="pack-count"><span>5</span> FIGURITAS OFICIALES</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- flap -->
+    <div class="pack-top">
+      <div class="pack-top-holo"></div>
+    </div>
+
+    <!-- perforación -->
+    <div class="pack-tear-line"></div>
+    <div class="pack-tear-triangle"></div>
+
+    <!-- cards que salen -->
+    <div class="cards-spill">
+      <div class="spill-card"></div>
+      <div class="spill-card"></div>
+      <div class="spill-card"></div>
+      <div class="spill-card"></div>
+      <div class="spill-card"></div>
+    </div>
+  </div>
+
+  <div class="pack-cta" id="pack-cta">Tocá el sobre para abrirlo</div>
+
+  <!-- REVEAL -->
+  <div class="reveal-section" id="reveal-section">
+    <div class="reveal-title">▸ Tus figuritas — tocá para revelar</div>
+    <div class="reveal-cards-row" id="reveal-row"></div>
+    <button class="btn-stick" id="btn-stick" onclick="stickAll()">
+      Pegar en el álbum →
+    </button>
+  </div>
+
+</div>
+
+<!-- ════════ ALBUM VIEW ════════ -->
+<div id="view-album" class="view">
+  <div class="album-page">
+    <div class="album-header">
+      <div>
+        <div class="alb-logo">Bellator</div>
+        <div class="alb-season">Colección Temporada 2026</div>
+      </div>
+      <div class="alb-badge">División Universal</div>
+    </div>
+    <div class="album-body">
+      <div class="album-section-label">Competidores Confirmados</div>
+      <div class="album-grid" id="album-grid"></div>
+    </div>
+    <div class="album-footer">
+      <div class="footer-progress">
+        <div class="footer-bar"><div class="footer-fill" id="footer-fill" style="width:0%"></div></div>
+        <div class="footer-text" id="footer-text">0 / 16 completadas</div>
+      </div>
+      <div class="footer-tag">Edición Limitada 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+/* ── DATA ── */
+const ALL_CARDS = [
+  { id:1,  name:'Khamzat',           nick:'The Borz Reapper', rarity:'legendario',
+    img:'https://animesher.com/orig/1/136/1362/13626/animesher.com_manga-tokyo-ghoul-kishou-arima-1362672.png' },
+  { id:2,  name:'Amiya Arknights',   nick:'La Doctora',       rarity:'raro',
+    img:'https://static.wikia.nocookie.net/arknights/images/e/e1/Amiya_Skin_3.png' },
+  { id:3,  name:'NEPHALEM',          nick:'Nephilim',         rarity:'raro',
+    img:'https://i.pinimg.com/originals/f6/35/a4/f635a4e3a87db1f97c00a1e56c04da7b.jpg' },
+  { id:4,  name:'Sak',               nick:'Sakura',           rarity:'comun',
+    img:'https://i.pinimg.com/originals/2a/5c/d7/2a5cd7c77d80d40f8f78c00e6b0c3b8e.jpg' },
+  { id:5,  name:'NeroAggelo',        nick:'Il Oscuro',        rarity:'comun',
+    img:'https://i.pinimg.com/originals/0d/c0/fb/0dc0fb4a1b51c4e3df63a23c91e2d2f5.jpg' },
+  { id:6,  name:'JIM',               nick:'El Titán',         rarity:'comun',
+    img:'https://i.pinimg.com/originals/5a/2c/d6/5a2cd67e5abd3d9a3c5c74ca4b3e2a9f.jpg' },
+  { id:7,  name:'RagnaKurenai',      nick:'Kure Blood',       rarity:'raro',
+    img:'https://i.pinimg.com/originals/3b/9c/e0/3b9ce0c4e3a91d8f0a0c3b5e2c9d6f7a.jpg' },
+  { id:8,  name:'Mel',               nick:'Melina',           rarity:'comun',
+    img:'https://i.pinimg.com/originals/ab/cd/ef/abcdef1234567890abcdef1234567890.jpg' },
+  { id:9,  name:'Prox',              nick:'El Proxy',         rarity:'raro',
+    img:'https://i.pinimg.com/originals/11/22/33/112233445566778899aabbccddeeff00.jpg' },
+  { id:10, name:'Inverse Bernkastel',nick:'La Bruja',         rarity:'legendario',
+    img:'https://i.pinimg.com/originals/77/88/99/778899aabbccddeeff0011223344556677.jpg' },
+  { id:11, name:'???', nick:'', rarity:'comun', img:'' },
+  { id:12, name:'???', nick:'', rarity:'comun', img:'' },
+  { id:13, name:'???', nick:'', rarity:'comun', img:'' },
+  { id:14, name:'???', nick:'', rarity:'comun', img:'' },
+  { id:15, name:'???', nick:'', rarity:'comun', img:'' },
+  { id:16, name:'???', nick:'', rarity:'comun', img:'' },
+];
+
+/* ── STATE ── */
+let album = JSON.parse(localStorage.getItem('bellator_album') || '{}');
+let pendingCards = [];
+let packOpened = false;
+
+/* ── INIT ALBUM ── */
+function buildAlbum() {
+  const grid = document.getElementById('album-grid');
+  grid.innerHTML = '';
+  ALL_CARDS.forEach(card => {
+    const slot = document.createElement('div');
+    slot.className = 'alb-slot';
+    slot.id = `slot-${card.id}`;
+    if (album[card.id]) {
+      fillSlot(slot, card, false);
+    } else if (card.id > 10) {
+      slot.innerHTML = `<div class="alb-slot-lock">🔒</div><div class="alb-slot-num">#${String(card.id).padStart(3,'0')}</div>`;
+    } else {
+      slot.innerHTML = `<div class="alb-slot-q">?</div><div class="alb-slot-num">#${String(card.id).padStart(3,'0')}</div>`;
+    }
+    grid.appendChild(slot);
+  });
+  updateProgress();
+}
+
+function fillSlot(slot, card, animate) {
+  slot.className = 'alb-slot filled rarity-' + card.rarity;
+  slot.style.setProperty('--rot', (Math.random()*8-4)+'deg');
+  if (animate) slot.classList.add('sticking');
+  if (card.img) {
+    slot.innerHTML = `
+      <img src="${card.img}" alt="${card.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;width:100%;height:65%;background:linear-gradient(135deg,#1a0d30,#0a1520);align-items:center;justify-content:center;font-size:1.5rem;color:rgba(255,255,255,.1)">?</div>
+      <div class="alb-filled-name">${card.name}</div>`;
+  } else {
+    slot.innerHTML = `<div style="width:100%;height:65%;background:linear-gradient(135deg,#1a0d30,#0a1520);display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,.1)">?</div><div class="alb-filled-name">${card.name}</div>`;
+  }
+  if (animate) setTimeout(() => slot.classList.remove('sticking'), 600);
+}
+
+function updateProgress() {
+  const n = Object.keys(album).length;
+  const pct = (n / ALL_CARDS.length * 100).toFixed(1);
+  document.getElementById('footer-fill').style.width = pct + '%';
+  document.getElementById('footer-text').textContent = `${n} / ${ALL_CARDS.length} completadas`;
+}
+
+/* ── TAB SWITCH ── */
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='pack')||(i===1&&tab==='album')));
+  document.getElementById('view-pack').classList.toggle('show', tab==='pack');
+  document.getElementById('view-album').classList.toggle('show', tab==='album');
+  if (tab === 'album') buildAlbum();
+}
+
+/* ── OPEN PACK ── */
+function openPack() {
+  if (packOpened) return;
+  packOpened = true;
+  const scene = document.getElementById('pack-scene');
+  scene.classList.add('tearing');
+  document.getElementById('pack-cta').style.display = 'none';
+
+  setTimeout(() => {
+    scene.style.display = 'none';
+    spawnRevealCards();
+  }, 900);
+}
+
+function pickRandom(n) {
+  // weighted: always 1 legendary, 1-2 raro, rest comun from first 10
+  const pool = ALL_CARDS.slice(0, 10);
+  const shuffled = [...pool].sort(() => Math.random() - .5);
+  const picks = [];
+  const legendary = shuffled.find(c => c.rarity === 'legendario');
+  if (legendary) picks.push(legendary);
+  const raros = shuffled.filter(c => c.rarity === 'raro').slice(0, 2);
+  picks.push(...raros);
+  const remaining = shuffled.filter(c => !picks.includes(c));
+  while (picks.length < n) picks.push(remaining.shift());
+  return picks.slice(0, n).sort(() => Math.random() - .5);
+}
+
+function spawnRevealCards() {
+  pendingCards = pickRandom(5);
+  const row = document.getElementById('reveal-row');
+  row.innerHTML = '';
+  const section = document.getElementById('reveal-section');
+  section.classList.add('show');
+
+  let flipped = 0;
+  pendingCards.forEach((card, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'rev-wrap';
+    wrap.innerHTML = `
+      <div class="rev-inner">
+        <div class="rev-front">
+          <div class="rev-front-logo">Bellator</div>
+        </div>
+        <div class="rev-back rarity-${card.rarity}">
+          <div class="rev-rarity-bar"></div>
+          <div class="rev-holo"></div>
+          <div class="rev-badge">${card.rarity === 'legendario' ? '✦ Legendario' : card.rarity === 'raro' ? '★ Raro' : '· Común'}</div>
+          ${card.img
+            ? `<img class="rev-img" src="${card.img}" alt="${card.name}" onerror="this.style.display='none'">`
+            : `<div class="rev-img-fallback">?</div>`}
+          <div class="rev-info">
+            <div class="rev-name">${card.name}</div>
+          </div>
+        </div>
+      </div>
+      <div class="click-hint">Tocá para revelar</div>`;
+
+    wrap.addEventListener('click', () => {
+      if (wrap.classList.contains('flipped')) return;
+      wrap.classList.add('flipped');
+      wrap.querySelector('.click-hint').textContent = '';
+      flipped++;
+      if (card.rarity === 'legendario') shakeScreen();
+      if (flipped === pendingCards.length) {
+        setTimeout(() => document.getElementById('btn-stick').classList.add('show'), 400);
+      }
+    });
+
+    row.appendChild(wrap);
+  });
+}
+
+function shakeScreen() {
+  document.body.style.animation = 'none';
+  document.body.offsetHeight; // reflow
+  const style = document.createElement('style');
+  style.textContent = `@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,3px)}80%{transform:translate(3px,-1px)}}`;
+  document.head.appendChild(style);
+  document.body.style.animation = 'shake .35s ease';
+  setTimeout(() => { document.body.style.animation = ''; style.remove(); }, 400);
+}
+
+/* ── STICK ALL ── */
+function stickAll() {
+  document.getElementById('btn-stick').classList.remove('show');
+  document.getElementById('reveal-section').classList.remove('show');
+
+  pendingCards.forEach(card => { album[card.id] = true; });
+  localStorage.setItem('bellator_album', JSON.stringify(album));
+
+  showToast('¡' + pendingCards.length + ' figuritas pegadas!');
+  setTimeout(() => showTab('album'), 800);
+
+  // reset pack for next time
+  packOpened = false;
+  setTimeout(() => {
+    document.getElementById('pack-scene').style.display = '';
+    document.getElementById('pack-scene').classList.remove('tearing');
+    document.getElementById('pack-cta').style.display = '';
+    pendingCards = [];
+  }, 1200);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── INIT ── */
+buildAlbum();
+</script>
+</body>
+</html>

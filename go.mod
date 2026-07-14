@@ -1,6 +1,6 @@
 module valhala-tracker
 
-go 1.21.1
+go 1.25.0
 
 require (
 	github.com/gorilla/mux v1.8.1
@@ -10,3 +10,5 @@ require (
 require github.com/supabase-community/postgrest-go v0.0.12
 
 require github.com/golang-jwt/jwt/v5 v5.3.1
+
+require golang.org/x/text v0.38.0

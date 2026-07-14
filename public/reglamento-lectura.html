@@ -517,7 +517,7 @@
     <!-- CREDITS -->
     <div class="ro-credits">
       <div class="ro-credits-inner">
-        <span class="ro-credits-icon">??</span>
+        <span class="ro-credits-icon">✦</span>
         <div>
           <span class="ro-credits-label">Créditos</span>
           <span class="ro-credits-text">Reglamento y sistema de combate Bellator creado por <strong>Bandet</strong> y el <em>Odiado Clan Orochi</em>. Plataforma web y dossier digital desarrollados por <strong>Bandet</strong>.</span>
@@ -534,12 +534,12 @@
     <!-- CONTENIDO DINÁMICO -->
     <div id="ro-content">
       <div class="ro-state" id="ro-loading">
-        <div class="ro-state-icon">??</div>
+        <div class="ro-state-icon">⌛</div>
         <h2 class="ro-state-title">Montando el dossier</h2>
         <p class="ro-state-copy">Se importa el reglamento canónico. Solo tarda un momento.</p>
       </div>
       <div class="ro-state" id="ro-empty" hidden>
-        <div class="ro-state-icon">??</div>
+        <div class="ro-state-icon">∅</div>
         <h2 class="ro-state-title">Sin resultados</h2>
         <p class="ro-state-copy">Prueba con otra palabra o quita los filtros.</p>
       </div>
@@ -548,7 +548,7 @@
   </main>
 </div>
 
-<script src="/core.js?v=1"></script>
+<script src="/core.js?v=3"></script>
 <script>
 (function(){
 "use strict";
@@ -1077,7 +1077,7 @@ async function load(){
     render();wireEvents();tocScroll();
   }catch(err){
     var el=document.getElementById('ro-loading');
-    if(el) el.innerHTML='<div class="ro-state-icon">??</div><h2 class="ro-state-title">Error al cargar</h2><p class="ro-state-copy">No se pudo importar el reglamento. <a href="/reglamento">Abrir reglamento principal</a>.</p>';
+    if(el) el.innerHTML='<div class="ro-state-icon">⚠</div><h2 class="ro-state-title">Error al cargar</h2><p class="ro-state-copy">No se pudo importar el reglamento. <a href="/reglamento">Abrir reglamento principal</a>.</p>';
     console.error(err);
   }
 }

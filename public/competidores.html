@@ -1,11 +1,32 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Competidores — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=8">
+  <link rel="stylesheet" href="/shared.css?v=14">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  <style>
+    @media (min-width: 901px) {
+      #bl-competitors-list {
+        grid-auto-rows: 430px;
+      }
+
+      #bl-competitors-list > .bl-driver-card {
+        height: 100%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      #bl-competitors-list {
+        grid-auto-rows: auto;
+      }
+
+      #bl-competitors-list > .bl-driver-card {
+        height: auto;
+      }
+    }
+  </style>
 </head>
 <body>
   <canvas class="space" id="space" aria-hidden="true"></canvas>
@@ -57,6 +78,8 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
+
         <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
@@ -129,23 +152,26 @@
       <div class="bl-drivers-grid" id="bl-competitors-list">
         <div class="bl-drivers-empty">Cargando competidores...</div>
       </div>
+      <div id="bl-drivers-pagination" style="display:none;justify-content:center;align-items:center;gap:8px;padding:28px 0 8px;flex-wrap:wrap"></div>
     </section>
   </div>
 
-  <script src="/core.js?v=1"></script>
-  <script src="/sentinel.js?v=1"></script>
-  <script src="/tracker.js?v=10"></script>
-  <script src="/app.js?v=20"></script>
+  <script src="/core.js?v=3"></script>
+  <script src="/sentinel.js?v=2"></script>
+  <script src="/_assets/chunk.27c1e5b4.js"></script>
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
   <script>
     let allDrivers = [];
     let currentFilter = 'all';
+    let driversPage = 0;
+    const DRIVERS_PAGE_SIZE = 24;
 
     function slugify(value) {
       return String(value || '')
-        .normalize('NFD')
+        .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
         .replace(/^-+|-+$/g, '');
     }
 
@@ -207,12 +233,38 @@
       const bio = safeText(item.bio, '');
       if (bio) {
         const compact = bio.replace(/\s+/g, ' ').trim();
-        return compact.length > 132 ? compact.slice(0, 129) + '...' : compact;
+        return compact.length > 88 ? compact.slice(0, 85) + '...' : compact;
       }
       if (since !== 'Fecha sin registrar') {
         return `Competidor en ${division}. En pista desde ${since}.`;
       }
       return `Competidor de ${division}. Perfil listo para abrir su ficha completa.`;
+    }
+
+    function renderDriversPagination(totalFiltered) {
+      const wrap = document.getElementById('bl-drivers-pagination');
+      if (!wrap) return;
+      const totalPages = Math.ceil(totalFiltered / DRIVERS_PAGE_SIZE);
+      if (totalPages <= 1) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'flex';
+      const btnStyle = (active) => `padding:7px 14px;border-radius:999px;border:1px solid ${active ? 'rgba(212,175,55,.55)' : 'rgba(255,255,255,.12)'};background:${active ? 'rgba(212,175,55,.12)' : 'rgba(255,255,255,.03)'};color:${active ? '#D4AF37' : 'rgba(238,244,255,.6)'};font-family:'Barlow Semi Condensed',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:1px;cursor:pointer;transition:all .18s`;
+      let html = `<button style="${btnStyle(false)}" ${driversPage === 0 ? 'disabled' : ''} onclick="goDriversPage(${driversPage - 1})">← Ant</button>`;
+      for (let i = 0; i < totalPages; i++) {
+        if (totalPages > 8 && Math.abs(i - driversPage) > 2 && i !== 0 && i !== totalPages - 1) {
+          if (i === 1 || i === totalPages - 2) html += `<span style="color:rgba(238,244,255,.3)">⬦</span>`;
+          continue;
+        }
+        html += `<button style="${btnStyle(i === driversPage)}" onclick="goDriversPage(${i})">${i + 1}</button>`;
+      }
+      html += `<button style="${btnStyle(false)}" ${driversPage >= totalPages - 1 ? 'disabled' : ''} onclick="goDriversPage(${driversPage + 1})">Sig →</button>`;
+      html += `<span style="font-size:.75rem;color:rgba(238,244,255,.38);letter-spacing:.5px;margin-left:4px">${totalFiltered} total</span>`;
+      wrap.innerHTML = html;
+    }
+
+    function goDriversPage(page) {
+      driversPage = page;
+      renderDrivers();
+      document.getElementById('bl-competitors-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function renderDrivers() {
@@ -227,9 +279,15 @@
       });
       if (!filtered.length) {
         list.innerHTML = '<div class="bl-drivers-empty">No hay competidores para ese filtro.</div>';
+        renderDriversPagination(0);
         return;
       }
-      list.innerHTML = filtered.map((item, index) => {
+      const totalFiltered = filtered.length;
+      const start = driversPage * DRIVERS_PAGE_SIZE;
+      const end = start + DRIVERS_PAGE_SIZE;
+      const page = filtered.slice(start, end);
+      list.innerHTML = page.map((item, index) => {
+        const globalIndex = start + index;
         const tc = normalizeColor(item.primary_color);
         const { tcVis, rgb } = effectiveColorVars(tc);
         const tcStyle = `--tc:${tc};--tc-vis:${tcVis};--driver-color-rgb:${rgb};`;
@@ -251,7 +309,7 @@
             ${aspiranteBadge}
             ${flagEl}
             <div class="bl-driver-topline">
-              <div class="bl-driver-pos">P${index + 1}</div>
+            <div class="bl-driver-pos">P${globalIndex + 1}</div>
               <div class="bl-driver-division-pill">${escapeHtml(division)}</div>
             </div>
             <div class="bl-driver-avatar-wrap">
@@ -275,6 +333,7 @@
           </a>
         `;
       }).join('');
+      renderDriversPagination(totalFiltered);
     }
 
     async function loadCompetidores() {
@@ -289,11 +348,12 @@
       }
     }
 
-    document.getElementById('driver-search')?.addEventListener('input', renderDrivers);
+    document.getElementById('driver-search')?.addEventListener('input', () => { driversPage = 0; renderDrivers(); });
     document.getElementById('bl-filter-row')?.addEventListener('click', function(event) {
       const button = event.target.closest('.bl-filter-btn[data-filter]');
       if (!button) return;
       currentFilter = button.dataset.filter;
+      driversPage = 0;
       document.querySelectorAll('.bl-filter-btn').forEach(el => el.classList.remove('active'));
       button.classList.add('active');
       renderDrivers();

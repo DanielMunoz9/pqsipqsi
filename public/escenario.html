@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Escenario de Batalla - BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=15">
+  <style>
+    html{scroll-behavior:smooth}
+
+    /* ── Página ────────────────────────────────────────────────────── */
+    .esc-page{max-width:1400px;margin:0 auto;padding:36px 24px 120px;display:grid;gap:22px;position:relative;z-index:10}
+
+    /* ── Formulario generador ───────────────────────────────────────── */
+    .esc-form-panel{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(212,175,55,.22);background:linear-gradient(135deg,rgba(7,10,16,.98),rgba(14,10,6,.98));box-shadow:0 18px 48px rgba(0,0,0,.36);padding:28px 32px;isolation:isolate}
+    .esc-form-panel::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 50%,rgba(212,175,55,.09) 0%,transparent 44%),radial-gradient(ellipse at 90% 50%,rgba(255,116,64,.06) 0%,transparent 44%);pointer-events:none}
+    .esc-form-kicker{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:.66rem;letter-spacing:7px;text-transform:uppercase;color:var(--bl-gold);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+    .esc-form-kicker::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(212,175,55,.4),transparent)}
+    .esc-form-title{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:2rem;line-height:.9;text-transform:uppercase;color:#fff;margin:0 0 22px}
+    .esc-form-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .esc-field{display:grid;gap:5px}
+    .esc-field label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold);font-family:'Teko',sans-serif}
+    .esc-input,.esc-select{width:100%;min-height:46px;padding:0 14px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Teko',sans-serif;font-size:1.08rem;letter-spacing:.04em;outline:none;transition:border-color .18s ease,background .18s ease;box-sizing:border-box}
+    .esc-input:focus,.esc-select:focus{border-color:rgba(212,175,55,.55);background:rgba(255,255,255,.09)}
+    .esc-input::placeholder{color:rgba(255,255,255,.28)}
+    .esc-select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:rgba(255,255,255,.06);padding-right:36px}
+    .esc-select option{background:#0d1117;color:#fff}
+    .esc-form-actions{position:relative;z-index:1;display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+    .esc-form-hint{font-size:.74rem;color:rgba(238,244,255,.40);line-height:1.5}
+
+    /* ── Botones ──────────────────────────────────────────────────── */
+    .esc-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:999px;font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;text-decoration:none;cursor:pointer;border:none;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+    .esc-btn--ghost{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--bl-text)}
+    .esc-btn--ghost:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.32)}
+    .esc-btn--generate{background:linear-gradient(135deg,#d4af37 0%,#f1cb57 52%,#b98b18 100%);color:#0d1117;min-height:52px;padding:0 36px;font-size:1.12rem;letter-spacing:3px;box-shadow:0 12px 28px rgba(212,175,55,.28)}
+    .esc-btn--generate:hover{transform:translateY(-2px);filter:brightness(1.06)}
+    .esc-btn--generate:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none}
+
+    /* ── Estado de carga ───────────────────────────────────────────── */
+    .esc-loading-state{display:flex;align-items:center;justify-content:center;min-height:300px;gap:16px;flex-direction:column}
+    .esc-loading-spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.14);border-top-color:var(--bl-gold);border-radius:50%;animation:escSpin .8s linear infinite}
+    @keyframes escSpin{to{transform:rotate(360deg)}}
+
+    /* ── Hero cinematic ──────────────────────────────────────────────*/
+    .esc-hero{position:relative;overflow:hidden;border-radius:32px;border:1px solid rgba(255,255,255,.08);background:#000;box-shadow:0 32px 80px rgba(0,0,0,.5);isolation:isolate}
+    .esc-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.38) saturate(1.4);transition:filter 1.4s ease;z-index:0}
+    .esc-hero-img.is-loaded{filter:brightness(.42) saturate(1.4)}
+    .esc-hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.05) 35%,rgba(0,0,0,.62) 74%,rgba(0,0,0,.88) 100%);z-index:1;pointer-events:none}
+    .esc-hero-scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);z-index:2;pointer-events:none;opacity:.6}
+    .esc-hero-content{position:relative;z-index:3;min-height:clamp(380px,52vw,560px);display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(22px,4vw,48px)}
+    .esc-eyebrow{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:7px;text-transform:uppercase;color:var(--bl-gold);margin-bottom:10px;opacity:.9}
+    .esc-scenario-name{font-family:'Teko',sans-serif;font-size:clamp(2.8rem,7vw,6.2rem);font-weight:700;line-height:.84;letter-spacing:-1px;text-transform:uppercase;color:#fff;text-shadow:0 4px 32px rgba(0,0,0,.7);margin:0 0 12px}
+    .esc-scenario-name span{background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 55%,#8bc4ff 80%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .esc-verse-tag{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(0,0,0,.52);border:1px solid rgba(212,175,55,.30);font-family:'Teko',sans-serif;font-size:.8rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold);backdrop-filter:blur(8px);margin-bottom:16px}
+    .esc-verse-dot{width:6px;height:6px;border-radius:50%;background:var(--bl-gold);flex-shrink:0}
+    .esc-description{max-width:76ch;color:rgba(238,244,255,.85);font-size:1.02rem;line-height:1.72;text-shadow:0 2px 12px rgba(0,0,0,.6);margin:0}
+
+    /* ── Badge de división ────────────────────────────────────────── */
+    .esc-division-badge{position:absolute;top:22px;right:22px;z-index:4;display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:999px;font-family:'Teko',sans-serif;font-size:.8rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;backdrop-filter:blur(12px)}
+    .esc-division-badge--universal{background:rgba(255,116,64,.18);border:1px solid rgba(255,116,64,.42);color:#ff7440}
+    .esc-division-badge--ciudad{background:rgba(66,159,255,.18);border:1px solid rgba(66,159,255,.42);color:#429fff}
+
+    /* ── Narración dramática ─────────────────────────────────────── */
+    .esc-narration{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(212,175,55,.18);background:linear-gradient(135deg,rgba(7,10,16,.98),rgba(14,10,6,.98));box-shadow:0 18px 48px rgba(0,0,0,.36);padding:32px 36px;isolation:isolate}
+    .esc-narration::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 15% 50%,rgba(212,175,55,.10) 0%,transparent 44%),radial-gradient(ellipse at 85% 50%,rgba(255,116,64,.07) 0%,transparent 44%);pointer-events:none}
+    .esc-narration-kicker{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:.64rem;letter-spacing:7px;text-transform:uppercase;color:var(--bl-gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+    .esc-narration-kicker::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(212,175,55,.4),transparent)}
+    .esc-narration-quote{position:relative;z-index:1;margin:0;font-family:'Teko',sans-serif;font-size:clamp(1.15rem,2.4vw,1.52rem);font-weight:400;line-height:1.58;letter-spacing:.03em;color:rgba(238,244,255,.88);font-style:normal;text-transform:uppercase}
+    .esc-narration-quote::before{content:'\201C';font-size:3.2rem;line-height:0;vertical-align:-.5em;color:var(--bl-gold);opacity:.7;margin-right:4px}
+    .esc-narration-quote::after{content:'\201D';font-size:3.2rem;line-height:0;vertical-align:-.5em;color:var(--bl-gold);opacity:.7;margin-left:4px}
+
+    /* ── VS Strip ──────────────────────────────────────────────────── */
+    .esc-vs-strip{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(7,10,16,.97),rgba(12,8,8,.97));box-shadow:0 18px 48px rgba(0,0,0,.34);isolation:isolate}
+    .esc-vs-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(66,159,255,.12) 0%,transparent 38%),radial-gradient(circle at 80% 50%,rgba(255,116,64,.12) 0%,transparent 38%),radial-gradient(circle at 50% 50%,rgba(212,175,55,.08) 0%,transparent 22%);pointer-events:none}
+    .esc-vs-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;padding:28px 32px}
+    .esc-fighter{display:grid;gap:8px}
+    .esc-fighter--right{justify-items:end;text-align:right}
+    .esc-fighter-kicker{font-family:'Teko',sans-serif;font-size:.64rem;letter-spacing:4px;text-transform:uppercase;color:var(--bl-muted)}
+    .esc-fighter-name{font-family:'Teko',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:.86;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+    .esc-fighter-avatar{width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:'Teko',sans-serif;font-size:1.8rem;color:#fff;overflow:hidden;flex-shrink:0}
+    .esc-fighter-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .esc-fighter-row{display:flex;align-items:center;gap:14px}
+    .esc-fighter--right .esc-fighter-row{flex-direction:row-reverse}
+    .esc-vs-center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px}
+    .esc-vs-word{font-family:'Teko',sans-serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:linear-gradient(135deg,var(--bl-gold),#fff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;filter:drop-shadow(0 0 22px rgba(212,175,55,.3))}
+    .esc-vs-divider{width:1px;height:54px;background:linear-gradient(180deg,transparent,rgba(212,175,55,.32),transparent)}
+
+    /* ── Seed proof card ───────────────────────────────────────────── */
+    .esc-proof{position:relative;overflow:hidden;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,16,.96),rgba(6,10,16,.92));box-shadow:0 18px 44px rgba(0,0,0,.28);padding:24px 28px;isolation:isolate}
+    .esc-proof::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 8% 30%,rgba(212,175,55,.12) 0%,transparent 28%);pointer-events:none}
+    .esc-proof-top{position:relative;z-index:1;margin-bottom:18px}
+    .esc-proof-kicker{font-family:'Teko',sans-serif;font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--bl-gold)}
+    .esc-proof-title{margin:4px 0 0;font-family:'Teko',sans-serif;font-size:1.6rem;line-height:.9;text-transform:uppercase;color:#fff}
+    .esc-proof-copy{margin:6px 0 0;color:rgba(238,244,255,.64);font-size:.84rem;line-height:1.56;max-width:55ch}
+    .esc-proof-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .esc-proof-box{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:grid;gap:4px}
+    .esc-proof-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold)}
+    .esc-proof-value{font-size:.92rem;color:#fff;font-weight:700;word-break:break-all;line-height:1.3}
+    .esc-proof-sub{font-size:.68rem;color:rgba(238,244,255,.48);letter-spacing:1px}
+    .esc-proof-equation{position:relative;z-index:1;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-family:'Teko',sans-serif;font-size:clamp(1rem,2vw,1.34rem);color:rgba(238,244,255,.60);letter-spacing:.06em;text-transform:uppercase}
+    .esc-proof-equation strong{color:var(--bl-gold)}
+
+    /* ── Atribución ────────────────────────────────────────────────── */
+    .esc-attribution{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:.78rem;color:rgba(238,244,255,.46);padding:10px 0}
+    .esc-attribution a{color:rgba(212,175,55,.72);text-decoration:none}
+    .esc-attribution a:hover{color:var(--bl-gold)}
+
+    /* ── Tarjeta de terreno ────────────────────────────────────────── */
+    .esc-terrain{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(66,159,255,.18);background:linear-gradient(135deg,rgba(6,12,22,.98),rgba(8,14,10,.98));box-shadow:0 18px 48px rgba(0,0,0,.36);padding:32px 36px;isolation:isolate}
+    .esc-terrain::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 40%,rgba(66,159,255,.10) 0%,transparent 44%),radial-gradient(ellipse at 90% 60%,rgba(34,197,94,.07) 0%,transparent 44%);pointer-events:none}
+    .esc-terrain-kicker{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:.64rem;letter-spacing:7px;text-transform:uppercase;color:#429fff;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+    .esc-terrain-kicker::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(66,159,255,.4),transparent)}
+    .esc-terrain-type{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:1.9rem;font-weight:700;line-height:.9;text-transform:uppercase;color:#fff;margin:0 0 16px}
+    .esc-terrain-para{position:relative;z-index:1;color:rgba(238,244,255,.86);font-size:1.04rem;line-height:1.76;margin:0 0 22px;max-width:80ch}
+    .esc-terrain-props{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+    .esc-terrain-prop{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(66,159,255,.12)}
+    .esc-terrain-prop-label{font-family:'Teko',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:#429fff;display:block;margin-bottom:3px}
+    .esc-terrain-prop-val{font-size:.92rem;color:rgba(238,244,255,.9);font-weight:600;line-height:1.3}
+    .esc-terrain-divider{position:relative;z-index:1;height:1px;background:linear-gradient(90deg,rgba(66,159,255,.22),transparent);margin-bottom:16px}
+    .esc-terrain-source-label{font-family:'Teko',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:rgba(238,244,255,.38);display:block;margin-bottom:6px}
+    .esc-terrain-source-text{position:relative;z-index:1;color:rgba(238,244,255,.50);font-size:.88rem;font-style:italic;line-height:1.64;margin:0}
+    .esc-terrain-portal{position:relative;z-index:1;color:rgba(238,244,255,.92);font-size:1.08rem;line-height:1.84;margin:0 0 22px;font-style:italic;border-left:3px solid rgba(66,159,255,.4);padding:10px 0 10px 18px;background:rgba(66,159,255,.04);border-radius:0 12px 12px 0}
+
+    /* ── Reveal animation ──────────────────────────────────────────── */
+    @media (prefers-reduced-motion: no-preference){
+      .esc-reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+      .esc-reveal.is-visible{opacity:1;transform:none}
+      .esc-reveal:nth-child(2){transition-delay:.12s}
+      .esc-reveal:nth-child(3){transition-delay:.22s}
+      .esc-reveal:nth-child(4){transition-delay:.32s}
+      .esc-scenario-name{animation:escNameIn 1s cubic-bezier(.22,1,.36,1) both .08s}
+      @keyframes escNameIn{from{opacity:0;letter-spacing:24px;filter:blur(8px)}to{opacity:1;letter-spacing:-1px;filter:blur(0)}}
+    }
+
+    /* ── Responsive ────────────────────────────────────────────────── */
+    @media (max-width:860px){
+      .esc-vs-inner{grid-template-columns:1fr;gap:14px;padding:20px}
+      .esc-vs-divider{display:none}
+      .esc-vs-center{flex-direction:row}
+      .esc-fighter--right{justify-items:start;text-align:left}
+      .esc-fighter--right .esc-fighter-row{flex-direction:row}
+      .esc-proof-grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:580px){
+      .esc-page{padding:20px 14px 100px;gap:14px}
+      .esc-form-panel{padding:20px 18px}
+      .esc-form-grid{grid-template-columns:1fr}
+      .esc-hero-content{padding:18px}
+      .esc-proof-grid{grid-template-columns:1fr}
+      .esc-btn{width:100%}
+      .esc-form-actions{flex-direction:column;align-items:stretch}
+    }
+  </style>
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; SISTEMA ACTIVO</span>
+        <a href="/clasificacion">STANDINGS</a>
+        <a href="/competidores">DRIVERS</a>
+        <a href="/reglamento">RULES</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Men&uacute;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificaci&oacute;n</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Pr&aacute;ctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink active" href="/escenario">Escenario</a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px">Cosmolog&iacute;as<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round" id="esc-event-round">ESCENARIO</span>
+      <span class="bl-event-name" id="esc-event-name">Generador de escenarios &mdash; Bellator RolBattle</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <main class="esc-page" id="esc-page">
+
+      <!-- ── Formulario generador ──────────────────────────────────── -->
+      <form class="esc-form-panel" id="esc-form" autocomplete="off">
+        <div class="esc-form-kicker">Generador de escenarios de batalla</div>
+        <h1 class="esc-form-title">&iquest;Qui&eacute;nes se enfrentan?</h1>
+        <div class="esc-form-grid">
+          <div class="esc-field">
+            <label for="f-p1">Combatiente 1</label>
+            <input class="esc-input" id="f-p1" type="text" placeholder="Nombre del luchador..." maxlength="60">
+          </div>
+          <div class="esc-field">
+            <label for="f-p2">Combatiente 2</label>
+            <input class="esc-input" id="f-p2" type="text" placeholder="Nombre del luchador..." maxlength="60">
+          </div>
+          <div class="esc-field">
+            <label for="f-division">Divisi&oacute;n</label>
+            <select class="esc-select" id="f-division">
+              <option value="universal">Universal &mdash; dioses, c&oacute;smicos, sin l&iacute;mite de poder</option>
+              <option value="ciudad">Ciudad &mdash; callejero, humano, sobrenatural bajo</option>
+            </select>
+          </div>
+          <div class="esc-field">
+            <label for="f-round">Ronda</label>
+            <input class="esc-input" id="f-round" type="number" value="1" min="1" max="99" style="max-width:160px">
+          </div>
+        </div>
+        <div class="esc-form-actions">
+          <button class="esc-btn esc-btn--generate" id="esc-gen-btn" type="submit">&#9654;&nbsp; Generar escenario</button>
+          <span class="esc-form-hint">El resultado es determin&iacute;stico: mismos datos = mismo escenario siempre.</span>
+        </div>
+      </form>
+
+      <!-- Estado de carga -->
+      <div class="esc-loading-state" id="esc-loading" style="display:none" aria-live="polite">
+        <div class="esc-loading-spinner" aria-hidden="true"></div>
+        <span style="font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:3px;text-transform:uppercase;color:rgba(238,244,255,.54)">Cargando escenario&hellip;</span>
+      </div>
+
+      <!-- Resultado (oculto hasta que carga) -->
+      <div id="esc-content" style="display:none;contents">
+
+        <!-- Hero cinematic -->
+        <div class="esc-hero esc-reveal">
+          <img class="esc-hero-img" id="esc-img" src="" alt="" loading="eager">
+          <div class="esc-hero-overlay" aria-hidden="true"></div>
+          <div class="esc-hero-scanline" aria-hidden="true"></div>
+          <div class="esc-hero-content">
+            <div class="esc-eyebrow">Escenario de batalla &mdash; Bellator RolBattle</div>
+            <div class="esc-verse-tag">
+              <span class="esc-verse-dot" aria-hidden="true"></span>
+              <span id="esc-verse-name">—</span>
+            </div>
+            <h2 class="esc-scenario-name"><span id="esc-title">—</span></h2>
+            <p class="esc-description" id="esc-description"></p>
+          </div>
+          <div class="esc-division-badge" id="esc-division-badge">
+            <span id="esc-division-text">UNIVERSAL</span>
+          </div>
+        </div>
+
+        <!-- Características del terreno -->
+        <div class="esc-terrain esc-reveal" id="esc-terrain-card">
+          <div class="esc-terrain-kicker">Zona sorteada</div>
+          <p class="esc-terrain-portal" id="esc-terrain-portal"></p>
+          <div class="esc-terrain-type" id="esc-terrain-type">—</div>
+          <p class="esc-terrain-para" id="esc-terrain-para"></p>
+          <div class="esc-terrain-props">
+            <div class="esc-terrain-prop">
+              <span class="esc-terrain-prop-label">Magnitud del campo</span>
+              <span class="esc-terrain-prop-val" id="esc-terrain-scale">—</span>
+            </div>
+            <div class="esc-terrain-prop">
+              <span class="esc-terrain-prop-label">Tipo de entorno</span>
+              <span class="esc-terrain-prop-val" id="esc-terrain-env">—</span>
+            </div>
+            <div class="esc-terrain-prop">
+              <span class="esc-terrain-prop-label">Visibilidad</span>
+              <span class="esc-terrain-prop-val" id="esc-terrain-vis">—</span>
+            </div>
+            <div class="esc-terrain-prop">
+              <span class="esc-terrain-prop-label">Peligros del entorno</span>
+              <span class="esc-terrain-prop-val" id="esc-terrain-danger">—</span>
+            </div>
+            <div class="esc-terrain-prop">
+              <span class="esc-terrain-prop-label">Ventaja t&aacute;ctica</span>
+              <span class="esc-terrain-prop-val" id="esc-terrain-tactic">—</span>
+            </div>
+          </div>
+          <div class="esc-terrain-divider" aria-hidden="true"></div>
+          <span class="esc-terrain-source-label" id="esc-terrain-source-label">Marco del universo</span>
+          <p class="esc-terrain-source-text" id="esc-terrain-source"></p>
+        </div>
+
+        <!-- Narración dramática -->
+        <div class="esc-narration esc-reveal" id="esc-narration-card">
+          <div class="esc-narration-kicker">El campo de batalla ha sido elegido</div>
+          <blockquote class="esc-narration-quote" id="esc-narration-text"></blockquote>
+        </div>
+
+        <!-- VS Strip -->
+        <div class="esc-vs-strip esc-reveal">
+          <div class="esc-vs-inner">
+            <div class="esc-fighter">
+              <div class="esc-fighter-kicker">Combatiente 1</div>
+              <div class="esc-fighter-row">
+                <div class="esc-fighter-avatar" id="esc-av1">?</div>
+                <div class="esc-fighter-name" id="esc-p1">—</div>
+              </div>
+            </div>
+            <div class="esc-vs-center" aria-hidden="true">
+              <div class="esc-vs-word">VS</div>
+              <div class="esc-vs-divider"></div>
+            </div>
+            <div class="esc-fighter esc-fighter--right">
+              <div class="esc-fighter-kicker">Combatiente 2</div>
+              <div class="esc-fighter-row">
+                <div class="esc-fighter-name" id="esc-p2">—</div>
+                <div class="esc-fighter-avatar" id="esc-av2">?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seed proof -->
+        <div class="esc-proof esc-reveal">
+          <div class="esc-proof-top">
+            <div class="esc-proof-kicker">Auditor&iacute;a del escenario</div>
+            <div class="esc-proof-title">Seed p&uacute;blico verificable</div>
+            <p class="esc-proof-copy">Cualquier persona puede reproducir este escenario con los mismos datos. Misma semilla = mismo escenario, siempre.</p>
+          </div>
+          <div class="esc-proof-grid">
+            <div class="esc-proof-box">
+              <span class="esc-proof-label">Seed del duelo</span>
+              <strong class="esc-proof-value" id="esc-seed-display">—</strong>
+              <span class="esc-proof-sub">torneo&middot;divisi&oacute;n&middot;ronda&middot;P1&middot;P2</span>
+            </div>
+            <div class="esc-proof-box">
+              <span class="esc-proof-label">&Iacute;ndice seleccionado</span>
+              <strong class="esc-proof-value" id="esc-index-display">—</strong>
+              <span class="esc-proof-sub" id="esc-pool-size">de N escenarios</span>
+            </div>
+            <div class="esc-proof-box">
+              <span class="esc-proof-label">Fuente</span>
+              <strong class="esc-proof-value">VS Battle Wiki</strong>
+              <span class="esc-proof-sub">Category:Verses &middot; CC-BY-SA</span>
+            </div>
+          </div>
+          <div class="esc-proof-equation">
+            <strong id="esc-p1-proof">P1</strong> + <strong id="esc-p2-proof">P2</strong> + <strong id="esc-div-proof">Div</strong> + <strong id="esc-round-proof">R1</strong> &rarr; escenario #<strong id="esc-idx-proof">—</strong>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="esc-reveal" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="esc-btn esc-btn--ghost" id="esc-copy-btn" type="button">Copiar escenario</button>
+            <button class="esc-btn esc-btn--ghost" id="esc-download-btn" type="button">Descargar tarjeta</button>
+            <button class="esc-btn esc-btn--ghost" id="esc-share-btn" type="button">Compartir</button>
+          </div>
+          <div class="esc-attribution">
+            Im&aacute;genes y datos: <a href="https://vsbattles.fandom.com" target="_blank" rel="noopener noreferrer">VS Battle Wiki</a> (CC-BY-SA 4.0)
+          </div>
+        </div>
+
+      </div><!-- /esc-content -->
+    </main>
+  </div>
+
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
+  <script>
+  (function() {
+    'use strict';
+
+    /* ── Narración dramática ─────────────────────────────────────── */
+    var NARR_U = [
+      'En los confines del universo de {T}, donde el poder de los dioses sacude la creaci\u00f3n misma, la arena ha sido elegida. El cosmos aguarda. Solo uno saldr\u00e1 victorioso.',
+      'M\u00e1s all\u00e1 de las estrellas, en el dominio de {T}, las leyes de la f\u00edsica se doblan ante la voluntad de los m\u00e1s poderosos. Aqu\u00ed, donde el espacio y el tiempo son meros obst\u00e1culos, se decidir\u00e1 el destino.',
+      'El multiverso de {T} es vasto, eterno e implacable. En sus dimensiones imposibles, donde los universos nacen y mueren como destellos, la batalla est\u00e1 a punto de comenzar.',
+      'Desde las alturas de {T}, donde seres de poder absoluto contemplan la eternidad, llega la se\u00f1al. El escenario elegido no es un lugar ordinario: es un campo de batalla digno de leyendas inmortales.',
+      'Las fuerzas primordiales de {T} han trazado el c\u00edrculo. En este rinc\u00f3n del cosmos, donde la energ\u00eda supera toda comprensi\u00f3n, dos combatientes se enfrentan a un destino demasiado vasto para retroceder.',
+      'Antes de que existiera el tiempo, {T} ya era un escenario de batallas c\u00f3smicas. Hoy ese legado contin\u00faa. El terreno ha sido elegido. Los combatientes han sido convocados. El universo observa.',
+      'En {T}, incluso los dioses temen equivocarse. Este escenario es el juicio de los eternos: el lugar donde los m\u00e1s poderosos demuestran de qu\u00e9 est\u00e1n hechos cuando el cosmos pende de un hilo.',
+      'De entre los miles de escenarios posibles, {T} ha emergido como el lugar donde este duelo ser\u00e1 recordado por generaciones. No hay coincidencias. Solo hay destino.'
+    ];
+    var NARR_C = [
+      'En las calles de {T}, donde el peligro se respira en cada esquina y los fuertes dominan a los d\u00e9biles, la arena ha sido trazada. No hay \u00e1rbitros. No hay piedad. Solo hay un ganador.',
+      'Las sombras de {T} guardan secretos que pocos sobreviven para contar. Esta noche, dos combatientes han cruzado sus caminos en el lugar m\u00e1s peligroso del mundo conocido.',
+      'El territorio de {T} tiene sus propias reglas. Aqu\u00ed el poder se gana con sangre y se mantiene con determinaci\u00f3n. El escenario ha sido decidido. El combate es inevitable.',
+      'Dicen que en el mundo de {T}, cada batalla deja una marca en el destino de todos. Hoy ese destino recae sobre dos combatientes que lo dar\u00e1n todo hasta el final.',
+      'Bajo el cielo de {T}, donde los guerreros forjan su nombre con cada victoria, el terreno ya est\u00e1 dispuesto y la tensi\u00f3n respira en cada rinc\u00f3n. Que comience la batalla.',
+      'En {T} no hay lugar para los d\u00e9biles. Las reglas de este escenario son simples: sobrevive o cae. Dos combatientes. Un solo resultado posible.',
+      'Las leyendas de {T} se escriben en los adoquines, en las paredes, en los callejones donde nadie pregunta y todos saben. Hoy se escribe una nueva p\u00e1gina.',
+      '{T} ha quedado marcado como el escenario donde este duelo puede grabarse en la historia del circuito. Preparen sus argumentos. Que empiece el espect\u00e1culo.'
+    ];
+
+    function buildNarration(title, isU, idx) {
+      return (isU ? NARR_U : NARR_C)[idx % 8].replace('{T}', title);
+    }
+
+    function escHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ── URL params ─────────────────────────────────────────────── */
+    function getParams() {
+      var p = new URLSearchParams(window.location.search);
+      return {
+        p1:       (p.get('p1')       || '').trim(),
+        p2:       (p.get('p2')       || '').trim(),
+        division: (p.get('division') || 'universal').trim().toLowerCase(),
+        round:    (p.get('round')    || '1').trim(),
+        torneo:   (p.get('torneo')   || 'bellator').trim(),
+        av1:      (p.get('av1')      || '').trim(),
+        av2:      (p.get('av2')      || '').trim()
+      };
+    }
+
+    /* ── Avatar ─────────────────────────────────────────────────── */
+    function setAvatar(el, url, name) {
+      if (url) {
+        var img = document.createElement('img');
+        img.src = url; img.alt = name || '';
+        img.onerror = function() { el.textContent = (name || '?')[0].toUpperCase(); };
+        el.innerHTML = ''; el.appendChild(img);
+      } else {
+        el.textContent = (name || '?')[0].toUpperCase();
+      }
+    }
+
+    /* ── Arquetipos de terreno ────────────────────────────────────── */
+    var TERRAINS = [
+      { keys:['space','cosmos','galaxy','stellar','nebula','planet','astro','cosmic','universe','dimensional','dimension','multiverse','quantum','void','entropy','existence','omniversal','omniverse'],
+        type:'Plano c\u00f3smico / v\u00edas del universo',
+        env:'Vac\u00edo c\u00f3smico — sin atm\u00f3sfera',
+        vis:'Ilimitada (ausencia de obst\u00e1culos)',
+        danger:'Radiaci\u00f3n de fondo, singularidades, colapso espacio-temporal',
+        tactic:'Quien controle la gravedad domina el espacio de movimiento',        entry:'Al cruzar el umbral, los combatientes pierden el suelo bajo sus pies. El cosmos se expande en todas direcciones: nebulosas de colores imposibles, estrellas que nacen y mueren en segundos, y una quietud que asfixia m\u00e1s que el vac\u00edo. El espacio-tiempo se ondula con cada movimiento. No hay horizonte \u2014 solo el infinito y sus leyes propias.',        para:'El campo de batalla se extiende m\u00e1s all\u00e1 de cualquier horizonte conocido. Bajo un firmamento de estrellas muertas y nebulosas en colapso, las leyes f\u00edsicas ordinarias son sugerencias. El espacio-tiempo se dobla bajo la presi\u00f3n del combate. No hay suelo, no hay techo, no hay l\u00edmite: solo la voluntad de quien pueda sostenerla.' },
+      { keys:['magic','wizard','mage','fantasy','spell','arcane','mystical','enchant','sorcerer','witch','rune','occult','supernatural','paranormal','esoteric','ritual','alchemy','mytholog'],
+        type:'Dominio arcano / tierra m\u00e1gica',
+        env:'Carga arc\u00e1nica activa — magia en el aire',
+        vis:'Variable (interferencia de hechizos)',
+        danger:'Portales inestables, trampas m\u00e1gicas antiguas, maldiciones residuales',
+        tactic:'Las fuentes de energ\u00eda arc\u00e1nica en el terreno pueden ser aprovechadas o destruidas',        entry:'Al cruzar el umbral, una oleada de energ\u00eda arcana golpea a los combatientes como un muro invisible. El aire huele a ozono y a algo m\u00e1s antiguo, imposible de nombrar. Runas en el suelo se iluminan bajo sus pies. El cielo muestra colores que no existen en ning\u00fan espectro conocido. Aqu\u00ed la magia no es herramienta: es la ley f\u00edsica fundamental.',        para:'El aire mismo pulsa con energ\u00eda arcana. Runas antiguas grabadas en el suelo brillan con una luz que no proviene de ning\u00fan sol. El cielo muestra colores imposibles: violetas que queman, negros que respiran. Cada paso puede activar un catalizador sellado hace eones. El terreno no es inerte: escucha, y responde.' },
+      { keys:['cyber','digital','virtual','matrix','android','robot','ai ','artificial intelligence','tech','hacker','program','data','code','simulation','mech','machine','electric','electronic','computer'],
+        type:'Entorno cibern\u00e9tico / digital',
+        env:'Carga electromagn\u00e9tica — neon y datos',
+        vis:'Distorsionada (interferencia EM)',
+        danger:'Campos de pulso, hackeo de implantes, colapso de infraestructura',
+        tactic:'Quien soporte primero el pulso eléctrico del lugar aprenderá a usar su brillo como cuchilla y como refugio.',        entry:'Al cruzar el umbral, el ruido electromagnético se mete en los dientes como una vibración hostil. Torres de luz, superficies de vidrio y una arquitectura saturada de energía convierten el escenario en una ciudad insomne donde cada destello puede delatar o cegar.',        para:'Neón, cables y resplandores fríos componen un paisaje que parece despierto incluso cuando calla. Aquí la tecnología no ordena el mundo: lo acelera hasta volverlo nervioso, violento y propenso al colapso.' },
+      { keys:['apocalypse','wasteland','ruin','destroyed','nuclear','fallout','collapse','dystopia','barren','desolate','decay','mutant','radiation','post-apoc','ravaged','blighted'],
+        type:'Tierra asolada / era post-apoc\u00e1liptica',
+        env:'Polvo, ceniza y radiaci\u00f3n residual',
+        vis:'Baja (tormenta de arena permanente)',
+        danger:'Escombros inestables, radiaci\u00f3n, estructuras en colapso',
+        tactic:'Conocer el terreno antes que el rival equivale a tener cobertura garantizada',
+        entry:'Al cruzar el umbral, un viento cargado de ceniza y olor a metal quemado raspa la piel. Horizontes de concreto destruido y estructuras calcinadas se extienden en todas direcciones. El silencio es roto solo por el crujido de edificios que a\u00fan colapsan lentamente. Este mundo termin\u00f3. Los combatientes son ahora sus \u00fanicos habitantes temporales.',
+        para:'El mundo tal como fue conocido termin\u00f3. Lo que queda es una civilizaci\u00f3n reducida a ruinas: estructuras calcinadas, veh\u00edculos fundidos, cielo permanentemente gris. El suelo est\u00e1 agrietado y contaminado. Los recursos son escasos. Sobrevivir al entorno ya es una haza\u00f1a antes de que comience el combate.' },
+      { keys:['studio','studios','workshop','ink','ink machine','animation','cartoon','factory','warehouse','projector','production floor'],
+        type:'Estudio clausurado / taller industrial',
+        env:'Tinta derramada, madera vieja, tuberías y maquinaria de producción',
+        vis:'Media-baja — luz cortada, pasillos estrechos y salas llenas de sombra',
+        danger:'Charcos de tinta, engranajes activos, esquinas ciegas y emboscadas cerradas',
+        tactic:'Quien domine intersecciones, oficinas y salas de máquinas rompe la ruta del rival',
+        entry:'Al cruzar el umbral, el aire huele a tinta caliente, madera húmeda y óxido viejo. Pasillos de servicio, estudios vacíos y maquinaria industrial convierten cada tramo en una emboscada potencial. El suelo resbala, la luz falla y el entorno obliga a pelear a distancia corta con rutas de escape muy pobres.',
+        para:'La batalla se desarrolla dentro de un estudio clausurado de pasillos cerrados, tinta derramada y maquinaria industrial. Cada cuarto puede ser una trampa y cada intersección una muerte anunciada si se pierde el control del mapa.' },
+      { keys:['medieval','knight','sword','castle','kingdom','empire','lord','king','queen','dynasty','feudal','dragon','armor','siege','throne','chivalry','heraldry'],
+        type:'Campo de batalla medieval',
+        env:'Polvo de guerra, acero y barro',
+        vis:'Despejada con niebla matutina',
+        danger:'Flechas perdidas, catapultas, terreno embarrado',
+        tactic:'Las zonas elevadas ofrecen ventaja de proyectil; los desfiladeros, emboscada',
+        entry:'Al cruzar el umbral, el estruendo apagado de un campo de batalla antiguo los envuelve. El olor a barro, metal y cuero curtido impregna el aire fr\u00edo de la madrugada. Estandartes en jirones flamean sobre ruinas de fortalezas. El suelo guarda las cicatrices de mil batallas anteriores. Esta tierra conoce la guerra, y tiene paciencia infinita.',
+        para:'Estandartes rotos y escudos astillados decoran un campo donde incontables batallas precedieron esta. El barro absorbe el sonido de los pasos y enmascara los movimientos. Formaciones rocosas y murallas semidestruidas proporcionan cobertura. El olor a p\u00f3lvora rudimentaria y metal caliente impregna cada r\u00e1faga de viento fr\u00edo.' },
+      { keys:['frontier','borderlands','prairie','plains','mesa','canyon','western','desert','arid','dust','badlands'],
+        type:'Frontera árida / territorio western',
+        env:'Sol duro, polvo seco, roca desnuda y cobertura muy espaciada',
+        vis:'Alta a larga distancia; rota por lomas, cañones y tormentas de tierra',
+        danger:'Exposición prolongada, deshidratación, barrancos y fuego cruzado abierto',
+        tactic:'Mandar la distancia y forzar al rival a cruzar terreno descubierto decide la pelea',
+        entry:'Al cruzar el umbral, un calor seco golpea de frente y el viento arrastra polvo fino que corta la visión a intervalos. El terreno es amplio, duro y poco generoso: llanuras abiertas, mesetas rocosas y barrancos donde la cobertura llega tarde o no llega nunca. Aquí cada desplazamiento se paga con exposición.',
+        para:'La batalla cae en una frontera árida de llanuras abiertas, cañones y cobertura escasa. El que controle la distancia, el relieve y los pocos puntos de sombra obligará al rival a pelear expuesto.' },
+      { keys:['demon','devil','hell','infernal','underworld','dark','cursed','corrupt','shadow','abyss','malevolent','sinister','damnation','nether','abyssal','unholy','fallen','hellscape'],
+        type:'Abismo infernal',
+        env:'Azufre, oscuridad activa y calor extremo',
+        vis:'Muy baja (humo y llamas constantes)',
+        danger:'Temperatura letal, entidades dem\u00f3niacas, suelo inestable',
+        tactic:'Resistencia al calor y a la oscuridad define qui\u00e9n puede moverse libre',
+        entry:'Al cruzar el umbral, el calor llega como un puño antes de que el cuerpo pueda adaptarse. El suelo de obsidiana rota cruje bajo cada paso. Columnas de fuego estallan sin aviso en la distancia. Sombras con formas que no deber\u00edan tener se mueven en los bordes de la visi\u00f3n. El entorno mismo quiere aniquilar a quienes han entrado \u2014 la batalla es solo el pretexto.',
+        para:'El terreno est\u00e1 vivo y es profundamente hostil. Llamaradas surgen sin aviso del suelo de obsidiana rota. El aire abrasa los pulmones y las estructuras de hueso y roca se reconfiguran con cada latido del escenario. Fuerzas invisibles intentan corroer la voluntad de los combatientes desde adentro. Resistir el entorno ya es parte del duelo.' },
+      { keys:['divine','god','holy','heaven','angel','celestial','sacred','blessed','deity','pantheon','olympus','paradise','ascend','pure','eternal','immortal','godhood','transcend'],
+        type:'Plano celestial / dominio divino',
+        env:'Luz divina y gravedad alterada',
+        vis:'Perfecta — resplandor omnipresente',
+        danger:'Juicio divino, terreno que responde a intenci\u00f3n moral',
+        tactic:'La serenidad bajo presi\u00f3n otorga ventaja; la duda, la neutraliza',        entry:'Al cruzar el umbral, una luz sin origen los envuelve \u2014 no ciega, sino omnipresente y sin sombras. Columnas de m\u00e1rmol infinito se elevan hacia un cielo sin techo. El tiempo fluye diferente aqu\u00ed; cada segundo parece m\u00e1s largo, m\u00e1s significativo. El terreno observa. Solo quienes permanezcan centrados bajo presi\u00f3n extrema encontrar\u00e1n apoyo en este plano.',        para:'Columnas de m\u00e1rmol infinito se elevan hacia un cielo sin techo. La luz no proyecta sombras y el tiempo parece fluir distinto aqu\u00ed. El terreno responde a la pureza de intenci\u00f3n: quien permanezca m\u00e1s centrado bajo presi\u00f3n extrema recibe una ventaja sutil pero decisiva. No hay lugar para el caos sin consecuencias en este plano.' },
+      { keys:['ocean','sea','marine','aquatic','underwater','submarine','water','deep','tide','coral','naval','pirate','ship','maritime','abyss sea','oceanic'],
+        type:'Entorno acu\u00e1tico / profundidades',
+        env:'Presi\u00f3n hidrost\u00e1tica — corrientes violentas',
+        vis:'Muy limitada (turbidez y biol\u00faminiscencia)',
+        danger:'Corrientes submarinas, depredadores, presi\u00f3n aplastante',
+        tactic:'El control tridimensional del espacio acuático es m\u00e1s importante que la fuerza bruta',        entry:'Al cruzar el umbral, la presi\u00f3n hidrost\u00e1tica comprime a los combatientes desde todos los \u00e1ngulos. La luz se fragmenta y desaparece r\u00e1pidamente mientras descienden. Corrientes submarinas los empujan en direcciones inesperadas. Bioluminiscencia intermitente revela fauna que los observa desde la oscuridad. Los sentidos terrestres son in\u00fatiles aqu\u00ed.',        para:'El combate se desarrolla donde la luz solar se convierte en un recuerdo. Corrientes submarinas desplazan a los combatientes de manera impredecible y silenciosa. Formaciones coralinas y naufragios ofrecen cobertura y trampas en igual medida. Los sentidos convencionales fallan aqu\u00ed: hay que desarrollar otros.' },
+      { keys:['jungle','forest','nature','wild','beast','animal','hunt','primal','tribal','organic','plant','creature','prehistoric','dinosaur','savage','primeval','island','skull island','tropical'],
+        type:'Jungla prim\u00f3rdial',
+        env:'H\u00famedo, denso y org\u00e1nico',
+        vis:'M\u00ednima — dosel cerrado sin luz directa',
+        danger:'Fauna hostil, venenos, plantas carnivoras, terreno traicionero',
+        tactic:'El sigilo y el conocimiento del terreno valen m\u00e1s que la velocidad bruta',        entry:'Al cruzar el umbral, el calor h\u00famedo y el olor org\u00e1nico golpean de inmediato. El dosel es tan denso que convierte el mediod\u00eda en penumbra permanente. Sonidos de criaturas invisibles rodean el per\u00edmetro. El suelo es una trampa de ra\u00edces, lodo y vida que no distingue aliados de enemigos. La jungla no tiene favoritos.',        para:'La vegetaci\u00f3n es tan densa que convierte el mediod\u00eda en penumbra. El suelo est\u00e1 cubierto de ra\u00edces, lodo viscoso y trampas naturales de eficiencia brutal. Criaturas invisibles observan desde la oscuridad del follaje. El ecosistema aqu\u00ed no es un escenario: es un tercer combatiente que ataca a ambos por igual.' },
+      { keys:['gakure','shinobi','ninja','konoha','konohagakure','sunagakure','kumogakure','iwagakure','kirigakure','otogakure','hidden leaf','hidden sand','hidden mist','hidden stone','hidden cloud'],
+        type:'Aldea shinobi fortificada',
+        env:'Calles cerradas, tejados y murallas defensivas',
+        vis:'Media — azoteas, bosque perimetral y calles estrechas',
+        danger:'Emboscadas verticales, sellos, proyectiles y puntos ciegos',
+        tactic:'La movilidad vertical y la lectura del perímetro deciden quién dicta la distancia del duelo',        entry:'Al cruzar el umbral, los combatientes aterrizan en una aldea shinobi donde tejados conectados, murallas internas y rutas elevadas vuelven cada desplazamiento una decisión táctica. Los accesos estrechos favorecen las emboscadas y el control del perímetro. Aquí la velocidad sola no basta: importa quién domina la verticalidad y quién lee primero las líneas de escape.',        para:'La zona sorteada corresponde a una aldea shinobi fortificada. Tejados enlazados, calles estrechas y murallas internas ofrecen cobertura, ángulos muertos y rutas rápidas para quien domine el movimiento vertical. El terreno premia la lectura táctica por encima del intercambio frontal.' },
+      { keys:['city','urban','street','metro','town','skyscraper','district','alley','subway','concrete','asphalt','modern','downtown','metropolitan','borough','ghetto'],
+        type:'Entorno urbano / ciudad en conflicto',
+        env:'Concreto, vidrio y lluvia \u00e1cida',
+        vis:'Parcial — estructuras y callejones oscuros',
+        danger:'Colapso estructural, civiles, apagones, francotiradores',
+        tactic:'La verticalidad y los \u00e1ngulos ciegos son las armas m\u00e1s infravaloradas',        entry:'Al cruzar el umbral, el estruendo de una ciudad en colapso los recibe. Calles agrietadas, edificios estallados y veh\u00edculos volcados forman el primer mapa de batalla. El eco de cada movimiento rebota entre las fachadas, haciendo imposible ubicar al rival por sonido. La ciudad sigue viva \u2014 herida, pero viva \u2014 y peligrosa para ambos.',        para:'Calles agrietadas, fachadas estalladas y veh\u00edculos volcados forman el mapa de batalla. La ciudad est\u00e1 en colapso, lo que significa que el terreno cambia seg\u00fan el combate avanza. El eco de los golpes rebota entre los edificios, dificultando la localizaci\u00f3n del rival. Las zonas elevadas dan alcance; los callejones, sigilo.' },
+      { keys:['horror','monster','undead','zombie','vampire','werewolf','ghost','haunted','eldritch','lovecraft','fear','nightmarish','psychological','terror','corrupt','aberrant'],
+        type:'Terreno del horror sobrenatural',
+        env:'Oscuridad activa, niebla sobrenatural',
+        vis:'M\u00ednima — niebla densa e impenetrable',
+        danger:'Entidades del horror, realidad inestable, corrupci\u00f3n mental',
+        tactic:'Mantener la sanidad es tan importante como mantener la posici\u00f3n',        entry:'Al cruzar el umbral, la niebla los consume al instante. La oscuridad no solo cubre: oprime. Sonidos imposibles resuenan desde \u00e1ngulos que no existen en el espacio ordinario. Algo observa desde adentro de esa oscuridad, y no es neutral. Mantener la cordura ya es la primera batalla \u2014 la segunda es mucho peor.',        para:'Niebla espesa y consciente cubre cada cent\u00edmetro del terreno. Sonidos imposibles resuenan desde direcciones que no existen en el mapa. El escenario respira. Paredes que no deber\u00edan estar ah\u00ed aparecen. El miedo no es una reacci\u00f3n emocional aqu\u00ed: es una fuerza f\u00edsica que modifica las capacidades de los combatientes.' },
+      { keys:['game','video game','rpg','dungeon','level','boss','player','character','quest','platform','console','arcade','pixel','simulation','virtual world'],
+        type:'Mundo artificial / teatro imposible',
+        env:'Color abrupto, materia obediente y geometrías que esconden costuras',
+        vis:'Nítida en apariencia; engañosa en profundidad y distancia',
+        danger:'Superficies que se reescriben, bordes falsos y quiebres bruscos del espacio',
+        tactic:'Sobrevive más quien advierta qué parte del mundo es decorado y qué parte muerde de vuelta.',        entry:'Al cruzar el umbral, todo parece demasiado preciso para ser natural. Los colores pesan más de la cuenta, las líneas del escenario obedecen a una lógica ajena y la realidad da la impresión de estar sostenida por una voluntad invisible que podría cansarse en cualquier momento.',        para:'Este terreno finge limpieza, simetría y orden, pero debajo de esa superficie late una trampa estética. Lo artificial aquí no tranquiliza: inquieta, porque cada plano perfecto parece esperar el instante exacto para torcerse.' },
+      { keys:['science','scientist','laboratory','experiment','evolution','biology','physics','chemistry','genetic','mutation','clone','lab','research','formula'],
+        type:'Laboratorio / entorno experimental',
+        env:'Est\u00e9ril, sustancias qu\u00edmicas y presi\u00f3n controlada',
+        vis:'Alta — iluminaci\u00f3n artificial total',
+        danger:'Reacciones qu\u00edmicas, gases, explosiones en cadena',
+        tactic:'Controlar las sustancias del entorno puede crear o destruir ventajas en segundos',        entry:'Al cruzar el umbral, el olor a antis\u00e9ptico y reacciones qu\u00edmicas activas llena el aire. Cristal, acero y tuber\u00edas de presi\u00f3n forman la arquitectura del escenario. Pantallas parpadean con datos incomprensibles. Una rotura fuera de lugar puede iniciar una reacci\u00f3n en cadena que convierta el laboratorio en una trampa mortal.',        para:'Cristal, acero y tuber\u00edas llenas de l\u00edquidos de color desconocido recorren el escenario. Pantallas parpadean con datos incomprensibles. Una rotura fuera de lugar puede iniciar una reacci\u00f3n en cadena que convierta el laboratorio entero en una trampa. La precisi\u00f3n vale m\u00e1s que la potencia bruta en este entorno.' }
+    ];
+
+    var TERRAIN_DEFAULT = {
+      type:'Plano de existencia no clasificado',
+      env:'Multifactorial e indefinido',
+      vis:'Variable seg\u00fan condiciones',
+      danger:'Desconocidos e impredecibles',
+      tactic:'La adaptaci\u00f3n r\u00e1pida supera cualquier estrategia preparada',
+      entry:'Al cruzar el umbral, los combatientes ingresan a un plano de existencia que desafía toda clasificación conocida. Nada aquí se deja leer de inmediato: el aire, la distancia y el relieve responden a leyes ajenas y podrían volverse hostiles sin previo aviso. Solo la lucidez bajo presión impedirá que el terreno cobre su primera víctima antes del choque.',
+      para:'El escenario elegido desaf\u00eda toda clasificaci\u00f3n conocida. Sus reglas son propias y sus leyes completamente distintas a las del mundo ordinario. Quienes batallan aqu\u00ed deben adaptarse en tiempo real a condiciones que pueden cambiar sin aviso alguno. Solo la creatividad, la determinaci\u00f3n y la lectura moment\u00e1nea del entorno marcar\u00e1n la diferencia.'
+    };
+
+    function hasSettingArtifacts(text) {
+      return /(?:^|[\s(])(?:File|Image):|(?:^|\s)Category:|\[\[|\{\{|<ref\b|(?:^|\s)(?:thumb|center|left|right)\||^(?:\s*-\s*[^=]{1,80}=){2,}/i.test(text || '');
+    }
+
+    function getScenarioArenaName(sc) {
+      var text = sc && typeof sc.arena === 'string' ? sc.arena.trim() : '';
+      return (text && text.length > 2 && !hasSettingArtifacts(text)) ? text : '';
+    }
+
+    function getScenarioSettingText(sc) {
+      var text = sc && typeof sc.setting === 'string' ? sc.setting.trim() : '';
+      return (text && text.length > 40 && !hasSettingArtifacts(text)) ? text : '';
+    }
+
+    function getScenarioSourceText(sc) {
+      var settingText = getScenarioSettingText(sc);
+      if (settingText) return settingText;
+      return (sc.description && sc.description.length > 20 && !sc.description.match(/^Escenario del universo/i))
+        ? sc.description
+        : '';
+    }
+
+    function hashText(text) {
+      var value = 2166136261;
+      String(text || '').split('').forEach(function(ch) {
+        value ^= ch.charCodeAt(0);
+        value = Math.imul(value, 16777619);
+      });
+      return value >>> 0;
+    }
+
+    function pickVariant(seed, options) {
+      if (!options || !options.length) return '';
+      return options[hashText(seed) % options.length];
+    }
+
+    function getScenarioWorldContext(sc, terrain) {
+      var title = (sc && sc.title) ? sc.title : 'este universo';
+      var arenaName = getScenarioArenaName(sc);
+      var sourceText = getScenarioSourceText(sc);
+      var cues = [title, sc && sc.source || '', sourceText, arenaName, terrain && terrain.type || ''].join(' ').toLowerCase();
+      var seed = [title, arenaName, sourceText].join('|');
+
+      if (/backrooms|liminal|async/.test(cues)) {
+        return pickVariant(seed, [
+          'Este universo no se abre: te absorbe. El aire zumba como fluorescencia moribunda y cada pared parece recordar demasiadas horas de encierro, como si el propio espacio hubiera aprendido a cazar a quien se demora.',
+          'Aquí la realidad se pudre en silencio. Los pasillos repiten la misma geometría hasta quebrar la orientación, y cada tramo da la impresión de haber sido construido para agotar primero la mente y después el cuerpo.'
+        ]);
+      }
+      if (/joey drew|ink|cartoon|studio|workshop|animation/.test(cues)) {
+        return pickVariant(seed, [
+          'En ' + title + ', todo fue creado para fabricar sonrisas y terminó aprendiendo a mascar carne. La tinta, la madera hinchada y la maquinaria exhausta convierten el escenario en un organismo enfermo que rechaza a cualquier intruso.',
+          'El mundo de ' + title + ' conserva la silueta de una fantasía industrial podrida. Bajo las lámparas exhaustas, cada mural parece vigilar y cada corredor suena como la garganta de algo que todavía no ha terminado de despertar.'
+        ]);
+      }
+      if (/frontier|borderlands|western|badlands|prairie|plains|mesa|canyon/.test(cues)) {
+        return pickVariant(seed, [
+          'Aquí la violencia no llega desde fuera: ya estaba enterrada en la tierra. El horizonte engaña con su amplitud, el polvo entra en los pulmones como vidrio fino y hasta la luz del sol parece dictada para desgastar la voluntad antes del primer choque.',
+          'El universo de ' + title + ' respira como una frontera vieja, seca y despiadada. Piedra, viento y distancia convierten cada tramo del paisaje en una amenaza paciente, una de esas que matan mucho antes de tocar la carne.'
+        ]);
+      }
+      if (/gakure|shinobi|ninja|hokage/.test(cues)) {
+        return pickVariant(seed, [
+          'Nada aquí permanece quieto el tiempo suficiente para parecer seguro. Tejados, árboles y murallas convierten el aire en una ruta de caza, y el silencio dura apenas lo que tarda la muerte en elegir un ángulo.',
+          'En ' + title + ', el combate nunca pisa un suelo verdaderamente neutro. Todo invita al engaño, al salto súbito y a la emboscada limpia; incluso la calma parece colocada para desarmar la guardia.'
+        ]);
+      }
+      if (/skull island|kong|jungle|island|primeval|beast/.test(cues)) {
+        return pickVariant(seed, [
+          'La naturaleza de ' + title + ' no reconoce proporción humana. Todo es húmedo, desmedido y antiguo, como si la tierra hubiera seguido creciendo para ocultar criaturas demasiado viejas para recibir nombre sin temblar.',
+          'Aquí la selva no sirve de fondo: pesa como un dios dormido. Bajo el follaje, cada sombra promete tamaño monstruoso y cada claro parece abierto por una fuerza capaz de arrancar roca, árbol y hombre con la misma facilidad.'
+        ]);
+      }
+      if (/demon|infernal|hell|abyss|sparda|underworld/.test(cues)) {
+        return pickVariant(seed, [
+          'Este mundo no arde por accidente. La piedra conserva memoria de tormento, el calor parece tener hambre y cada grieta del paisaje da la impresión de haber sido abierta por algo que aún no acepta estar sellado.',
+          'En ' + title + ', el fuego no ilumina: juzga. Todo lo que existe aquí huele a ruina activa, a liturgia blasfema y a una furia tan vieja que el combate humano apenas parece otro de sus síntomas.'
+        ]);
+      }
+      if (/cosmos|space|stellar|galaxy|planet|cosmic|universe|nebula|celestial|divine/.test(cues)) {
+        return pickVariant(seed, [
+          'Aquí la escala destruye primero la voluntad. No hay horizonte protector, solo distancias monstruosas, luz moribunda y una sensación permanente de que el vacío escucha cada movimiento como si esperara un error.',
+          'El universo de ' + title + ' no concede refugio visual ni espiritual. Frente a esta inmensidad, hasta la violencia parece pequeña durante un segundo, y ese segundo basta para quebrar a quien vacile.'
+        ]);
+      }
+      if (/ocean|sea|underwater|aquatic|naval|pirate|coral/.test(cues)) {
+        return pickVariant(seed, [
+          'Bajo estas aguas nada concede estabilidad ni misericordia. La presión abraza, la distancia se deforma y cada sombra parece más grande de lo que la razón acepta antes de convertirse en pánico.',
+          'En ' + title + ', el mar no es paisaje sino tribunal. Todo flota, todo se hunde y cada corriente parece decidir por adelantado quién llega entero al siguiente segundo.'
+        ]);
+      }
+      if (/laboratory|experiment|research|science|facility|academy|station|base|factory/.test(cues)) {
+        return pickVariant(seed, [
+          'Aquí hasta la limpieza tiene algo cruel. Vidrio, metal y conductos sellados contienen una violencia fría, como si cada puerta hubiera sido diseñada para ocultar un error demasiado grande para recibir nombre.',
+          'El mundo de ' + title + ' late con precisión clínica. Todo parece ordenado hasta que se escucha el fondo real del lugar: motores, presión y la certeza de que cualquier fallo aquí nace ya convertido en desastre.'
+        ]);
+      }
+      if (/city|urban|district|street|town|borough|metro/.test(cues)) {
+        return pickVariant(seed, [
+          'La ciudad no ofrece refugio; ofrece ángulos desde los que morir. Fachadas heridas, callejones húmedos y alturas hostiles convierten cada bloque en una garganta donde el eco llega antes que la sangre.',
+          'En ' + title + ', la arquitectura conserva la arrogancia del mundo civilizado aunque ya esté rota. Cada ventana parece un ojo oscuro y cada cruce pide una decisión que puede no repetirse.'
+        ]);
+      }
+      if (/horror|ghost|haunted|eldritch|fear|nightmare/.test(cues)) {
+        return pickVariant(seed, [
+          'Aquí el miedo no acompaña al paisaje: lo construye. La arquitectura parece enferma, el aire suena usado por otra respiración y la oscuridad actúa como si ya conociera los nombres de quienes van a pelear.',
+          'El universo de ' + title + ' no necesita correr para imponerse. Basta con permanecer quieto, húmedo y mal iluminado para que la mente empiece a imaginar cosas peores de las que realmente acechan.'
+        ]);
+      }
+
+      return pickVariant(seed, [
+        'El universo de ' + title + ' no se comporta como decorado. Cae sobre el duelo con una presencia hostil y demasiado consciente, como si el terreno hubiera estado esperando esta pelea desde antes de que el portal se abriera.',
+        'Aquí nada parece dispuesto para contemplar el combate desde lejos. Todo pesa, todo observa y hasta el silencio da la impresión de estar empujando a los combatientes hacia una violencia que el lugar ya había imaginado.'
+      ]);
+    }
+
+    function appendScenarioConsistencyFrame(baseText, sc, terrain) {
+      var base = String(baseText || '').trim();
+      var title = (sc && sc.title) ? sc.title : 'este universo';
+      var arenaName = getScenarioArenaName(sc);
+      var seed = [title, arenaName, terrain && terrain.type || ''].join('|');
+      var inspiration = pickVariant(seed + '|insp', [
+        ' Esta ambientación se presenta como una inspiración narrativa directa del universo ' + title + ', respetando su atmósfera sin convertir el escenario en un final automático.',
+        ' El marco está tratado como una alusión inspirada en ' + title + ': conserva tono y presión contextual, pero mantiene reglas de combate legibles para ambos jugadores.',
+        ' La escena toma referencia del verso de ' + title + ' como inspiración táctica y visual; prioriza coherencia de lectura y no una resolución pasiva por ambientación.'
+      ]);
+      var survival = pickVariant(seed + '|survival', [
+        ' Por poderes otorgados de resistencia ambiental y adaptación táctica, las condiciones del mapa siempre permiten vida para ambos combatientes; no existe daño ambiental pasivo que reduzca vida por sí solo.',
+        ' Se asume resistencia activa al entorno para ambos personajes: el terreno condiciona ritmo, cobertura y posicionamiento, pero no elimina ni daña automáticamente fuera de acciones narradas de combate.',
+        ' La integridad de los combatientes se preserva por cualidades especiales de resistencia: la hostilidad del escenario funciona como presión estratégica y no como daño directo automático sobre los PJs.'
+      ]);
+      return [base, inspiration, survival].join(' ').trim();
+    }
+
+    function getTerrainScale(type) {
+      var text = String(type || '').toLowerCase();
+      if (!text) return 'Escala cambiante; sin límites fiables para medir la zona.';
+      if (text.indexOf('cósmico') !== -1 || text.indexOf('celestial') !== -1) return 'Escala astronómica o transdimensional; no hay bordes físicos fiables.';
+      if (text.indexOf('arcano') !== -1 || text.indexOf('infernal') !== -1 || text.indexOf('divino') !== -1) return 'Recinto amplio con anomalías activas y relieve capaz de mutar durante el combate.';
+      if (text.indexOf('cibern') !== -1 || text.indexOf('urbano') !== -1) return 'Sector de varias manzanas o niveles conectados por rutas verticales y coberturas duras.';
+      if (text.indexOf('estudio') !== -1 || text.indexOf('industrial') !== -1) return 'Complejo interior de varias alas, con corredores, salas de máquinas y recorridos de visibilidad rota.';
+      if (text.indexOf('post-apoc') !== -1) return 'Extensión abierta de cientos de metros a kilómetros, con cobertura irregular y ruina dispersa.';
+      if (text.indexOf('frontera') !== -1 || text.indexOf('western') !== -1) return 'Territorio abierto de gran radio, con llanuras áridas, mesetas, cañones y coberturas muy separadas.';
+      if (text.indexOf('medieval') !== -1) return 'Campo o fortificación de gran radio, con líneas de choque y alturas marcadas.';
+      if (text.indexOf('acuático') !== -1) return 'Volumen tridimensional amplio, sin suelo estable ni referencias fijas.';
+      if (text.indexOf('jungla') !== -1) return 'Bioma denso de amplio radio, con cobertura total y visibilidad rota.';
+      if (text.indexOf('horror') !== -1) return 'Recinto incierto; la escala aparente puede distorsionarse con el propio entorno.';
+      if (text.indexOf('videojuego') !== -1 || text.indexOf('sim') !== -1) return 'Recinto de geometría obediente solo en apariencia, con profundidad tramposa y distancias que pueden plegarse como un decorado vivo.';
+      if (text.indexOf('laboratorio') !== -1) return 'Complejo interior de varias salas, corredores y puntos de estrangulamiento.';
+      if (text.indexOf('shinobi') !== -1) return 'Aldea de varios bloques con perímetro vertical, azoteas enlazadas y rutas rápidas.';
+      return 'Escala media-alta con límites poco fiables y relieve cambiante.';
+    }
+
+    function getTerrainNarrativeKey(sc, profile, arenaName) {
+      var cues = [
+        profile && profile.type || '',
+        arenaName || '',
+        sc && sc.title || '',
+        getScenarioSourceText(sc)
+      ].join(' ').toLowerCase();
+
+      if (/(marvel|dc|cinematic universe|mcu)/.test(cues) && /(dark world|asgard|svartalfheim|jotunheim|midgard|multiverse|quantum realm)/.test(cues)) return 'cosmic';
+      if (/dark world/.test(cues)) return 'cosmic';
+      if (/infernal|demon|devil|hell|abyss|underworld/.test(cues)) return 'infernal';
+
+      if (/backrooms|liminal|async/.test(cues)) return 'liminal';
+      if (/joey drew|studio|studios|workshop|ink|animation|cartoon/.test(cues)) return 'studio';
+      if (/frontier|borderlands|western|prairie|plains|mesa|canyon|badlands/.test(cues)) return 'frontier';
+      if (/gakure|shinobi|ninja|hidden leaf|hidden sand|hidden mist|hidden stone|hidden cloud/.test(cues)) return 'shinobi';
+      if (/castle|fortress|temple|tower|palace|medieval|kingdom|feudal|knight/.test(cues)) return 'stonehold';
+      if (/skull island|jungle|forest|swamp|island|primeval|beast|tropical/.test(cues)) return 'wild';
+      if (/city|urban|district|street|town|metro|borough/.test(cues)) return 'urban';
+      if (/laboratory|facility|academy|institute|station|base|factory|experiment|research/.test(cues)) return 'laboratory';
+      if (/game|video game|rpg|arcade|virtual world/.test(cues)) return 'artificial';
+      if (/cyber|digital|virtual|matrix|android|artificial intelligence|data|code|mech|electric/.test(cues)) return 'electric';
+      if (/divine|celestial|heaven|angel|god|olympus|sacred/.test(cues)) return 'celestial';
+      if (/space|cosmos|galaxy|stellar|nebula|cosmic|omniverse|multiverse|planet|void/.test(cues)) return 'cosmic';
+      if (/ocean|sea|aquatic|underwater|coral|naval|maritime/.test(cues)) return 'sea';
+      if (/horror|haunted|eldritch|nightmare|ghost|fear|terror/.test(cues)) return 'horror';
+      if (/arcane|magic|wizard|mage|sorcerer|witch|ritual|mystical/.test(cues)) return 'arcane';
+      if (/post-apoc|wasteland|ruin|nuclear|fallout|collapse|radiation/.test(cues)) return 'wasteland';
+      return 'default';
+    }
+
+    function getBellatorTerrainLines(sc, profile, arenaName) {
+      var key = getTerrainNarrativeKey(sc, profile, arenaName);
+      var lines = {
+        liminal: {
+          scale: 'La escala se burla del ojo: un pasillo parece breve hasta que lo recorres y descubres que la distancia se ha estirado en silencio mientras respirabas.',
+          env: 'El aire sabe a alfombra húmeda, yeso cansado y electricidad vieja, como si el lugar llevara demasiado tiempo cerrado sobre algo que sigue moviéndose.',
+          vis: 'Nada se oculta del todo y, sin embargo, nada termina de mostrarse; cada esquina tarda un segundo de más en revelar lo que trae detrás.',
+          danger: 'Aquí no solo mata lo que persigue. Mata la orientación rota, el eco mentiroso y la forma en que el lugar se parece demasiado a algo cotidiano para no confiarse.',
+          tactic: 'La mente se quiebra antes que las piernas; gana quien consiga seguir pensando con claridad cuando el espacio empiece a comportarse como un animal paciente.',
+          entry: 'El lugar se abre como una oficina abandonada por la misericordia. Techo bajo, zumbido enfermo y una sensación inmediata de que el suelo ya ha memorizado demasiadas huidas fallidas.',
+          para: 'Nada aquí parece hecho para la guerra y, sin embargo, todo la favorece. La banalidad del entorno se vuelve insoportable cuando descubres que cada metro fue diseñado, sin querer o queriendo, para extraviar la voluntad.'
+        },
+        studio: {
+          scale: 'Las alas del estudio se encadenan unas a otras como el interior de un animal industrial: pasillos, talleres y cuartos de máquina que se hunden cada vez más lejos de la luz limpia.',
+          env: 'La humedad se pega a la ropa con olor a tinta tibia, madera hinchada y grasa vieja, como si la fábrica siguiera sudando aun después de haber muerto.',
+          vis: 'La luz llega mutilada. Cada lámpara deja medias sombras y cada puerta entreabierta parece una invitación demasiado obvia para no ser emboscada.',
+          danger: 'No hace falta una criatura para volver mortal este sitio: bastan el suelo resbaladizo, los ángulos muertos y la maquinaria dormida que parece esperar un error humano para despertar.',
+          tactic: 'Aquí la pelea se gana imponiendo ritmo dentro del encierro, obligando al rival a girar, dudar y escuchar demasiado de cerca su propia respiración.',
+          entry: 'No hay bienvenida, solo madera que se queja, metal oxidado y la impresión de haber entrado a un lugar que siguió produciendo pesadillas mucho después de quedarse sin público.',
+          para: 'Todo en este escenario suena a caricatura enferma. La arquitectura conserva la forma de una fantasía industrial, pero ya solo fabrica miedo, encierro y ataques que llegan desde demasiado cerca.'
+        },
+        frontier: {
+          scale: 'El horizonte se abre tanto que humilla. Llanuras, mesetas y barrancos se estiran hasta convertir al hombre en una interrupción mínima dentro de una tierra hecha para resistirlo.',
+          env: 'El aire entra seco, abrasivo y lleno de polvo fino; raspa la garganta como si el propio paisaje quisiera dejar constancia de que aquí respirar también tiene precio.',
+          vis: 'La distancia engaña: parece limpia hasta que el calor la ondula, la roca la rompe y el relieve transforma cada silueta lejana en presagio.',
+          danger: 'La muerte no necesita esconderse. Vive en la exposición, en la sed, en una caída mal medida y en la forma en que el terreno obliga a mostrar el cuerpo antes de permitir el avance.',
+          tactic: 'Aquí manda quien soporta la intemperie sin regalar la silueta, quien convierte la distancia en castigo y obliga al otro a cruzar kilómetros de duda.',
+          entry: 'El mundo no se abre con estruendo, sino con un viento seco que ya viene cansado de arrastrar huesos, polvo y jornadas demasiado largas bajo un sol que no perdona a nadie.',
+          para: 'Todo aquí parece viejo, exhausto y todavía dispuesto a matar. La frontera no ofrece heroísmo; ofrece inmensidad, sequedad y la certeza de que el paisaje aceptará la sangre sin cambiar de expresión.'
+        },
+        shinobi: {
+          scale: 'La aldea parece compacta desde fuera, pero al entrar se multiplica en tejados, callejones y corredores verticales que convierten el aire en otra capa del campo de batalla.',
+          env: 'Madera, teja caliente, polvo de muro y follaje perimetral componen una atmósfera inquieta, siempre a medio camino entre el silencio y la irrupción súbita.',
+          vis: 'Nunca es completa. Una azotea, una copa de árbol o la curva de un callejón bastan para borrar a un rival entero y devolverlo un segundo después en otra altura.',
+          danger: 'El peligro no llega solo de frente; cae desde arriba, rebota en los muros y se escurre por rutas que el ojo inexperto tarda demasiado en descubrir.',
+          tactic: 'Sobrevive quien lea primero la verticalidad del lugar y convierta la arquitectura en una extensión de su instinto antes de que el rival haga lo mismo.',
+          entry: 'Tejados tensos, madera viva y muros que conocen demasiado bien el sonido del acero reciben a los combatientes como si la aldea llevara generaciones entrenándose para esta clase de violencia.',
+          para: 'Nada en este entorno es puramente civil. Hasta la calma tiene disciplina, y esa disciplina vuelve cada cornisa, cada sombra y cada ruta alta en una promesa de impacto repentino.'
+        },
+        stonehold: {
+          scale: 'Patios, torres, escaleras y muros se apilan con un peso casi litúrgico, como si la arquitectura quisiera recordar a cada paso que fue erigida para resistir asedios, no para albergarlos.',
+          env: 'Piedra fría, polvo viejo, hierro y humedad guardada durante siglos cargan el aire con una solemnidad que aprieta el pecho antes de que llegue el primer golpe.',
+          vis: 'Se abre en patios y se estrangula en corredores; el ojo nunca descansa porque cada vano oscuro promete un ataque desde una altura o desde una puerta demasiado estrecha.',
+          danger: 'Aquí matan las caídas, los embudos, los ángulos imposibles y la lentitud con que una fortaleza decide revelar quién controla realmente sus alturas.',
+          tactic: 'La piedra favorece al paciente. Vence quien obligue al otro a subir cansado, entrar torcido o mirar tarde hacia donde ya lo estaban esperando.',
+          entry: 'La fortaleza recibe a los combatientes con el silencio severo de los lugares que han visto demasiadas guerras como para fingir sorpresa ante una más.',
+          para: 'Todo pesa en este escenario: los muros, la historia y la altura. No es un lugar que acompañe la pelea; es un lugar que la examina y castiga cualquier movimiento indigno de su dureza.'
+        },
+        wild: {
+          scale: 'Nada aquí conserva escala humana. Los árboles suben como columnas húmedas, los acantilados cortan la vista y los claros duran apenas lo suficiente para recordar lo expuesto que queda un cuerpo en ellos.',
+          env: 'El aire cae caliente, vegetal y espeso, cargado de barro, savia y un olor animal antiguo que hace sentir observado incluso antes de escuchar algo moverse.',
+          vis: 'La mirada no avanza limpia; se rompe en hojas, raíces, bruma y alturas cubiertas de verde, hasta convertir cualquier hueco de luz en sospecha.',
+          danger: 'La tierra cede, la piedra resbala y el follaje guarda tamaños que la mente humana preferiría no calcular. Aquí basta un ruido mal leído para entender tarde quién estaba cazando a quién.',
+          tactic: 'La selva y la isla premian al que no necesita ver completo para atacar con certeza, al que escucha el peso del lugar y obliga al rival a delatarse dentro de esa masa viva.',
+          entry: 'Antes de que el ojo se acostumbre, ya se siente la humedad mordiéndole la piel al duelo. El follaje cae desde todas las alturas posibles y la tierra parece latir bajo algo inmenso que aún no se muestra entero.',
+          para: 'Este paisaje no sirve de telón. Respira, cruje y presiona como un depredador inmóvil. La naturaleza de aquí no protege a nadie: devora, oculta y espera.'
+        },
+        urban: {
+          scale: 'Las manzanas se encadenan como una garganta de concreto donde cada cruce promete otra profundidad, otra ventana rota y otra altura desde la que el peligro aprende a caer.',
+          env: 'Humo, lluvia sucia, cableado expuesto y piedra fracturada mezclan el olor de una ciudad todavía viva con el de una herida que no terminó de cerrar.',
+          vis: 'A veces la avenida abre la distancia de golpe; a veces una sola esquina la mutila por completo. El ojo nunca logra relajarse porque la ciudad cambia de tamaño según el miedo que le entre al cuerpo.',
+          danger: 'Aquí matan el eco, los derrumbes parciales, las alturas habitadas por sombras y el exceso de rutas por las que el desastre puede llegar al mismo tiempo.',
+          tactic: 'La ciudad castiga al impulsivo. Quien imponga el ángulo, la fachada y el segundo exacto del cruce empuja al otro a pelear como si siempre llegara tarde.',
+          entry: 'La urbe recibe a los combatientes con vidrios que todavía tiemblan, callejones mojados y una tensión de cables y concreto que parece lista para descargar violencia sobre el primero que se confíe.',
+          para: 'No hay neutralidad entre estas paredes. Cada edificio observa, cada esquina selecciona víctimas y cada tramo de asfalto conserva suficiente memoria del caos como para querer repetirlo.'
+        },
+        laboratory: {
+          scale: 'El complejo se despliega en alas selladas, pasillos clínicos y cámaras que parecen diseñadas para contener cosas demasiado inestables para ver la luz sin consecuencias.',
+          env: 'El aire llega frío, tratado y químico, con un fondo de ozono, metal limpio y presión artificial que vuelve sospechoso incluso el acto más simple de respirar.',
+          vis: 'La claridad es excesiva pero no tranquiliza. Todo se ve demasiado bien y precisamente por eso cada puerta automática, cada cristal y cada reflejo parecen esconder una intención peor.',
+          danger: 'Matan los compuestos activos, las fugas, la sobrepresión y la certeza de que cualquier error aquí nace ya amplificado por tubos, vidrio y energía contenida.',
+          tactic: 'La supervivencia depende de leer el laboratorio como un experimento al borde del fallo, usando su rigidez contra el rival sin convertirse en la primera variable sacrificable.',
+          entry: 'Luces blancas, vidrio inmóvil y el zumbido disciplinado de un sistema de contención reciben el duelo con la frialdad de un lugar que fue creado para vigilar monstruos, no para albergarlos libremente.',
+          para: 'Todo parece preciso hasta que uno recuerda para qué existe un sitio así: para encerrar lo que no puede permitirse afuera. Esa memoria convierte cada sala en una amenaza más tensa de lo que aparenta.'
+        },
+        electric: {
+          scale: 'La arquitectura sube y se multiplica como una descarga congelada: torres, pasarelas y superficies reflectantes que prolongan la ciudad mucho más allá de donde el cuerpo querría seguirla.',
+          env: 'El aire lleva ozono, metal mojado y un temblor eléctrico que se mete bajo la piel, como si el propio entorno estuviera demasiado cargado para permanecer quieto.',
+          vis: 'La luz no aclara: fragmenta. Reflejos, anuncios, neón y pantallas convierten la visión en una batalla paralela donde el exceso de brillo también sirve para ocultar.',
+          danger: 'La amenaza viene del pulso, del cableado, del colapso súbito y de la facilidad con que una superficie luminosa puede convertir un descuido mínimo en sentencia.',
+          tactic: 'Aquí vence quien haga que el resplandor traicione al otro antes de quedar expuesto por él, leyendo la electricidad del lugar como si fuera un temperamento.',
+          entry: 'Un resplandor frío se derrama antes que el suelo aparezca entero. Luego vienen las alturas, el vidrio y la sensación de que la ciudad está electrizada no por progreso, sino por ansiedad.',
+          para: 'La tecnología de este escenario no ordena la pelea: la acelera. Todo brilla demasiado, vibra demasiado y reacciona como si el combate fuera otra sobrecarga que la estructura ya venía temiendo.'
+        },
+        artificial: {
+          scale: 'La profundidad parece obediente hasta que se revela falsa. El espacio se deja mirar como un decorado perfecto, pero guarda proporciones que cambian apenas el cuerpo empieza a confiar en ellas.',
+          env: 'Todo huele a materia recién obedecida, a superficies sin desgaste real y a una limpieza tan precisa que termina volviéndose antinatural.',
+          vis: 'Se ve demasiado bien, y justo por eso inquieta. El ojo no encuentra ruido donde debería haberlo y esa pureza vuelve sospechosa cada línea del entorno.',
+          danger: 'Aquí el peligro nace cuando el paisaje decide dejar de fingir estabilidad: un borde dócil se vuelve traición, una forma simétrica se quiebra y la armonía revela su filo.',
+          tactic: 'Gana quien advierta primero qué parte del escenario es forma y qué parte es voluntad, sin regalar el cuerpo a una geometría que espera confianza para cerrarse.',
+          entry: 'El escenario aparece con una perfección ofensiva, como si alguien hubiera pulido la realidad hasta borrarle la suciedad necesaria para parecer humana.',
+          para: 'La belleza de este lugar no consuela; inquieta. Todo está demasiado bien dispuesto, demasiado limpio, demasiado exacto, y por eso mismo cada metro parece preparado para deformarse en el peor momento.'
+        },
+        infernal: {
+          scale: 'Las grietas, las cornisas y las llanuras negras parecen extenderse como una herida geológica que nunca cerró y que todavía sigue abriéndose hacia abajo.',
+          env: 'El aire quema por dentro. Azufre, ceniza y calor antiguo convierten cada respiración en una pequeña prueba de resistencia y de rabia.',
+          vis: 'Las llamas y el humo no ciegan del todo; peor aún, dejan ver lo justo para que cada forma del paisaje parezca a punto de lanzarse encima.',
+          danger: 'Aquí la tierra escupe fuego, las piedras se parten y la temperatura castiga la vacilación con la misma crueldad que cualquier enemigo visible.',
+          tactic: 'El infierno favorece a quien soporte su presión sin regalar el ritmo, usando el caos térmico y la oscuridad como si fueran parte del propio temperamento.',
+          entry: 'Primero llega el calor, como una mano cerrada contra el pecho. Después aparece el suelo, negro, resquebrajado y demasiado dispuesto a abrirse bajo cualquier exceso.',
+          para: 'Todo en este escenario desea prolongar el dolor. La roca, el fuego y el humo no acompañan la violencia: la celebran.'
+        },
+        celestial: {
+          scale: 'La inmensidad se eleva con una pureza tan vasta que empequeñece a los combatientes antes de que crucen el primer metro de suelo consagrado.',
+          env: 'El aire parece limpio hasta volverse insoportable, cargado de luz, mármol frío y una gravedad espiritual que exige compostura incluso mientras amenaza con quebrarla.',
+          vis: 'Se ve demasiado lejos y demasiado nítido; no hay sombras cómodas en las que esconder la duda, solo claridad suficiente para que el error resplandezca.',
+          danger: 'Matan la altura, la exposición total y esa extraña sensación de que el propio terreno juzga la violencia que hospeda en lugar de limitarse a soportarla.',
+          tactic: 'Aquí resiste mejor quien no se desordena por la solemnidad del lugar y consigue ensuciar esa pureza sin quedar aplastado por ella.',
+          entry: 'La luz llega primero, no como caricia sino como peso. Después aparecen columnas, piedra perfecta y una quietud tan inmensa que vuelve obsceno cualquier movimiento brusco.',
+          para: 'Lo divino aquí no consuela. Presiona. La belleza del plano eleva la escena hasta volver cada gesto más pequeño, más desnudo y más culpable.'
+        },
+        cosmic: {
+          scale: 'La distancia no se cuenta en pasos sino en abismos de luz, y esa inmensidad basta para hacer sentir al cuerpo como un accidente insignificante dentro de algo demasiado grande.',
+          env: 'No hay aire ni refugio psicológico, solo vacío, radiación muda y la frialdad limpia de un espacio que no reconoce la palabra misericordia.',
+          vis: 'Todo parece visible y, sin embargo, nada es cercano. La mirada viaja demasiado lejos, se pierde entre astros y vuelve con la sensación de no haber encontrado un borde verdadero.',
+          danger: 'Aquí matan la desorientación, la presión del vacío y la simple idea de caer sin tocar nunca nada sólido mientras el universo sigue indiferente alrededor.',
+          tactic: 'Solo domina este plano quien no se rompe ante su escala y es capaz de pelear sin necesitar tierra, horizonte ni promesa alguna de abrigo.',
+          entry: 'El mundo no se abre tanto como se aparta. De pronto no hay techo, no hay suelo y el duelo queda suspendido bajo una arquitectura de estrellas muertas y distancias hostiles.',
+          para: 'Este escenario no acompaña al combate humano; lo ridiculiza con su tamaño. La inmensidad pesa tanto como cualquier golpe, porque aquí el vacío también participa.'
+        },
+        sea: {
+          scale: 'La masa de agua se abre en profundidad y deriva, haciendo que el espacio parezca crecer hacia abajo y hacia los costados al mismo tiempo, sin conceder un centro estable.',
+          env: 'Sal, presión, humedad helada y un rumor constante de corrientes convierten cada respiración o cada braceo en una conversación forzada con algo mucho más grande.',
+          vis: 'La claridad dura poco. Luego el agua la tritura en partículas, sombras y reflejos, hasta volver cualquier silueta un presagio más que una certeza.',
+          danger: 'Aquí castigan la presión, las corrientes, la falta de apoyo y la sensación de que el mar entero puede decidir moverse contra ti sin previo aviso.',
+          tactic: 'Sobrevive quien acepte que aquí no existe arriba seguro ni abajo tranquilo, usando el volumen del océano antes de ser tragado por él.',
+          entry: 'El agua aparece como una presencia total, aplastando sonido y dirección hasta dejar a los combatientes dentro de un mundo que no comparte ninguna costumbre de la tierra firme.',
+          para: 'El océano no ofrece escenario: ofrece dominio. Todo se hunde, se desplaza y se vuelve incierto dentro de una extensión que parece querer cerrar la boca sobre el combate.'
+        },
+        horror: {
+          scale: 'La escala se pervierte. Un corredor parece alargarse con el miedo, un cuarto cerrado respira demasiado hondo y la arquitectura adquiere la elasticidad de una pesadilla despierta.',
+          env: 'La humedad cae con olor a moho, hierro y abandono. Incluso el silencio parece usado, como si otra presencia hubiera estado respirándolo antes.',
+          vis: 'La oscuridad no tapa por completo: sugiere. Deja ver lo justo para que la imaginación termine el trabajo con más crueldad que cualquier prueba directa.',
+          danger: 'Aquí matan lo visible y lo que se sospecha. La mente empieza a rendirse mucho antes de que el cuerpo reciba el primer impacto definitivo.',
+          tactic: 'La única salida es conservar una forma de lucidez dentro del miedo, porque este escenario ataca la percepción con la misma hambre que la carne.',
+          entry: 'No hay transición amable. El lugar ya estaba esperando, húmedo, oscuro y demasiado consciente de sí mismo como para parecer simple decoración del espanto.',
+          para: 'Todo en este universo conspira para que la mente dude de lo que oye y de lo que ve. Esa duda, sostenida el tiempo suficiente, termina volviéndose una forma muy eficaz de herida.'
+        },
+        arcane: {
+          scale: 'La amplitud no depende solo del espacio, sino del peso de símbolos, altares y fuerzas invisibles que vuelven cada tramo más grande de lo que la piedra sola justificaría.',
+          env: 'El aire arde de energía ritual, incienso viejo y una electricidad sobrenatural que eriza la piel como si cada poro estuviera escuchando un conjuro a medio pronunciar.',
+          vis: 'La luz cambia de tono con demasiada facilidad; brilla donde no debería y oscurece justo cuando algo importante intenta asomar entre runas, humo o resplandor.',
+          danger: 'Matan la magia residual, los portales mal cerrados y la forma en que el entorno parece dispuesto a responder al exceso con una violencia que no necesita manos.',
+          tactic: 'Aquí vence quien entienda que el suelo, el aire y los símbolos también participan, y que ignorarlos es regalarle al escenario una forma extra de castigo.',
+          entry: 'La realidad se abre con un temblor ritual. Luego llegan la piedra cargada, las luces imposibles y la certeza de que el lugar obedece primero a una liturgia y solo después a la física.',
+          para: 'La magia de este escenario no adorna el combate; lo vigila. Cada paso parece rozar algo antiguo, despierto y apenas tolerante con la presencia humana.'
+        },
+        wasteland: {
+          scale: 'Las ruinas se dispersan a lo largo de una extensión exhausta donde la distancia pesa tanto como la devastación, y cada resto de civilización parece hundido en siglos de derrota.',
+          env: 'Polvo caliente, metal muerto y ceniza suspendida cargan el aire con una suciedad que no termina de caer nunca, como si el mundo siguiera ardiendo aunque ya nadie lo mire.',
+          vis: 'La vista se abre y se enturbia a la vez, rota por humo, estructuras colapsadas y esa luz enferma que vuelve más triste todo lo que alcanza.',
+          danger: 'Aquí matan los escombros, la radiación, los desprendimientos y la brutal intemperie de un planeta que ya no está interesado en albergar nada vivo.',
+          tactic: 'Solo resiste quien sepa convertir la ruina en cobertura sin confiar demasiado en ella, porque hasta los restos del mundo parecen listos para ceder bajo presión.',
+          entry: 'La entrada no trae sorpresa sino resaca de catástrofe. Polvo, silencio roto y estructuras abiertas como costillas dan la bienvenida de un mundo que ya perdió demasiado para fingir esperanza.',
+          para: 'No queda gloria aquí, solo persistencia. La devastación se ha vuelto paisaje, y ese paisaje convierte cada movimiento en una negociación con el cansancio del fin del mundo.'
+        },
+        default: {
+          scale: 'La extensión del lugar nunca termina de entregarse del todo; cada paso sugiere que hay más mundo del que la vista alcanza a domesticar en un primer golpe de ojo.',
+          env: 'El aire llega cargado de una identidad difícil de nombrar, mezcla de materia, historia y una presión invisible que anuncia que este entorno no será un simple testigo.',
+          vis: 'La percepción cambia según dónde se detenga la mirada. Hay zonas que se revelan de inmediato y otras que prefieren mantenerse apenas a medio segundo de la comprensión.',
+          danger: 'El mayor riesgo es creer que el escenario se limita a existir. Aquí el suelo, la distancia y la forma misma del lugar parecen esperar una oportunidad para intervenir.',
+          tactic: 'Gana quien entienda antes que el rival qué quiere imponer este mundo sobre el combate y encuentre la manera de no pelear exactamente como el entorno le exige.',
+          entry: 'El acceso al escenario no se parece a una puerta sino a una concesión momentánea del propio universo, como si el lugar aceptara recibir la pelea bajo sus términos y no bajo los de nadie más.',
+          para: 'Este terreno no se deja reducir a una etiqueta limpia. Tiene demasiada presencia, demasiada gravedad propia y una hostilidad demasiado íntima para convertirse en simple fondo del duelo.'
+        }
+      };
+      return lines[key] || lines.default;
+    }
+
+    function getPortalOpening(sc, terrain, arenaName) {
+      var key = getTerrainNarrativeKey(sc, terrain, arenaName);
+      var seed = [sc && sc.title || '', arenaName || '', key, 'opening'].join('|');
+      var openings = {
+        liminal: ['El techo empieza a zumbar antes de que exista pasillo alguno.', 'La entrada no rompe el espacio: lo amarillea y lo deja oler a encierro viejo.'],
+        studio: ['Primero cruje la madera. Después llega el olor a tinta y herrumbre.', 'No aparece una puerta limpia, sino un costillar de vigas, poleas y tinta reseca.'],
+        frontier: ['El viento seco llega antes que la visión del horizonte.', 'La luz abre el mundo con brutalidad, como si el sol quisiera presidir la ejecución.'],
+        shinobi: ['Las alturas se revelan primero: tejados, ramas y muros listos para cortar la calma.', 'El silencio dura apenas un instante antes de volverse sospechoso.'],
+        stonehold: ['La piedra recibe el duelo con una quietud tan vieja que parece memoria.', 'Antes de ver el patio, ya pesa la altura de los muros sobre el pecho.'],
+        wild: ['La humedad muerde primero; el paisaje se muestra después.', 'Algo enorme parece haber respirado en el follaje justo antes de que el escenario termine de abrirse.'],
+        urban: ['La ciudad aparece encendida por heridas de vidrio, humo y concreto.', 'El eco urbano llega antes que las calles, rebotando como advertencia entre fachadas rotas.'],
+        laboratory: ['La luz blanca entra como un cuchillo frío antes de que el recinto complete su forma.', 'No surge caos al principio, sino una precisión clínica que vuelve todo más amenazante.'],
+        electric: ['El resplandor eléctrico toma forma antes que el suelo.', 'Primero se oye el zumbido; luego la arquitectura luminosa decide mostrarse entera.'],
+        artificial: ['La perfección del lugar resulta sospechosa desde el primer segundo.', 'El escenario se revela demasiado limpio para inspirar confianza.'],
+        infernal: ['El calor golpea antes de que el ojo entienda dónde ha sido arrojado el duelo.', 'Una exhalación de azufre abre la escena como si el propio subsuelo hubiera bostezado.'],
+        celestial: ['La claridad desciende primero, pesada y severa.', 'Antes de que aparezca el suelo, la luz ya ha dejado claro que aquí todo error será visible.'],
+        cosmic: ['El vacío aparta sus cortinas de oscuridad y deja al combate sin refugio.', 'No se abre un umbral: desaparece la idea misma de estar bajo techo.'],
+        sea: ['El agua y la presión toman el cuerpo antes de permitirle orientarse.', 'La masa líquida envuelve la escena de golpe, como si el mundo hubiera decidido pelear desde todos los costados.'],
+        horror: ['La oscuridad ya estaba allí; el acceso solo la vuelve consciente.', 'La entrada deja pasar al duelo como quien alimenta una casa demasiado hambrienta.'],
+        arcane: ['El aire se carga de símbolos, ozono y una antigüedad difícil de pronunciar.', 'La realidad se abre con la solemnidad peligrosa de un rito que nunca debió reanudarse.'],
+        wasteland: ['El polvo entra primero, como si el fin del mundo hubiera aprendido a llegar antes que la imagen.', 'La ruina no se presenta: simplemente ya estaba esperando en el otro lado.'],
+        default: ['El acceso no concede comodidad; apenas permite el paso a un mundo que ya viene tenso.', 'La apertura del escenario se siente menos como una puerta y más como una advertencia.']
+      };
+      return pickVariant(seed, openings[key] || openings.default);
+    }
+
+    function getPortalArrival(sc, terrain, arenaName) {
+      var key = getTerrainNarrativeKey(sc, terrain, arenaName);
+      var seed = [sc && sc.title || '', arenaName || '', key, 'arrival'].join('|');
+      if (arenaName) {
+        return pickVariant(seed, [
+          'El tránsito los deja en «' + arenaName + '», un punto exacto de ' + sc.title + ' donde el paisaje ya parece haber elegido bando.',
+          'No los entrega al azar: los planta en «' + arenaName + '», un rincón de ' + sc.title + ' que conserva suficiente carácter para matar antes del primer intercambio.',
+          'La caída termina en «' + arenaName + '», una herida concreta dentro de ' + sc.title + ' donde la geografía impone su humor desde el primer aliento.'
+        ]);
+      }
+      return pickVariant(seed, [
+        'Los combatientes no tocan un suelo neutral, sino el corazón mismo de ' + sc.title + ', donde el entorno parece haber sido convocado para participar del duelo.',
+        'El duelo despierta dentro del universo de ' + sc.title + ', no como visitante elegante, sino como intruso sobre un terreno que ya respira con hostilidad propia.',
+        'La transición desemboca en ' + sc.title + ' sin pedir permiso, y el lugar responde de inmediato dejando claro que aquí también pelea el mundo.'
+      ]);
+    }
+
+    function buildPortalNarrative(sc, terrain, arenaName) {
+      return [
+        getPortalOpening(sc, terrain, arenaName),
+        getPortalArrival(sc, terrain, arenaName),
+        terrain.entry
+      ].join('\n');
+    }
+
+    function getArenaTerrainProfile(arenaName, title) {
+      if (!arenaName) return '';
+      if (/backrooms/i.test(arenaName)) {
+        return {
+          type: 'Laberinto liminal / complejo interior',
+          scale: 'Red interior de extensión incierta; corredores repetidos, techos bajos y referencias falsas.',
+          env: 'Moho, fluorescencia agotada, eco constante y humedad rancia',
+          vis: 'Media-baja — esquinas ciegas, profundidad engañosa y geometría repetida',
+          danger: 'Desorientación, rutas sin salida, entidades hostiles y pérdida de referencias',
+          tactic: 'Cerrar intersecciones y conservar puntos de referencia vale más que correr sin plan',
+          para: 'La batalla cae en un laberinto liminal de pasillos repetidos, orientación rota y amenazas que castigan cualquier lectura lenta del entorno.'
+        };
+      }
+      if (/gakure/i.test(arenaName)) {
+        return {
+          type: 'Aldea shinobi fortificada',
+          scale: 'Aldea de varios bloques con perímetro amurallado, azoteas enlazadas y bosque perimetral.',
+          env: 'Tejados, callejones, muros y accesos verticales encadenados',
+          vis: 'Media — alturas dominantes y muchas líneas de aproximación',
+          danger: 'Emboscadas verticales, proyectiles, sellos y ángulos muertos',
+          tactic: 'Controlar tejados y cruces estrechos decide el ritmo del intercambio',
+          para: 'La batalla cae en una aldea shinobi fortificada donde los tejados, murallas y accesos estrechos favorecen la movilidad vertical y las emboscadas.'
+        };
+      }
+      if (/\b(?:Island|Islands)\b/i.test(arenaName)) {
+        return {
+          type: 'Isla salvaje / selva cerrada',
+          scale: 'Isla de gran radio, con selva, costa rocosa, claros escasos y desniveles de cientos de metros.',
+          env: 'Humedad pesada, barro, vegetación cerrada y acantilados',
+          vis: 'Baja-media — follaje denso con claros puntuales y altura variable',
+          danger: 'Caídas, depredadores, terreno resbaladizo y cobertura total del rival',
+          tactic: 'Leer la topografía y forzar al rival a salir de la cobertura natural da la ventaja',
+          para: 'La batalla cae en una región insular agreste de vegetación densa, desniveles abruptos y cobertura natural impredecible.'
+        };
+      }
+      if (/\b(?:Joey Drew Studios|Studio|Studios|Workshop)\b/i.test(arenaName)) {
+        return {
+          type: 'Estudio clausurado / taller industrial',
+          scale: 'Complejo interior de varias alas, con pasillos de servicio, estudios de animación y cuartos de máquinas.',
+          env: 'Tinta derramada, madera vieja, tuberías, salas cerradas y maquinaria de producción',
+          vis: 'Media-baja — luz rota, esquinas ciegas y cobertura cerrada en casi cada tramo',
+          danger: 'Charcos de tinta, maquinaria activa, pasillos estrechos y emboscadas a corta distancia',
+          tactic: 'Tomar intersecciones, puertas y cuartos de máquinas rompe el movimiento del rival',
+          para: 'La batalla cae en un estudio clausurado de tinta, pasillos cerrados y maquinaria industrial donde cada sala puede convertirse en una trampa.'
+        };
+      }
+      if (/\b(?:Borderlands?|Frontier|Prairie|Plains|Mesa|Canyon|Badlands)\b/i.test(arenaName)) {
+        return {
+          type: 'Frontera árida / territorio western',
+          scale: 'Región abierta de kilómetros, con llanuras secas, barrancos, mesetas y coberturas muy espaciadas.',
+          env: 'Polvo seco, sol duro, roca desnuda y trayectorias largas sin sombra estable',
+          vis: 'Alta-media — el campo se abre mucho, pero el relieve puede cortar líneas de tiro de golpe',
+          danger: 'Exposición prolongada, caídas en barrancos, deshidratación y fuego cruzado a campo abierto',
+          tactic: 'Quien mande la distancia y el relieve obliga al rival a cruzar terreno descubierto',
+          para: 'La batalla cae en una frontera árida de llanuras abiertas y barrancos donde la distancia, la resistencia y la cobertura escasa dictan todo el duelo.'
+        };
+      }
+      if (/\b(?:Forest|Jungle|Swamp|Desert|Mountain|Valley|Cave)\b/i.test(arenaName)) {
+        return {
+          scale: 'Bioma amplio y accidentado, con relieve dominante y rutas poco directas.',
+          env: 'Cobertura natural pesada, suelo irregular y tránsito limitado',
+          vis: 'Baja-media — el relieve y la vegetación rompen las líneas de visión',
+          danger: 'Terreno traicionero, caídas, fatiga y cobertura impredecible del rival',
+          tactic: 'Forzar al rival a moverse donde el relieve lo exponga vale más que perseguirlo a ciegas',
+          para: 'La batalla cae en un entorno natural hostil donde la cobertura, el relieve y la resistencia al terreno pesan tanto como la potencia.'
+        };
+      }
+      if (/\b(?:City|Town|Court|District|Village)\b/i.test(arenaName)) {
+        return {
+          scale: 'Zona urbana de varias manzanas o sectores conectados por calles, interiores y alturas.',
+          env: 'Estructuras, intersecciones, pasajes laterales y coberturas duras',
+          vis: 'Media — líneas largas en avenidas y ciegas severas en interiores y esquinas',
+          danger: 'Emboscadas, derrumbes parciales, puntos elevados y rutas múltiples de flanqueo',
+          tactic: 'Controlar cruces y alturas obliga al rival a pelear en desventaja espacial',
+          para: 'La batalla cae en un entorno habitado con estructuras, calles y puntos ciegos que premian la lectura táctica del mapa.'
+        };
+      }
+      if (/\b(?:Realm|World|Domain)\b/i.test(arenaName)) {
+        return {
+          scale: 'Dominio amplio y mutable, con límites poco fiables y reglas de espacio propias.',
+          env: 'Física alterada, transiciones bruscas y superficies de estabilidad dudosa',
+          vis: 'Variable — el propio dominio puede comprimir o expandir el campo de visión',
+          danger: 'Cambio de reglas, deformación del terreno y control desigual del espacio',
+          tactic: 'Sobrevive quien detecte antes qué reglas locales sí se mantienen estables',
+          para: 'La batalla cae en un dominio de reglas propias donde la adaptación inmediata decide qué combatiente impone el ritmo.'
+        };
+      }
+      if (/\b(?:Academy|Institute|Laboratory|Facility|Base|Station|Factory)\b/i.test(arenaName)) {
+        return {
+          scale: 'Complejo interior de múltiples alas, corredores y salas técnicas conectadas.',
+          env: 'Pasillos estrechos, cámaras cerradas, maquinaria y puntos de control',
+          vis: 'Media — buena en salas, muy rota en giros, puertas y corredores',
+          danger: 'Explosiones, cierres automáticos, maquinaria activa y cuellos de botella',
+          tactic: 'Apropiarse de puertas, esquinas y nodos de tránsito corta el mapa a tu favor',
+          para: 'La batalla cae en una instalación cerrada llena de corredores, puntos de estrangulamiento y riesgos estructurales.'
+        };
+      }
+      if (/\b(?:Castle|Fortress|Temple|Tower|Palace)\b/i.test(arenaName)) {
+        return {
+          scale: 'Estructura escalonada de varias plantas o patios, con alturas duras y accesos limitados.',
+          env: 'Muros, corredores, escaleras, patios y chokepoints defensivos',
+          vis: 'Media — abierta en patios, muy cortada en interiores y ascensos',
+          danger: 'Caídas, embudos de acceso, fuego cruzado y control de altura',
+          tactic: 'Quien tome antes las alturas obliga al rival a pelear cuesta arriba',
+          para: 'La batalla cae en una estructura defensiva donde las alturas, los pasillos y la piedra obligan a pelear con el peso del lugar respirando en la nuca.'
+        };
+      }
+      if (/\bLand\s+Of\b/i.test(arenaName)) {
+        return {
+          scale: 'Región extensa y abierta, con transición entre biomas o subzonas de gran radio.',
+          env: 'Terreno abierto, cobertura espaciada y líneas de aproximación largas',
+          vis: 'Alta-media — el campo se abre, pero el relieve puede romper la lectura a distancia',
+          danger: 'Exposición prolongada, cambios de relieve y pérdida de cobertura',
+          tactic: 'Mandar la distancia del combate importa más que ganar un solo intercambio',
+          para: 'La batalla cae en una región extensa y cambiante donde el control del terreno abierto castiga cualquier error de posicionamiento.'
+        };
+      }
+      return {
+        scale: 'Localización de escala media, con límites físicos claros pero lecturas tácticas variables.',
+        env: 'Relieve concreto del verso, con rutas principales y coberturas situacionales',
+        vis: 'Variable según la zona y la cantidad de cobertura estructural o natural',
+        danger: 'El terreno favorece a quien lo lea mejor antes del primer gran choque',
+        tactic: 'La posición, la cobertura y la lectura del mapa definen quién marca el ritmo',
+        para: 'La batalla cae en una localización concreta dentro del universo de ' + title + ', donde el entorno puede decidir el ritmo del combate.'
+      };
+    }
+
+    function getScenarioArenaBlurb(sc) {
+      var arenaName = getScenarioArenaName(sc);
+      var profile = arenaName ? getArenaTerrainProfile(arenaName, sc.title || 'este universo') : null;
+      return profile ? profile.para : '';
+    }
+
+    function getScenarioCardBlurb(sc, terrain) {
+      return (terrain && terrain.para) || getScenarioWorldContext(sc, terrain);
+    }
+
+    function enrichTerrainNarrative(sc, terrain) {
+      if (!terrain) return terrain;
+      var enriched = Object.assign({}, terrain);
+      var title = (sc && sc.title) || 'este universo';
+      var arena = getScenarioArenaName(sc) || '';
+      var seedText = [title, arena, enriched.type || ''].join('|');
+      var hash = 0;
+      for (var i = 0; i < seedText.length; i++) hash = ((hash << 5) - hash + seedText.charCodeAt(i)) | 0;
+
+      var extra = ' El terreno condiciona líneas de avance, ritmo respiratorio, ventanas de castigo y calidad de lectura táctica en cada intercambio.';
+      if (enriched.para && enriched.para.indexOf('líneas de avance') === -1) enriched.para += extra;
+
+      var globalSafety = [
+        ' Por cualidades activas de resistencia y adaptación, los peleadores mantienen viabilidad total en este entorno: la hostilidad ambiental se interpreta como presión táctica y narrativa, no como daño automático.',
+        ' Las condiciones del escenario se consideran estabilizadas para sostener vida de ambos combatientes; el entorno influye en posicionamiento, lectura y desgaste estratégico, pero no aplica daño ambiental directo por sí solo.',
+        ' Se reconoce resistencia otorgada por habilidades especiales: el mapa puede imponer tensión, visibilidad irregular y control territorial, pero nunca eliminar a un peleador por daño ambiental pasivo.'
+      ];
+      var safetyLine = globalSafety[Math.abs(hash) % globalSafety.length];
+      if (enriched.para && enriched.para.indexOf('daño ambiental') === -1) enriched.para += safetyLine;
+      if (enriched.danger && enriched.danger.indexOf('presión táctica') === -1) {
+        enriched.danger += ' (la amenaza del entorno funciona como presión táctica, no como daño ambiental automático)';
+      }
+
+      var infernalCue = [enriched.type || '', enriched.entry || '', enriched.para || '', title].join(' ').toLowerCase();
+      if (/infernal|hell|abyss|demon|devil|underworld|fuego/.test(infernalCue)) {
+        var infernalVariants = [
+          ' En este plano infernal, el Autor Omnipotente suprime la letalidad térmica directa: el fuego conserva su presencia estética y táctica, pero no consume vida por contacto ambiental pasivo.',
+          ' Aquí opera una cláusula explícita de resistencia otorgada: el fuego infernal no ejecuta daño automático sobre los personajes, y queda como recurso de presión narrativa y control espacial.',
+          ' El verso infernal se mantiene como alusión escénica: por intervención del Autor Omnipotente, las llamas no reducen vida de forma pasiva y solo enmarcan el intercambio táctico.'
+        ];
+        var safety = ' ' + infernalVariants[Math.abs(hash + 17) % infernalVariants.length];
+        if (enriched.para && enriched.para.indexOf('Autor Omnipotente') === -1) enriched.para += safety;
+        if (enriched.danger && enriched.danger.indexOf('no produce daño ambiental directo') === -1) {
+          enriched.danger += ', pero no produce daño ambiental directo sobre los combatientes por intervención del Autor Omnipotente';
+        }
+      }
+      return enriched;
+    }
+
+    function buildTerrain(sc) {
+      var text = [sc.title, sc.description || '', getScenarioSourceText(sc), getScenarioArenaName(sc), getScenarioArenaBlurb(sc)].join(' ').toLowerCase();
+      var best = 0, archetype = TERRAIN_DEFAULT;
+      TERRAINS.forEach(function(t) {
+        var score = 0;
+        t.keys.forEach(function(k) { if (text.indexOf(k) !== -1) score++; });
+        if (score > best) { best = score; archetype = t; }
+      });
+      var arenaName = getScenarioArenaName(sc);
+      var arenaProfile = arenaName ? getArenaTerrainProfile(arenaName, sc.title || 'este universo') : null;
+      var profile = Object.assign({}, archetype, arenaProfile || {});
+      var bellator = getBellatorTerrainLines(sc, profile, arenaName);
+      var terrain = Object.assign({}, profile, bellator);
+      terrain = enrichTerrainNarrative(sc, terrain);
+      if (!terrain.scale) terrain.scale = (arenaProfile && arenaProfile.scale) || getTerrainScale((arenaProfile && arenaProfile.type) || archetype.type);
+      terrain.portal = buildPortalNarrative(sc, terrain, arenaName);
+      return terrain;
+    }
+
+    /* ── Copiar ─────────────────────────────────────────────────── */
+    function copyScenario(scenario, params, terrain) {
+      var DIV  = '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500';
+      var HDR  = '\u25c6\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u25c6';
+      var p1n  = (params.p1 || 'Jugador 1').toUpperCase();
+      var p2n  = (params.p2 || 'Jugador 2').toUpperCase();
+      var div  = params.division === 'ciudad' ? 'Ciudad' : 'Universal';
+      var arenaName = getScenarioArenaName(scenario);
+      var worldDesc = appendScenarioConsistencyFrame(getScenarioWorldContext(scenario, terrain), scenario, terrain);
+      var lines = [
+        HDR,
+        '  B E L L A T O R  \u00b7  ROLBATTLE',
+        '  ESCENARIO DE BATALLA',
+        HDR,
+        '',
+        '  \u25b8 UNIVERSO',
+        '  ' + scenario.title.toUpperCase(),
+        ''
+      ];
+      if (arenaName) {
+        lines = lines.concat([
+          '  \u25b8 ZONA SORTEADA',
+          '  ' + arenaName.toUpperCase(),
+          ''
+        ]);
+      }
+      lines = lines.concat([
+        '',
+        '  \u25b8 ENTRADA AL ESCENARIO',
+        '',
+        '  ' + (terrain ? terrain.portal.replace(/\n/g, '\n  ') : ''),
+        '',
+        DIV,
+        '  \u25b8 TERRENO  \u00b7  ' + (terrain ? terrain.type.toUpperCase() : ''),
+        DIV,
+        '  MAGNITUD    \u00b7  ' + (terrain ? terrain.scale : ''),
+        '  AMBIENTE    \u00b7  ' + (terrain ? terrain.env : ''),
+        '  VISIBILIDAD \u00b7  ' + (terrain ? terrain.vis : ''),
+        '  PELIGROS    \u00b7  ' + (terrain ? terrain.danger : ''),
+        '  T\u00c1CTICA     \u00b7  ' + (terrain ? terrain.tactic : ''),
+        DIV
+      ]);
+      if (worldDesc) {
+        lines.push('');
+        lines.push('  \u25b8 MARCO DEL UNIVERSO');
+        lines.push('  ' + worldDesc);
+      }
+      lines = lines.concat([
+        '',
+        '  \u25b8 COMBATIENTES',
+        '  ' + p1n + '  vs  ' + p2n,
+        '',
+        '  RONDA ' + params.round + '  \u00b7  DIVISI\u00d3N ' + div.toUpperCase(),
+        '',
+        HDR,
+        '  Fuente: VS Battle Wiki (CC-BY-SA 4.0)',
+        '  Bellator RolBattle \u2014 generado determin\u00edsticamente',
+        HDR
+      ]);
+      var text = lines.join('\n');
+      var btn = document.getElementById('esc-copy-btn');
+      var orig = btn.textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+        .catch(function() {
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+          document.body.removeChild(ta);
+        })
+        .finally(function() {
+          btn.textContent = '\u2713 Copiado!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        });
+    }
+
+    /* ── Canvas card ────────────────────────────────────────────── */
+    function wrapText(ctx, text, x, y, maxW, lh) {
+      var words = String(text).split(' '), line = '';
+      for (var i = 0; i < words.length; i++) {
+        var test = line + words[i] + ' ';
+        if (ctx.measureText(test).width > maxW && i > 0) {
+          ctx.fillText(line.trim(), x, y); line = words[i] + ' '; y += lh;
+          if (y > 530) { ctx.fillText('...', x, y); return; }
+        } else { line = test; }
+      }
+      if (line.trim()) ctx.fillText(line.trim(), x, y);
+    }
+
+    function getCardBackgroundURL(imageUrl) {
+      var raw = String(imageUrl || '').trim();
+      if (!raw) return '';
+      if (!/^https?:\/\//i.test(raw)) return raw;
+      return '/api/image-proxy?url=' + encodeURIComponent(raw);
+    }
+
+    function downloadCard(scenario, params, idx) {
+      var W = 1200, H = 630;
+      var canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0,0,W,H);
+
+      function drawInfoLine(label, value, x, y, maxW) {
+        ctx.font = 'bold 13px Arial Black,sans-serif';
+        ctx.fillStyle = '#D4AF37';
+        ctx.fillText(label, x, y);
+        ctx.font = '15px Arial,sans-serif';
+        ctx.fillStyle = '#fff';
+        wrapText(ctx, value, x, y + 18, maxW, 18);
+      }
+
+      function saveCardBlob(blob) {
+        var fileName = 'escenario-' + scenario.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40) + '.png';
+        if (blob) {
+          try {
+            var file = new File([blob], fileName, { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({ files: [file], title: document.title }).catch(function() {});
+              return;
+            }
+          } catch (e) {}
+
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+          return;
+        }
+
+        var dataUrl = canvas.toDataURL('image/png');
+        var link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = fileName;
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        if (/android|iphone|ipad|ipod/i.test(navigator.userAgent || '')) {
+          window.open(dataUrl, '_blank', 'noopener');
+        }
+      }
+
+      function finish() {
+        var grad = ctx.createLinearGradient(0,0,0,H);
+        grad.addColorStop(0,'rgba(13,17,23,0.35)'); grad.addColorStop(0.3,'rgba(13,17,23,0.12)');
+        grad.addColorStop(0.6,'rgba(13,17,23,0.72)'); grad.addColorStop(1,'rgba(13,17,23,0.97)');
+        ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+        ctx.globalAlpha = 1;
+        var isU = params.division !== 'ciudad';
+        var terrain = buildTerrain(scenario);
+        var panelX = 806, panelY = 206, panelW = 346, panelH = 250;
+        var contentMaxW = panelX - 96;
+        ctx.fillStyle = '#D4AF37'; ctx.fillRect(48,158,200,2);
+        ctx.font = '800 58px Arial Black,sans-serif'; ctx.fillStyle = '#D4AF37'; ctx.fillText('BELLATOR', 48, 148);
+        ctx.font = 'bold 54px Arial Black,Impact,sans-serif'; ctx.fillStyle = '#fff';
+        ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 16;
+        wrapText(ctx, scenario.title.toUpperCase(), 48, 240, contentMaxW, 60);
+        ctx.shadowBlur = 0;
+        var arenaName = getScenarioArenaName(scenario);
+        var cardDesc = getScenarioCardBlurb(scenario, terrain);
+        var cardDescY = 336;
+        if (arenaName) {
+          ctx.font = 'bold 22px Arial Black,sans-serif'; ctx.fillStyle = '#D4AF37';
+          wrapText(ctx, 'ZONA SORTEADA · ' + arenaName.toUpperCase(), 48, 308, contentMaxW, 28);
+          cardDescY = 352;
+        }
+        if (cardDesc) {
+          cardDesc = cardDesc.slice(0, 400);
+          ctx.font = '17px Arial,sans-serif'; ctx.fillStyle = 'rgba(238,244,255,0.8)';
+          wrapText(ctx, cardDesc, 48, cardDescY, contentMaxW, 24);
+        }
+
+        ctx.fillStyle = 'rgba(4,9,18,0.68)'; ctx.fillRect(panelX, panelY, panelW, panelH);
+        ctx.strokeStyle = 'rgba(212,175,55,0.30)'; ctx.lineWidth = 1.5; ctx.strokeRect(panelX, panelY, panelW, panelH);
+        ctx.font = 'bold 14px Arial Black,sans-serif'; ctx.fillStyle = '#D4AF37';
+        ctx.fillText('LECTURA DEL TERRENO', panelX + 18, panelY + 26);
+        ctx.font = 'bold 21px Arial Black,sans-serif'; ctx.fillStyle = '#fff';
+        wrapText(ctx, terrain.type.toUpperCase(), panelX + 18, panelY + 56, panelW - 36, 24);
+        drawInfoLine('MAGNITUD', terrain.scale, panelX + 18, panelY + 100, panelW - 36);
+        drawInfoLine('AMBIENTE', terrain.env, panelX + 18, panelY + 154, panelW - 36);
+        drawInfoLine('PELIGROS', terrain.danger, panelX + 18, panelY + 208, panelW - 36);
+
+        ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(0, H-80, W, 80);
+        var p1n = (params.p1||'Jugador 1').toUpperCase();
+        var p2n = (params.p2||'Jugador 2').toUpperCase();
+        ctx.font = 'bold 22px Arial Black,sans-serif'; ctx.textAlign = 'left';
+        ctx.fillStyle = '#fff'; ctx.fillText(p1n, 48, H-30);
+        ctx.textAlign = 'center'; ctx.fillStyle = '#D4AF37'; ctx.fillText('VS', W/2, H-30);
+        ctx.textAlign = 'right'; ctx.fillStyle = '#fff'; ctx.fillText(p2n, W-48, H-30);
+        ctx.textAlign = 'left'; ctx.font = '12px Arial'; ctx.fillStyle = 'rgba(238,244,255,0.4)';
+        ctx.fillText('R'+params.round+' \u00b7 '+(isU?'UNIVERSAL':'CIUDAD')+' \u00b7 #'+idx+' \u00b7 vsbattles.fandom.com', 48, H-10);
+        if (canvas.toBlob) {
+          canvas.toBlob(function(blob) { saveCardBlob(blob); }, 'image/png');
+        } else {
+          saveCardBlob(null);
+        }
+      }
+
+      if (scenario.image) {
+        var img2 = new Image(); img2.crossOrigin = 'anonymous';
+        img2.onload = function() {
+          ctx.globalAlpha = 0.38;
+          var sc = Math.max(W/img2.naturalWidth, H/img2.naturalHeight);
+          ctx.drawImage(img2, (W-img2.naturalWidth*sc)/2, (H-img2.naturalHeight*sc)/2, img2.naturalWidth*sc, img2.naturalHeight*sc);
+          finish();
+        };
+        img2.onerror = finish;
+        img2.src = getCardBackgroundURL(scenario.image);
+      } else {
+        finish();
+      }
+    }
+
+    /* ── Render ─────────────────────────────────────────────────── */
+    function renderScenario(data, params) {
+      var sc = data.scenario, seed = data.seed, idx = data.index, pool = data.pool_size;
+      var isU = params.division !== 'ciudad';
+
+      var img = document.getElementById('esc-img');
+      if (sc.image) { img.src = sc.image; img.alt = sc.title; img.onload = function() { img.classList.add('is-loaded'); }; }
+      else { img.style.display = 'none'; }
+
+      document.getElementById('esc-title').textContent       = sc.title;
+      document.getElementById('esc-verse-name').textContent  = sc.source || sc.title;
+  document.getElementById('esc-description').textContent = getScenarioArenaName(sc) ? ('Zona sorteada: ' + getScenarioArenaName(sc) + '.') : (sc.description || '');
+
+      var badge = document.getElementById('esc-division-badge');
+      badge.className = 'esc-division-badge ' + (isU ? 'esc-division-badge--universal' : 'esc-division-badge--ciudad');
+      document.getElementById('esc-division-text').textContent = isU ? 'UNIVERSAL' : 'CIUDAD';
+
+      document.getElementById('esc-narration-text').textContent = buildNarration(sc.title, isU, idx);
+
+      var p1n = params.p1 || 'Jugador 1', p2n = params.p2 || 'Jugador 2';
+      document.getElementById('esc-p1').textContent = p1n;
+      document.getElementById('esc-p2').textContent = p2n;
+      setAvatar(document.getElementById('esc-av1'), params.av1, p1n);
+      setAvatar(document.getElementById('esc-av2'), params.av2, p2n);
+
+      document.getElementById('esc-seed-display').textContent  = seed.length > 52 ? seed.slice(0,52) + '\u2026' : seed;
+      document.getElementById('esc-index-display').textContent = '#' + idx;
+      document.getElementById('esc-pool-size').textContent     = 'de ' + pool + ' escenarios';
+      document.getElementById('esc-p1-proof').textContent      = p1n;
+      document.getElementById('esc-p2-proof').textContent      = p2n;
+      document.getElementById('esc-div-proof').textContent     = params.division.charAt(0).toUpperCase() + params.division.slice(1);
+      document.getElementById('esc-round-proof').textContent   = 'R' + params.round;
+      document.getElementById('esc-idx-proof').textContent     = idx;
+
+      document.getElementById('esc-event-round').textContent = 'RONDA ' + params.round;
+      document.getElementById('esc-event-name').textContent  = p1n + ' vs ' + p2n + ' \u00b7 ' + sc.title;
+      document.title = p1n + ' vs ' + p2n + ' \u2014 ' + sc.title + ' \u00b7 BELLATOR';
+
+      // Terrain
+      var terrain = buildTerrain(sc);
+      var arenaName = getScenarioArenaName(sc);
+      var worldDesc = appendScenarioConsistencyFrame(getScenarioWorldContext(sc, terrain), sc, terrain);
+      document.getElementById('esc-terrain-portal').textContent = terrain.portal;
+      document.getElementById('esc-terrain-type').textContent   = arenaName || terrain.type;
+      document.getElementById('esc-terrain-para').textContent   = terrain.para;
+      document.getElementById('esc-terrain-scale').textContent  = terrain.scale;
+      document.getElementById('esc-terrain-env').textContent    = terrain.env;
+      document.getElementById('esc-terrain-vis').textContent    = terrain.vis;
+      document.getElementById('esc-terrain-danger').textContent = terrain.danger;
+      document.getElementById('esc-terrain-tactic').textContent = terrain.tactic;
+      document.getElementById('esc-terrain-source-label').textContent = worldDesc ? 'Marco del universo' : 'Contexto del universo';
+      var srcDesc = worldDesc || 'Sin descripci\u00f3n adicional disponible para este universo.';
+      document.getElementById('esc-terrain-source').textContent = srcDesc;
+
+      document.getElementById('esc-copy-btn').onclick     = function() { copyScenario(sc, params, terrain); };
+      document.getElementById('esc-download-btn').onclick = function() {
+        var btn = this; btn.textContent = 'Generando\u2026'; btn.disabled = true;
+        try { downloadCard(sc, params, idx); } catch(e) {}
+        setTimeout(function() { btn.textContent = 'Descargar tarjeta'; btn.disabled = false; }, 2000);
+      };
+      document.getElementById('esc-share-btn').onclick = function() {
+        var url = window.location.href;
+        if (navigator.share) { navigator.share({title: document.title, url: url}).catch(function(){}); return; }
+        navigator.clipboard.writeText(url).then(function() {
+          var btn = document.getElementById('esc-share-btn'), orig = btn.textContent;
+          btn.textContent = '\u2713 Copiado!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function(){});
+      };
+    }
+
+    /* ── UI state ───────────────────────────────────────────────── */
+    function showContent() {
+      document.getElementById('esc-loading').style.display = 'none';
+      var content = document.getElementById('esc-content');
+      content.style.display = 'contents';
+      setTimeout(function() {
+        content.querySelectorAll('.esc-reveal').forEach(function(el, i) {
+          setTimeout(function() { el.classList.add('is-visible'); }, i * 130);
+        });
+      }, 60);
+    }
+
+    function showError(msg) {
+      var el = document.getElementById('esc-loading');
+      el.innerHTML = '<p style="font-family:\'Teko\',sans-serif;font-size:1.2rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,100,80,.8);text-align:center;padding:24px">' + escHtml(msg) + '</p>';
+      el.style.display = 'flex';
+    }
+
+    /* ── Cargar escenario ───────────────────────────────────────── */
+    function loadScenario(params) {
+      document.getElementById('esc-loading').style.display = 'flex';
+      document.getElementById('esc-content').style.display = 'none';
+      document.getElementById('esc-content').querySelectorAll('.esc-reveal').forEach(function(el) {
+        el.classList.remove('is-visible');
+      });
+
+      var btn = document.getElementById('esc-gen-btn');
+      btn.disabled = true; btn.textContent = 'Cargando\u2026';
+
+      var qs = new URLSearchParams({
+        p1: params.p1, p2: params.p2,
+        division: params.division, round: params.round, torneo: params.torneo
+      });
+
+      fetch('/api/escenario?' + qs.toString(), { cache: 'no-store' })
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data || !data.scenario) throw new Error('Sin datos');
+          renderScenario(data, params);
+          showContent();
+          setTimeout(function() {
+            document.getElementById('esc-content').scrollIntoView({behavior:'smooth', block:'start'});
+          }, 100);
+        })
+        .catch(function(err) {
+          showError('No se pudo cargar el escenario. Verifica los datos e intenta de nuevo.');
+          console.error('escenario error', err);
+        })
+        .finally(function() {
+          btn.disabled = false; btn.innerHTML = '&#9654;&nbsp; Generar escenario';
+        });
+    }
+
+    /* ── Init ───────────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', function() {
+      var params = getParams();
+
+      // Pre-fill form
+      document.getElementById('f-p1').value       = params.p1;
+      document.getElementById('f-p2').value       = params.p2;
+      document.getElementById('f-division').value = params.division;
+      document.getElementById('f-round').value    = params.round || '1';
+
+      // Form submit
+      document.getElementById('esc-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var p1 = document.getElementById('f-p1').value.trim();
+        var p2 = document.getElementById('f-p2').value.trim();
+        var div = document.getElementById('f-division').value;
+        var rnd = document.getElementById('f-round').value || '1';
+        var newP = { p1: p1, p2: p2, division: div, round: rnd, torneo: 'bellator', av1: '', av2: '' };
+        history.replaceState(null, '', '/escenario?' + new URLSearchParams({ p1:p1, p2:p2, division:div, round:rnd, torneo:'bellator' }).toString());
+        loadScenario(newP);
+      });
+
+      // Auto-load if URL has fighters
+      if (params.p1 || params.p2) {
+        loadScenario(params);
+      }
+    });
+
+  })();
+  </script>
+</body>
+</html>

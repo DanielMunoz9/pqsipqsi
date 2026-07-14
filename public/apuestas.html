@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apuestas Bellator - Álbum Oficial</title>
+  <link rel="stylesheet" href="/shared.css?v=15">
+  <style>
+    body { background-color: #070a10; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    .bet-container { max-width: 1200px; margin: 40px auto; padding: 0 24px; width: 100%; flex: 1; }
+    
+    /* Login State */
+    .bet-login { max-width: 420px; margin: 80px auto; padding: 40px; background: linear-gradient(180deg, rgba(16,21,31,0.9), rgba(11,15,22,0.9)); border: 1px solid rgba(212,175,55,0.2); border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,0.4); text-align: center; }
+    .bet-login h1 { font-family: 'Teko', sans-serif; font-size: 3rem; color: #d4af37; margin: 0 0 10px; line-height: 1; text-transform: uppercase; }
+    .bet-login p { color: rgba(238,244,255,0.7); margin-bottom: 30px; font-size: 0.95rem; }
+    .bet-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 14px 18px; border-radius: 12px; margin-bottom: 16px; font-size: 1rem; transition: border-color 0.2s; }
+    .bet-input:focus { outline: none; border-color: #d4af37; }
+    .bet-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37 0%, #f1cb57 52%, #b98b18 100%); color: #0d1117; font-family: 'Teko', sans-serif; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s; }
+    .bet-btn:hover { transform: translateY(-2px); }
+    .bet-error { color: #ff5c40; font-size: 0.85rem; margin-top: 12px; display: none; }
+
+    /* Dashboard State */
+    .bet-dash { display: none; }
+    .bet-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid rgba(212,175,55,0.15); padding-bottom: 24px; margin-bottom: 32px; }
+    .bet-title h1 { font-family: 'Teko', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); margin: 0; line-height: 0.9; text-transform: uppercase; background: linear-gradient(135deg, #d4af37 0%, #fff 50%, #d4af37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .bet-title p { margin: 6px 0 0; color: rgba(238,244,255,0.6); font-size: 0.95rem; }
+    .bet-balance { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); padding: 14px 24px; border-radius: 16px; text-align: right; }
+    .bet-balance-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; margin-bottom: 4px; display: block; }
+    .bet-balance-val { font-family: 'Teko', sans-serif; font-size: 2.2rem; line-height: 1; color: #fff; }
+    
+    .bet-tabs { display: flex; gap: 12px; margin-bottom: 24px; }
+    .bet-tab { padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; }
+    .bet-tab.active { background: #d4af37; border-color: #d4af37; color: #0d1117; font-weight: bold; }
+    
+    .bet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .fight-card { background: linear-gradient(180deg, rgba(16,21,31,0.9), rgba(11,15,22,0.9)); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; }
+    .fight-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg, #429fff, #ff5c40); }
+    .fight-card.univ::before { background: linear-gradient(90deg, #d4af37, #ff5c40); }
+    .fight-kicker { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; margin-bottom: 12px; }
+    .fight-title { font-family: 'Teko', sans-serif; font-size: 1.6rem; line-height: 1; margin-bottom: 20px; color: #fff; }
+    
+    .fight-vs-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+    .fighter-btn { flex: 1; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; color: #fff; }
+    .fighter-btn:hover { background: rgba(255,255,255,0.1); }
+    .fighter-btn.selected { background: rgba(212,175,55,0.15); border-color: #d4af37; box-shadow: 0 0 16px rgba(212,175,55,0.2); }
+    .fighter-btn span { display: block; font-family: 'Teko', sans-serif; font-size: 1.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .vs-badge { flex: 0 0 auto; font-family: 'Teko', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,0.4); }
+    
+    .bet-action { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
+    .bet-action-row { display: flex; gap: 10px; align-items: center; }
+    .bet-amt-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.4rem; font-family: 'Teko', sans-serif; text-align: center; padding: 4px; outline: none; }
+    .bet-amt-input:focus { border-bottom-color: #d4af37; }
+    .bet-submit { background: #d4af37; color: #0d1117; border: none; border-radius: 8px; padding: 0 20px; font-family: 'Teko', sans-serif; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; height: 42px; font-weight: bold; transition: opacity 0.2s; }
+    .bet-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .bet-return { text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
+    .bet-return strong { color: #d4af37; }
+    
+    .mybet-card { background: rgba(16,21,31,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 12px; }
+    .mybet-info h4 { margin: 0 0 4px; font-family: 'Teko', sans-serif; font-size: 1.4rem; font-weight: normal; color: #fff; }
+    .mybet-info p { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .mybet-status { display: flex; flex-direction: column; align-items: flex-end; }
+    .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 6px; }
+    .status-badge.pending { background: rgba(255,193,7,0.15); color: #ffc107; }
+    .status-badge.won { background: rgba(40,167,69,0.15); color: #28a745; }
+    .status-badge.lost { background: rgba(220,53,69,0.15); color: #dc3545; }
+    .mybet-amt { font-family: 'Teko', sans-serif; font-size: 1.5rem; color: #fff; }
+    .mybet-amt span { font-size: 0.9rem; color: rgba(255,255,255,0.5); font-family: sans-serif; }
+    
+    .bl-spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <nav class="bl-navbar">
+    <a class="bl-navbar-logo" href="/">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,28 2,28" fill="#D4AF37"/><polygon points="16,9 25,26 7,26" fill="#0d1117"/><line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="12" r="1.5" fill="#D4AF37"/></svg>
+      <span>BELLATOR</span>
+    </a>
+    <ul class="bl-navbar-links">
+      <li><a class="bl-navlink" href="/">Inicio</a></li>
+      <li><a class="bl-navlink" href="/sorteo.html">Sorteo</a></li>
+      <li><a class="bl-navlink active" href="/apuestas.html">Apuestas</a></li>
+    </ul>
+  </nav>
+
+  <div class="bet-container">
+    <!-- LOGIN VIEW -->
+    <div class="bet-login" id="login-view">
+      <h1>Álbum Login</h1>
+      <p>Ingresa con tu cuenta del álbum de Bellator para apostar tus sobres extra en las peleas oficiales.</p>
+      <form id="login-form">
+        <input type="text" id="l-user" class="bet-input" placeholder="Nombre de usuario" required>
+        <input type="password" id="l-pass" class="bet-input" placeholder="Contraseña" required>
+        <button type="submit" class="bet-btn" id="l-btn">Entrar a Apostar</button>
+        <div class="bet-error" id="l-err">Usuario o contraseña incorrectos.</div>
+      </form>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div class="bet-dash" id="dash-view">
+      <div class="bet-header">
+        <div class="bet-title">
+          <h1>Mercado de Apuestas</h1>
+          <p>Multiplica tus sobres (Pago 4×). Las apuestas se descuentan de tu inventario del álbum.</p>
+        </div>
+        <div class="bet-balance">
+          <span class="bet-balance-label">Sobres Extra (Stock)</span>
+          <span class="bet-balance-val" id="user-balance">--</span>
+        </div>
+      </div>
+      
+      <div class="bet-tabs">
+        <div class="bet-tab active" data-tab="fights">Peleas Abiertas</div>
+        <div class="bet-tab" data-tab="history">Mis Apuestas</div>
+      </div>
+      
+      <!-- Fights Tab -->
+      <div id="tab-fights" class="bet-grid">
+        <div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.4); padding: 40px;">Cargando peleas...</div>
+      </div>
+      
+      <!-- History Tab -->
+      <div id="tab-history" style="display:none;">
+        <div id="history-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginView = document.getElementById('login-view');
+    const dashView = document.getElementById('dash-view');
+    const loginForm = document.getElementById('login-form');
+    const errBox = document.getElementById('l-err');
+    const fightsGrid = document.getElementById('tab-fights');
+    const historyContainer = document.getElementById('history-container');
+    const userBalance = document.getElementById('user-balance');
+    let currentUser = null;
+    let balance = 0;
+
+    document.querySelectorAll('.bet-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.bet-tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        if (t.dataset.tab === 'fights') {
+          fightsGrid.style.display = 'grid';
+          historyContainer.parentElement.style.display = 'none';
+          loadFights();
+        } else {
+          fightsGrid.style.display = 'none';
+          historyContainer.parentElement.style.display = 'block';
+          loadHistory();
+        }
+      });
+    });
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/album/me');
+        if (res.ok) {
+          const data = await res.json();
+          currentUser = data;
+          balance = data.sobres_extra || 0;
+          userBalance.textContent = balance;
+          loginView.style.display = 'none';
+          dashView.style.display = 'block';
+          loadFights();
+        } else {
+          loginView.style.display = 'block';
+          dashView.style.display = 'none';
+        }
+      } catch (e) {
+        loginView.style.display = 'block';
+      }
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      const btn = document.getElementById('l-btn');
+      btn.innerHTML = '<span class="bl-spinner"></span>';
+      
+      try {
+        const res = await fetch('/api/album/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('l-user').value.trim(),
+            password: document.getElementById('l-pass').value.trim()
+          })
+        });
+        if (res.ok) {
+          checkAuth();
+        } else {
+          errBox.style.display = 'block';
+        }
+      } catch (e) {
+        errBox.style.display = 'block';
+      }
+      btn.innerHTML = 'Entrar a Apostar';
+    });
+
+    async function loadFights() {
+      try {
+        const res = await fetch('/api/bets/fights');
+        const fights = await res.json();
+        
+        if (!fights || fights.length === 0) {
+          fightsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.4); padding: 40px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">No hay peleas abiertas para apostar en este momento.</div>';
+          return;
+        }
+
+        fightsGrid.innerHTML = fights.map(f => {
+          const isUniv = (f.division || '').toLowerCase().includes('universal');
+          return `
+            <div class="fight-card ${isUniv ? 'univ' : ''}" id="fc-${f.fight_id}">
+              <div class="fight-kicker">${f.division}</div>
+              <div class="fight-title">${f.label}</div>
+              <div class="fight-vs-row">
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_a}')" id="fb-${f.fight_id}-a">
+                  <span>${f.fighter_a}</span>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_b}')" id="fb-${f.fight_id}-b">
+                  <span>${f.fighter_b}</span>
+                </div>
+              </div>
+              <div class="bet-action">
+                <input type="hidden" id="fpick-${f.fight_id}" value="">
+                <div class="bet-action-row">
+                  <input type="number" id="famt-${f.fight_id}" class="bet-amt-input" min="1" max="${balance}" value="1" oninput="updateReturn('${f.fight_id}')">
+                  <button class="bet-submit" onclick="placeBet('${f.fight_id}', '${f.division}', '${f.fighter_a}', '${f.fighter_b}')" id="fbtn-${f.fight_id}" disabled>Apostar</button>
+                </div>
+                <div class="bet-return" id="fret-${f.fight_id}">Selecciona un luchador (Pago x4.0)</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.selectFighter = function(fightId, fighter) {
+      document.getElementById(`fb-${fightId}-a`).classList.remove('selected');
+      document.getElementById(`fb-${fightId}-b`).classList.remove('selected');
+      
+      const btnA = document.getElementById(`fb-${fightId}-a`).innerText;
+      if (btnA.trim() === fighter.trim()) {
+        document.getElementById(`fb-${fightId}-a`).classList.add('selected');
+      } else {
+        document.getElementById(`fb-${fightId}-b`).classList.add('selected');
+      }
+      
+      document.getElementById(`fpick-${fightId}`).value = fighter;
+      document.getElementById(`fbtn-${fightId}`).disabled = false;
+      updateReturn(fightId);
+    };
+
+    window.updateReturn = function(fightId) {
+      const pick = document.getElementById(`fpick-${fightId}`).value;
+      if (!pick) return;
+      let amt = parseInt(document.getElementById(`famt-${fightId}`).value) || 0;
+      if (amt < 1) amt = 1;
+      const payout = amt * 4;
+      document.getElementById(`fret-${fightId}`).innerHTML = `Ganancia potencial: <strong>${payout} sobres</strong> si gana ${pick}`;
+    };
+
+    window.placeBet = async function(fightId, division, fa, fb) {
+      const pick = document.getElementById(`fpick-${fightId}`).value;
+      const amt = parseInt(document.getElementById(`famt-${fightId}`).value);
+      if (!pick || amt < 1 || amt > balance) {
+        alert("Selecciona a quién apoyar y un monto válido (que no supere tus sobres extra).");
+        return;
+      }
+
+      if (!confirm(`¿Estás seguro de apostar ${amt} sobres a que ${pick} gana?`)) return;
+      
+      const btn = document.getElementById(`fbtn-${fightId}`);
+      btn.innerHTML = '<span class="bl-spinner"></span>';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/bets/place', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ fight_id: fightId, division: division, fighter_a: fa, fighter_b: fb, picked_pseudo: pick, sobres_amount: amt })
+        });
+        
+        if (res.ok) {
+          alert('¡Apuesta registrada con éxito! Los sobres han sido descontados.');
+          checkAuth(); // Refresca balance y oculta la pelea actual si deseas o recarga
+        } else {
+          const data = await res.json();
+          alert('Error: ' + (data.error || 'Desconocido'));
+          btn.innerHTML = 'Apostar';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        alert("Error de conexión");
+        btn.innerHTML = 'Apostar';
+        btn.disabled = false;
+      }
+    };
+
+    async function loadHistory() {
+      historyContainer.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 40px;">Cargando historial...</div>';
+      try {
+        const res = await fetch('/api/bets/my');
+        const bets = await res.json();
+        
+        if (!bets || bets.length === 0) {
+          historyContainer.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 40px; background: rgba(255,255,255,0.02); border-radius: 12px;">No has realizado apuestas aún.</div>';
+          return;
+        }
+
+        historyContainer.innerHTML = bets.map(b => {
+          const date = new Date(b.created_at).toLocaleString();
+          let statusHtml = '';
+          if (b.status === 'pending') statusHtml = '<div class="status-badge pending">Pendiente</div>';
+          else if (b.status === 'won') statusHtml = '<div class="status-badge won">Ganada (+'+b.payout+')</div>';
+          else if (b.status === 'lost') statusHtml = '<div class="status-badge lost">Perdida</div>';
+          
+          return `
+            <div class="mybet-card">
+              <div class="mybet-info">
+                <div style="font-size:0.65rem; color:#d4af37; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px;">${b.division}</div>
+                <h4>${b.picked_pseudo} <span style="font-size:0.9rem; color:rgba(255,255,255,0.3)">vs</span> ${b.opponent_pseudo}</h4>
+                <p>${date} (Pago ${b.multiplier}x)</p>
+              </div>
+              <div class="mybet-status">
+                ${statusHtml}
+                <div class="mybet-amt">${b.sobres_amount} <span>sobres</span></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>

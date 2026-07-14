@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BELLATOR ROLBATTLE">
+  <meta property="og:title" content="Sorteo Transparente - Bellator RolBattle">
+  <meta property="og:description" content="Llaves oficiales Bellator: Ciudad con 16 rivales y Universal con 12, seed publico y estilo Champions League.">
+  <meta property="og:url" content="https://bellatorrpg.online/sorteo.html">
+  <link rel="canonical" href="https://bellatorrpg.online/sorteo.html">
+  <title>Sorteo Transparente - BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=15">
+  <style>
+    html{scroll-behavior:smooth}
+    .drw-page{max-width:1560px;margin:0 auto;padding:38px 24px 136px;position:relative;z-index:10;display:grid;gap:24px}
+    .drw-hero{display:grid;gap:14px;padding:8px 0 10px;scroll-margin-top:150px}
+    .drw-eyebrow{font-family:'Teko',sans-serif;font-size:.78rem;letter-spacing:7px;text-transform:uppercase;color:var(--bl-gold);opacity:.92}
+    .drw-title{margin:0;font-family:'Teko',sans-serif;font-size:clamp(3.1rem,8vw,6.6rem);font-weight:700;line-height:.84;letter-spacing:-1.8px;text-transform:uppercase;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 45%,#8bc4ff 68%,#ff9267 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .drw-copy{max-width:980px;margin:0;color:var(--bl-soft);font-size:1.02rem;line-height:1.75}
+    .drw-action-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+    .drw-action-ghost,.drw-action-solid{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;text-decoration:none;font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;transition:transform .18s ease,filter .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .drw-action-solid{background:linear-gradient(135deg,#d4af37 0%,#f1cb57 52%,#b98b18 100%);color:#0d1117;box-shadow:0 18px 34px rgba(212,175,55,.24)}
+    .drw-action-solid:hover{transform:translateY(-2px);filter:brightness(1.05)}
+    .drw-action-ghost{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--bl-text)}
+    .drw-action-ghost:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.34)}
+    .drw-helpbar{position:relative;top:auto;z-index:12;margin-top:0;order:2}
+    .drw-helpbar-inner{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:14px;align-items:center;padding:14px 18px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(7,11,18,.96) 0%,rgba(8,14,25,.95) 48%,rgba(17,9,10,.95) 100%);box-shadow:0 18px 44px rgba(0,0,0,.26);isolation:isolate}
+    .drw-helpbar-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 14% 26%,rgba(66,159,255,.18) 0%,transparent 26%),radial-gradient(circle at 88% 30%,rgba(255,116,62,.16) 0%,transparent 28%),linear-gradient(120deg,transparent 0 72%,rgba(212,175,55,.08) 72% 80%,transparent 80% 100%);pointer-events:none}
+    .drw-helpbar-main,.drw-helpbar-actions{position:relative;z-index:2}
+    .drw-helpbar-kicker{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--bl-gold)}
+    .drw-helpbar-title{margin:2px 0 0;font-family:'Teko',sans-serif;font-size:1.44rem;line-height:.92;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+    .drw-helpbar-copy{max-width:44ch;margin:6px 0 0;color:rgba(238,244,255,.72);font-size:.82rem;line-height:1.42}
+    .drw-helpbar-actions{display:grid;gap:10px;justify-items:end}
+    .drw-helpbar-mode-row,.drw-helpbar-link-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    .drw-help-pill{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:rgba(238,244,255,.86);font-family:'Teko',sans-serif;font-size:.84rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+    .drw-help-pill:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.30);background:rgba(255,255,255,.08)}
+    .drw-help-pill.is-active{background:linear-gradient(135deg,#d4af37 0%,#f1cb57 52%,#b98b18 100%);border-color:transparent;color:#0d1117;box-shadow:0 12px 28px rgba(212,175,55,.22)}
+    .drw-proof-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:18px;margin-top:0;scroll-margin-top:150px;order:4}
+    .drw-proof-card{position:relative;overflow:hidden;padding:22px 24px;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,16,.96),rgba(6,10,16,.92));box-shadow:0 24px 64px rgba(0,0,0,.28);isolation:isolate}
+    .drw-proof-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(255,255,255,.08) 0%,transparent 24%),radial-gradient(circle at left center,rgba(212,175,55,.10) 0%,transparent 32%);pointer-events:none}
+    .drw-proof-card::after{content:'';position:absolute;inset:14px;border-radius:22px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+    .drw-proof-top,.drw-proof-body{position:relative;z-index:2}
+    .drw-proof-kicker{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:4px;text-transform:uppercase;color:var(--bl-gold)}
+    .drw-proof-title{margin:4px 0 0;font-family:'Teko',sans-serif;font-size:2.15rem;line-height:.9;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+    .drw-proof-copy{margin:8px 0 0;color:rgba(238,244,255,.72);font-size:.92rem;line-height:1.65}
+    .drw-beacon-grid{display:grid;gap:12px;margin-top:18px}
+    .drw-beacon-box{display:grid;gap:5px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .drw-beacon-label{font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold)}
+    .drw-beacon-value{font-size:1rem;color:#fff;font-weight:700;line-height:1.35}
+    .drw-beacon-proof{font-size:.74rem;letter-spacing:1.3px;color:rgba(238,244,255,.58)}
+    .drw-chip-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .drw-chip{display:inline-flex;align-items:center;min-height:32px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.62rem;letter-spacing:1.7px;text-transform:uppercase;color:rgba(238,244,255,.84)}
+    .drw-steps{margin:16px 0 0;padding-left:20px;display:grid;gap:10px;color:rgba(238,244,255,.74);font-size:.95rem;line-height:1.62}
+    .drw-steps strong{color:#fff}
+    .drw-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .drw-legend-item{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:.7rem;letter-spacing:1.2px;text-transform:uppercase;color:rgba(238,244,255,.74)}
+    .drw-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .drw-dot--real{background:#d4af37}
+    .drw-dot--open{background:#429fff}
+    .drw-dot--future{background:#ff7440}
+    .drw-fairness{display:grid;gap:16px;margin-top:0;scroll-margin-top:150px;order:5}
+    .drw-fairness-head{max-width:920px;display:grid;gap:8px}
+    .drw-fairness-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .drw-fairness-card{position:relative;overflow:hidden;padding:18px 18px 16px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(7,10,16,.94),rgba(6,10,16,.90));box-shadow:0 18px 42px rgba(0,0,0,.24);isolation:isolate}
+    .drw-fairness-card::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.05),transparent 42%),radial-gradient(circle at top right,rgba(212,175,55,.10),transparent 24%);pointer-events:none}
+    .drw-fairness-card > *{position:relative;z-index:2}
+    .drw-fairness-kicker{font-family:'Teko',sans-serif;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--bl-gold)}
+    .drw-fairness-title{margin:6px 0 0;font-family:'Teko',sans-serif;font-size:1.34rem;line-height:.92;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+    .drw-fairness-copy{margin:8px 0 0;color:rgba(238,244,255,.68);font-size:.84rem;line-height:1.58}
+    .drw-audit-strip{position:relative;overflow:hidden;padding:20px 22px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(8,13,22,.95),rgba(12,10,17,.94));box-shadow:0 18px 48px rgba(0,0,0,.24);isolation:isolate}
+    .drw-audit-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 30%,rgba(66,159,255,.14) 0%,transparent 28%),radial-gradient(circle at 82% 26%,rgba(255,116,64,.12) 0%,transparent 24%);pointer-events:none}
+    .drw-audit-strip > *{position:relative;z-index:2}
+    .drw-audit-kicker{font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--bl-gold)}
+    .drw-audit-equation{margin-top:8px;font-family:'Teko',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);line-height:.92;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+    .drw-audit-copy{max-width:70ch;margin:10px 0 0;color:rgba(238,244,255,.70);font-size:.9rem;line-height:1.62}
+    .drw-board-stack{display:grid;gap:22px;margin-top:0;order:3}
+    .drw-board{--drw-accent:212,175,55;position:relative;overflow:hidden;border-radius:32px;padding:18px;background:linear-gradient(180deg,rgba(7,10,16,.98),rgba(5,8,13,.98));border:1px solid rgba(255,255,255,.08);box-shadow:0 26px 74px rgba(0,0,0,.34);isolation:isolate;scroll-margin-top:150px}
+    .drw-board::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 14% 18%,rgba(var(--drw-accent),.16) 0%,transparent 24%),radial-gradient(circle at 84% 18%,rgba(255,255,255,.08) 0%,transparent 24%),linear-gradient(125deg,transparent 0 72%,rgba(var(--drw-accent),.08) 72% 80%,transparent 80% 100%);pointer-events:none}
+    .drw-board::after{content:'';position:absolute;inset:14px;border-radius:24px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+    .drw-board--city{--drw-accent:66,159,255;background:linear-gradient(180deg,rgba(7,18,34,.98),rgba(5,10,19,.98))}
+    .drw-board--universal{--drw-accent:255,116,64;background:linear-gradient(180deg,rgba(28,10,11,.98),rgba(14,7,9,.98))}
+    .drw-board-top,.drw-bracket-frame,.drw-board-scroll,.drw-board-foot{position:relative;z-index:2}
+    .drw-board-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .drw-board-kicker{font-size:.66rem;letter-spacing:3.6px;text-transform:uppercase;color:rgba(var(--drw-accent),.96);font-weight:700}
+    .drw-board-title{margin:4px 0 0;font-family:'Teko',sans-serif;font-size:2.35rem;line-height:.84;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+    .drw-board-meta{max-width:46ch;margin:7px 0 0;color:rgba(238,244,255,.68);font-size:.86rem;line-height:1.54}
+    .drw-board-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .drw-board-chip{display:inline-flex;align-items:center;min-height:34px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.62rem;letter-spacing:1.7px;text-transform:uppercase;color:rgba(238,244,255,.82);white-space:nowrap}
+    .drw-board-chip--hint{display:none}
+    .drw-board-chip strong{font-size:.8rem;color:#fff;letter-spacing:1px}
+    .drw-bracket-frame{display:flex;justify-content:center;align-items:flex-start;overflow:hidden;padding:4px 0 10px;border-radius:24px}
+    .drw-bracket-fit{position:relative;flex:0 0 auto}
+    .drw-bracket-canvas{position:absolute;left:0;top:0;transform-origin:top left}
+    .drw-board-scroll{display:none;align-items:center;gap:10px;margin-top:8px}
+    .drw-board-scroll-label{font-family:'Teko',sans-serif;font-size:.62rem;letter-spacing:2.8px;text-transform:uppercase;color:rgba(238,244,255,.48);white-space:nowrap}
+    .drw-board-scroll-track{position:relative;flex:1 1 auto;height:8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+    .drw-board-scroll-thumb{position:absolute;left:0;top:0;height:100%;min-width:44px;border-radius:inherit;background:linear-gradient(135deg,rgba(var(--drw-accent),.92),rgba(255,255,255,.92));box-shadow:0 0 0 1px rgba(255,255,255,.08),0 6px 18px rgba(0,0,0,.22);transform:translateX(0)}
+    html[data-drw-view="detail"] .drw-bracket-frame{display:block;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+    html[data-drw-view="detail"] .drw-bracket-frame::-webkit-scrollbar{height:10px}
+    html[data-drw-view="detail"] .drw-bracket-frame::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+    .drw-bracket{display:grid;align-items:stretch;gap:8px;min-width:930px;min-height:392px}
+    .drw-column{position:relative;display:flex;flex-direction:column;justify-content:space-evenly;gap:8px;min-width:0}
+    .drw-column::after{content:'';position:absolute;top:28px;bottom:18px;right:-5px;width:1px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.16),transparent)}
+    .drw-column.is-right::after{left:-7px;right:auto}
+    .drw-round-label{padding:0 2px 2px;font-family:'Teko',sans-serif;font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:rgba(238,244,255,.54)}
+    .drw-match{position:relative;display:grid;gap:5px;padding:8px 9px;border-radius:15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);box-shadow:0 10px 24px rgba(0,0,0,.16);min-height:64px}
+    .drw-match::after{content:'';position:absolute;top:50%;right:-14px;width:14px;height:1px;background:rgba(255,255,255,.20)}
+    .drw-column.is-right .drw-match::after{left:-18px;right:auto}
+    .drw-match-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .drw-match-kicker{font-size:.54rem;letter-spacing:2.2px;text-transform:uppercase;color:rgba(238,244,255,.36)}
+    .drw-match-code{font-family:'Teko',sans-serif;font-size:.82rem;letter-spacing:1px;color:rgba(var(--drw-accent),.94)}
+    .drw-team{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:6px;padding:1px 0;min-width:0}
+    .drw-team--ghost,.drw-team--open{opacity:.82}
+    .drw-team-avatar,.drw-team-ph{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)}
+    .drw-team-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .drw-team-ph{font-family:'Teko',sans-serif;font-size:.86rem;letter-spacing:.04em;color:#fff}
+    .drw-team-copy{min-width:0;display:grid;gap:2px}
+    .drw-team-name{font-size:.7rem;line-height:1.12;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .drw-team-note{font-size:.5rem;letter-spacing:1.1px;text-transform:uppercase;color:rgba(238,244,255,.38)}
+    .drw-team-meta{display:grid;justify-items:end;gap:2px}
+    .drw-team-turn{font-family:'Teko',sans-serif;font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(238,244,255,.62);line-height:1}
+    .drw-team-seed{font-family:'Teko',sans-serif;font-size:.62rem;letter-spacing:.08em;color:rgba(var(--drw-accent),.92)}
+    .drw-final{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 14px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.10);text-align:center;overflow:hidden}
+    .drw-final::before{content:'';position:absolute;inset:14px;border-radius:20px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+    .drw-final::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 24%,rgba(var(--drw-accent),.18) 0%,transparent 30%),linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));pointer-events:none}
+    .drw-final-icon{position:relative;z-index:1;width:76px;height:108px;color:rgba(var(--drw-accent),.96);filter:drop-shadow(0 0 18px rgba(var(--drw-accent),.22))}
+    .drw-final-title{position:relative;z-index:1;font-family:'Teko',sans-serif;font-size:1.54rem;line-height:.86;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+    .drw-final-copy{position:relative;z-index:1;max-width:18ch;font-size:.68rem;line-height:1.42;color:rgba(238,244,255,.56)}
+    .drw-final-pair{position:relative;z-index:1;display:grid;gap:6px;width:100%;margin-top:4px}
+    .drw-final-pair .drw-team{padding:0}
+    .drw-board-foot{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;line-height:1.55;color:rgba(238,244,255,.56)}
+    .drw-board-empty{position:relative;z-index:2;display:grid;gap:8px;padding:22px;border-radius:18px;border:1px dashed rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:rgba(238,244,255,.62)}
+    .drw-board-empty strong{font-family:'Teko',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+    .drw-pairings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .drw-pairings-col{display:grid;gap:8px;min-width:0}
+    .drw-board.is-compact .drw-team-note,
+    .drw-board.is-compact .drw-match-kicker{display:none}
+    .drw-board.is-micro .drw-team-avatar,
+    .drw-board.is-micro .drw-team-ph{width:22px;height:22px}
+    .drw-board.is-micro .drw-final-copy{display:none}
+    .drw-board.is-micro .drw-team-name{font-size:.68rem}
+    @media (max-width:1200px){
+      .drw-proof-grid{grid-template-columns:1fr}
+      .drw-fairness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width:860px){
+      .drw-page{padding:26px 14px 124px}
+      .drw-copy{font-size:.96rem}
+      .drw-helpbar-inner{grid-template-columns:1fr;padding:16px}
+      .drw-helpbar-actions{justify-items:stretch}
+      .drw-helpbar-mode-row,.drw-helpbar-link-row{justify-content:flex-start}
+      .drw-proof-card{padding:18px 16px}
+      .drw-fairness-grid{grid-template-columns:1fr}
+      .drw-audit-strip{padding:18px 16px}
+      .drw-board{padding:14px}
+      .drw-board-top{margin-bottom:14px}
+      .drw-board-title{font-size:2.1rem}
+      .drw-bracket{min-width:820px;min-height:350px}
+      .drw-pairings-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .drw-action-solid,.drw-action-ghost{width:100%}
+      .drw-page{gap:16px}
+      .drw-hero{gap:8px;padding:0;scroll-margin-top:104px}
+      .drw-eyebrow{font-size:.62rem;letter-spacing:4px}
+      .drw-title{font-size:clamp(2.2rem,15vw,3.5rem);line-height:.9;letter-spacing:-.6px}
+      .drw-copy,.drw-action-row,.drw-helpbar{display:none}
+      .drw-team-turn{font-size:.54rem}
+      .drw-board-stack{gap:14px}
+      .drw-board{padding:12px;border-radius:24px;scroll-margin-top:92px}
+      .drw-board::after{inset:10px;border-radius:18px}
+      .drw-board-top{gap:10px;margin-bottom:8px}
+      .drw-board-title{font-size:1.7rem}
+      .drw-board-meta,.drw-board-foot{display:none}
+      .drw-board-chips{justify-content:flex-start;gap:6px}
+      .drw-board-chip--hint{display:inline-flex}
+      .drw-bracket{gap:6px;min-width:700px;min-height:320px}
+      .drw-board-chip{min-height:28px;padding:5px 9px;font-size:.54rem;letter-spacing:1.2px}
+      .drw-bracket-frame{display:block;overflow-x:auto;overflow-y:hidden;padding:2px 0 6px;border-radius:18px;scrollbar-width:thin}
+      .drw-bracket-frame::-webkit-scrollbar{height:8px}
+      .drw-bracket-frame::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+      .drw-board-scroll{display:flex}
+      .drw-match{padding:8px 8px 7px;min-height:68px}
+      .drw-team{grid-template-columns:22px minmax(0,1fr) auto;gap:6px}
+      .drw-team-avatar,.drw-team-ph{width:22px;height:22px}
+      .drw-team-name{font-size:.72rem}
+      .drw-team-note{font-size:.52rem;letter-spacing:.8px}
+      .drw-team-seed{font-size:.6rem}
+      .drw-final-icon{width:68px;height:96px}
+      .drw-final-title{font-size:1.32rem}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+    }
+    @media (prefers-reduced-motion: no-preference){
+      .drw-anim .drw-proof-card,
+      .drw-anim .drw-fairness-card,
+      .drw-anim .drw-audit-strip,
+      .drw-anim .drw-board{opacity:0;transform:translateY(18px);transition:opacity .68s cubic-bezier(.22,1,.36,1),transform .68s cubic-bezier(.22,1,.36,1),box-shadow .28s ease}
+      .drw-anim .drw-proof-card.is-live,
+      .drw-anim .drw-fairness-card.is-live,
+      .drw-anim .drw-audit-strip.is-live,
+      .drw-anim .drw-board.is-live{opacity:1;transform:none}
+      .drw-anim .drw-column,
+      .drw-anim .drw-final{opacity:0;transform:translateY(14px);transition:opacity .46s ease,transform .46s ease;transition-delay:var(--drw-col-delay,0ms)}
+      .drw-anim .drw-board.is-live .drw-column,
+      .drw-anim .drw-board.is-live .drw-final{opacity:1;transform:none}
+      .drw-anim .drw-final-icon{animation:drwFloat 5.2s ease-in-out infinite}
+      .drw-anim .drw-beacon-box.is-ready{animation:drwPulse 4s ease-in-out infinite}
+    }
+    @keyframes drwFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+    @keyframes drwPulse{
+      0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,0)}
+      50%{box-shadow:0 0 0 12px rgba(212,175,55,.08)}
+    }
+  </style>
+</head>
+<body>
+  <canvas class="space" id="space" aria-hidden="true"></canvas>
+  <canvas class="constellations" id="constellations" aria-hidden="true"></canvas>
+  <div class="space-overlay" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="custom-cursor" id="cursor">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="bl-topbar bl-stripe-bg">
+      <div class="bl-topbar-left">
+        <span><span class="bl-live-dot"></span>&nbsp; SISTEMA ACTIVO</span>
+        <a href="/clasificacion">STANDINGS</a>
+        <a href="/competidores">DRIVERS</a>
+        <a href="/reglamento">RULES</a>
+      </div>
+      <div class="bl-topbar-right">
+        <a href="/registro" class="bl-topbar-subscribe">INSCRIBIRSE</a>
+      </div>
+    </div>
+
+    <nav class="bl-navbar" style="position:relative">
+      <a class="bl-navbar-logo" href="/">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
+          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+        </svg>
+        <span>BELLATOR</span>
+      </a>
+      <button class="bl-hamburger" id="bl-burger" aria-label="Men&uacute;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+      </button>
+      <ul class="bl-navbar-links" id="bl-links">
+        <li><a class="bl-navlink" href="/">Inicio</a></li>
+        <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificaci&oacute;n</a></li>
+        <li><a class="bl-navlink active" href="/sorteo.html">Sorteo</a></li>
+        <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
+        <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
+      </ul>
+      <div class="bl-navbar-right">
+        <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
+        <span style="font-size:.8rem;color:var(--bl-muted);letter-spacing:1px">DRAW BOARD</span>
+      </div>
+    </nav>
+
+    <div class="bl-event-bar bl-stripe-bg">
+      <span class="bl-event-round">SORTEO</span>
+      <span class="bl-event-name">Tablero oficial de llaves Bellator · Ciudad 16 · Universal 12</span>
+      <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
+    </div>
+
+    <main class="drw-page">
+      <section class="drw-hero" aria-labelledby="drw-title">
+        <div class="drw-eyebrow">BELLATOR DRAW BOARD</div>
+        <h1 class="drw-title" id="drw-title">Llaves oficiales<br>Ciudad 16 · Universal 12</h1>
+        <p class="drw-copy">Aqu&iacute; la gr&aacute;fica manda. Ciudad conserva su cuadro de 16 y Universal queda en 12 con 6 duelos fijos ya definidos, sin avances dibujados hasta que existan resultados reales. Ambas vistas arrancan listas para verse completas tanto en m&oacute;vil como en escritorio.</p>
+        <div class="drw-action-row">
+          <a class="drw-action-solid" href="/registro">Inscribir competidor</a>
+          <a class="drw-action-ghost" href="/">Volver al inicio</a>
+        </div>
+      </section>
+
+      <section class="drw-helpbar" aria-label="Barra de ayuda del sorteo">
+        <div class="drw-helpbar-inner">
+          <div class="drw-helpbar-main">
+            <div class="drw-helpbar-kicker">Barra de ayuda</div>
+            <div class="drw-helpbar-title">Vista total, detalle y auditoria</div>
+            <p class="drw-helpbar-copy" id="drw-view-state">Vista total activa: la llave se achica para entrar completa en pantalla. Cambia a detalle si quieres leer cada cruce con m&aacute;s aire y desplazamiento horizontal.</p>
+          </div>
+          <div class="drw-helpbar-actions">
+            <div class="drw-helpbar-mode-row" aria-label="Cambiar modo de vista">
+              <button type="button" class="drw-help-pill is-active" data-drw-mode="fit">Vista total</button>
+              <button type="button" class="drw-help-pill" data-drw-mode="detail">Detalle</button>
+            </div>
+            <div class="drw-helpbar-link-row" aria-label="Atajos del sorteo">
+              <a class="drw-help-pill" href="#drw-board-city">Ciudad</a>
+              <a class="drw-help-pill" href="#drw-board-universal">Universal</a>
+              <a class="drw-help-pill" href="#drw-fairness">Por que es imparcial</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="drw-proof-grid" id="drw-proof" aria-label="Explicacion del sorteo">
+        <article class="drw-proof-card">
+          <div class="drw-proof-top">
+            <div class="drw-proof-kicker">Semilla publica</div>
+            <h2 class="drw-proof-title">Beacon del sorteo</h2>
+            <p class="drw-proof-copy">Bellator deja visible una referencia publica verificable y ajena al panel manual del torneo. La llave ya no remezcla a los clasificados existentes: cada aprobado toma un slot fijo y los huecos restantes siguen abiertos hasta completar el tope visible de su divisi&oacute;n.</p>
+          </div>
+          <div class="drw-beacon-grid" id="drw-beacon-card">
+            <div class="drw-beacon-box">
+              <span class="drw-beacon-label">Fuente</span>
+              <strong class="drw-beacon-value">Cargando drand...</strong>
+              <span class="drw-beacon-proof">Esperando seed publico</span>
+            </div>
+          </div>
+          <div class="drw-chip-row">
+            <span class="drw-chip">drand public network</span>
+            <span class="drw-chip">Ciudad 16 · Universal 12</span>
+            <span class="drw-chip">reproducible</span>
+            <span class="drw-chip">champions style</span>
+          </div>
+        </article>
+
+        <article class="drw-proof-card">
+          <div class="drw-proof-top">
+            <div class="drw-proof-kicker">Como se congela</div>
+            <h2 class="drw-proof-title">Protocolo del emparejamiento</h2>
+            <p class="drw-proof-copy">La transparencia no depende de una frase bonita, sino de un procedimiento repetible: cada aprobado toma un slot aleatorio fijo, los siguientes ocupan huecos libres y el cuadro no vuelve a mover a quienes ya quedaron emparejados.</p>
+          </div>
+          <div class="drw-proof-body">
+            <ol class="drw-steps">
+              <li><strong>Bellator fija el tope por divisi&oacute;n.</strong> Ciudad conserva 16 plazas; Universal cierra en 12 y deja visible d&oacute;nde faltan rivales antes del cierre.</li>
+              <li><strong>Slot aleatorio fijo.</strong> Cada aprobado cae en un hueco libre con una regla determinista; no entra simplemente detr&aacute;s del anterior.</li>
+              <li><strong>Cruces congelados.</strong> La llave publicada no reacomoda manualmente a quienes ya quedaron ubicados.</li>
+            </ol>
+            <div class="drw-legend">
+              <span class="drw-legend-item"><span class="drw-dot drw-dot--real"></span>Inscrito real</span>
+              <span class="drw-legend-item"><span class="drw-dot drw-dot--open"></span>Cupo disponible</span>
+              <span class="drw-legend-item"><span class="drw-dot drw-dot--future"></span>Ganador pendiente</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="drw-fairness" id="drw-fairness" aria-labelledby="drw-fairness-title">
+        <div class="drw-fairness-head">
+          <div class="drw-proof-kicker">Auditoria de imparcialidad</div>
+          <h2 class="drw-proof-title" id="drw-fairness-title">Por que esta llave no depende del capricho de nadie</h2>
+          <p class="drw-proof-copy">La idea es defender imparcialidad con hechos visibles. El cuadro usa una lista p&uacute;blica de inscritos, una regla determinista por competidor y slots fijos que no se reordenan cuando llegan nuevos nombres. Si otra persona toma los mismos datos, llega al mismo resultado.</p>
+        </div>
+        <div class="drw-fairness-grid">
+          <article class="drw-fairness-card">
+            <div class="drw-fairness-kicker">01 · Referencia visible</div>
+            <h3 class="drw-fairness-title">Bellator no inventa el numero</h3>
+            <p class="drw-fairness-copy">El tablero deja visible una referencia externa para auditar el estado del sorteo sin depender de una frase del panel interno.</p>
+          </article>
+          <article class="drw-fairness-card">
+            <div class="drw-fairness-kicker">02 · Lista visible</div>
+            <h3 class="drw-fairness-title">El insumo tambien es publico</h3>
+            <p class="drw-fairness-copy">La mezcla usa los inscritos visibles en el roster. No hay nombres ocultos ni cruces misteriosos entrando por fuera del tablero.</p>
+          </article>
+          <article class="drw-fairness-card">
+            <div class="drw-fairness-kicker">03 · Regla fija</div>
+            <h3 class="drw-fairness-title">La mezcla siempre hace lo mismo</h3>
+            <p class="drw-fairness-copy">Con los mismos inscritos y las mismas marcas de aprobaci&oacute;n, el algoritmo devuelve la misma llave. Eso vuelve el sorteo reproducible y verificable.</p>
+          </article>
+          <article class="drw-fairness-card">
+            <div class="drw-fairness-kicker">04 · Congelacion</div>
+            <h3 class="drw-fairness-title">Despues del cierre no se reordena</h3>
+            <p class="drw-fairness-copy">Cuando cada divisi&oacute;n llegue a su tope visible, la llave ya estar&aacute; completa sin remezclar los slots previos. Desde ah&iacute; el argumento es claro: no hubo mano negra posterior.</p>
+          </article>
+        </div>
+        <div class="drw-audit-strip">
+          <div class="drw-audit-kicker">Ecuacion auditable</div>
+          <div class="drw-audit-equation">Roster visible + regla determinista + slots fijos = misma llave para cualquiera</div>
+          <p class="drw-audit-copy">Esa es la parte importante. No hace falta pedir fe. Hace falta poder repetir la operaci&oacute;n con los mismos datos y ver el mismo cuadro. Cuanto m&aacute;s f&aacute;cil sea replicar el resultado, m&aacute;s fuerte queda el argumento de imparcialidad.</p>
+        </div>
+      </section>
+
+      <section class="drw-board-stack" aria-label="Llaves del torneo">
+        <article class="drw-board drw-board--city" id="drw-board-city">
+          <div class="drw-board-empty"><strong>Ciudad</strong><span>Armando llave de 16 rivales...</span></div>
+        </article>
+        <article class="drw-board drw-board--universal" id="drw-board-universal">
+          <div class="drw-board-empty"><strong>Universal</strong><span>Armando llave de 12 rivales...</span></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
+  <script src="/sorteo-algo.js?v=4"></script>
+  <script>
+    const Draw = window.BellatorDraw;
+    let qualifiedRosterCache = null;
+    const DRAW_VIEW_KEY = 'bellatorDrawViewMode';
+    let drawScaleRaf = 0;
+    let drawRevealObserver = null;
+
+    async function fetchQualifiedCompetidores() {
+      if (qualifiedRosterCache) return qualifiedRosterCache;
+      try {
+        const data = await fetch('/api/competidores-oficiales', { cache: 'no-store' }).then(function(res) { return res.json(); });
+        qualifiedRosterCache = data && typeof data === 'object' ? data : { ciudad: [], universal: [], max: 16 };
+      } catch (_) {
+        qualifiedRosterCache = { ciudad: [], universal: [], max: 16 };
+      }
+      return qualifiedRosterCache;
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function displayInitial(value, fallback) {
+      const text = String(value || '').trim();
+      if (!text) return fallback || '?';
+      const first = Array.from(text.normalize('NFKC'))[0];
+      return first ? first.toUpperCase() : (fallback || '?');
+    }
+
+
+    async function fetchTransparentSeed() {
+      const CACHE_KEY = 'bellatorDraw_seed_v2';
+      const CACHE_TTL = 3600000; // 1 hour
+      try {
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+        if (cached && cached.fetchedAt && (Date.now() - cached.fetchedAt) < CACHE_TTL && cached.randomness) {
+          return cached;
+        }
+      } catch (_) {}
+      try {
+        const response = await fetch('https://api.drand.sh/public/latest', { cache: 'no-store' });
+        const data = await response.json();
+        if (!response.ok || !data || !data.randomness) throw new Error('beacon');
+        const seed = {
+          source: 'drand public network',
+          round: Number(data.round) || 0,
+          randomness: String(data.randomness),
+          proof: String(data.randomness).slice(0, 16).toUpperCase(),
+          fallback: false,
+          fetchedAt: Date.now()
+        };
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(seed)); } catch (_) {}
+        return seed;
+      } catch (_) {
+        let fallback = String(Date.now());
+        if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+          const array = window.crypto.getRandomValues(new Uint32Array(4));
+          fallback = Array.from(array).map(function(item) {
+            return item.toString(16).padStart(8, '0');
+          }).join('');
+        }
+        return {
+          source: 'fallback local',
+          round: 0,
+          randomness: fallback,
+          proof: fallback.slice(0, 16).toUpperCase(),
+          fallback: true,
+          fetchedAt: Date.now()
+        };
+      }
+    }
+
+    function isMobileDrawViewport() {
+      return !!(window.matchMedia && window.matchMedia('(max-width: 640px)').matches);
+    }
+
+    function getDrawViewMode() {
+      try {
+        const stored = sessionStorage.getItem(DRAW_VIEW_KEY);
+        if (stored === 'detail' || stored === 'fit') return stored;
+        return 'fit';
+      } catch (_) {
+        return 'fit';
+      }
+    }
+
+      function setStoredDrawViewMode(mode) {
+        try {
+          sessionStorage.setItem(DRAW_VIEW_KEY, mode);
+        } catch (_) {}
+      }
+
+    function updateDrawViewState(mode) {
+      const copy = document.getElementById('drw-view-state');
+      if (!copy) return;
+      const isMobile = isMobileDrawViewport();
+      copy.textContent = mode === 'detail'
+        ? (isMobile
+          ? 'Detalle activo: desliza la llave para leer cada cruce.'
+          : 'Modo detalle activo: la llave conserva tamano de lectura y permite desplazamiento horizontal para revisar cada cruce con calma.')
+        : (isMobile
+          ? 'Vista total activa: la llave se encoge para entrar completa.'
+          : 'Vista total activa: la llave se achica para entrar completa en pantalla. Cambia a detalle si quieres leer cada cruce con mas aire y desplazamiento horizontal.');
+    }
+
+      function applyDrawMode(mode) {
+        mode = mode === 'detail' ? 'detail' : 'fit';
+      document.documentElement.setAttribute('data-drw-view', mode);
+      updateDrawViewState(mode);
+      document.querySelectorAll('[data-drw-mode]').forEach(function(button) {
+        button.classList.toggle('is-active', button.getAttribute('data-drw-mode') === mode);
+      });
+      setStoredDrawViewMode(mode);
+      queueBoardScaling();
+    }
+
+    function queueBoardScaling() {
+      if (drawScaleRaf) cancelAnimationFrame(drawScaleRaf);
+      drawScaleRaf = requestAnimationFrame(applyBoardScaling);
+    }
+
+      function applyBoardScaling() {
+      const mode = document.documentElement.getAttribute('data-drw-view') || 'fit';
+      document.querySelectorAll('.drw-board').forEach(function(board) {
+        const frame = board.querySelector('.drw-bracket-frame');
+        const fit = board.querySelector('.drw-bracket-fit');
+        const canvas = board.querySelector('.drw-bracket-canvas');
+        const bracket = board.querySelector('.drw-bracket');
+        const scrollTrack = board.querySelector('.drw-board-scroll-track');
+        const scrollThumb = board.querySelector('.drw-board-scroll-thumb');
+        if (!frame || !fit || !canvas || !bracket) return;
+
+        const designWidth = bracket.scrollWidth;
+        const designHeight = bracket.scrollHeight;
+        let scale = 1;
+        if (mode === 'fit') {
+          scale = Math.min(1, frame.clientWidth / designWidth);
+        }
+        if (!isFinite(scale) || scale <= 0) scale = 1;
+
+        fit.style.width = Math.ceil(designWidth * scale) + 'px';
+        fit.style.height = Math.ceil(designHeight * scale) + 'px';
+        canvas.style.width = designWidth + 'px';
+        canvas.style.height = designHeight + 'px';
+        canvas.style.transform = mode === 'detail' ? 'none' : ('scale(' + scale.toFixed(4) + ')');
+
+        if (mode === 'fit') frame.scrollLeft = 0;
+
+        board.classList.toggle('is-compact', scale < 0.72);
+        board.classList.toggle('is-micro', scale < 0.54);
+
+          if (scrollTrack && scrollThumb) {
+            const visibleWidth = frame.clientWidth || 1;
+            const totalWidth = mode === 'detail' ? designWidth : fit.clientWidth;
+            const maxScroll = Math.max(0, frame.scrollWidth - visibleWidth);
+            const thumbWidth = Math.max(44, Math.round((visibleWidth / Math.max(totalWidth, visibleWidth)) * scrollTrack.clientWidth));
+            const maxThumbOffset = Math.max(0, scrollTrack.clientWidth - thumbWidth);
+            const thumbOffset = maxScroll > 0 ? Math.round((frame.scrollLeft / maxScroll) * maxThumbOffset) : 0;
+            scrollThumb.style.width = thumbWidth + 'px';
+            scrollThumb.style.transform = 'translateX(' + thumbOffset + 'px)';
+            board.classList.toggle('is-scrollable', maxScroll > 2);
+          }
+      });
+    }
+
+      function syncBoardScrollIndicator(frame) {
+        if (!frame) return;
+        const board = frame.closest('.drw-board');
+        if (!board) return;
+        const scrollTrack = board.querySelector('.drw-board-scroll-track');
+        const scrollThumb = board.querySelector('.drw-board-scroll-thumb');
+        if (!scrollTrack || !scrollThumb) return;
+        const visibleWidth = frame.clientWidth || 1;
+        const maxScroll = Math.max(0, frame.scrollWidth - visibleWidth);
+        const thumbWidth = Math.max(44, Math.round((visibleWidth / Math.max(frame.scrollWidth, visibleWidth)) * scrollTrack.clientWidth));
+        const maxThumbOffset = Math.max(0, scrollTrack.clientWidth - thumbWidth);
+        const thumbOffset = maxScroll > 0 ? Math.round((frame.scrollLeft / maxScroll) * maxThumbOffset) : 0;
+        scrollThumb.style.width = thumbWidth + 'px';
+        scrollThumb.style.transform = 'translateX(' + thumbOffset + 'px)';
+      }
+
+      function initDrawScrollbars() {
+        document.querySelectorAll('.drw-bracket-frame').forEach(function(frame) {
+          if (frame.dataset.drwScrollBound === '1') return;
+          frame.dataset.drwScrollBound = '1';
+          frame.addEventListener('scroll', function() {
+            syncBoardScrollIndicator(frame);
+          }, { passive: true });
+        });
+        queueBoardScaling();
+      }
+
+    function initDrawHelpbar() {
+      document.querySelectorAll('[data-drw-mode]').forEach(function(button) {
+        button.addEventListener('click', function() {
+          applyDrawMode(button.getAttribute('data-drw-mode'));
+        });
+      });
+      applyDrawMode(getDrawViewMode());
+      window.addEventListener('resize', function() {
+        applyDrawMode(getDrawViewMode());
+      }, { passive: true });
+    }
+
+    function initDrawAnimations() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.documentElement.classList.add('drw-anim');
+      const targets = document.querySelectorAll('.drw-proof-card, .drw-fairness-card, .drw-audit-strip, .drw-board');
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(function(target) { target.classList.add('is-live'); });
+        return;
+      }
+      if (drawRevealObserver) drawRevealObserver.disconnect();
+      drawRevealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-live');
+          drawRevealObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+      targets.forEach(function(target) {
+        drawRevealObserver.observe(target);
+      });
+    }
+
+    function renderDrawAvatar(slot) {
+      if (slot.kind === 'player' && slot.avatar) {
+        return '<span class="drw-team-avatar"><img src="' + escapeHtml(slot.avatar) + '" alt="' + escapeHtml(slot.name) + '" loading="lazy" decoding="async"></span>';
+      }
+      return '<span class="drw-team-ph">' + escapeHtml(slot.initial || '?') + '</span>';
+    }
+
+    function renderDrawTeam(slot, turnNumber) {
+      const extraClass = slot.kind === 'future' ? ' drw-team--ghost' : (slot.kind === 'open' ? ' drw-team--open' : '');
+      return [
+        '<div class="drw-team' + extraClass + '">',
+        renderDrawAvatar(slot),
+        '<span class="drw-team-copy">',
+        '<span class="drw-team-name">' + escapeHtml(slot.name) + '</span>',
+        '<span class="drw-team-note">' + escapeHtml(slot.note) + '</span>',
+        '</span>',
+        '<span class="drw-team-meta">',
+        '<span class="drw-team-turn">Turno ' + escapeHtml(turnNumber) + '</span>',
+        '<span class="drw-team-seed">' + escapeHtml(slot.code) + '</span>',
+        '</span>',
+        '</div>'
+      ].join('');
+    }
+
+    function renderDrawMatch(match) {
+      return [
+        '<article class="drw-match">',
+        '<div class="drw-match-head">',
+        '<span class="drw-match-kicker">Cruce</span>',
+        '<span class="drw-match-code">' + escapeHtml(match.code) + '</span>',
+        '</div>',
+        match.teams.map(function(team, index) {
+          return renderDrawTeam(team, index + 1);
+        }).join(''),
+        '</article>'
+      ].join('');
+    }
+
+    function renderDrawColumn(label, matches, sideClass, order) {
+      return [
+        '<div class="drw-column ' + sideClass + '" style="--drw-col-delay:' + (order * 70) + 'ms">',
+        '<div class="drw-round-label">' + escapeHtml(label) + '</div>',
+        matches.map(renderDrawMatch).join(''),
+        '</div>'
+      ].join('');
+    }
+
+    function renderUniversalPairingBoard(players, config, slotCap) {
+      const matches = Draw.buildOrderedPairingMatches(players, 'universal', slotCap);
+      const openSlots = Math.max(0, slotCap - players.length);
+      const leftMatches = matches.slice(0, 3);
+      const rightMatches = matches.slice(3);
+
+      return [
+        '<div class="drw-board-top">',
+        '<div>',
+        '<div class="drw-board-kicker">' + escapeHtml(config.kicker) + '</div>',
+        '<h2 class="drw-board-title">' + escapeHtml(config.title) + '</h2>',
+        '<p class="drw-board-meta">' + config.copy + '</p>',
+        '</div>',
+        '<div class="drw-board-chips">',
+        '<span class="drw-board-chip"><strong>' + players.length + '/' + slotCap + '</strong>&nbsp;inscritos</span>',
+        '<span class="drw-board-chip">' + openSlots + ' cupos libres</span>',
+        '<span class="drw-board-chip">6 duelos fijos</span>',
+        '</div>',
+        '</div>',
+        '<div class="drw-pairings-grid">',
+        '<div class="drw-pairings-col">',
+        '<div class="drw-round-label">Ronda Clasificatoria A</div>',
+        leftMatches.map(renderDrawMatch).join(''),
+        '</div>',
+        '<div class="drw-pairings-col">',
+        '<div class="drw-round-label">Ronda Clasificatoria B</div>',
+        rightMatches.map(renderDrawMatch).join(''),
+        '</div>',
+        '</div>',
+        '<div class="drw-round-label" style="margin-top:32px;text-align:center;font-size:1rem;color:#d4af37">🏆 Gran Final Universal (Combate de 3)</div>',
+        '<div style="display:flex;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap;">',
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 1</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-1">Por Definir</div></div>',
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 2</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-2">Por Definir</div></div>',
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 3</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-3">Por Definir</div></div>',
+        '</div>',
+        '<div class="drw-board-foot" style="margin-top:24px">Se muestran los 6 emparejamientos clasificatorios. Los 3 ganadores (elegidos por desempeño) avanzan a la Final de 3.</div>'
+      ].join('');
+    }
+
+    function getRoundLabelsForBracketSize(slotCap) {
+      return ['Octavos', 'Cuartos', 'Semis'];
+    }
+
+    function getBoardMetrics(slotCap, mobileView) {
+      if (slotCap === 12) {
+        return mobileView
+          ? { gridTemplate: 'repeat(3, minmax(84px, 1fr)) 96px repeat(3, minmax(84px, 1fr))', minWidth: 580, minHeight: 280 }
+          : { gridTemplate: 'repeat(3, minmax(102px, 1fr)) 144px repeat(3, minmax(102px, 1fr))', minWidth: 840, minHeight: 340 };
+      }
+      return mobileView
+        ? { gridTemplate: 'repeat(3, minmax(96px, 1fr)) 108px repeat(3, minmax(96px, 1fr))', minWidth: 700, minHeight: 320 }
+        : { gridTemplate: 'repeat(3, minmax(116px, 1fr)) 156px repeat(3, minmax(116px, 1fr))', minWidth: 930, minHeight: 392 };
+    }
+
+    function getDivisionSlotCap(slotInfo, divisionKey) {
+      const prop = divisionKey === 'universal' ? 'universal_max' : 'ciudad_max';
+      const fallback = divisionKey === 'universal' ? 12 : 16;
+      const parsed = Number(slotInfo && slotInfo[prop]);
+      return parsed > 0 ? parsed : fallback;
+    }
+
+    function renderFinalBlock(leftCode, rightCode, divisionLabel, slotCap, order) {
+      return [
+        '<div class="drw-final" style="--drw-col-delay:' + (order * 70) + 'ms">',
+        '<svg class="drw-final-icon" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">',
+        '<path d="M32 20H88V28C88 52 77 72 60 84C43 72 32 52 32 28V20Z" stroke="currentColor" stroke-width="4"/>',
+        '<path d="M23 28H32V42C25 41 19 36 19 29V24H23" stroke="currentColor" stroke-width="4"/>',
+        '<path d="M97 28H88V42C95 41 101 36 101 29V24H97" stroke="currentColor" stroke-width="4"/>',
+        '<path d="M52 90H68V108H52V90Z" stroke="currentColor" stroke-width="4"/>',
+        '<path d="M42 118H78" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+        '<path d="M34 130H86" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+        '</svg>',
+        '<div class="drw-final-title">Final</div>',
+        '<div class="drw-final-copy">' + escapeHtml(divisionLabel) + ' completa esta llave cuando Bellator cierre los ' + slotCap + ' cupos, sin mover los slots ya asignados.</div>',
+        '<div class="drw-final-pair">',
+        renderDrawTeam(Draw.createFutureDrawSlot(leftCode)),
+        renderDrawTeam(Draw.createFutureDrawSlot(rightCode)),
+        '</div>',
+        '</div>'
+      ].join('');
+    }
+
+    function renderDrawBoard(divisionKey, players, seedInfo, slotCap) {
+      const mobileView = isMobileDrawViewport();
+      const config = {
+        ciudad: {
+          kicker: 'Ciudad Draw Board',
+          title: 'Ciudad',
+          copy: 'Llave urbana con cuadro completo de 16 rivales. Los registros visibles ocupan su lugar y los huecos siguen marcados hasta cerrar cupos.',
+          label: 'Ciudad'
+        },
+        universal: {
+          kicker: 'Universal Draw Board',
+          title: 'Universal',
+          copy: 'Universal queda en 12 rivales con 6 duelos pre-establecidos. No se dibujan avances ni rondas siguientes hasta que exista un resultado real.',
+          label: 'Universal'
+        }
+      }[divisionKey];
+
+      if (!config) {
+        return '<div class="drw-board-empty"><strong>Division invalida</strong><span>No se pudo generar la llave.</span></div>';
+      }
+
+      if (divisionKey === 'universal' && slotCap === 12) {
+        return renderUniversalPairingBoard(players, config, slotCap);
+      }
+
+      const bracketSize = slotCap;
+      const roundLabels = getRoundLabelsForBracketSize(slotCap);
+      const boardMetrics = getBoardMetrics(slotCap, mobileView);
+      const openSlots = Math.max(0, slotCap - players.length);
+      const provisionalMode = openSlots > 0;
+      const drawModel = Draw.buildOrderedDrawModel(players, divisionKey, bracketSize);
+      const rightColumns = drawModel.right.slice().reverse();
+      const rightLabels = roundLabels.slice().reverse();
+      const leftChampion = drawModel.left[drawModel.left.length - 1][0].code;
+      const rightChampion = drawModel.right[drawModel.right.length - 1][0].code;
+
+      return [
+        '<div class="drw-board-top">',
+        '<div>',
+        '<div class="drw-board-kicker">' + escapeHtml(config.kicker) + '</div>',
+        '<h2 class="drw-board-title">' + escapeHtml(config.title) + '</h2>',
+        '<p class="drw-board-meta">' + config.copy + '</p>',
+        '</div>',
+        '<div class="drw-board-chips">',
+        '<span class="drw-board-chip"><strong>' + players.length + '/' + slotCap + '</strong>&nbsp;inscritos</span>',
+        '<span class="drw-board-chip">' + openSlots + ' cupos libres</span>',
+        '<span class="drw-board-chip">' + (provisionalMode ? 'cruces por orden de llegada' : ('cuadro fijo ' + slotCap + '/' + slotCap)) + '</span>',
+        '<span class="drw-board-chip drw-board-chip--hint">desliza</span>',
+        '</div>',
+        '</div>',
+        '<div class="drw-bracket-frame">',
+        '<div class="drw-bracket-fit">',
+        '<div class="drw-bracket-canvas">',
+        '<div class="drw-bracket" style="grid-template-columns:' + boardMetrics.gridTemplate + ';min-width:' + boardMetrics.minWidth + 'px;min-height:' + boardMetrics.minHeight + 'px">',
+        drawModel.left.map(function(round, index) {
+          return renderDrawColumn(roundLabels[index], round, 'is-left', index);
+        }).join(''),
+        renderFinalBlock(leftChampion, rightChampion, config.label, slotCap, roundLabels.length),
+        rightColumns.map(function(round, index) {
+          return renderDrawColumn(rightLabels[index], round, 'is-right', roundLabels.length + 1 + index);
+        }).join(''),
+        '</div>',
+        '</div>',
+        '</div>',
+        '<div class="drw-board-scroll" aria-hidden="true">',
+        '<span class="drw-board-scroll-label">Desliza</span>',
+        '<div class="drw-board-scroll-track"><span class="drw-board-scroll-thumb"></span></div>',
+        '</div>',
+        '<div class="drw-board-foot">' + (provisionalMode
+          ? 'Cuadro provisional: los duelos ya publicados están fijos. Cada nuevo aprobado ocupa el siguiente cupo libre según orden de aprobación.'
+          : 'Cuadro cerrado: el ' + slotCap + '/' + slotCap + ' completa la llave sin remezclar los slots ya asignados. Los cruces visibles se mantienen fijos.' ) + '</div>'
+      ].join('');
+    }
+
+    initDrawHelpbar();
+    initDrawAnimations();
+
+    (async function initDrawBoards() {
+      const cityEl = document.getElementById('drw-board-city');
+      const universalEl = document.getElementById('drw-board-universal');
+      const beaconEl = document.getElementById('drw-beacon-card');
+      if (!cityEl || !universalEl || !beaconEl) return;
+
+      try {
+        const result = await Promise.all([
+          fetchQualifiedCompetidores(),
+          fetch('/api/division-slots').then(function(response) { return response.json(); }).catch(function() { return {}; }),
+          fetchTransparentSeed(),
+          fetch('/api/bracket/results').then(function(res){ return res.json(); }).catch(function(){ return []; })
+        ]);
+
+        const players = result[0] || { ciudad: [], universal: [] };
+        const slotData = result[1];
+        const seedInfo = result[2];
+        const bracketResults = result[3];
+
+        const capC = getDivisionSlotCap(slotData, 'ciudad');
+        const capU = getDivisionSlotCap(slotData, 'universal');
+
+        // Handle Beacon
+        const tournamentLocked = !!(slotData && slotData.locked);
+        const grouped = { ciudad: players.ciudad || [], universal: players.universal || [] };
+        const citySlotCap = capC;
+        const universalSlotCap = capU;
+        const provisionalBoards = [];
+        if (!tournamentLocked && grouped.ciudad.length < citySlotCap) provisionalBoards.push('Ciudad');
+        if (!tournamentLocked && grouped.universal.length < universalSlotCap) provisionalBoards.push('Universal');
+
+        if (tournamentLocked) {
+          grouped.ciudad = [];
+          grouped.universal = [];
+        }
+
+        beaconEl.innerHTML = provisionalBoards.length
+          ? [
+              '<div class="drw-beacon-box">',
+              '<span class="drw-beacon-label">Estado del cuadro</span>',
+              '<strong class="drw-beacon-value">Cruces por orden de llegada</strong>',
+              '<span class="drw-beacon-proof">' + escapeHtml(provisionalBoards.join(' · ')) + ' mantiene los cruces ya publicados. Cada nuevo aprobado cae en un hueco libre sin empujar a nadie al siguiente slot.</span>',
+              '</div>'
+            ].join('')
+          : [
+              '<div class="drw-beacon-box">',
+              '<span class="drw-beacon-label">Estado del cuadro</span>',
+              '<strong class="drw-beacon-value">Llave cerrada sin remezcla</strong>',
+              '<span class="drw-beacon-proof">' + escapeHtml(seedInfo.source) + ' · ' + escapeHtml(seedInfo.proof) + ' · los slots ya asignados no se vuelven a mover.</span>',
+              '</div>'
+            ].join('');
+
+        cityEl.innerHTML = renderDrawBoard('ciudad', grouped.ciudad, seedInfo, citySlotCap);
+        universalEl.innerHTML = renderDrawBoard('universal', grouped.universal, seedInfo, universalSlotCap);
+        initDrawScrollbars();
+        
+        // Aplicar resultados Final de 3 Universal
+        if (bracketResults && bracketResults.length > 0) {
+          bracketResults.forEach(r => {
+            if (r.division === 'universal' && r.match_code.startsWith('U_FINAL_')) {
+               const idx = r.match_code.split('_')[2]; // 1, 2, 3
+               const el = document.getElementById('u-final-' + idx);
+               if (el) { el.innerText = r.winner_pseudo; el.style.color = "#fff"; }
+            }
+          });
+        }
+
+        const beaconBox = beaconEl.querySelector('.drw-beacon-box');
+        if (beaconBox) beaconBox.classList.add('is-ready');
+        queueBoardScaling();
+        setTimeout(queueBoardScaling, 160);
+      } catch (e) {
+        console.error("Failed to load boards:", e);
+        beaconEl.innerHTML = '<div class="drw-beacon-box"><span class="drw-beacon-label">Beacon del sorteo</span><strong class="drw-beacon-value">No se pudo cargar la semilla</strong><span class="drw-beacon-proof">La vista sigue mostrando la estructura general.</span></div>';
+        cityEl.innerHTML = '<div class="drw-board-empty"><strong>Ciudad</strong><span>No se pudo generar la llave en este momento.</span></div>';
+        universalEl.innerHTML = '<div class="drw-board-empty"><strong>Universal</strong><span>No se pudo generar la llave en este momento.</span></div>';
+      }
+    })();
+  </script>
+</body>
+</html>

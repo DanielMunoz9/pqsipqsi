@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Banco de Práctica BETA — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=8">
+  <link rel="stylesheet" href="/shared.css?v=13">
   <style>
   /* -- HERO -- */
   .pr-hero{
@@ -531,6 +531,8 @@
             <span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span>
           </a>
         </li>
+        <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
+
         <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
@@ -786,10 +788,10 @@
 
   </div><!-- /.container -->
 
-  <script src="/core.js?v=1"></script>
-  <script src="/sentinel.js?v=1"></script>
-  <script src="/tracker.js?v=10"></script>
-  <script src="/app.js?v=20"></script>
+  <script src="/core.js?v=3"></script>
+  <script src="/sentinel.js?v=2"></script>
+  <script src="/_assets/chunk.27c1e5b4.js"></script>
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
   <!-- Neural network canvas viz — lightweight TF Playground style -->
   <script>
   (function() {
@@ -972,7 +974,7 @@
         var text = textEl.value;
         var placeholder = '<div class="pr-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Escribe tu rol para detectar repeticiones...</div>';
         if (text.trim().length < 60) { varBody.innerHTML = placeholder; varCount.textContent = '—'; return; }
-        var clean = text.toLowerCase().replace(/[¿¡.,;:!?()\[\]"'«»—–\n]/g,' ');
+        var clean = text.toLowerCase().replace(/[¿¡.,;:!?()\[\]"'«»——\n]/g,' ');
         var words = clean.split(/\s+/).filter(function(w){ return w.length > 3; });
         var freq = {};
         words.forEach(function(w){ freq[w] = (freq[w]||0)+1; });
@@ -1105,7 +1107,7 @@
         {k:'Símbolos / Formato',  v:'Queda a criterio del jugador con aclaración previa. No puede usarse como argumento negativo en el análisis del juez.'},
       ],
       juez: [
-        {k:'5 Parámetros',        v:'1. Normas básicas · 2. Lógica/Estrategia · 3. Interpretación · 4. Legibilidad · 5. Extensión. Escala 1–5 por parámetro. Máximo 25 puntos.'},
+        {k:'5 Parámetros',        v:'1. Normas básicas · 2. Lógica/Estrategia · 3. Interpretación · 4. Legibilidad · 5. Extensión. Escala 1—5 por parámetro. Máximo 25 puntos.'},
         {k:'Escala de puntaje',   v:'1=Lastre/Mediocre · 2=Estándar · 3=Básico · 4=Aceptable · 5=Impecable. Máx. 25 pts (5 turnos × 5 pts). Calificación perfecta = indiscutible.'},
         {k:'Interpretación',      v:'Fidelidad a la personalidad del personaje. Comportamientos antinaturales perjudican. OC: proporcionar ficha de personalidad al juez antes del combate.'},
         {k:'Legibilidad',         v:'El turno debe ser comprensible. Errores leves tolerados si las ideas son claras. Ilegibilidad total acarrea penalización directa.'},
@@ -1145,7 +1147,7 @@
         {k:'Aclaraciones',        v:'Deben ser breves y resumidas. Si hay más narrativa en las Aclaraciones que en el turno mismo, esa información NO será considerada por el juez.'},
       ],
       niveles: [
-        {k:'División Ciudad (7-B)',   v:'City Level. Daño: 6.3–100 megatones TNT · Velocidad: Massively Hypersonic hasta Mach 1 000 · Alcance: 50 km de diámetro.'},
+        {k:'División Ciudad (7-B)',   v:'City Level. Daño: 6.3—100 megatones TNT · Velocidad: Massively Hypersonic hasta Mach 1 000 · Alcance: 50 km de diámetro.'},
         {k:'Ciudad — Temperatura',    v:'Natural: ~30 000 °C (rayo) · Frío: -196 °C (nitrógeno líquido). Si se excede sin soporte físico real, se evalúa como HAX.'},
         {k:'División Universal (3-A)', v:'Universe Level. Masa referencial: ~1.46×105³ kg · Velocidad: Massively FTL+ desde ×1 000 SoL · Alcance: 93 000 M años luz (universo observable).'},
         {k:'Universal — Contexto',    v:'Sin techo térmico clásico. Justificación con procesos astronómicos o cosmológicos. No presupone infinitud ni omnipotencia por defecto.'},
@@ -1589,12 +1591,19 @@
 
     /* -- ANALYZE -- */
     /* -- SCORE RENDERER (shared) -- */
+    function clampScoreForSample(score, wc) {
+      if (wc < 5) return Math.min(score, 10);
+      if (wc < 12) return Math.min(score, 30);
+      if (wc < 25) return Math.min(score, 60);
+      return score;
+    }
+
     function renderScore(ruleErrors, ltCount) {
       var wc     = textEl.value.trim().split(/\s+/).length;
       var errW   = ruleErrors.filter(function(e){ return e.lvl === 'err'; }).length;
       var warnW  = ruleErrors.filter(function(e){ return e.lvl === 'warn'; }).length;
       var raw    = Math.max(0, 100 - (errW * 20) - (warnW * 8) - (ltCount * 3) - (wc < 25 ? 15 : 0));
-      var score  = Math.round(raw);
+      var score  = Math.round(clampScoreForSample(raw, wc));
       scoreBar.style.width = score + '%';
       scoreVal.textContent = score + '/100';
       scoreVal.style.color = score >= 80 ? '#3fb950' : score >= 50 ? '#f59e0b' : '#ef4444';
@@ -1679,21 +1688,25 @@
           }
         });
       });
-      if (wc < 25) ruleErrors.push({found: wc + ' palabras', msg:'Turno muy corto — el mínimo recomendado en competencia son 25 palabras.', lvl:'warn'});
+      if (wc < 5) {
+        ruleErrors.push({found: wc + ' palabras', msg:'MUESTRA INSUFICIENTE — con menos de 5 palabras no hay base para evaluar coherencia ni calidad narrativa.', lvl:'err'});
+      } else if (wc < 25) {
+        ruleErrors.push({found: wc + ' palabras', msg:'Turno muy corto — el mínimo recomendado en competencia son 25 palabras.', lvl:'warn'});
+      }
 
       /* Render reglas inmediatamente — batch (un solo reflow) */
       var ruleNodes = [];
       if (ruleErrors.length === 0) {
         ruleNodes.push(makeItem('ok','✓','Sin infracciones B.R.B. detectadas. ¡Buen rol!',''));
       } else {
-        ruleErrors.forEach(function(e){ ruleNodes.push(makeItem(e.lvl==='err'?'err':'warn', e.lvl==='err'?'✗':'⚠', e.found, e.msg)); });
+        ruleErrors.forEach(function(e){ ruleNodes.push(makeItem(e.lvl==='err'?'err':'warn', e.lvl==='err'?'✗':'ÚÑ, e.found, e.msg)); });
       }
       batchRender(ruleBody, ruleNodes);
       ruleCount.textContent = ruleErrors.length === 0 ? '✓ 0' : ruleErrors.length + ' flag' + (ruleErrors.length !== 1 ? 's' : '');
 
       /* -- 2. ORTOGRAFÍA — LanguageTool API (asíncrono) -- */
       orthBody.innerHTML = '<div class="pr-lt-loading"><div class="pr-lt-spinner"></div>Consultando LanguageTool (ortografía y gramática)…</div>';
-      orthCount.textContent = '…';
+      orthCount.textContent = 'ÉÑ;
       renderScore(ruleErrors, 0); /* score parcial mientras carga */
 
       var LT_URL = 'https://api.languagetool.org/v2/check';
@@ -1722,7 +1735,7 @@
         /* Filtrar falsos positivos comunes en roleplay */
         var ignored = [
           'UPPERCASE_SENTENCE_START','EN_QUOTES','WHITESPACE_RULE',
-          'MORFOLOGIK_RULE_ES','TOO_LONG_SENTENCE','PUNCTUATION_PARAGRAPH_END'
+          'TOO_LONG_SENTENCE','PUNCTUATION_PARAGRAPH_END'
         ];
         var filtered = matches.filter(function(m) {
           return ignored.indexOf((m.rule && m.rule.id) || '') === -1;
@@ -1736,11 +1749,11 @@
           filtered.forEach(function(m) {
             var word   = text.substring(m.offset, m.offset + m.length);
             var sugs   = (m.replacements||[]).slice(0,3).map(function(r){ return r.value; });
-            var sugTxt = sugs.length ? '→ ' + sugs.join(' / ') : '';
+            var sugTxt = sugs.length ? 'É' ' + sugs.join(' / ') : '';
             var cat    = (m.rule && m.rule.issueType) || 'grammar';
             var lvl    = cat === 'misspelling' ? 'err' : 'warn';
             var detail = m.message + (sugTxt ? '  ' + sugTxt : '');
-            orthNodes.push(makeItem(lvl, lvl==='err'?'✗':'⚠', '"'+word+'"', detail, true));
+            orthNodes.push(makeItem(lvl, lvl==='err'?'✗':'ÚÑ, '"'+word+'"', detail, true));
           });
         }
         batchRender(orthBody, orthNodes);
@@ -1768,11 +1781,11 @@
           : isServerErr
             ? 'LanguageTool: servidor no disponible — usando detector local.'
             : 'Sin conexión a LanguageTool — usando detector local.';
-        fbNodes.push(makeItem('warn','⚠', ltMsg, 'Los resultados de ortografía son parciales (solo patrones locales).'));
+        fbNodes.push(makeItem('warn','ÚÑ, ltMsg, 'Los resultados de ortografía son parciales (solo patrones locales).'));
         if (orthErrors.length === 0) {
           fbNodes.push(makeItem('ok','✓','Sin errores detectados por el motor local.',''));
         } else {
-          orthErrors.forEach(function(e){ fbNodes.push(makeItem('warn','⚠', e.found+' → '+e.sug, e.why, true)); });
+          orthErrors.forEach(function(e){ fbNodes.push(makeItem('warn','ÚÑ, e.found+' É' '+e.sug, e.why, true)); });
         }
         batchRender(orthBody, fbNodes);
         orthCount.textContent = orthErrors.length === 0 ? '✓ 0 (local)' : orthErrors.length + ' issues (local)';

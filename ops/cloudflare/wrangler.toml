@@ -1,0 +1,10 @@
+name = "bellator-proxy"
+main = "worker.js"
+compatibility_date = "2026-05-06"
+routes = [
+  "bellatorrpg.online/*",
+  "www.bellatorrpg.online/*",
+]
+
+[vars]
+UPSTREAM_ORIGIN = "https://bellatorrpg-740609680593.us-central1.run.app"

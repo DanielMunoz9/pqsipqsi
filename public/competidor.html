@@ -3,25 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil del Competidor â€” BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=8">
+    <title>Perfil del Competidor - BELLATOR ROLBATTLE</title>
+  <link rel="stylesheet" href="/shared.css?v=13">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
   <style>
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       F1-STYLE PROFILE â€” variables de color dinÃ¡mico
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+      /* F1 profile theme variables */
     .bl-profile-theme {
       --driver-color: #D4AF37;
       --driver-color-rgb: 212,175,55;
     }
 
-    /* â”€â”€ HERO COVER (estilo F1 â€” banda de color lateral + nÃºmero grande) â”€â”€ */
+      /* F1 hero cover */
     .f1-hero {
       position: relative;
       overflow: hidden;
       min-height: 420px;
       background: linear-gradient(135deg, #07090e 0%, #0c1120 55%, #07090e 100%);
       border-bottom: 1px solid rgba(var(--driver-color-rgb),.22);
+    }
+    .f1-hero-media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .f1-hero-media img {
+      position: absolute;
+      inset: -6%;
+      width: 112%;
+      height: 112%;
+      object-fit: cover;
+      object-position: center 18%;
+      transform: scale(1.08);
+    }
+    .f1-hero-media-blur {
+      opacity: .55;
+      filter: blur(26px) saturate(1.12) contrast(1.08) brightness(.44);
+    }
+    .f1-hero-media-cut {
+      right: -8%;
+      left: auto;
+      width: 46%;
+      opacity: .22;
+      filter: saturate(1.16) contrast(1.08) brightness(.68);
+      mask-image: linear-gradient(to left, rgba(0,0,0,.94) 26%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,.94) 26%, transparent 100%);
+    }
+    .f1-hero-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 22% 20%, rgba(var(--driver-color-rgb), .20) 0%, transparent 28%),
+        linear-gradient(90deg, rgba(7,9,14,.96) 0%, rgba(7,9,14,.84) 34%, rgba(7,9,14,.24) 74%, rgba(7,9,14,.10) 100%),
+        linear-gradient(180deg, rgba(7,9,14,.18) 0%, rgba(7,9,14,.82) 100%);
+    }
+    .f1-hero-media-fallback {
+      position: absolute;
+      left: 34px;
+      bottom: 24px;
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(4.4rem, 12vw, 8.8rem);
+      line-height: .8;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.05);
+      text-transform: uppercase;
+    }
+    /* Bandera vertical integrada al fondo del avatar */
+    .f1-hero-flag-wm {
+      position: absolute;
+      left: -10px;
+      bottom: -24px;
+      width: 124px;
+      height: 188px;
+      z-index: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      opacity: .56;
+      transform: rotate(-7deg);
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 18px 36px rgba(0,0,0,.28);
+    }
+    .f1-hero-flag-wm::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7,9,14,.06) 0%, rgba(7,9,14,.22) 36%, rgba(7,9,14,.82) 100%),
+        linear-gradient(90deg, rgba(7,9,14,.16) 0%, rgba(7,9,14,0) 45%, rgba(7,9,14,.34) 100%);
+    }
+    .f1-hero-flag-wm .fi {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      filter: saturate(1.12) contrast(1.06) brightness(.95);
+      transform: scale(1.18);
+      transform-origin: center;
     }
     /* Franja diagonal de color (racing stripe) */
     .f1-hero::before {
@@ -50,7 +134,7 @@
       pointer-events: none;
     }
 
-    /* NÃºmero grande de posiciÃ³n (background watermark) */
+    /* Position number watermark */
     .f1-hero-number-bg {
       position: absolute;
       top: 50%;
@@ -79,7 +163,7 @@
       padding: 28px 0 0;
     }
 
-    /* Columna izquierda: nÃºmero de posiciÃ³n + barra vertical */
+    /* Position number column */
     .f1-hero-number-col {
       display: flex;
       flex-direction: column;
@@ -125,23 +209,66 @@
 
     /* Avatar */
     .f1-hero-avatar-col {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
+      gap: 0;
       padding: 0 20px 28px 12px;
       flex-shrink: 0;
+      isolation: isolate;
+    }
+    .f1-country-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(7,9,14,.68);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 12px 30px rgba(0,0,0,.24);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .f1-country-banner-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+    .f1-country-banner-label {
+      font-size: .54rem;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: rgba(238,244,255,.40);
+    }
+    .f1-country-banner-value {
+      font-size: .8rem;
+      color: rgba(238,244,255,.88);
+      line-height: 1.05;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 15ch;
     }
     .f1-avatar-ring {
       position: relative;
       width: 110px; height: 110px;
       border-radius: 50%;
       flex-shrink: 0;
+      z-index: 1;
+      box-shadow: 0 24px 46px rgba(0,0,0,.32);
       animation: f1AvatarPulse 3s ease-in-out infinite;
     }
     @keyframes f1AvatarPulse {
       0%,100% { box-shadow: 0 0 0 3px rgba(var(--driver-color-rgb),.35), 0 0 24px rgba(var(--driver-color-rgb),.18); }
       50%     { box-shadow: 0 0 0 5px rgba(var(--driver-color-rgb),.55), 0 0 40px rgba(var(--driver-color-rgb),.32); }
+    }
+    @keyframes f1AvatarFloat {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-5px); }
     }
     .f1-avatar-ring img,
     .f1-avatar-ring .f1-avatar-ph {
@@ -268,16 +395,25 @@
       color: rgba(238,244,255,.58);
     }
 
-    /* DescripciÃ³n bio corta */
+    /* Short bio summary */
     .f1-hero-summary {
       font-size: .88rem;
       color: rgba(238,244,255,.55);
       max-width: 480px;
       line-height: 1.5;
       margin-top: 4px;
+      text-wrap: pretty;
+      font-family: 'Barlow Semi Condensed', 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Noto Sans Symbols', sans-serif;
+    }
+    #profile-breadcrumb {
+      display: block;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Botones de acciÃ³n del hero */
+    /* Hero actions */
     .f1-hero-actions {
       display: flex;
       gap: 10px;
@@ -285,7 +421,7 @@
       margin-top: 8px;
     }
 
-    /* â”€â”€ BARRA DE STATS F1 (W / L / D / STREAK / RANKING) â”€â”€ */
+    /* ── BARRA DE STATS F1 (W / L / D / STREAK / RANKING) ── */
     .f1-stats-bar {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -339,7 +475,7 @@
       .f1-stat-cell:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,.05); }
     }
 
-    /* â”€â”€ GRID PRINCIPAL POST-HERO â”€â”€ */
+    /* ── GRID PRINCIPAL POST-HERO ── */
     .f1-main-grid {
       max-width: 1320px;
       margin: 0 auto;
@@ -355,7 +491,7 @@
     }
     .f1-main-col { display: flex; flex-direction: column; gap: 20px; }
 
-    /* â”€â”€ TARJETAS DE SECCIÃ“N (reemplazan bl-stat-block) â”€â”€ */
+    /* ── TARJETAS DE SECCIÓN (reemplazan bl-stat-block) ── */
     .f1-card {
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,.07);
@@ -390,7 +526,7 @@
     }
     .f1-card-body { padding: 18px 20px; }
 
-    /* â”€â”€ PANEL DERECHO: cards de info â”€â”€ */
+    /* ── PANEL DERECHO: cards de info ── */
     .f1-aside-col { display: flex; flex-direction: column; gap: 16px; }
     .f1-info-grid { display: grid; gap: 10px; }
     .f1-info-row {
@@ -422,7 +558,7 @@
       transition: color .5s ease;
     }
 
-    /* â”€â”€ CLAN BADGE â”€â”€ */
+    /* ── CLAN BADGE ── */
     .f1-clan-badge {
       display: flex;
       align-items: center;
@@ -461,7 +597,7 @@
       margin-top: 2px;
     }
 
-    /* â”€â”€ RECORD ROW (dentro de fight history card) â”€â”€ */
+    /* ── RECORD ROW (dentro de fight history card) ── */
     .f1-record-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -491,7 +627,7 @@
       margin-top: 4px;
     }
 
-    /* â”€â”€ STREAK BADGE â”€â”€ */
+    /* ── STREAK BADGE ── */
     .f1-streak-badge {
       display: inline-flex;
       align-items: center;
@@ -518,74 +654,391 @@
       color: rgba(238,244,255,.45);
     }
 
-    /* â”€â”€ FIGHT HISTORY CARDS (mantenido del original) â”€â”€ */
+    /* ── FIGHT HISTORY CARDS (mantenido del original) ── */
     .f1-fight-empty {
       padding: 22px 20px;
       color: rgba(255,255,255,.35);
       font-size: .9rem;
       font-style: italic;
     }
-    .bl-fight-card {
-      border-bottom: 1px solid rgba(255,255,255,.07);
-      padding: 14px 20px;
+    .bl-fight-summary {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 12px;
     }
-    .bl-fight-card:last-child { border-bottom: none; }
+    .bl-fight-summary-copy {
+      color: rgba(255,255,255,.52);
+      font-size: .82rem;
+      line-height: 1.55;
+    }
+    .bl-fight-summary-bar {
+      display: flex;
+      width: 100%;
+      min-height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .bl-fight-summary-segment {
+      min-width: 0;
+      transition: width .25s ease;
+    }
+    .bl-fight-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .bl-fight-summary-cell {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    .bl-fight-summary-label {
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.42);
+      margin-bottom: 6px;
+    }
+    .bl-fight-summary-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .bl-fight-summary-value.win { color: #4ade80; }
+    .bl-fight-summary-value.loss { color: #f87171; }
+    .bl-fight-summary-value.draw { color: #fbbf24; }
+    .bl-fight-history-shell {
+      margin-top: 14px;
+    }
+    .bl-fight-history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .bl-fight-history-copy {
+      font-size: .82rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,.68);
+    }
+    .bl-fight-history-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    .bl-fight-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,244,223,.14);
+      background:
+        radial-gradient(circle at top right, rgba(var(--driver-color-rgb), .22) 0%, transparent 34%),
+        linear-gradient(145deg, rgba(255,250,242,.16) 0%, rgba(255,255,255,.08) 54%, rgba(255,255,255,.04) 100%);
+      box-shadow: 0 22px 44px rgba(0,0,0,.18);
+      backdrop-filter: blur(14px);
+    }
+    .bl-fight-card:last-child { margin-bottom: 0; }
     .bl-fight-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .bl-fight-header-main,
+    .bl-fight-header-side {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bl-fight-header-main {
+      min-width: 0;
       font-size: .72rem;
-      color: rgba(255,255,255,.45);
+      color: rgba(255,255,255,.54);
       letter-spacing: .08em;
       text-transform: uppercase;
-      margin-bottom: 10px;
     }
     .bl-fight-header-dot {
       width: 5px; height: 5px; border-radius: 50%;
       background: rgba(255,255,255,.25); flex-shrink: 0;
     }
-    .bl-fight-matchup { display: flex; align-items: center; gap: 10px; }
-    .bl-fight-fighter { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .bl-fight-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(8,10,16,.44);
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,244,223,.9);
+    }
+    .bl-fight-event-name {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.92);
+    }
+    .bl-fight-matchup {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+    }
+    .bl-fight-fighter {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      padding: 13px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(7,9,14,.34);
+    }
     .bl-fight-fighter.right { flex-direction: row-reverse; text-align: right; }
+    .bl-fight-fighter.win {
+      border-color: rgba(34,197,94,.26);
+      background: rgba(34,197,94,.09);
+    }
+    .bl-fight-fighter.loss {
+      border-color: rgba(239,68,68,.23);
+      background: rgba(239,68,68,.08);
+    }
+    .bl-fight-fighter.draw {
+      border-color: rgba(251,191,36,.24);
+      background: rgba(251,191,36,.08);
+    }
     .bl-fight-avatar {
-      width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
-      border: 2px solid rgba(255,255,255,.12); flex-shrink: 0;
-      background: rgba(255,255,255,.06);
+      width: 54px; height: 54px; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(255,255,255,.14); flex-shrink: 0;
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
     }
     .bl-fight-avatar-placeholder {
-      width: 42px; height: 42px; border-radius: 50%;
+      width: 54px; height: 54px; border-radius: 50%;
       background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.12);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Teko', sans-serif; font-size: 1.3rem;
+      font-family: 'Teko', sans-serif; font-size: 1.45rem;
       color: rgba(255,255,255,.5); flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
     }
     .bl-fight-info { min-width: 0; }
     .bl-fight-name {
       font-family: 'Barlow Semi Condensed', sans-serif; font-weight: 700;
-      font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff;
+      font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff;
     }
-    .bl-fight-record { font-size: .75rem; color: rgba(255,255,255,.45); margin-top: 1px; }
-    .bl-fight-result-badge {
-      flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
-      gap: 3px; min-width: 52px;
+    .bl-fight-role {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin-top: 8px;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.8);
     }
-    .bl-fight-vs { font-family: 'Teko', sans-serif; font-size: 1rem; color: rgba(255,255,255,.3); }
+    .bl-fight-role.win {
+      border-color: rgba(34,197,94,.32);
+      background: rgba(34,197,94,.15);
+      color: #bbf7d0;
+    }
+    .bl-fight-role.loss {
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.13);
+      color: #fecaca;
+    }
+    .bl-fight-role.draw {
+      border-color: rgba(251,191,36,.28);
+      background: rgba(251,191,36,.12);
+      color: #fde68a;
+    }
+    .bl-fight-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 82px;
+    }
+    .bl-fight-vs-ring {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 1.55rem;
+      letter-spacing: .06em;
+      color: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), rgba(7,9,14,.78));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .bl-fight-center-copy {
+      font-size: .66rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.46);
+      text-align: center;
+    }
     .bl-fight-result-pill {
-      padding: 3px 10px; border-radius: 999px; font-size: .7rem;
+      padding: 5px 11px; border-radius: 999px; font-size: .7rem;
       font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
     }
     .bl-fight-result-pill.win  { background: rgba(34,197,94,.18); color: #4ade80; border: 1px solid rgba(34,197,94,.35); }
     .bl-fight-result-pill.loss { background: rgba(239,68,68,.15); color: #f87171; border: 1px solid rgba(239,68,68,.3); }
     .bl-fight-result-pill.draw { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
-    .bl-fight-char { font-size: .7rem; color: rgba(255,255,255,.32); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bl-fight-char { font-size: .72rem; color: rgba(255,255,255,.54); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bl-fight-division-tag {
-      display: inline-block; font-size: .65rem; letter-spacing: .07em;
+      display: inline-flex; align-items: center; min-height: 28px;
+      font-size: .65rem; letter-spacing: .07em;
       text-transform: uppercase; color: var(--bl-gold, #D4AF37);
-      border: 1px solid rgba(212,175,55,.25); border-radius: 4px; padding: 1px 6px; margin-left: auto;
+      border: 1px solid rgba(212,175,55,.28); border-radius: 999px; padding: 0 10px;
+      background: rgba(212,175,55,.10);
+    }
+    .bl-fight-division-tag.muted {
+      color: rgba(255,255,255,.58);
+      border-color: rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .bl-fight-details {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .bl-fight-detail {
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(7,9,14,.34);
+      border: 1px solid rgba(255,255,255,.08);
+      min-width: 0;
+    }
+    .bl-fight-detail-label {
+      font-size: .63rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.42);
+      margin-bottom: 6px;
+    }
+    .bl-fight-detail-value {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.92);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bl-fight-notes {
+      margin-top: 12px;
+      padding: 14px 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.06);
+    }
+    .bl-fight-note-copy {
+      font-size: .83rem;
+      line-height: 1.55;
+      color: rgba(255,255,255,.78);
+    }
+    .bl-fight-expander {
+      margin-top: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      background: rgba(9,12,20,.30);
+      overflow: hidden;
+    }
+    .bl-fight-expander-summary,
+    .bl-fight-history-more-summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    .bl-fight-expander-summary::-webkit-details-marker,
+    .bl-fight-history-more-summary::-webkit-details-marker {
+      display: none;
+    }
+    .bl-fight-expander-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      font-size: .74rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.76);
+    }
+    .bl-fight-expander-summary::after,
+    .bl-fight-history-more-summary::after {
+      content: '+';
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.84);
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .bl-fight-expander[open] .bl-fight-expander-summary::after,
+    .bl-fight-history-more[open] .bl-fight-history-more-summary::after {
+      content: '-';
+    }
+    .bl-fight-expander-meta {
+      font-size: .65rem;
+      color: rgba(255,255,255,.46);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+    .bl-fight-expander-body {
+      padding: 0 15px 15px;
+    }
+    .bl-fight-history-more {
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      background: rgba(255,255,255,.04);
+      overflow: hidden;
+    }
+    .bl-fight-history-more-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-size: .92rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.9);
+    }
+    .bl-fight-history-more-body {
+      padding: 0 14px 14px;
     }
 
-    /* â”€â”€ CHARACTER CARDS â”€â”€ */
+    /* ── CHARACTER CARDS ── */
     .f1-chars-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .f1-char-edit-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:8px; }
     .f1-char-card {
       text-align: center;
       padding: 14px 8px;
@@ -600,16 +1053,19 @@
       border-radius: 50%;
       background: rgba(var(--driver-color-rgb),.14);
       border: 2px solid rgba(var(--driver-color-rgb),.28);
+      overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       font-family: 'Teko', sans-serif; font-size: 1.4rem;
       color: var(--driver-color, #D4AF37);
       margin: 0 auto 8px;
       transition: background .5s ease, border-color .5s ease, color .5s ease;
     }
+    .f1-char-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .f1-char-avatar-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
     .f1-char-name { font-size: .85rem; font-weight: 700; color: rgba(238,244,255,.82); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .f1-char-type { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(238,244,255,.35); margin-top: 3px; }
 
-    /* â”€â”€ STAT GRID (season stats / career stats) â”€â”€ */
+    /* ── STAT GRID (season stats / career stats) ── */
     .f1-stat-grid { display: grid; gap: 0; }
     .f1-stat-line {
       display: flex;
@@ -623,11 +1079,11 @@
     .f1-stat-key { font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(238,244,255,.35); }
     .f1-stat-value { font-size: .88rem; color: rgba(238,244,255,.82); font-weight: 600; text-align: right; }
 
-    /* â”€â”€ BIO PANEL â”€â”€ */
-    .f1-bio-text p { color: rgba(238,244,255,.72); font-size: .92rem; line-height: 1.7; margin-bottom: 10px; }
+    /* ── BIO PANEL ── */
+    .f1-bio-text p { color: rgba(238,244,255,.72); font-size: .92rem; line-height: 1.7; margin-bottom: 10px; font-family: 'Barlow Semi Condensed', 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Noto Sans Symbols', sans-serif; }
     .f1-bio-text p:last-child { margin-bottom: 0; }
 
-    /* â”€â”€ TITLE BADGE â”€â”€ */
+    /* ── TITLE BADGE ── */
     .f1-title-badge {
       display: inline-flex;
       align-items: center;
@@ -644,7 +1100,7 @@
       transition: background .5s ease, border-color .5s ease, color .5s ease;
     }
 
-    /* â”€â”€ RELATED LINKS CARDS â”€â”€ */
+    /* ── RELATED LINKS CARDS ── */
     .f1-article-card {
       display: block;
       text-decoration: none;
@@ -665,7 +1121,7 @@
     .f1-article-title { font-size: .88rem; font-weight: 700; color: rgba(238,244,255,.82); margin-bottom: 2px; }
     .f1-article-sub { font-size: .78rem; color: rgba(238,244,255,.4); }
 
-    /* â”€â”€ EDIT BIO BUTTON â”€â”€ */
+    /* ── EDIT BIO BUTTON ── */
     .f1-edit-btn {
       margin-top: 14px;
       display: none;
@@ -686,8 +1142,29 @@
       border-color: rgba(var(--driver-color-rgb),.28);
       color: var(--driver-color, #D4AF37);
     }
+    .f1-edit-btn-hero {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      padding: 0 12px;
+      min-height: 34px;
+      background: rgba(var(--driver-color-rgb),.14);
+      border-color: rgba(var(--driver-color-rgb),.28);
+      color: #fff;
+      font-weight: 700;
+      font-size: .68rem;
+      letter-spacing: 1.4px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18), inset 0 0 0 1px rgba(var(--driver-color-rgb),.14);
+    }
+    .f1-edit-btn-hero:hover {
+      background: rgba(var(--driver-color-rgb),.22);
+      border-color: rgba(var(--driver-color-rgb),.42);
+      color: #fff;
+      transform: translateY(-1px);
+    }
 
-    /* â”€â”€ AVATAR UPLOAD SECTION â”€â”€ */
+    /* ── AVATAR UPLOAD SECTION ── */
     .f1-avatar-upload {
       display: none;
       margin-top: 8px;
@@ -733,21 +1210,436 @@
     }
     .f1-upload-preview.show { display: block; }
     .f1-upload-msg { font-size: .75rem; color: rgba(238,244,255,.45); text-align: center; }
+    .f1-upload-btn.is-disabled { opacity: .45; pointer-events: none; }
+    .f1-upload-preview--square { width: 56px; height: 56px; border-radius: 14px; }
+    .f1-upload-msg--left { text-align: left; min-height: 1.1em; }
+    .f1-char-upload-card {
+      display: grid;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .f1-char-upload-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 56px;
+    }
 
-    /* â”€â”€ RESPONSIVO â”€â”€ */
+    .f1-profile-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10020;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .f1-profile-modal-card {
+      position: relative;
+      width: min(960px, 100%);
+      max-height: min(88vh, 920px);
+      overflow: auto;
+      border-radius: 26px;
+      border: 1px solid rgba(var(--driver-color-rgb), .22);
+      background:
+        radial-gradient(circle at top right, rgba(var(--driver-color-rgb), .16) 0%, transparent 28%),
+        linear-gradient(180deg, rgba(15,20,28,.98), rgba(8,11,17,.98));
+      box-shadow: 0 34px 90px rgba(0,0,0,.46);
+      padding: 28px;
+    }
+    .f1-profile-modal-card::before {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.06);
+      pointer-events: none;
+    }
+    .f1-profile-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.62);
+      font-size: 1.1rem;
+    }
+    .f1-profile-modal-head {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 6px;
+      margin-bottom: 22px;
+      padding-right: 54px;
+    }
+    .f1-profile-modal-kicker {
+      font-size: .64rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--driver-color, #D4AF37);
+    }
+    .f1-profile-modal-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      line-height: .88;
+      letter-spacing: -.02em;
+      color: #fff;
+      margin: 0;
+    }
+    .f1-profile-modal-copy {
+      color: rgba(238,244,255,.56);
+      font-size: .92rem;
+      line-height: 1.5;
+      max-width: 62ch;
+    }
+    .f1-profile-edit-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: 20px;
+    }
+    .f1-profile-edit-main,
+    .f1-profile-edit-side {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .f1-profile-panel {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .f1-form-stack {
+      display: grid;
+      gap: 14px;
+    }
+    .f1-form-grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .f1-form-field {
+      display: grid;
+      gap: 6px;
+    }
+    .f1-form-label {
+      font-size: .72rem;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(238,244,255,.46);
+    }
+    .f1-form-note {
+      font-size: .76rem;
+      line-height: 1.45;
+      color: rgba(238,244,255,.44);
+    }
+    .f1-form-note.is-locked { color: #fbbf24; }
+    .f1-form-input,
+    .f1-form-select,
+    .f1-form-textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      font-size: .92rem;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .f1-form-select:disabled {
+      opacity: .55;
+    }
+    .f1-form-textarea {
+      min-height: 150px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.55;
+    }
+    .f1-profile-side-head {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .f1-profile-side-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .f1-profile-side-copy {
+      font-size: .84rem;
+      color: rgba(238,244,255,.48);
+      line-height: 1.45;
+    }
+    .f1-profile-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .f1-profile-save {
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, var(--driver-color, #D4AF37), rgba(255,255,255,.92));
+      color: #08111a;
+      font-size: .9rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .f1-profile-status {
+      font-size: .82rem;
+      color: rgba(238,244,255,.50);
+    }
+
+    /* ── RESPONSIVO ── */
     @media (max-width: 760px) {
-      .f1-hero { min-height: 320px; }
-      .f1-hero-inner { min-height: 320px; flex-wrap: wrap; align-items: flex-end; }
-      .f1-hero-number-col { width: 56px; }
-      .f1-hero-pos-num { font-size: 2.8rem; }
-      .f1-avatar-ring, .f1-avatar-ring img, .f1-avatar-ring .f1-avatar-ph { width: 80px; height: 80px; }
-      .f1-driver-name { font-size: clamp(2rem, 8vw, 3rem); }
+      .bl-fight-history-grid {
+        grid-template-columns: 1fr;
+      }
+      .bl-fight-card {
+        padding: 16px;
+        border-radius: 20px;
+      }
+      .bl-fight-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .bl-fight-header-side {
+        justify-content: space-between;
+      }
+      .bl-fight-matchup {
+        grid-template-columns: 1fr;
+      }
+      .bl-fight-center {
+        order: -1;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      .bl-fight-fighter.right {
+        flex-direction: row;
+        text-align: left;
+      }
+      .bl-fight-expander-summary,
+      .bl-fight-history-more-summary {
+        align-items: flex-start;
+      }
+      .bl-fight-details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .f1-hero { min-height: 468px; }
+      .f1-hero-media-blur {
+        opacity: .64;
+        filter: blur(18px) saturate(1.14) contrast(1.06) brightness(.46);
+      }
+      .f1-hero-media-cut {
+        inset: 18px auto auto 50%;
+        width: 86%;
+        height: 56%;
+        opacity: .28;
+        transform: translateX(-50%) scale(1.04);
+        object-position: center 16%;
+        mask-image: radial-gradient(circle at center, rgba(0,0,0,.96) 0%, rgba(0,0,0,.72) 42%, transparent 92%);
+        -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,.96) 0%, rgba(0,0,0,.72) 42%, transparent 92%);
+      }
+      .f1-hero-media::after {
+        background:
+          radial-gradient(circle at 50% 18%, rgba(var(--driver-color-rgb), .18) 0%, transparent 26%),
+          linear-gradient(180deg, rgba(7,9,14,.26) 0%, rgba(7,9,14,.44) 34%, rgba(7,9,14,.70) 100%);
+      }
+      .f1-hero-inner {
+        min-height: auto;
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr);
+        grid-template-areas:
+          'number header'
+          'avatar avatar'
+          'name name'
+          'meta meta'
+          'summary summary'
+          'actions actions';
+        align-items: start;
+        gap: 8px 10px;
+        padding: 16px 12px 0;
+      }
+      .f1-hero-number-col {
+        grid-area: number;
+        width: 42px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 4px 0 0;
+        gap: 4px;
+      }
+      .f1-hero-pos-badge { align-items: flex-start; }
+      .f1-hero-pos-num { font-size: 1.72rem; }
+      .f1-hero-pos-label { font-size: .42rem; letter-spacing: 1.8px; }
+      .f1-hero-pos-line { height: 24px; }
+      .f1-hero-avatar-col {
+        grid-area: avatar;
+        width: 100%;
+        min-height: 152px;
+        align-items: center;
+        justify-content: flex-start;
+        justify-self: center;
+        padding: 12px 0 10px;
+        transform: none;
+      }
+      .f1-hero-avatar-col::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 10px;
+        width: 138px;
+        height: 138px;
+        border-radius: 50%;
+        transform: translateX(-50%);
+        background: radial-gradient(circle, rgba(var(--driver-color-rgb), .16) 0%, rgba(var(--driver-color-rgb), .06) 42%, transparent 74%);
+        z-index: 0;
+        pointer-events: none;
+      }
+      .f1-hero-flag-wm {
+        top: 18px;
+        left: 50%;
+        bottom: auto;
+        width: 168px;
+        height: 112px;
+        opacity: .78;
+        border-radius: 24px;
+        transform: translateX(-50%) rotate(-6deg);
+        box-shadow: 0 14px 28px rgba(0,0,0,.22), 0 0 0 1px rgba(255,255,255,.05);
+      }
+      .f1-hero-flag-wm::before {
+        content: none;
+      }
+      .f1-hero-flag-wm::after {
+        background:
+          linear-gradient(180deg, rgba(7,9,14,.02) 0%, rgba(7,9,14,.12) 34%, rgba(7,9,14,.38) 100%),
+          linear-gradient(90deg, rgba(7,9,14,.08) 0%, rgba(7,9,14,0) 45%, rgba(7,9,14,.16) 100%);
+        z-index: 2;
+      }
+      .f1-hero-flag-wm .fi {
+        position: relative;
+        z-index: 0;
+        transform: scale(1.12);
+        filter: saturate(1.12) contrast(1.06) brightness(1.02);
+      }
+      .f1-avatar-ring,
+      .f1-avatar-ring img,
+      .f1-avatar-ring .f1-avatar-ph {
+        width: 98px;
+        height: 98px;
+      }
+      .f1-avatar-ring {
+        box-shadow: 0 20px 38px rgba(0,0,0,.30);
+        animation: f1AvatarPulse 3s ease-in-out infinite, f1AvatarFloat 5.2s ease-in-out infinite;
+      }
+      .f1-hero-copy {
+        display: contents;
+      }
+      .f1-hero-eyebrow {
+        grid-area: header;
+        justify-content: space-between;
+        gap: 6px 8px;
+        align-self: center;
+        min-width: 0;
+      }
+      .f1-edit-btn-hero { display: inline-flex; width: max-content; }
+      .f1-driver-name {
+        grid-area: name;
+        justify-self: center;
+        width: min(100%, 15ch);
+        text-align: center;
+        font-size: clamp(1.72rem, 8.4vw, 2.24rem);
+        letter-spacing: -.4px;
+        line-height: .82;
+        display: -webkit-box;
+        line-clamp: 3;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-wrap: balance;
+        align-self: start;
+      }
+      .f1-hero-meta-row {
+        grid-area: meta;
+        justify-content: center;
+        gap: 6px 4px;
+        margin-top: 0;
+        min-width: 0;
+      }
+      .f1-pill { font-size: .58rem; letter-spacing: .8px; padding: 4px 7px; }
+      .f1-nationality { font-size: .7rem; gap: 5px; }
+      .f1-flag { width: 20px; height: 14px; }
+      .f1-hero-summary {
+        grid-area: summary;
+        max-width: none;
+        justify-self: center;
+        margin-top: 0;
+        width: min(100%, 36ch);
+        text-align: center;
+        font-size: .77rem;
+        line-height: 1.48;
+        display: block;
+        overflow: visible;
+        padding-top: 0;
+      }
+      .f1-hero-actions {
+        grid-area: actions;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 0;
+        padding-bottom: 12px;
+      }
+      .f1-hero-actions .bl-btn-primary,
+      .f1-hero-actions .bl-btn-secondary {
+        width: 100%;
+        min-height: 40px;
+        padding: 0 10px;
+        font-size: .78rem;
+      }
+      .f1-edit-btn-secondary { display: none !important; }
+      .f1-stats-bar { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .f1-stat-cell { padding: 12px 8px 10px; }
+      .f1-stat-num { font-size: 1.52rem; }
+      .f1-stat-label { font-size: .5rem; letter-spacing: 1.6px; }
       .f1-chars-row { grid-template-columns: repeat(3,1fr); }
+      .f1-char-edit-grid { grid-template-columns: 1fr; }
       .f1-main-grid { padding: 0 14px 40px; }
+      .f1-profile-modal-card { padding: 22px 18px; }
+      .f1-profile-edit-grid,
+      .f1-form-grid-two { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
-      .bl-fight-name { font-size: .82rem; }
-      .bl-fight-avatar, .bl-fight-avatar-placeholder { width: 34px; height: 34px; font-size: 1.1rem; }
+      .bl-fight-name { font-size: .86rem; }
+      .bl-fight-avatar, .bl-fight-avatar-placeholder { width: 44px; height: 44px; font-size: 1.2rem; }
+      .bl-fight-vs-ring { width: 48px; height: 48px; font-size: 1.2rem; }
+      .bl-fight-fighter { padding: 11px 12px; }
+      .bl-fight-expander-summary,
+      .bl-fight-history-more-summary {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .bl-fight-expander-meta {
+        text-align: left;
+      }
+      .bl-fight-details { grid-template-columns: 1fr; }
       .f1-chars-row { grid-template-columns: repeat(2,1fr); }
     }
   </style>
@@ -792,17 +1684,19 @@
         </svg>
         <span>BELLATOR</span>
       </a>
-      <button class="bl-hamburger" id="bl-burger" aria-label="MenÃº">
+      <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
       </button>
       <ul class="bl-navbar-links" id="bl-links">
         <li><a class="bl-navlink" href="/">Inicio</a></li>
         <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
-        <li><a class="bl-navlink" href="/clasificacion">ClasificaciÃ³n</a></li>
+        <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
-        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">PrÃ¡ctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
-        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px">CosmologÃ­as<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
+
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
         <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
@@ -816,13 +1710,14 @@
       <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
     </div>
 
-    <!-- â•â• F1 HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- F1 hero -->
     <div class="f1-hero bl-profile-theme" id="profile-shell">
-      <!-- nÃºmero de posiciÃ³n watermark (fondo) -->
+      <div class="f1-hero-media" id="profile-hero-media" aria-hidden="true"></div>
+      <!-- Position number watermark -->
       <div class="f1-hero-number-bg" id="profile-number-bg">--</div>
 
       <div class="f1-hero-inner">
-        <!-- Columna: nÃºmero de posiciÃ³n + barra vertical -->
+        <!-- Position number column -->
         <div class="f1-hero-number-col">
           <div class="f1-hero-pos-badge">
             <div class="f1-hero-pos-num" id="profile-number">--</div>
@@ -833,18 +1728,9 @@
 
         <!-- Avatar -->
         <div class="f1-hero-avatar-col">
+          <div class="f1-hero-flag-wm" id="profile-flag-wm" aria-hidden="true"></div>
           <div class="f1-avatar-ring" id="profile-avatar-box">
             <div class="f1-avatar-ph" id="profile-placeholder">?</div>
-          </div>
-          <!-- Upload de avatar: oculto, se muestra via JS -->
-          <div class="f1-avatar-upload" id="avatar-upload-section">
-            <div class="f1-upload-row">
-              <input type="url" class="f1-upload-input" id="avatar-url-input" placeholder="https://... o subir archivo">
-              <label class="f1-upload-btn" for="avatar-file-input" title="Subir imagen">ðŸ“·</label>
-              <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
-            </div>
-            <img class="f1-upload-preview" id="avatar-preview" src="" alt="preview">
-            <div class="f1-upload-msg" id="avatar-upload-msg"></div>
           </div>
         </div>
 
@@ -856,6 +1742,7 @@
               <span class="f1-hero-color-dot" id="bl-color-dot"></span>
               <span id="profile-color-chip">Color activo</span>
             </span>
+            <button id="btn-edit-hero" class="f1-edit-btn f1-edit-btn-hero" type="button">Editar</button>
           </div>
 
           <h1 class="f1-driver-name" id="profile-name">Cargando...</h1>
@@ -865,12 +1752,12 @@
             <div class="f1-nationality" id="profile-nationality">
               <!-- inyectado por JS -->
             </div>
-            <!-- DivisiÃ³n pill -->
-            <span class="f1-pill" id="profile-division">Sin divisiÃ³n</span>
+            <!-- Division pill -->
+            <span class="f1-pill" id="profile-division">Sin división</span>
             <!-- Temporada -->
             <span class="f1-pill f1-pill-neutral">Temporada 2026</span>
             <!-- Fecha -->
-            <span class="f1-pill f1-pill-neutral" id="profile-since">â€”</span>
+            <span class="f1-pill f1-pill-neutral" id="profile-since">-</span>
           </div>
 
           <p class="f1-hero-summary" id="profile-summary">Consultando datos del competidor.</p>
@@ -897,7 +1784,7 @@
           <div class="f1-stat-label">Empates</div>
         </div>
         <div class="f1-stat-cell">
-          <div class="f1-stat-num" id="f1-streak-num">â€”</div>
+          <div class="f1-stat-num" id="f1-streak-num">-</div>
           <div class="f1-stat-label">Racha</div>
         </div>
         <div class="f1-stat-cell">
@@ -906,7 +1793,7 @@
         </div>
       </div>
     </div>
-    <!-- â•â• FIN F1 HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══ FIN F1 HERO ══════════════════════════════════════════ -->
 
     <!-- Grids principales -->
     <div class="f1-main-grid">
@@ -924,11 +1811,11 @@
           </div>
         </div>
 
-        <!-- RÃ©cord -->
+        <!-- Record -->
         <div class="f1-card">
           <div class="f1-card-head">
             <div class="f1-card-accent" id="f1-accent-2"></div>
-            <h3 class="f1-card-title">RÃ©cord de Combate</h3>
+            <h3 class="f1-card-title">Récord de Combate</h3>
           </div>
           <div class="f1-card-body">
             <div id="profile-record">
@@ -983,7 +1870,7 @@
             <div class="f1-bio-text" id="profile-bio">
               <p>Esperando datos del competidor.</p>
             </div>
-            <button id="btn-edit-bio" class="f1-edit-btn">Editar bio</button>
+            <button id="btn-edit-bio" class="f1-edit-btn f1-edit-btn-secondary">Editar perfil</button>
           </div>
         </div>
 
@@ -992,11 +1879,11 @@
       <!-- Panel lateral derecho -->
       <aside class="f1-aside-col">
 
-        <!-- Clan & TÃ­tulos -->
+        <!-- Clan y titulos -->
         <div class="f1-card">
           <div class="f1-card-head">
             <div class="f1-card-accent" id="f1-accent-6"></div>
-            <h3 class="f1-card-title">Clan & TÃ­tulos</h3>
+            <h3 class="f1-card-title">Clan y Títulos</h3>
           </div>
           <div class="f1-card-body" style="display:flex;flex-direction:column;gap:12px">
             <div id="profile-clan"></div>
@@ -1024,8 +1911,8 @@
           <div class="f1-card-body" style="padding:12px">
             <a class="f1-article-card" href="/clasificacion">
               <div class="f1-article-tag">Standings</div>
-              <div class="f1-article-title">PosiciÃ³n completa de la temporada</div>
-              <div class="f1-article-sub">Revisa cÃ³mo queda dentro de la tabla general.</div>
+              <div class="f1-article-title">Posición completa de la temporada</div>
+              <div class="f1-article-sub">Revisa cómo queda dentro de la tabla general.</div>
             </a>
             <a class="f1-article-card" href="/competidores">
               <div class="f1-article-tag">Drivers</div>
@@ -1045,17 +1932,17 @@
 
   </div><!-- /container -->
 
-  <script src="/core.js?v=1"></script>
-  <script src="/sentinel.js?v=1"></script>
-  <script src="/tracker.js?v=10"></script>
-  <script src="/app.js?v=20"></script>
+  <script src="/core.js?v=3"></script>
+  <script src="/sentinel.js?v=2"></script>
+  <script src="/_assets/chunk.27c1e5b4.js"></script>
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
   <script>
     function slugify(value) {
       return String(value || '')
-        .normalize('NFD')
+        .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
         .replace(/^-+|-+$/g, '');
     }
 
@@ -1077,6 +1964,33 @@
         .replace(/'/g, '&#39;');
     }
 
+    function sanitizeDisplayText(value) {
+      return String(value || '')
+        .normalize('NFKC')
+        .replace(/[\u200B-\u200D\uFE0E\uFE0F]/g, '')
+        .replace(/[\u{1F0A0}-\u{1F0FF}\u{13000}-\u{1342F}]/gu, '')
+        .replace(/[^\S\r\n]{2,}/g, ' ')
+        .trim();
+    }
+
+    function displayInitial(value, fallback) {
+      const text = sanitizeDisplayText(value);
+      if (!text) return fallback || '?';
+
+      const normalized = Array.from(text.normalize('NFKD')).find(function(char) {
+        return /[\p{L}\p{N}]/u.test(char);
+      });
+      const direct = Array.from(text).find(function(char) {
+        return /[\p{L}\p{N}]/u.test(char);
+      });
+      return String(normalized || direct || Array.from(text)[0] || fallback || '?').toUpperCase();
+    }
+
+    function safeImageUrl(value) {
+      var text = String(value || '').trim();
+      return /^https?:\/\//i.test(text) ? text : '';
+    }
+
     function normalizeColor(value) {
       var hex = String(value || '').trim();
       if (/^#[0-9a-f]{6}$/i.test(hex)) return hex.toUpperCase();
@@ -1093,7 +2007,7 @@
     }
 
     function bioHtml(value) {
-      const text = String(value || '').trim();
+      const text = sanitizeDisplayText(value);
       if (!text || text === '<nil>' || text === 'null') return '';
       return text
         .split(/\n{2,}/)
@@ -1133,7 +2047,7 @@
       var visColor = lum < 0.06 ? '#b0b4c2' : color;
       shell.style.setProperty('--driver-color', visColor);
       shell.style.setProperty('--driver-color-rgb', visR+','+visG+','+visB);
-      // Propagar a todo el documento para que los accents del grid tambiÃ©n cambien
+      // Propagate the active theme across the full profile grid
       document.documentElement.style.setProperty('--driver-color', visColor);
       document.documentElement.style.setProperty('--driver-color-rgb', visR+','+visG+','+visB);
       // Actualizar accents
@@ -1157,8 +2071,271 @@
         .toUpperCase();
     }
 
-    // â”€â”€ Avatar upload widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    var currentDriverState = null;
+    var PROFILE_SLUG_RECOVERY_KEY = 'bellatorPendingProfileSlug';
+
+    function getCurrentProfileSlug() {
+      try {
+        return String(new URLSearchParams(window.location.search).get('slug') || '').trim();
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function readPendingProfileSlug() {
+      try {
+        return String(sessionStorage.getItem(PROFILE_SLUG_RECOVERY_KEY) || '').trim();
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function storePendingProfileSlug(slug) {
+      var value = String(slug || '').trim();
+      if (!value) return;
+      try {
+        sessionStorage.setItem(PROFILE_SLUG_RECOVERY_KEY, value);
+      } catch (_) {}
+    }
+
+    function clearPendingProfileSlug() {
+      try {
+        sessionStorage.removeItem(PROFILE_SLUG_RECOVERY_KEY);
+      } catch (_) {}
+    }
+
+    function buildSafeProfileSlug(name, fallbackSlug) {
+      return slugify(name) || String(fallbackSlug || '').trim() || readPendingProfileSlug();
+    }
+
+    function getProfileRefreshToken() {
+      try {
+        return String(new URLSearchParams(window.location.search).get('refresh') || '').trim();
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function buildCompetidoresUrl() {
+      var refreshToken = getProfileRefreshToken();
+      if (!refreshToken) return '/api/competidores';
+      return '/api/competidores?refresh=' + encodeURIComponent(refreshToken);
+    }
+
+    function openProfileBySlug(slug, replaceHistory, refreshToken) {
+      var safeSlug = String(slug || '').trim();
+      if (!safeSlug) return false;
+      storePendingProfileSlug(safeSlug);
+      var targetUrl = '/competidor?slug=' + encodeURIComponent(safeSlug);
+      var safeRefreshToken = String(refreshToken || '').trim();
+      if (safeRefreshToken) {
+        targetUrl += '&refresh=' + encodeURIComponent(safeRefreshToken);
+      }
+      if (replaceHistory) window.location.replace(targetUrl);
+      else window.location.href = targetUrl;
+      return true;
+    }
+
+    function setNativeCursorMode(active) {
+      document.body.classList.toggle('bl-native-cursor-active', !!active);
+    }
+
+    function setHeroBackdrop(avatarUrl, label) {
+      var media = document.getElementById('profile-hero-media');
+      if (!media) return;
+      if (avatarUrl && avatarUrl !== '<nil>') {
+        media.innerHTML = '' +
+          '<img class="f1-hero-media-blur" src="' + escapeHtml(avatarUrl) + '" alt="" loading="eager" decoding="async">' +
+          '<img class="f1-hero-media-cut" src="' + escapeHtml(avatarUrl) + '" alt="" loading="eager" decoding="async">';
+        return;
+      }
+      media.innerHTML = '<div class="f1-hero-media-fallback">' + escapeHtml(wordmark(label || 'Bellator')) + '</div>';
+    }
+
+    function closeProfileEditor() {
+      clearPendingAvatarFile();
+      document.getElementById('bio-edit-modal').style.display = 'none';
+      setNativeCursorMode(false);
+    }
+
+    function openProfileEditor(driver, totalFights) {
+      currentDriverState = {
+        pseudonimo: driver.pseudonimo,
+        slug: buildSafeProfileSlug(driver.pseudonimo, getCurrentProfileSlug()),
+        fights: totalFights,
+        avatar_url: driver.avatar_url && driver.avatar_url !== '<nil>' ? driver.avatar_url : '',
+        division: safeValue(driver.division, 'Sin división'),
+        country_code: normalizeCountryCode(driver.country_code)
+      };
+
+      document.getElementById('bio-edit-original-pseudonimo').value = driver.pseudonimo;
+      document.getElementById('bio-edit-pseudonimo').value = driver.pseudonimo;
+      document.getElementById('bio-edit-text').value = (driver.bio && driver.bio !== '<nil>') ? driver.bio : '';
+      document.getElementById('bio-edit-char1').value = (driver.top_char_1 && driver.top_char_1 !== '<nil>') ? driver.top_char_1 : '';
+      document.getElementById('bio-edit-char2').value = (driver.top_char_2 && driver.top_char_2 !== '<nil>') ? driver.top_char_2 : '';
+      document.getElementById('bio-edit-char3').value = (driver.top_char_3 && driver.top_char_3 !== '<nil>') ? driver.top_char_3 : '';
+      document.getElementById('bio-edit-char1-img').value = safeImageUrl(driver.top_char_1_image);
+      document.getElementById('bio-edit-char2-img').value = safeImageUrl(driver.top_char_2_image);
+      document.getElementById('bio-edit-char3-img').value = safeImageUrl(driver.top_char_3_image);
+      document.getElementById('bio-edit-key').value = '';
+      document.getElementById('bio-edit-msg').textContent = '';
+      document.getElementById('avatar-upload-msg').textContent = '';
+      ['bio-edit-char1-msg', 'bio-edit-char2-msg', 'bio-edit-char3-msg'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = '';
+      });
+      clearPendingAvatarFile();
+      clearPendingCharacterFiles();
+
+      // Color picker
+      var colorInput = document.getElementById('bio-edit-color');
+      var colorHex   = document.getElementById('bio-edit-color-hex');
+      var rawColor = (driver.primary_color || '#D4AF37');
+      if (!/^#[0-9a-f]{6}$/i.test(rawColor)) rawColor = '#D4AF37';
+      colorInput.value = rawColor;
+      colorHex.textContent = rawColor.toUpperCase();
+
+      initProfileCountryOptions();
+      var countrySelect = document.getElementById('bio-edit-country');
+      var countryNote = document.getElementById('bio-edit-country-note');
+      if (countrySelect) {
+        countrySelect.value = currentDriverState.country_code || '';
+      }
+      if (countryNote) {
+        countryNote.textContent = currentDriverState.country_code
+          ? 'Puedes ajustar la bandera visible si cambiaste de nación o si quieres corregirla.'
+          : 'Todavía no has elegido nación. Selecciónala ahora para mostrar tu bandera en el perfil.';
+      }
+
+      // Char lock: disable char inputs after May 14 2026 (05:00 UTC = midnight Colombia)
+      var CHAR_LOCK_TS = new Date('2026-05-14T05:00:00Z');
+      var charsLocked = new Date() >= CHAR_LOCK_TS;
+      var charsNote = document.getElementById('bio-edit-chars-note');
+      ['bio-edit-char1','bio-edit-char2','bio-edit-char3','bio-edit-char1-img','bio-edit-char2-img','bio-edit-char3-img'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.disabled = charsLocked;
+        el.style.opacity = charsLocked ? '0.45' : '';
+        el.title = charsLocked ? 'Personajes bloqueados desde el 14 de mayo' : '';
+      });
+      ['bio-edit-char1-file','bio-edit-char2-file','bio-edit-char3-file'].forEach(function(id) {
+        var fileEl = document.getElementById(id);
+        if (fileEl) {
+          fileEl.disabled = charsLocked;
+          fileEl.title = charsLocked ? 'Personajes bloqueados desde el 14 de mayo' : '';
+        }
+        var labelEl = document.querySelector('label[for="' + id + '"]');
+        if (labelEl) {
+          labelEl.classList.toggle('is-disabled', charsLocked);
+          labelEl.title = charsLocked ? 'Personajes bloqueados desde el 14 de mayo' : 'Elegir de galeria';
+        }
+      });
+      if (charsNote) {
+        charsNote.textContent = charsLocked
+          ? '🔒 Los personajes quedaron fijos el 14 de mayo. Solo el admin puede modificarlos.'
+          : 'Aparecen en tu ficha de competidor. Puedes pegar una URL o elegir una imagen desde tu galeria hasta el 14 de mayo.';
+      }
+
+      var avatarInput = document.getElementById('avatar-url-input');
+      var avatarPreview = document.getElementById('avatar-preview');
+      var fileInput = document.getElementById('avatar-file-input');
+      avatarInput.value = currentDriverState.avatar_url;
+      if (fileInput) fileInput.value = '';
+      setUploadPreview(avatarPreview, currentDriverState.avatar_url);
+      [1, 2, 3].forEach(function(slotIndex) {
+        var preview = document.getElementById('bio-edit-char' + slotIndex + '-preview');
+        var charFileInput = document.getElementById('bio-edit-char' + slotIndex + '-file');
+        if (charFileInput) charFileInput.value = '';
+        setUploadPreview(preview, document.getElementById('bio-edit-char' + slotIndex + '-img').value);
+      });
+
+      var divisionSelect = document.getElementById('bio-edit-division');
+      var divisionNote = document.getElementById('bio-edit-division-note');
+      divisionSelect.value = currentDriverState.division === 'Universal' ? 'Universal' : 'Ciudad';
+      if (totalFights >= 4) {
+        divisionSelect.disabled = false;
+        divisionNote.className = 'f1-form-note';
+        divisionNote.textContent = 'Cambio disponible. Combates registrados: ' + totalFights + '.';
+      } else {
+        divisionSelect.disabled = true;
+        divisionNote.className = 'f1-form-note is-locked';
+        divisionNote.textContent = 'Se desbloquea al registrar 4 combates. Llevas ' + totalFights + '.';
+      }
+
+      document.getElementById('bio-edit-modal').style.display = 'flex';
+      setNativeCursorMode(true);
+      document.getElementById('bio-edit-pseudonimo').focus();
+      document.getElementById('bio-edit-pseudonimo').select();
+    }
+
+    // Avatar upload widget
     var currentDriverPseudo = null;
+    var pendingAvatarFile = null;
+    var pendingAvatarObjectUrl = '';
+    var pendingCharacterFiles = { 1: null, 2: null, 3: null };
+    var pendingCharacterObjectUrls = { 1: '', 2: '', 3: '' };
+    var avatarUploadSetupDone = false;
+    var characterUploadSetupDone = false;
+
+    function resolveEditorUploadUrl(value) {
+      var text = String(value || '').trim();
+      if (!text) return '';
+      if (/^https?:\/\//i.test(text)) return text;
+      if (text.charAt(0) === '/') return window.location.origin + text;
+      return '';
+    }
+
+    function setUploadPreview(preview, value) {
+      if (!preview) return;
+      var resolved = resolveEditorUploadUrl(value) || String(value || '').trim();
+      if (resolved) {
+        preview.src = resolved;
+        preview.classList.add('show');
+        return;
+      }
+      preview.removeAttribute('src');
+      preview.classList.remove('show');
+    }
+
+    function clearPendingAvatarFile() {
+      pendingAvatarFile = null;
+      if (pendingAvatarObjectUrl) {
+        URL.revokeObjectURL(pendingAvatarObjectUrl);
+        pendingAvatarObjectUrl = '';
+      }
+    }
+
+    function clearPendingCharacterFile(slotIndex) {
+      pendingCharacterFiles[slotIndex] = null;
+      if (pendingCharacterObjectUrls[slotIndex]) {
+        URL.revokeObjectURL(pendingCharacterObjectUrls[slotIndex]);
+        pendingCharacterObjectUrls[slotIndex] = '';
+      }
+      var fileInput = document.getElementById('bio-edit-char' + slotIndex + '-file');
+      if (fileInput) fileInput.value = '';
+    }
+
+    function clearPendingCharacterFiles() {
+      [1, 2, 3].forEach(clearPendingCharacterFile);
+    }
+
+    async function uploadEditorImage(file) {
+      var formData = new FormData();
+      formData.append('file', file);
+      var uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+      var uploadData = await uploadRes.json().catch(function() { return {}; });
+      if (!uploadRes.ok || !uploadData.url) {
+        throw new Error('upload_failed');
+      }
+      return resolveEditorUploadUrl(uploadData.url) || String(uploadData.url || '').trim();
+    }
+
+    function getEditorImageValue(inputId) {
+      var input = document.getElementById(inputId);
+      if (!input) return '';
+      var text = String(input.value || '').trim();
+      return resolveEditorUploadUrl(text) || text;
+    }
 
     function setupAvatarUpload(pseudo) {
       currentDriverPseudo = pseudo;
@@ -1167,107 +2344,162 @@
       var preview    = document.getElementById('avatar-preview');
       var msg        = document.getElementById('avatar-upload-msg');
 
+      if (avatarUploadSetupDone) return;
+      avatarUploadSetupDone = true;
+
       if (urlInput) {
         urlInput.addEventListener('input', function() {
           var url = this.value.trim();
-          if (url.startsWith('http')) {
-            if (preview) { preview.src = url; preview.classList.add('show'); }
-          } else {
-            if (preview) preview.classList.remove('show');
-          }
+          if (url !== pendingAvatarObjectUrl) clearPendingAvatarFile();
+          setUploadPreview(preview, url);
         });
       }
       if (fileInput) {
-        fileInput.addEventListener('change', async function() {
+        fileInput.addEventListener('change', function() {
           if (!this.files[0]) return;
-          var formData = new FormData();
-          formData.append('file', this.files[0]);
-          if (msg) msg.textContent = 'Subiendo...';
-          try {
-            var res = await fetch('/api/upload', { method: 'POST', body: formData });
-            var data = await res.json();
-            if (data.url) {
-              if (urlInput) urlInput.value = data.url;
-              if (preview) { preview.src = data.url; preview.classList.add('show'); }
-              if (msg) msg.textContent = 'âœ“ Subida OK â€” guardÃ¡ con tu clave';
-            } else {
-              if (msg) msg.textContent = 'Error: ' + (data.error || 'desconocido');
-            }
-          } catch(e) {
-            if (msg) msg.textContent = 'Error de red al subir';
-          }
+          clearPendingAvatarFile();
+          pendingAvatarFile = this.files[0];
+          pendingAvatarObjectUrl = URL.createObjectURL(pendingAvatarFile);
+          if (urlInput) urlInput.value = '';
+          if (preview) { preview.src = pendingAvatarObjectUrl; preview.classList.add('show'); }
+          if (msg) msg.textContent = 'Imagen lista. Guarda con tu clave para subirla.';
         });
       }
     }
 
+    function setupCharacterUploads() {
+      if (characterUploadSetupDone) return;
+      characterUploadSetupDone = true;
+
+      [1, 2, 3].forEach(function(slotIndex) {
+        var urlInput = document.getElementById('bio-edit-char' + slotIndex + '-img');
+        var fileInput = document.getElementById('bio-edit-char' + slotIndex + '-file');
+        var preview = document.getElementById('bio-edit-char' + slotIndex + '-preview');
+        var msg = document.getElementById('bio-edit-char' + slotIndex + '-msg');
+
+        if (urlInput) {
+          urlInput.addEventListener('input', function() {
+            var url = this.value.trim();
+            if (url !== pendingCharacterObjectUrls[slotIndex]) clearPendingCharacterFile(slotIndex);
+            setUploadPreview(preview, url);
+            if (msg && !pendingCharacterFiles[slotIndex]) msg.textContent = '';
+          });
+        }
+
+        if (fileInput) {
+          fileInput.addEventListener('change', function() {
+            var selectedFile = this.files[0];
+            if (!selectedFile) return;
+            clearPendingCharacterFile(slotIndex);
+            pendingCharacterFiles[slotIndex] = selectedFile;
+            pendingCharacterObjectUrls[slotIndex] = URL.createObjectURL(selectedFile);
+            if (urlInput) urlInput.value = '';
+            setUploadPreview(preview, pendingCharacterObjectUrls[slotIndex]);
+            if (msg) msg.textContent = 'Imagen lista. Guarda con tu clave para subirla.';
+          });
+        }
+      });
+    }
+
+    async function uploadPendingCharacterImage(slotIndex, statusEl) {
+      var urlInput = document.getElementById('bio-edit-char' + slotIndex + '-img');
+      var preview = document.getElementById('bio-edit-char' + slotIndex + '-preview');
+      var slotMsg = document.getElementById('bio-edit-char' + slotIndex + '-msg');
+      var currentUrl = getEditorImageValue('bio-edit-char' + slotIndex + '-img');
+      var file = pendingCharacterFiles[slotIndex];
+      if (!file) return currentUrl;
+
+      if (statusEl) statusEl.textContent = 'Subiendo imagen del personaje ' + slotIndex + '...';
+      var uploadedUrl = await uploadEditorImage(file);
+      if (urlInput) urlInput.value = uploadedUrl;
+      clearPendingCharacterFile(slotIndex);
+      setUploadPreview(preview, uploadedUrl);
+      if (slotMsg) slotMsg.textContent = 'Imagen subida desde galeria.';
+      return uploadedUrl;
+    }
+
     (async function loadProfile() {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get('slug');
+      var slug = getCurrentProfileSlug();
       if (!slug) {
+        var recoveredSlug = readPendingProfileSlug();
+        if (recoveredSlug) {
+          openProfileBySlug(recoveredSlug, true);
+          return;
+        }
         document.getElementById('profile-name').textContent = 'Competidor no encontrado';
-        document.getElementById('profile-summary').textContent = 'No se recibio un identificador valido.';
+        document.getElementById('profile-summary').textContent = 'No se recibió un identificador válido.';
         document.getElementById('season-stats').innerHTML = statLine('Estado', 'Sin slug');
         document.getElementById('career-stats').innerHTML = statLine('Estado', 'Sin slug');
         return;
       }
       try {
-        const data = await fetch('/api/competidores').then(r => r.json());
+        const data = await fetch(buildCompetidoresUrl()).then(r => r.json());
         const list = Array.isArray(data) ? data : [];
         const index = list.findIndex(item => slugify(item.pseudonimo) === slug);
         const driver = index >= 0 ? list[index] : null;
         if (!driver) {
           document.getElementById('profile-name').textContent = 'Competidor no encontrado';
-          document.getElementById('profile-summary').textContent = 'No existe ese competidor en la lista publica.';
+          document.getElementById('profile-summary').textContent = 'No existe ese competidor en la lista pública.';
           document.getElementById('season-stats').innerHTML = statLine('Estado', 'Sin resultado');
           document.getElementById('career-stats').innerHTML = statLine('Estado', 'Sin resultado');
           return;
         }
+        clearPendingProfileSlug();
         const position    = index + 1;
-        const division    = safeValue(driver.division, 'Sin division');
+        const division    = safeValue(driver.division, 'Sin división');
         const since       = safeValue(driver.fecha_inicio_rol, 'Fecha sin registrar');
         const hasAvatar   = driver.avatar_url && driver.avatar_url !== '<nil>';
         const primaryColor= normalizeColor(driver.primary_color);
         const wins        = driver.wins   || 0;
         const losses      = driver.losses || 0;
         const draws       = driver.draws  || 0;
+        const totalFights = wins + losses + draws;
         const streak      = driver.current_streak || 0;
         const clanName    = driver.clan_name && driver.clan_name !== '<nil>' ? driver.clan_name : null;
         const rankPoints  = driver.ranking_points || 0;
         const statusLabel = normalizeStatus(driver.status);
-        const rawBio      = driver.bio && driver.bio !== '<nil>' ? driver.bio.replace(/\s+/g, ' ').trim() : '';
-        const heroSummary = rawBio.length > 0
-          ? (rawBio.length > 170 ? rawBio.slice(0, 167) + '...' : rawBio)
-          : `${division} Â· ${statusLabel} Â· ${wins}V - ${losses}D - ${draws}E`;
+        const rawBio      = driver.bio && driver.bio !== '<nil>' ? sanitizeDisplayText(driver.bio) : '';
+        const summaryBio  = rawBio.replace(/\s+/g, ' ').trim();
+        const heroSummary = summaryBio.length > 0
+          ? (summaryBio.length > 170 ? summaryBio.slice(0, 167) + '...' : summaryBio)
+          : `${division} - ${statusLabel} - ${wins}V - ${losses}D - ${draws}E`;
+        const driverInitial = displayInitial(driver.pseudonimo, 'B');
+        const clanInitial   = displayInitial(clanName, 'C');
 
-        document.title = `${driver.pseudonimo} â€” BELLATOR ROLBATTLE`;
+        document.title = `${driver.pseudonimo} - BELLATOR ROLBATTLE`;
         applyTheme(primaryColor);
 
         document.getElementById('profile-breadcrumb').textContent = `Perfil de ${driver.pseudonimo}`;
 
-        // NÃºmero de posiciÃ³n
+        // Position number
         document.getElementById('profile-number').textContent    = position;
         document.getElementById('profile-number-bg').textContent = position;
 
         // Nombre
         document.getElementById('profile-name').textContent = driver.pseudonimo;
+        setHeroBackdrop(driver.avatar_url, driver.pseudonimo);
 
         // Nacionalidad + flag
         const flagCode = driver.country_code ? String(driver.country_code).toLowerCase() : '';
-        const flagHtml = flagCode
-          ? `<span class="fi fi-${flagCode} f1-flag" style="display:inline-block;vertical-align:middle"></span>`
-          : '';
         const countryMap = {
-          co:'Colombia',mx:'MÃ©xico',ar:'Argentina',ve:'Venezuela',pe:'PerÃº',cl:'Chile',ec:'Ecuador',
-          bo:'Bolivia',uy:'Uruguay',py:'Paraguay',br:'Brasil',us:'Estados Unidos',es:'EspaÃ±a',
-          ru:'Rusia',kz:'KazajistÃ¡n',cn:'China',jp:'JapÃ³n',fr:'Francia',de:'Alemania',
+          co:'Colombia',mx:'México',ar:'Argentina',ve:'Venezuela',pe:'Perú',cl:'Chile',ec:'Ecuador',
+          bo:'Bolivia',uy:'Uruguay',py:'Paraguay',br:'Brasil',us:'Estados Unidos',es:'España',
+          ru:'Rusia',kz:'Kazajistán',cn:'China',jp:'Japón',fr:'Francia',de:'Alemania',
           gb:'Reino Unido',it:'Italia',pt:'Portugal',
         };
         const countryName = flagCode ? (countryMap[flagCode] || flagCode.toUpperCase()) : '';
         const natEl = document.getElementById('profile-nationality');
         if (natEl) {
           natEl.innerHTML = flagCode
-            ? `${flagHtml}<span>${escapeHtml(countryName)}</span>`
-            : `<span style="color:rgba(238,244,255,.35);font-size:.78rem">PaÃ­s sin registrar</span>`;
+            ? `<span>${escapeHtml(countryName)}</span>`
+            : `<span style="color:rgba(238,244,255,.35);font-size:.78rem">País sin registrar</span>`;
+        }
+        // Flag watermark integrated behind the avatar ring
+        const flagWm = document.getElementById('profile-flag-wm');
+        if (flagWm) {
+          flagWm.innerHTML = flagCode
+            ? `<span class="fi fi-${flagCode}" title="${escapeHtml(countryName)}"></span>`
+            : '';
         }
 
         // Division pill
@@ -1280,9 +2512,9 @@
         // Avatar
         const avatarBox = document.getElementById('profile-avatar-box');
         if (hasAvatar) {
-          avatarBox.innerHTML = `<img src="${driver.avatar_url}" alt="${escapeHtml(driver.pseudonimo)}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(var(--driver-color-rgb),.42);display:block" onerror="this.outerHTML='<div class=f1-avatar-ph>${escapeHtml(driver.pseudonimo.charAt(0).toUpperCase())}</div>'">`;
+          avatarBox.innerHTML = `<img src="${driver.avatar_url}" alt="${escapeHtml(driver.pseudonimo)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid rgba(var(--driver-color-rgb),.42);display:block" onerror="this.outerHTML='<div class=f1-avatar-ph>${escapeHtml(driverInitial)}</div>'">`;
         } else {
-          document.getElementById('profile-placeholder').textContent = driver.pseudonimo.charAt(0).toUpperCase();
+          document.getElementById('profile-placeholder').textContent = driverInitial;
         }
 
         // Stats bar
@@ -1291,7 +2523,7 @@
         document.getElementById('rc-draws').textContent  = draws;
         const streakEl = document.getElementById('f1-streak-num');
         if (streakEl) {
-          streakEl.textContent = streak !== 0 ? (streak > 0 ? '+'+Math.abs(streak) : String(streak)) : 'â€”';
+          streakEl.textContent = streak !== 0 ? (streak > 0 ? '+'+Math.abs(streak) : String(streak)) : '-';
           if (streak > 0)       streakEl.className = 'f1-stat-num f1-streak-pos';
           else if (streak < 0)  streakEl.className = 'f1-stat-num f1-streak-neg';
           else                  streakEl.className = 'f1-stat-num';
@@ -1308,7 +2540,7 @@
           if (streak !== 0) {
             const abs = Math.abs(streak);
             const cls = streak > 0 ? 'positive' : 'negative';
-            sw.innerHTML = `<span class="f1-streak-badge ${cls}">${streak > 0 ? 'â–²' : 'â–¼'} Racha ${streak > 0 ? '+'+abs : streak}</span>`;
+            sw.innerHTML = `<span class="f1-streak-badge ${cls}">${streak > 0 ? '&#9650;' : '&#9660;'} Racha ${streak > 0 ? '+'+abs : streak}</span>`;
           } else {
             sw.innerHTML = `<span class="f1-streak-badge neutral">Sin racha activa</span>`;
           }
@@ -1318,41 +2550,46 @@
         const clanEl = document.getElementById('profile-clan');
         if (clanEl) {
           clanEl.innerHTML = clanName
-            ? `<div class="f1-clan-badge"><div class="f1-clan-icon">${clanName.charAt(0).toUpperCase()}</div><div><div class="f1-clan-name">${escapeHtml(clanName)}</div><div class="f1-clan-role">Miembro activo</div></div></div>`
+            ? `<div class="f1-clan-badge"><div class="f1-clan-icon">${escapeHtml(clanInitial)}</div><div><div class="f1-clan-name">${escapeHtml(clanName)}</div><div class="f1-clan-role">Miembro activo</div></div></div>`
             : `<span style="color:rgba(255,255,255,.38);font-size:.9rem">Sin clan registrado</span>`;
         }
 
-        // TÃ­tulos / RP badge
+        // Titles / RP badge
         const td = document.getElementById('profile-titles');
         if (td) {
-          if (rankPoints >= 500)      td.innerHTML = `<span class="f1-title-badge">ðŸ† ${rankPoints} RP Â· Elite</span>`;
-          else if (rankPoints >= 200) td.innerHTML = `<span class="f1-title-badge">â­ ${rankPoints} RP Â· Veterano</span>`;
-          else if (rankPoints > 0)    td.innerHTML = `<span class="f1-title-badge">${rankPoints} RP Â· Prospecto</span>`;
-          else                         td.innerHTML = `<span style="color:rgba(255,255,255,.38);font-size:.9rem">Sin tÃ­tulos aÃºn</span>`;
+          if (rankPoints >= 500)      td.innerHTML = `<span class="f1-title-badge">&#127942; ${rankPoints} RP · Elite</span>`;
+          else if (rankPoints >= 200) td.innerHTML = `<span class="f1-title-badge">&#11088; ${rankPoints} RP · Veterano</span>`;
+          else if (rankPoints > 0)    td.innerHTML = `<span class="f1-title-badge">${rankPoints} RP · Prospecto</span>`;
+          else                         td.innerHTML = `<span style="color:rgba(255,255,255,.38);font-size:.9rem">Sin títulos aún</span>`;
         }
 
         // Personajes
         const charsDiv = document.getElementById('profile-chars');
         const charLabels = ['Principal','Secundario','Alterno'];
         const charValues = [driver.top_char_1, driver.top_char_2, driver.top_char_3];
+        const charImages = [driver.top_char_1_image, driver.top_char_2_image, driver.top_char_3_image];
         if (charsDiv) {
           charsDiv.innerHTML = '';
           charLabels.forEach(function(type, i) {
             const name = charValues[i] && charValues[i] !== '<nil>' && charValues[i].trim() !== '' ? charValues[i].trim() : null;
-            const initial = name ? name.charAt(0).toUpperCase() : (driver.pseudonimo.charAt(0).toUpperCase() + (i+1));
-            charsDiv.innerHTML += `<div class="f1-char-card"><div class="f1-char-avatar">${initial}</div><div class="f1-char-name">${name || 'Por definir'}</div><div class="f1-char-type">${type}</div></div>`;
+            const image = safeImageUrl(charImages[i]);
+            const initial = name ? displayInitial(name, driverInitial) : (driverInitial + (i+1));
+            const avatarMarkup = image
+              ? `<div class="f1-char-avatar"><img class="f1-char-avatar-img" src="${escapeHtml(image)}" alt="${escapeHtml(name || ('Personaje ' + (i + 1)))}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="f1-char-avatar-fallback" style="display:none">${escapeHtml(initial)}</span></div>`
+              : `<div class="f1-char-avatar"><span class="f1-char-avatar-fallback">${escapeHtml(initial)}</span></div>`;
+            charsDiv.innerHTML += `<div class="f1-char-card">${avatarMarkup}<div class="f1-char-name">${name || 'Por definir'}</div><div class="f1-char-type">${type}</div></div>`;
           });
         }
 
         // Season stats
         const ss = document.getElementById('season-stats');
         if (ss) ss.innerHTML = [
-          statLine('PosiciÃ³n',  `P${position}`),
-          statLine('DivisiÃ³n',  division),
+          statLine('Posición',  `P${position}`),
+          statLine('División',  division),
           statLine('Victorias', String(wins)),
           statLine('Derrotas',  String(losses)),
           statLine('Empates',   String(draws)),
-          statLine('Racha',     streak !== 0 ? (streak > 0 ? `+${streak}` : String(streak)) : 'â€”')
+          statLine('Racha',     streak !== 0 ? (streak > 0 ? `+${streak}` : String(streak)) : '-')
         ].join('');
 
         // Career stats
@@ -1362,42 +2599,40 @@
           statLine('Ranking Points', String(rankPoints)),
           statLine('Color oficial',  primaryColor.toUpperCase()),
           statLine('Desde',          since),
-          statLine('Clan',           clanName || 'â€”'),
+          statLine('Clan',           clanName || '-'),
           statLine('Avatar',         hasAvatar ? 'Registrado' : 'Sin foto')
         ].join('');
 
         // Bio
         const bioEl = document.getElementById('profile-bio');
         if (bioEl) {
-          if (driver.bio && driver.bio !== '<nil>' && driver.bio.trim() !== '') {
-            bioEl.innerHTML = bioHtml(driver.bio);
+          if (rawBio) {
+            bioEl.innerHTML = bioHtml(rawBio);
           } else {
             bioEl.innerHTML = `<p>${escapeHtml(driver.pseudonimo)} compite en <strong>${escapeHtml(division)}</strong> desde ${escapeHtml(since)}. ` +
               `Record: <strong>${wins} victorias</strong>, ${losses} derrotas, ${draws} empates` +
               (streak > 1 ? `, racha activa de ${streak} victorias.` : '.') + `</p>` +
               (clanName ? `<p>Clan: <strong>${escapeHtml(clanName)}</strong>.</p>` : '') +
-              `<p>Color oficial: <strong>${escapeHtml(primaryColor.toUpperCase())}</strong> â€” aplicado a todo el perfil.</p>`;
+              `<p>Color oficial: <strong>${escapeHtml(primaryColor.toUpperCase())}</strong> - aplicado a todo el perfil.</p>`;
           }
         }
 
         // Edit bio button
-        const editBioBtn = document.getElementById('btn-edit-bio');
-        if (editBioBtn) {
-          editBioBtn.style.display = 'inline-block';
-          editBioBtn.addEventListener('click', function() {
-            document.getElementById('bio-edit-pseudonimo').value = driver.pseudonimo;
-            document.getElementById('bio-edit-text').value = (driver.bio && driver.bio !== '<nil>') ? driver.bio : '';
-            document.getElementById('bio-edit-key').value = '';
-            document.getElementById('bio-edit-msg').textContent = '';
-            document.getElementById('bio-edit-modal').style.display = 'flex';
+        [document.getElementById('btn-edit-bio'), document.getElementById('btn-edit-hero')].forEach(function(button) {
+          if (!button || button.dataset.bound === 'true') return;
+          button.style.display = button.classList.contains('f1-edit-btn-hero') ? 'inline-flex' : 'inline-block';
+          button.dataset.bound = 'true';
+          button.addEventListener('click', function() {
+            openProfileEditor(driver, totalFights);
           });
-        }
+        });
 
         // Setup avatar upload
         setupAvatarUpload(driver.pseudonimo);
+        setupCharacterUploads();
 
         // Load fight history
-        loadFightHistory(driver.pseudonimo);
+        loadFightHistory(driver);
 
         // Animate stat cells
         setTimeout(function() {
@@ -1412,17 +2647,53 @@
       }
     })();
 
-    // â”€â”€ Render historial de combates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    async function loadFightHistory(pseudonimo) {
+    // Render fight history
+    function buildFightHistorySummaryMarkup(driver, message) {
+      const wins = Number(driver && driver.wins || 0);
+      const losses = Number(driver && driver.losses || 0);
+      const draws = Number(driver && driver.draws || 0);
+      const total = wins + losses + draws;
+      const scale = total > 0 ? total : 1;
+      const segments = [
+        { label: 'Victorias', value: wins, color: '#4ade80', className: 'win' },
+        { label: 'Derrotas', value: losses, color: '#f87171', className: 'loss' },
+        { label: 'Empates', value: draws, color: '#fbbf24', className: 'draw' }
+      ];
+      return `
+        <div class="bl-fight-summary">
+          <div class="bl-fight-summary-copy">${escapeHtml(message)}</div>
+          <div class="bl-fight-summary-bar">${segments.map(function(segment) {
+            const width = total > 0 ? ((segment.value / scale) * 100).toFixed(2) : '0';
+            return `<div class="bl-fight-summary-segment" style="width:${width}%;background:${segment.color}"></div>`;
+          }).join('')}</div>
+          <div class="bl-fight-summary-grid">${segments.map(function(segment) {
+            return `<div class="bl-fight-summary-cell"><div class="bl-fight-summary-label">${segment.label}</div><div class="bl-fight-summary-value ${segment.className}">${segment.value}</div></div>`;
+          }).join('')}</div>
+        </div>`;
+    }
+
+    function renderFightHistorySummary(container, driver, message) {
+      container.innerHTML = buildFightHistorySummaryMarkup(driver, message);
+    }
+
+    async function loadFightHistory(driver) {
       const container = document.getElementById('fight-history-list');
       if (!container) return;
+      const pseudonimo = driver && driver.pseudonimo ? String(driver.pseudonimo) : '';
+      const maxVisibleFights = 4;
+      if (!pseudonimo) {
+        renderFightHistorySummary(container, driver || {}, 'No se encontró el competidor para cargar su historial.');
+        return;
+      }
       try {
-        const fights = await fetch('/api/combates?pseudo=' + encodeURIComponent(pseudonimo)).then(r => r.json());
+        const response = await fetch('/api/combates?pseudo=' + encodeURIComponent(pseudonimo));
+        if (!response.ok) throw new Error('history_unavailable');
+        const fights = await response.json();
         if (!Array.isArray(fights) || fights.length === 0) {
-          container.innerHTML = '<div class="f1-fight-empty">Sin combates registrados aÃºn.</div>';
+          renderFightHistorySummary(container, driver, 'Aún no hay combates detallados guardados. Mostrando la gráfica del récord actual.');
           return;
         }
-        container.innerHTML = fights.map(function(f) {
+        const fightCards = fights.map(function(f) {
           const mySlot    = f.player1_pseudo.toLowerCase() === pseudonimo.toLowerCase() ? 1 : 2;
           const myPseudo  = mySlot === 1 ? f.player1_pseudo : f.player2_pseudo;
           const oppoPseudo= mySlot === 1 ? f.player2_pseudo : f.player1_pseudo;
@@ -1430,94 +2701,367 @@
           const oppoAvatar= (mySlot === 1 ? f.player2_avatar : f.player1_avatar);
           const myChar    = (mySlot === 1 ? f.player1_char : f.player2_char) || '';
           const oppoChar  = (mySlot === 1 ? f.player2_char : f.player1_char) || '';
+          const safeMyPseudo = escapeHtml(myPseudo || 'Competidor');
+          const safeOppoPseudo = escapeHtml(oppoPseudo || 'Rival');
+          const safeMyChar = escapeHtml(myChar || 'Sin personaje');
+          const safeOppoChar = escapeHtml(oppoChar || 'Sin personaje');
+          const safeEventName = escapeHtml(f.event_name || 'Cartel oficial');
+          const safeEventDate = escapeHtml(f.event_date_fmt || f.event_date || 'Fecha pendiente');
+          const divisionText = f.division && f.division !== '<nil>' ? String(f.division) : '';
+          const safeDivision = escapeHtml(divisionText || 'Sin división');
+          const safeNotes = escapeHtml(sanitizeDisplayText(f.notes || ''));
           let resultLabel, resultClass;
           if (f.result === 'draw') { resultLabel = 'EMPATE'; resultClass = 'draw'; }
           else if ((f.result === 'player1' && mySlot === 1) || (f.result === 'player2' && mySlot === 2)) {
             resultLabel = 'VICTORIA'; resultClass = 'win';
           } else { resultLabel = 'DERROTA'; resultClass = 'loss'; }
+          const opponentResultClass = resultClass === 'win' ? 'loss' : (resultClass === 'loss' ? 'win' : 'draw');
+          const myRoleLabel = resultClass === 'win' ? 'Ganador' : (resultClass === 'loss' ? 'Derrotado' : 'Empate');
+          const oppoRoleLabel = opponentResultClass === 'win' ? 'Ganador' : (opponentResultClass === 'loss' ? 'Derrotado' : 'Empate');
+          const detailMeta = [divisionText || 'Sin división', safeNotes ? 'Con notas' : 'Ficha rápida'].join(' · ');
           function avatarEl(url, pseudo) {
             const safe = String(url || '');
+            const initial = escapeHtml(displayInitial(pseudo, 'B'));
+            const alt = escapeHtml(pseudo || 'Competidor');
             if (safe && safe !== '<nil>' && safe.startsWith('http')) {
-              return `<img class="bl-fight-avatar" src="${safe}" alt="${pseudo}" onerror="this.outerHTML='<div class=bl-fight-avatar-placeholder>${pseudo.charAt(0).toUpperCase()}</div>'">`;
+              return `<img class="bl-fight-avatar" src="${escapeHtml(safe)}" alt="${alt}" onerror="this.outerHTML='<div class=bl-fight-avatar-placeholder>${initial}</div>'">`;
             }
-            return `<div class="bl-fight-avatar-placeholder">${pseudo.charAt(0).toUpperCase()}</div>`;
+            return `<div class="bl-fight-avatar-placeholder">${initial}</div>`;
           }
-          const divTag = f.division && f.division !== '<nil>'
-            ? `<span class="bl-fight-division-tag">${f.division}</span>` : '';
+          const divTag = `<span class="bl-fight-division-tag${divisionText ? '' : ' muted'}">${safeDivision}</span>`;
           return `<div class="bl-fight-card">
   <div class="bl-fight-header">
-    <div class="bl-fight-header-dot"></div><span>${f.event_date_fmt || f.event_date}</span>
-    <div class="bl-fight-header-dot"></div><span>${f.event_name}</span>${divTag}
+    <div class="bl-fight-header-main">
+      <span class="bl-fight-meta-pill">${safeEventDate}</span>
+      <div class="bl-fight-header-dot"></div>
+      <span class="bl-fight-event-name">${safeEventName}</span>
+    </div>
+    <div class="bl-fight-header-side">${divTag}<span class="bl-fight-result-pill ${resultClass}">${resultLabel}</span></div>
   </div>
   <div class="bl-fight-matchup">
-    <div class="bl-fight-fighter">${avatarEl(myAvatar, myPseudo)}<div class="bl-fight-info"><div class="bl-fight-name">${myPseudo}</div>${myChar ? `<div class="bl-fight-char">${myChar}</div>` : ''}</div></div>
-    <div class="bl-fight-result-badge"><span class="bl-fight-result-pill ${resultClass}">${resultLabel}</span><span class="bl-fight-vs">VS</span></div>
-    <div class="bl-fight-fighter right">${avatarEl(oppoAvatar, oppoPseudo)}<div class="bl-fight-info"><div class="bl-fight-name">${oppoPseudo}</div>${oppoChar ? `<div class="bl-fight-char">${oppoChar}</div>` : ''}</div></div>
+    <div class="bl-fight-fighter ${resultClass}">${avatarEl(myAvatar, myPseudo)}<div class="bl-fight-info"><div class="bl-fight-name">${safeMyPseudo}</div><div class="bl-fight-char">${safeMyChar}</div><div class="bl-fight-role ${resultClass}">${myRoleLabel}</div></div></div>
+    <div class="bl-fight-center"><div class="bl-fight-vs-ring">VS</div><div class="bl-fight-center-copy">Cartel Bellator</div></div>
+    <div class="bl-fight-fighter right ${opponentResultClass}">${avatarEl(oppoAvatar, oppoPseudo)}<div class="bl-fight-info"><div class="bl-fight-name">${safeOppoPseudo}</div><div class="bl-fight-char">${safeOppoChar}</div><div class="bl-fight-role ${opponentResultClass}">${oppoRoleLabel}</div></div></div>
   </div>
-  ${f.notes && f.notes !== '<nil>' ? `<div style="margin-top:8px;font-size:.75rem;color:rgba(255,255,255,.35);padding-left:52px">${f.notes}</div>` : ''}
+  <details class="bl-fight-expander">
+    <summary class="bl-fight-expander-summary"><span>Ver más detalles</span><span class="bl-fight-expander-meta">${escapeHtml(detailMeta)}</span></summary>
+    <div class="bl-fight-expander-body">
+      <div class="bl-fight-details">
+        <div class="bl-fight-detail"><div class="bl-fight-detail-label">Tu personaje</div><div class="bl-fight-detail-value">${safeMyChar}</div></div>
+        <div class="bl-fight-detail"><div class="bl-fight-detail-label">Rival</div><div class="bl-fight-detail-value">${safeOppoChar}</div></div>
+        <div class="bl-fight-detail"><div class="bl-fight-detail-label">Resultado</div><div class="bl-fight-detail-value">${resultLabel}</div></div>
+        <div class="bl-fight-detail"><div class="bl-fight-detail-label">División</div><div class="bl-fight-detail-value">${safeDivision}</div></div>
+      </div>
+      ${safeNotes ? `<div class="bl-fight-notes"><div class="bl-fight-detail-label">Detalles de la pelea</div><div class="bl-fight-note-copy">${safeNotes}</div></div>` : ''}
+    </div>
+  </details>
 </div>`;
-        }).join('');
+        });
+        const visibleCards = fightCards.slice(0, maxVisibleFights).join('');
+        const hiddenCards = fightCards.slice(maxVisibleFights).join('');
+        const visibleCount = Math.min(fights.length, maxVisibleFights);
+        const historyCopy = fights.length > maxVisibleFights
+          ? `Mostrando ${visibleCount} de ${fights.length} combates. Abre cada tarjeta para ver datos completos.`
+          : `Mostrando ${fights.length} combate${fights.length === 1 ? '' : 's'} registrados. Abre cada tarjeta para ver datos completos.`;
+        const hiddenCount = fights.length - visibleCount;
+        container.innerHTML = buildFightHistorySummaryMarkup(driver, 'Gráfica del récord actual y detalle de combates registrados.') + `
+          <div class="bl-fight-history-shell">
+            <div class="bl-fight-history-head"><div class="bl-fight-history-copy">${escapeHtml(historyCopy)}</div></div>
+            <div class="bl-fight-history-grid">${visibleCards}</div>
+            ${hiddenCards ? `<details class="bl-fight-history-more"><summary class="bl-fight-history-more-summary">Ver ${hiddenCount} pelea${hiddenCount === 1 ? '' : 's'} más</summary><div class="bl-fight-history-more-body"><div class="bl-fight-history-grid">${hiddenCards}</div></div></details>` : ''}
+          </div>`;
       } catch(e) {
-        container.innerHTML = '<div class="f1-fight-empty">No se pudo cargar el historial.</div>';
+        renderFightHistorySummary(container, driver, 'No se pudo cargar el detalle por combate. Mostrando la gráfica del récord actual.');
       }
     }
   </script>
 
-  <!-- Modal editar bio -->
-  <div id="bio-edit-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);align-items:center;justify-content:center">
-    <div style="background:#0f141b;border:1px solid rgba(212,175,55,.28);border-radius:22px;padding:32px;max-width:440px;width:calc(100% - 32px);position:relative">
-      <button id="bio-edit-close" style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.2rem;cursor:pointer">âœ•</button>
-      <h3 style="font-family:'Teko',sans-serif;font-size:2rem;margin-bottom:4px">Editar Bio</h3>
-      <p style="font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:18px">Verifica con tu pseudÃ³nimo y clave personal.</p>
-      <div style="display:grid;gap:10px;margin-bottom:18px">
-        <div>
-          <label style="font-size:.82rem;color:rgba(255,255,255,.45)">PseudÃ³nimo</label>
-          <input type="text" id="bio-edit-pseudonimo" style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:.9rem;margin-top:4px">
-        </div>
-        <div>
-          <label style="font-size:.82rem;color:rgba(255,255,255,.45)">Clave personal</label>
-          <input type="password" id="bio-edit-key" placeholder="Tu clave..." style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:.9rem;margin-top:4px">
-        </div>
-        <div>
-          <label style="font-size:.82rem;color:rgba(255,255,255,.45)">Bio (mÃ¡x. 500 caracteres)</label>
-          <textarea id="bio-edit-text" rows="4" maxlength="500" style="width:100%;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:.9rem;resize:vertical;font-family:inherit;margin-top:4px"></textarea>
-        </div>
+  <!-- Modal editar perfil -->
+  <div class="f1-profile-modal bl-native-cursor-zone" id="bio-edit-modal">
+    <div class="f1-profile-modal-card">
+      <button id="bio-edit-close" class="f1-profile-close" type="button">&times;</button>
+      <div class="f1-profile-modal-head">
+        <div class="f1-profile-modal-kicker">Pit Lane Edit</div>
+        <h3 class="f1-profile-modal-title">Editar perfil del competidor</h3>
+        <p class="f1-profile-modal-copy">Desde aquí puedes cambiar nombre visible, biografía, imagen y división. El cambio de división solo se desbloquea cuando el competidor ya tiene 4 combates reales registrados.</p>
       </div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <button id="bio-edit-save" style="padding:10px 22px;background:#D4AF37;border:none;border-radius:10px;color:#0d1117;font-weight:800;font-size:.9rem;cursor:pointer">GUARDAR</button>
-        <span id="bio-edit-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+
+      <div class="f1-profile-edit-grid">
+        <div class="f1-profile-edit-main">
+          <div class="f1-profile-panel">
+            <div class="f1-form-stack">
+              <input type="hidden" id="bio-edit-original-pseudonimo">
+              <div class="f1-form-grid-two">
+                <div class="f1-form-field">
+                  <label class="f1-form-label" for="bio-edit-pseudonimo">Nombre del competidor</label>
+                  <input class="f1-form-input" type="text" id="bio-edit-pseudonimo" maxlength="80" autocomplete="off">
+                </div>
+                <div class="f1-form-field">
+                  <label class="f1-form-label" for="bio-edit-key">Clave personal</label>
+                  <input class="f1-form-input" type="password" id="bio-edit-key" placeholder="Tu clave..." autocomplete="current-password">
+                </div>
+              </div>
+
+              <div class="f1-form-field">
+                <label class="f1-form-label" for="bio-edit-division">División</label>
+                <select class="f1-form-select" id="bio-edit-division">
+                  <option value="Ciudad">Ciudad</option>
+                  <option value="Universal">Universal</option>
+                </select>
+                <span class="f1-form-note" id="bio-edit-division-note">La división actual se mantiene.</span>
+              </div>
+
+              <div class="f1-form-field">
+                <label class="f1-form-label" for="bio-edit-country">Nación / bandera</label>
+                <select class="f1-form-select" id="bio-edit-country"></select>
+                <span class="f1-form-note" id="bio-edit-country-note">Si todavía no elegiste nación, puedes hacerlo aquí.</span>
+              </div>
+
+              <div class="f1-form-field">
+                <label class="f1-form-label" for="bio-edit-text">Biografía</label>
+                <textarea class="f1-form-textarea" id="bio-edit-text" maxlength="500"></textarea>
+                <span class="f1-form-note">Máximo 500 caracteres. Se respeta el formato por párrafos.</span>
+              </div>
+
+              <div class="f1-form-field">
+                <label class="f1-form-label">Mis 3 personajes favoritos</label>
+                <div class="f1-char-edit-grid" style="margin-top:4px">
+                  <div class="f1-char-upload-card">
+                    <input class="f1-form-input" type="text" id="bio-edit-char1" maxlength="48" placeholder="Personaje 1" autocomplete="off">
+                    <div class="f1-upload-row" style="max-width:none">
+                      <input class="f1-upload-input" type="url" id="bio-edit-char1-img" maxlength="512" placeholder="URL imagen 1 o galer&iacute;a" autocomplete="off">
+                      <label class="f1-upload-btn" for="bio-edit-char1-file" title="Elegir de galer&iacute;a">Galer&iacute;a</label>
+                      <input type="file" id="bio-edit-char1-file" accept="image/*" style="display:none">
+                    </div>
+                    <div class="f1-char-upload-meta">
+                      <img class="f1-upload-preview f1-upload-preview--square" id="bio-edit-char1-preview" src="" alt="preview personaje 1">
+                      <div class="f1-upload-msg f1-upload-msg--left" id="bio-edit-char1-msg"></div>
+                    </div>
+                  </div>
+                  <div class="f1-char-upload-card">
+                    <input class="f1-form-input" type="text" id="bio-edit-char2" maxlength="48" placeholder="Personaje 2" autocomplete="off">
+                    <div class="f1-upload-row" style="max-width:none">
+                      <input class="f1-upload-input" type="url" id="bio-edit-char2-img" maxlength="512" placeholder="URL imagen 2 o galer&iacute;a" autocomplete="off">
+                      <label class="f1-upload-btn" for="bio-edit-char2-file" title="Elegir de galer&iacute;a">Galer&iacute;a</label>
+                      <input type="file" id="bio-edit-char2-file" accept="image/*" style="display:none">
+                    </div>
+                    <div class="f1-char-upload-meta">
+                      <img class="f1-upload-preview f1-upload-preview--square" id="bio-edit-char2-preview" src="" alt="preview personaje 2">
+                      <div class="f1-upload-msg f1-upload-msg--left" id="bio-edit-char2-msg"></div>
+                    </div>
+                  </div>
+                  <div class="f1-char-upload-card">
+                    <input class="f1-form-input" type="text" id="bio-edit-char3" maxlength="48" placeholder="Personaje 3" autocomplete="off">
+                    <div class="f1-upload-row" style="max-width:none">
+                      <input class="f1-upload-input" type="url" id="bio-edit-char3-img" maxlength="512" placeholder="URL imagen 3 o galer&iacute;a" autocomplete="off">
+                      <label class="f1-upload-btn" for="bio-edit-char3-file" title="Elegir de galer&iacute;a">Galer&iacute;a</label>
+                      <input type="file" id="bio-edit-char3-file" accept="image/*" style="display:none">
+                    </div>
+                    <div class="f1-char-upload-meta">
+                      <img class="f1-upload-preview f1-upload-preview--square" id="bio-edit-char3-preview" src="" alt="preview personaje 3">
+                      <div class="f1-upload-msg f1-upload-msg--left" id="bio-edit-char3-msg"></div>
+                    </div>
+                  </div>
+                </div>
+                <span class="f1-form-note" id="bio-edit-chars-note">Aparecen en tu ficha con mini icono. Puedes pegar una URL o elegir una imagen desde tu galer&iacute;a.</span>
+              </div>
+
+              <div class="f1-form-field">
+                <label class="f1-form-label">Color de perfil</label>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap">
+                  <input type="color" id="bio-edit-color" value="#D4AF37" style="width:44px;height:36px;padding:2px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);cursor:pointer">
+                  <span id="bio-edit-color-hex" style="font-size:.82rem;color:rgba(238,244,255,.55);letter-spacing:1px;font-family:'Teko',sans-serif">#D4AF37</span>
+                </div>
+                <div id="bio-edit-color-presets" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                  <button type="button" data-color="#D4AF37" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#D4AF37;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Oro</button>
+                  <button type="button" data-color="#3671C6" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#3671C6;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Azul</button>
+                  <button type="button" data-color="#D64A4A" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#D64A4A;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Rojo</button>
+                  <button type="button" data-color="#2FBF71" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#2FBF71;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Verde</button>
+                  <button type="button" data-color="#8B5CF6" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#8B5CF6;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Violeta</button>
+                  <button type="button" data-color="#FFFFFF" style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#eef4ff;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 0 1px rgba(255,255,255,.14)"></span>Blanco</button>
+                </div>
+                <span class="f1-form-note">Elige un preset o ajusta el color manualmente. Si el tono es demasiado oscuro, la ficha lo aclara para que siga leyéndose bien.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="f1-profile-edit-side">
+          <div class="f1-profile-panel">
+            <div class="f1-profile-side-head">
+              <div class="f1-profile-side-title">Avatar y cover</div>
+              <p class="f1-profile-side-copy">La misma imagen alimenta el retrato del piloto y el fondo cinematic del hero.</p>
+            </div>
+            <div class="f1-avatar-upload visible" id="avatar-upload-section">
+              <div class="f1-upload-row" style="max-width:none">
+                <input type="url" class="f1-upload-input" id="avatar-url-input" placeholder="https://... o elegir desde galer&iacute;a">
+                <label class="f1-upload-btn" for="avatar-file-input" title="Elegir de galer&iacute;a">Galer&iacute;a</label>
+                <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
+              </div>
+              <img class="f1-upload-preview" id="avatar-preview" src="" alt="preview">
+              <div class="f1-upload-msg" id="avatar-upload-msg"></div>
+            </div>
+          </div>
+
+          <div class="f1-profile-panel">
+            <div class="f1-profile-side-head">
+              <div class="f1-profile-side-title">Verificación</div>
+              <p class="f1-profile-side-copy">Usa el pseudónimo actual y tu clave personal. Si cambias el nombre, el perfil se recargará con el nuevo slug automáticamente.</p>
+            </div>
+            <div class="f1-profile-actions">
+              <button id="bio-edit-save" class="f1-profile-save" type="button">Guardar perfil</button>
+              <span id="bio-edit-msg" class="f1-profile-status"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <script>
+    const PROFILE_COUNTRY_OPTIONS = [
+      { code: '', label: 'Sin bandera / no definida' },
+      { code: 'ar', label: 'Argentina' },
+      { code: 'bo', label: 'Bolivia' },
+      { code: 'br', label: 'Brasil' },
+      { code: 'ca', label: 'Canadá' },
+      { code: 'cl', label: 'Chile' },
+      { code: 'co', label: 'Colombia' },
+      { code: 'cr', label: 'Costa Rica' },
+      { code: 'cu', label: 'Cuba' },
+      { code: 'do', label: 'República Dominicana' },
+      { code: 'ec', label: 'Ecuador' },
+      { code: 'es', label: 'España' },
+      { code: 'fr', label: 'Francia' },
+      { code: 'gb', label: 'Reino Unido' },
+      { code: 'gt', label: 'Guatemala' },
+      { code: 'hn', label: 'Honduras' },
+      { code: 'it', label: 'Italia' },
+      { code: 'jp', label: 'Japón' },
+      { code: 'kr', label: 'Corea del Sur' },
+      { code: 'mx', label: 'México' },
+      { code: 'ni', label: 'Nicaragua' },
+      { code: 'pa', label: 'Panamá' },
+      { code: 'pe', label: 'Perú' },
+      { code: 'pr', label: 'Puerto Rico' },
+      { code: 'py', label: 'Paraguay' },
+      { code: 'sv', label: 'El Salvador' },
+      { code: 'us', label: 'Estados Unidos' },
+      { code: 'uy', label: 'Uruguay' },
+      { code: 've', label: 'Venezuela' }
+    ];
+
+    function normalizeCountryCode(value) {
+      return String(value || '').trim().toLowerCase().replace(/[^a-z]/g, '').slice(0, 2);
+    }
+
+    function initProfileCountryOptions() {
+      var select = document.getElementById('bio-edit-country');
+      if (!select || select.dataset.ready === '1') return;
+      select.innerHTML = PROFILE_COUNTRY_OPTIONS.map(function(option) {
+        return '<option value="' + option.code + '">' + option.label + '</option>';
+      }).join('');
+      select.dataset.ready = '1';
+    }
+
     document.getElementById('bio-edit-close').addEventListener('click', function() {
-      document.getElementById('bio-edit-modal').style.display = 'none';
+      closeProfileEditor();
     });
     document.getElementById('bio-edit-modal').addEventListener('click', function(e) {
-      if (e.target === this) this.style.display = 'none';
+      if (e.target === this) closeProfileEditor();
+    });
+    initProfileCountryOptions();
+    // Live color preview
+    document.getElementById('bio-edit-color').addEventListener('input', function() {
+      var hex = document.getElementById('bio-edit-color-hex');
+      if (hex) hex.textContent = this.value.toUpperCase();
+    });
+    document.getElementById('bio-edit-color-presets').addEventListener('click', function(e) {
+      var button = e.target.closest('button[data-color]');
+      if (!button) return;
+      var input = document.getElementById('bio-edit-color');
+      if (!input) return;
+      input.value = button.getAttribute('data-color');
+      input.dispatchEvent(new Event('input', { bubbles: true }));
     });
     document.getElementById('bio-edit-save').addEventListener('click', async function() {
+      const original_pseudonimo = document.getElementById('bio-edit-original-pseudonimo').value.trim();
       const pseudonimo = document.getElementById('bio-edit-pseudonimo').value.trim();
       const player_key = document.getElementById('bio-edit-key').value.trim();
-      const bio        = document.getElementById('bio-edit-text').value.trim();
-      const msg        = document.getElementById('bio-edit-msg');
-      if (!pseudonimo || !player_key) { msg.style.color='#f87171'; msg.textContent='Ingresa pseudonimo y clave.'; return; }
+      const bio = document.getElementById('bio-edit-text').value.trim();
+      const char1 = document.getElementById('bio-edit-char1').value.trim();
+      const char2 = document.getElementById('bio-edit-char2').value.trim();
+      const char3 = document.getElementById('bio-edit-char3').value.trim();
+      let char1_image = getEditorImageValue('bio-edit-char1-img');
+      let char2_image = getEditorImageValue('bio-edit-char2-img');
+      let char3_image = getEditorImageValue('bio-edit-char3-img');
+      const country_code = normalizeCountryCode(document.getElementById('bio-edit-country').value);
+      const divisionInput = document.getElementById('bio-edit-division');
+      const division = divisionInput.disabled ? '' : divisionInput.value;
+      const msg = document.getElementById('bio-edit-msg');
+      if (!original_pseudonimo || !pseudonimo || !player_key) { msg.style.color='#f87171'; msg.textContent='Ingresa nombre y clave.'; return; }
       msg.style.color=''; msg.textContent='Guardando...';
       try {
-        const res = await fetch('/api/players/bio', {
+        let avatar_url = getEditorImageValue('avatar-url-input');
+        if (pendingAvatarFile) {
+          msg.textContent = 'Subiendo avatar...';
+          try {
+            avatar_url = await uploadEditorImage(pendingAvatarFile);
+          } catch (_) {
+            msg.style.color='#f87171';
+            msg.textContent = 'Error subiendo la imagen.';
+            return;
+          }
+          document.getElementById('avatar-url-input').value = avatar_url;
+          clearPendingAvatarFile();
+          setUploadPreview(document.getElementById('avatar-preview'), avatar_url);
+        }
+
+        try {
+          char1_image = await uploadPendingCharacterImage(1, msg);
+          char2_image = await uploadPendingCharacterImage(2, msg);
+          char3_image = await uploadPendingCharacterImage(3, msg);
+        } catch (_) {
+          msg.style.color='#f87171';
+          msg.textContent = 'Error subiendo una imagen de personaje.';
+          return;
+        }
+
+        const primary_color = (document.getElementById('bio-edit-color') || {}).value || '';
+        const res = await fetch('/api/players/profile', {
           method: 'PATCH', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ pseudonimo, player_key, bio })
+          body: JSON.stringify({ pseudonimo: original_pseudonimo, player_key, new_pseudonimo: pseudonimo, bio, avatar_url, division, char1, char2, char3, char1_image, char2_image, char3_image, primary_color, country_code })
         });
         if (res.ok) {
-          msg.style.color='#4ade80'; msg.textContent='Bio actualizada.';
-          const bioEl = document.getElementById('profile-bio');
-          if (bioEl) bioEl.innerHTML = bio ? bioHtml(bio) : bioEl.innerHTML;
-          setTimeout(() => { document.getElementById('bio-edit-modal').style.display='none'; }, 1400);
+          const data = await res.json().catch(function() { return {}; });
+          msg.style.color='#4ade80'; msg.textContent='Perfil actualizado. Recargando ficha...';
+          setTimeout(function() {
+            const nextName = data.pseudonimo || pseudonimo;
+            const fallbackSlug = (currentDriverState && currentDriverState.slug) || getCurrentProfileSlug();
+            const targetSlug = buildSafeProfileSlug(nextName, fallbackSlug);
+            const refreshToken = String(Date.now());
+            if (!openProfileBySlug(targetSlug, false, refreshToken)) {
+              window.location.reload();
+            }
+          }, 550);
         } else {
           const err = await res.json().catch(()=>({}));
-          msg.style.color='#f87171'; msg.textContent = err.error === 'clave_incorrecta' ? 'Clave incorrecta.' : 'Error al guardar.';
+          msg.style.color='#f87171';
+          if (err.error === 'clave_incorrecta') msg.textContent = 'Clave incorrecta.';
+          else if (err.error === 'pseudonimo_taken') msg.textContent = 'Ese nombre ya existe.';
+          else if (err.error === 'division_locked') msg.textContent = 'Necesitas 4 combates registrados. Llevas ' + (err.fights || 0) + '.';
+          else if (err.error === 'chars_locked') msg.textContent = '🔒 Los personajes están bloqueados desde el 14 de mayo.';
+          else if (err.error === 'pais_invalido') msg.textContent = 'La nación seleccionada no es válida.';
+          else if (err.error === 'color_invalido') msg.textContent = 'El color elegido no es válido.';
+          else if (err.error === 'char_imagen_invalida') msg.textContent = 'La imagen del personaje debe ser una URL http o https.';
+          else if (err.error === 'char_imagen_muy_larga') msg.textContent = 'Una URL de personaje es demasiado larga.';
+          else msg.textContent = 'Error al guardar.';
         }
       } catch(e) { msg.style.color='#f87171'; msg.textContent='Error de red.'; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('bio-edit-modal').style.display === 'flex') {
+        closeProfileEditor();
+      }
     });
   </script>
 </body>

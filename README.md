@@ -17,27 +17,35 @@ Este proyecto está **completamente adaptado** para funcionar en cualquier hosti
 ```bash
 # Configurar variables de entorno
 cp .env.example .env
-# Edita .env con tus credenciales de Supabase
+# Edita .env con tus credenciales reales
 
 # Ejecutar script de verificación
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### 2. Railway (Opción Recomendada - 5 min)
+### 2. Oracle Cloud Free (Recomendada para tu caso)
+1. Crea una VM Ubuntu Always Free en Oracle Cloud
+2. Abre puertos `80`, `443` y `22` en el Security List y en el firewall del sistema
+3. Apunta tu dominio al IP público de la VM
+4. Copia `.env.example` a `.env` y completa variables reales
+5. Ejecuta `docker compose -f ops/oracle/docker-compose.yml up -d --build`
+6. Valida `https://tu-dominio/`, la narración desde una página pública y el panel `/bl-sentinel-9f3a2c`
+
+### 3. Railway (Opción Rápida - 5 min)
 1. Ve a [Railway.app](https://railway.app) → "New Project" → "Deploy from GitHub"
 2. Conecta tu repositorio
 3. **Automático**: Railway detecta el Dockerfile y configura todo
 4. Variables de entorno se configuran automáticamente desde `.env`
 
-### 3. Render (Alternativa)
+### 4. Render (Alternativa)
 1. Ve a [Render.com](https://render.com) → "New" → "Web Service"
 2. Conecta GitHub repo
 3. Selecciona "Docker" como runtime
 4. Puerto: `8080`
 5. Variables de entorno desde `.env`
 
-### 4. DigitalOcean App Platform
+### 5. DigitalOcean App Platform
 1. "Create App" desde GitHub
 2. Seleccionar Dockerfile
 3. Configurar variables de entorno
@@ -47,13 +55,44 @@ chmod +x deploy.sh
 ### Variables de Entorno (.env)
 ```bash
 # Requeridas
+PUBLIC_HOST=bellatorrpg.online
 SUPABASE_URL=https://tu-proyecto.supabase.co
 SUPABASE_KEY=tu-supabase-anon-key
-JWT_SECRET=tu-jwt-secret-seguro
+ADMIN_PASSWORD=tu-clave-admin-segura
+ADMIN_JWT_SECRET=tu-jwt-secret-seguro
 
 # Opcionales
+ADMIN_USERNAME=admin
+APP_ENV=production
 PORT=8080  # Para hosting
+PUBLIC_TTS_ENABLED=false
+TTS_MAX_CHARS=700
+TTS_MIN_INTERVAL_SECONDS=20
+AZURE_SPEECH_KEY=tu-azure-speech-key
+AZURE_SPEECH_REGION=eastus
+AZURE_SPEECH_DEFAULT_VOICE=es-CO-SalomeNeural
+AZURE_SPEECH_OUTPUT_FORMAT=audio-24khz-96kbitrate-mono-mp3
+SUPABASE_STORAGE_BUCKET=bellator-uploads
+SUPABASE_STORAGE_FOLDER=uploads
+SUPABASE_STORAGE_KEY=tu-service-role-o-anon-con-permisos
 ```
+
+## Oracle Cloud Free
+
+- Usa la VM Always Free como origen unico de produccion.
+- Mantiene `Sentinel`, nodos interactivos, cursor, musica y narración Azure cuando `AZURE_SPEECH_KEY` y `AZURE_SPEECH_REGION` están configurados. Si no, el frontend cae al narrador del navegador como respaldo.
+- El frontend compartido depende de `core.js`, `tracker.js`, `sentinel.js` y `app.js`; si despliegas desde este repo con cache limpia, todo vuelve a la misma fuente de verdad.
+- El archivo listo para levantar en Oracle es `ops/oracle/docker-compose.yml`.
+- En hosts efimeros como Cloud Run, configura `SUPABASE_STORAGE_BUCKET` para que `/api/upload` persista en Supabase Storage en vez de disco local.
+
+## Cloud Run
+
+- El contenedor ya expone `8080`, no depende de Piper y está listo para escalar a cero.
+- El script [ops/cloudrun/deploy.ps1](ops/cloudrun/deploy.ps1) ahora despliega con `--max-instances 2` y `--timeout 30` para no abrir la puerta a picos caros por error.
+- La narración pública queda deshabilitada por defecto con `PUBLIC_TTS_ENABLED=false`; si la reactivas, conviene mantener `TTS_MAX_CHARS` y `TTS_MIN_INTERVAL_SECONDS` para limitar costo.
+- Si despliegas desde código fuente en Google Cloud, excluye `tts/`, `.hf-deploy/` y logs pesados con `.gcloudignore`.
+- Script listo para desplegar desde Windows: `ops/cloudrun/deploy.ps1`.
+- Cloud Run y Cloud Build requieren billing activo en el proyecto, incluso si luego entras al free tier.
 
 ### Base de Datos Supabase
 ```sql
@@ -73,6 +112,8 @@ CREATE TABLE audit_logs (
   spamhaus_status TEXT
 );
 ```
+
+Para habilitar el historial de combates y la programación de peleas en el panel admin, ejecuta también el script [ops/supabase-competition-tables.sql](ops/supabase-competition-tables.sql) en el SQL Editor de Supabase.
 
 ## 📊 Funcionalidades Implementadas
 

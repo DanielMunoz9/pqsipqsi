@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://bellatorrpg.online/">
   <link rel="canonical" href="https://bellatorrpg.online/">
   <title>BELLATOR ROLBATTLE — Inicio</title>
-  <link rel="stylesheet" href="/shared.css?v=8">
+  <link rel="stylesheet" href="/shared.css?v=15">
   <style>
     .bl-search-hero{padding:64px 24px 52px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:1px solid var(--bl-border2);position:relative;z-index:10}
     .bl-sh-eyebrow{font-family:'Teko',sans-serif;letter-spacing:6px;font-size:.7rem;color:var(--bl-gold);text-transform:uppercase;opacity:.9}
@@ -46,9 +46,11 @@
     .bl-hero-orb{position:absolute;right:24px;top:22px;width:220px;height:220px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:0}
     .bl-hero-orb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
     .bl-hero-orb-img.orb-active{opacity:.68}
-    .bl-home-hero-grid{align-items:start}
-    .bl-home-hero-meta{max-width:1320px;margin:18px auto 0;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:18px}
+    .bl-home-hero-grid{grid-template-columns:1fr;align-items:start}
+    .bl-home-hero-main{display:grid;gap:18px;min-width:0}
+    .bl-home-hero-meta{max-width:none;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .bl-home-hero-meta .bl-aside-card{height:100%}
+    .bl-home-hero-lower{max-width:1320px;margin:18px auto 0}
     .bl-home-carousel{max-width:1320px;margin:0 auto;padding:4px 24px 50px}
     .bl-home-carousel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}
     .bl-home-carousel-copy{max-width:520px;margin:0;color:var(--bl-muted);font-size:.95rem;line-height:1.5}
@@ -81,10 +83,39 @@
     .bl-home-carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;min-height:18px}
     .bl-home-carousel-dots button{width:10px;height:10px;border-radius:50%;border:none;background:rgba(255,255,255,.18);cursor:pointer;transition:transform .18s ease,background .18s ease}
     .bl-home-carousel-dots button.is-active{background:var(--bl-gold);transform:scale(1.2)}
+    /* ── PRÓXIMAS PELEAS: carrusel 2 filas ─────────────────────────────────── */
+    .bl-prox-shell{position:relative}
+    .bl-prox-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,minmax(0,1fr));grid-auto-columns:minmax(300px,320px);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:2px 0 10px;scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.35) rgba(255,255,255,.04);touch-action:pan-x;-webkit-overflow-scrolling:touch}
+    .bl-prox-grid::-webkit-scrollbar{height:8px}
+    .bl-prox-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:999px}
+    .bl-prox-grid::-webkit-scrollbar-thumb{background:rgba(212,175,55,.45);border-radius:999px}
+    .bl-prox-card{scroll-snap-align:start;background:rgba(255,255,255,.035);border:1px solid rgba(212,175,55,.18);border-radius:16px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden}
+    .bl-prox-nav{display:flex;gap:10px}
+    .bl-prox-nav-btn{width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(13,17,23,.86);color:#fff;cursor:pointer}
+    .bl-prox-nav-btn:hover{border-color:rgba(212,175,55,.45);color:var(--bl-gold)}
+    @media(max-width:960px){
+      .bl-prox-grid{grid-template-rows:1fr;grid-auto-columns:minmax(86vw,86vw);gap:14px;padding-bottom:2px;scrollbar-width:none;-ms-overflow-style:none}
+      .bl-prox-grid::-webkit-scrollbar{display:none}
+      .bl-prox-nav{display:none}
+    }
+    .bl-draw-callout{max-width:1320px;margin:0 auto;padding:20px 24px 12px}
+    .bl-draw-callout-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;padding:26px 28px;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(6,11,19,.97) 0%,rgba(10,16,28,.96) 40%,rgba(22,10,11,.96) 100%);box-shadow:0 24px 68px rgba(0,0,0,.34);isolation:isolate}
+    .bl-draw-callout-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(66,159,255,.22) 0%,transparent 26%),radial-gradient(circle at 84% 26%,rgba(255,115,78,.20) 0%,transparent 28%),linear-gradient(120deg,transparent 0 72%,rgba(212,175,55,.08) 72% 79%,transparent 79% 100%);pointer-events:none}
+    .bl-draw-callout-card::after{content:'';position:absolute;inset:14px;border-radius:22px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+    .bl-draw-callout-copy,.bl-draw-callout-actions{position:relative;z-index:2}
+    .bl-draw-callout-kicker{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9}
+    .bl-draw-callout-title{font-family:'Teko',sans-serif;font-size:clamp(2.2rem,4.4vw,3.35rem);font-weight:700;line-height:.88;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 52%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:4px 0 0}
+    .bl-draw-callout-body{max-width:760px;margin:8px 0 0;color:var(--bl-soft);font-size:.96rem;line-height:1.64}
+    .bl-draw-callout-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .bl-draw-callout-chip{display:inline-flex;align-items:center;min-height:32px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.62rem;letter-spacing:1.9px;text-transform:uppercase;color:rgba(238,244,255,.82);white-space:nowrap}
+    .bl-draw-callout-btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 24px;border-radius:999px;background:linear-gradient(135deg,#d4af37 0%,#f1cb57 52%,#b98b18 100%);color:#0d1117;text-decoration:none;font-family:'Teko',sans-serif;font-size:1.18rem;letter-spacing:2.8px;text-transform:uppercase;font-weight:700;box-shadow:0 18px 38px rgba(212,175,55,.22);transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+    .bl-draw-callout-btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 24px 48px rgba(212,175,55,.28)}
     @media (max-width:960px){
       .bl-home-intro{padding:22px 14px 10px}
       .bl-home-hero--slim{padding:24px 14px 22px}
-      .bl-home-hero-meta{grid-template-columns:1fr;margin-top:14px}
+      .bl-home-hero-main{gap:14px}
+      .bl-home-hero-lower{margin-top:14px}
+      .bl-home-hero-meta{grid-template-columns:1fr;margin-top:0}
       .bl-home-hero--slim .bl-hero-copy::before{right:12px;top:auto;bottom:18px;width:150px;height:150px;box-shadow:0 0 0 24px rgba(212,175,55,.03),0 0 0 50px rgba(212,175,55,.02)}
       .bl-hero-orb{right:12px;bottom:18px;top:auto;width:150px;height:150px}
       .bl-home-carousel{padding:0 14px 38px}
@@ -94,6 +125,10 @@
       .bl-home-carousel-track.is-mobile::-webkit-scrollbar{display:none}
       .bl-home-carousel-track.is-mobile .bl-home-carousel-card{position:relative;min-width:80vw;width:80vw;height:330px;transform:none !important;opacity:1 !important;filter:none !important;scroll-snap-align:center}
       .bl-home-carousel-controls{margin-top:8px}
+      .bl-draw-callout{padding:16px 14px 10px}
+      .bl-draw-callout-card{grid-template-columns:1fr;padding:18px 16px}
+      .bl-draw-callout-actions{display:flex;justify-content:flex-start}
+      .bl-draw-callout-btn{width:100%}
     }
     mark{background:rgba(212,175,55,.22);color:var(--bl-gold);border-radius:2px;padding:0 1px;font-style:normal}
     .bl-nav-card-icon{color:var(--bl-gold)}
@@ -241,9 +276,12 @@
         <li><a class="bl-navlink" href="/">Inicio</a></li>
         <li><a class="bl-navlink" href="/competidores">Competidores</a></li>
         <li><a class="bl-navlink" href="/clasificacion">Clasificación</a></li>
+        <li><a class="bl-navlink" href="/sorteo.html">Sorteo</a></li>
+        <li><a class="bl-navlink" href="/apuestas.html">Apuestas</a></li>
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
         <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
@@ -286,129 +324,66 @@
 
     <section class="bl-home-hero bl-home-hero--slim">
       <div class="bl-home-hero-grid">
-        <div class="bl-hero-copy">
-          <div id="bl-hero-orb" class="bl-hero-orb"></div>
-          <div class="bl-hero-copy-inner">
-            <div class="bl-hero-eyebrow">BELLATOR WORLD CHAMPIONSHIP · 2026</div>
-            <div class="bl-hero-chips">
-              <div class="bl-hero-chip"><strong id="chip-total">–</strong> Guerreros</div>
-              <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
-              <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
+        <div class="bl-home-hero-main">
+          <div class="bl-hero-copy">
+            <div id="bl-hero-orb" class="bl-hero-orb"></div>
+            <div class="bl-hero-copy-inner">
+              <div class="bl-hero-eyebrow">BELLATOR WORLD CHAMPIONSHIP · 2026</div>
+              <div class="bl-hero-chips">
+                <div class="bl-hero-chip"><strong id="chip-total">–</strong> Guerreros</div>
+                <div class="bl-hero-chip"><strong id="chip-universal">–</strong> Universal</div>
+                <div class="bl-hero-chip"><strong id="chip-ciudad">–</strong> Ciudad</div>
+              </div>
+              <div class="bl-cta-row">
+                <a href="/registro" class="bl-btn-primary">Registrar competidor</a>
+                <a href="/clasificacion" class="bl-btn-secondary">Ver standings</a>
+              </div>
             </div>
-            <div class="bl-cta-row">
-              <a href="/registro" class="bl-btn-primary">Registrar competidor</a>
-              <a href="/clasificacion" class="bl-btn-secondary">Ver standings</a>
+          </div>
+
+          <div class="bl-home-hero-meta">
+            <div class="bl-aside-card">
+              <div class="bl-kicker">Event Tracker</div>
+              <h3 id="hero-round-title">Cargando ronda</h3>
+              <p id="hero-round-copy">Obteniendo información del calendario Bellator 2026.</p>
+              <div class="bl-live-ribbon" style="margin-top:18px">
+                <div>
+                  <div class="bl-kicker">Próximo foco</div>
+                  <strong id="hero-next-focus">Liga Universal</strong>
+                </div>
+                <span class="bl-badge-status pendiente" id="hero-round-status">PENDIENTE</span>
+              </div>
+            </div>
+            <div class="bl-aside-card">
+              <div class="bl-kicker">Quick Access</div>
+              <div class="bl-aside-list">
+                <a href="/competidores"><span>Drivers Line-up</span><span>→</span></a>
+                <a href="/clasificacion"><span>Full Standings</span><span>→</span></a>
+                <a href="/registro"><span>Registration Center</span><span>→</span></a>
+                <a href="/reglamento"><span>Sporting Regulations</span><span>→</span></a>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="bl-hero-aside">
-          <div class="bl-divshow bl-aside-card" id="bl-divshow" aria-label="Inscripciones Bellator">
-            <div class="bl-divshow-card">
-              <div class="bl-divshow-head">
-                <div>
-                  <div class="bl-divshow-kicker">Bellator RolBattle 2026</div>
-                  <div class="bl-divshow-title">Inscripciones al Primer Campeonato</div>
-                </div>
-                <span class="bl-divshow-chip">Ciudad y Universal</span>
-              </div>
-              <div class="bl-divshow-grid">
-                <a href="/registro" class="bl-ds-panel bl-ds-city" tabindex="0">
-                  <img class="bl-ds-photo" src="https://images.pexels.com/photos/31413138/pexels-photo-31413138.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Ciudad neon" loading="lazy" decoding="async" referrerpolicy="no-referrer">
-                  <div class="bl-ds-gif-wrap" aria-hidden="true">
-                    <img class="bl-ds-gif" src="https://media.giphy.com/media/0aIY8ZCncOtgh35ftC/giphy.gif" alt="">
-                    <div class="bl-ds-gif-tone"></div>
-                  </div>
-                  <div class="bl-ds-bg-word" aria-hidden="true">City</div>
-                  <div class="bl-ds-burst" aria-hidden="true"></div>
-                  <div class="bl-ds-orb" aria-hidden="true"></div>
-                  <div class="bl-ds-speed" aria-hidden="true"></div>
-                  <div class="bl-ds-halftone" aria-hidden="true"></div>
-                  <div class="bl-ds-tint" aria-hidden="true"></div>
-                  <div class="bl-ds-frame" aria-hidden="true"></div>
-                  <div class="bl-ds-slash" aria-hidden="true"></div>
-                  <div class="bl-ds-ribbon" aria-hidden="true">Manga Edition</div>
-                  <div class="bl-ds-content">
-                    <div class="bl-ds-top">
-                      <span class="bl-ds-badge">División Ciudad</span>
-                      <div class="bl-ds-count">
-                        <span class="bl-ds-count-num" id="bl-ds-city-n">–</span>
-                        <span class="bl-ds-count-label">Ciudad</span>
-                      </div>
-                    </div>
-                    <div class="bl-ds-bottom">
-                      <div class="bl-ds-kicker" id="ds-kicker-ciudad">Inscripción abierta</div>
-                      <h2 class="bl-ds-title">Ciudad</h2>
-                      <p class="bl-ds-subtitle">El mejor del mundo con arsenal de este tier entra.</p>
-                      <p class="bl-ds-copy">Combate callejero, presión táctica y pase directo a la primera corona del circuito.</p>
-                      <div class="bl-ds-meta">
-                        <span class="bl-ds-chip">Nivel urbano</span>
-                        <span class="bl-ds-cta-btn" id="ds-cta-ciudad">Entrar al registro +</span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-                <a href="/registro" class="bl-ds-panel bl-ds-univ" tabindex="0">
-                  <img class="bl-ds-photo" src="https://images.pexels.com/photos/34310965/pexels-photo-34310965.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Energía roja" loading="lazy" decoding="async" referrerpolicy="no-referrer">
-                  <div class="bl-ds-gif-wrap" aria-hidden="true">
-                    <img class="bl-ds-gif" src="https://media.giphy.com/media/fWgwBq6OGY1kPjCqDP/giphy.gif" alt="">
-                    <div class="bl-ds-gif-tone"></div>
-                  </div>
-                  <div class="bl-ds-bg-word" aria-hidden="true">Power</div>
-                  <div class="bl-ds-burst" aria-hidden="true"></div>
-                  <div class="bl-ds-orb" aria-hidden="true"></div>
-                  <div class="bl-ds-speed" aria-hidden="true"></div>
-                  <div class="bl-ds-halftone" aria-hidden="true"></div>
-                  <div class="bl-ds-tint" aria-hidden="true"></div>
-                  <div class="bl-ds-frame" aria-hidden="true"></div>
-                  <div class="bl-ds-slash" aria-hidden="true"></div>
-                  <div class="bl-ds-ribbon" aria-hidden="true">Comic Edition</div>
-                  <div class="bl-ds-content">
-                    <div class="bl-ds-top">
-                      <span class="bl-ds-badge">División Universal</span>
-                      <div class="bl-ds-count">
-                        <span class="bl-ds-count-num" id="bl-ds-univ-n">–</span>
-                        <span class="bl-ds-count-label">Universal</span>
-                      </div>
-                    </div>
-                    <div class="bl-ds-bottom">
-                      <div class="bl-ds-kicker" id="ds-kicker-univ">Inscripción abierta</div>
-                      <h2 class="bl-ds-title">Universal</h2>
-                      <p class="bl-ds-subtitle">El mejor del mundo con arsenal de este tier entra.</p>
-                      <p class="bl-ds-copy">Poder bruto, lectura de alto impacto y acceso a la cima del torneo principal.</p>
-                      <div class="bl-ds-meta">
-                        <span class="bl-ds-chip">Escala máxima</span>
-                        <span class="bl-ds-cta-btn" id="ds-cta-univ">Entrar al registro +</span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="bl-home-hero-meta">
-        <div class="bl-aside-card">
-          <div class="bl-kicker">Event Tracker</div>
-          <h3 id="hero-round-title">Cargando ronda</h3>
-          <p id="hero-round-copy">Obteniendo información del calendario Bellator 2026.</p>
-          <div class="bl-live-ribbon" style="margin-top:18px">
-            <div>
-              <div class="bl-kicker">Próximo foco</div>
-              <strong id="hero-next-focus">Liga Universal</strong>
-            </div>
-            <span class="bl-badge-status pendiente" id="hero-round-status">PENDIENTE</span>
+    </section>
+
+    <section class="bl-draw-callout" aria-labelledby="bl-album-callout-title">
+      <div class="bl-draw-callout-card">
+        <div class="bl-draw-callout-copy">
+          <div class="bl-draw-callout-kicker">NUEVO LANZAMIENTO</div>
+          <h2 class="bl-draw-callout-title" id="bl-album-callout-title">ÁLBUM BELLATOR 2026</h2>
+          <p class="bl-draw-callout-body">Ya está activo el álbum oficial de Bellator. Abre sobres, pega cromos, activa tu identidad Bellator y sigue tus misiones diarias desde la edición standalone publicada para toda la comunidad.</p>
+          <div class="bl-draw-callout-meta">
+            <span class="bl-draw-callout-chip">Sobres diarios</span>
+            <span class="bl-draw-callout-chip">Intercambio</span>
+            <span class="bl-draw-callout-chip">Mercado de Apuestas (NUEVO)</span>
           </div>
         </div>
-        <div class="bl-aside-card">
-          <div class="bl-kicker">Quick Access</div>
-          <div class="bl-aside-list">
-            <a href="/competidores"><span>Drivers Line-up</span><span>→</span></a>
-            <a href="/clasificacion"><span>Full Standings</span><span>→</span></a>
-            <a href="/registro"><span>Registration Center</span><span>→</span></a>
-            <a href="/reglamento"><span>Sporting Regulations</span><span>→</span></a>
-          </div>
+        <div class="bl-draw-callout-actions">
+          <a class="bl-draw-callout-btn" href="https://valhala-album.netlify.app/" target="_blank" rel="noopener">Entrar al álbum</a>
+          <a class="bl-draw-callout-btn" href="/apuestas.html" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2);">Apostar Sobres</a>
         </div>
       </div>
     </section>
@@ -420,10 +395,18 @@
           <div style="font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9;margin-bottom:6px">AGENDA OFICIAL</div>
           <h2 style="font-family:'Teko',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">Próximas Peleas</h2>
         </div>
-        <a href="/competidores" style="display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold);text-decoration:none;opacity:.8">Ver todos los competidores &#8594;</a>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="bl-prox-nav" aria-label="Controles de próximas peleas">
+            <button class="bl-prox-nav-btn" id="bl-prox-prev" type="button" aria-label="Ver peleas anteriores">&#8592;</button>
+            <button class="bl-prox-nav-btn" id="bl-prox-next" type="button" aria-label="Ver más peleas">&#8594;</button>
+          </div>
+          <a href="/competidores" style="display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold);text-decoration:none;opacity:.8">Ver todos los competidores &#8594;</a>
+        </div>
       </div>
-      <div id="bl-proximas-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px">
-        <div style="color:rgba(255,255,255,.3);font-size:.9rem;padding:24px 0">Cargando próximas peleas...</div>
+      <div class="bl-prox-shell">
+        <div id="bl-proximas-grid" class="bl-prox-grid" data-auto-scroll="true">
+          <div style="color:rgba(255,255,255,.3);font-size:.9rem;padding:24px 0">Cargando próximas peleas...</div>
+        </div>
       </div>
     </section>
 
@@ -463,7 +446,8 @@
       </div>
       <div id="bl-clanes-grid" style="
         display:grid;
-        grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+        grid-template-columns:repeat(auto-fit,minmax(260px,360px));
+        justify-content:start;
         gap:14px
       ">
         <div class="bl-featured-skeleton">Cargando clanes...</div>
@@ -474,7 +458,7 @@
     <div class="bl-content-grid">
       <section class="bl-table-card">
         <div class="bl-section-head">
-          <h2 class="bl-section-h2">Standings Snapshot</h2>
+          <h2 class="bl-section-h2">Podium Snapshot</h2>
           <span class="bl-badge-live">LIVE</span>
         </div>
         <div class="bl-standings-mini" id="bl-standings-mini">
@@ -551,19 +535,19 @@
     </div>
   </div>
 
-  <script src="/core.js?v=1"></script>
-  <script src="/sentinel.js?v=1"></script>
-  <script src="/tracker.js?v=10"></script>
-  <script src="/app.js?v=20"></script>
+  <script src="/core.js?v=3"></script>
+  <script src="/sentinel.js?v=2"></script>
+  <script src="/_assets/chunk.27c1e5b4.js"></script>
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
   <script>
     let searchCache = [];
 
     function slugify(value) {
       return String(value || '')
-        .normalize('NFD')
+        .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
         .replace(/^-+|-+$/g, '');
     }
 
@@ -589,6 +573,34 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+    }
+
+    function displayInitial(value, fallback = '?') {
+      const text = String(value || '').trim();
+      if (!text) return fallback;
+      const first = Array.from(text.normalize('NFKC'))[0];
+      return first ? first.toUpperCase() : fallback;
+    }
+
+    function normalizeClanColor(value) {
+      const hex = String(value || '').trim();
+      if (/^#[0-9a-f]{6}$/i.test(hex)) return hex.toUpperCase();
+      if (/^[0-9a-f]{6}$/i.test(hex)) return ('#' + hex).toUpperCase();
+      return '#D4AF37';
+    }
+
+    function hexToRgbList(hex) {
+      return [hex.slice(1, 3), hex.slice(3, 5), hex.slice(5, 7)]
+        .map(function(part) { return parseInt(part, 16); })
+        .join(',');
+    }
+
+    function tokenizeSearchText(value) {
+      var stop = new Set(['de','la','el','los','las','en','del','y','o','un','una','por','para','con']);
+      var normalized = String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      return normalized.split(/[^\p{L}\p{N}]+/u).filter(function(token) {
+        return token && token.length > 2 && !stop.has(token);
+      });
     }
 
     (function initSearch() {
@@ -687,16 +699,39 @@
         }
 
         if (reglas.length) {
-          html += `<div class="bl-gsr-cat-label">Reglamento</div>`;
-          html += reglas.slice(0, 5).map(item => `
-            <a class="bl-gsr-page-item" href="${item.url}?q=${encodeURIComponent(item.name)}">
-              <div class="bl-gsr-page-icon" style="font-family:'Teko',sans-serif;font-size:.78rem;letter-spacing:1px">REG</div>
-              <div style="flex:1;min-width:0">
-                <div class="bl-gsr-page-name">${hl(item.name, q)}</div>
-                <div class="bl-gsr-page-desc">${hl(item.desc, q)}</div>
-              </div>
-              <span class="bl-gsr-page-arrow">→</span>
-            </a>`).join('');
+          const queryTokens = tokenizeSearchText(q);
+          const threshold = queryTokens.length >= 2 ? 4 : 3;
+          const relevantReglas = reglas.map(item => {
+            const itemName = norm(item.name);
+            const itemDesc = norm(item.desc);
+            let score = 0;
+            if (itemName.includes(nq)) score += 8;
+            if (itemDesc.includes(nq)) score += 3;
+            queryTokens.forEach(token => {
+              if (itemName.includes(token)) score += 3;
+              else if (itemDesc.includes(token)) score += 1;
+            });
+            return { item, score, itemName };
+          }).filter(entry => {
+            if (!queryTokens.length) return false;
+            if (queryTokens.length === 1) return entry.itemName.includes(queryTokens[0]);
+            return entry.score >= threshold;
+          })
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 4)
+            .map(entry => entry.item);
+          if (relevantReglas.length) {
+            html += `<div class="bl-gsr-cat-label">Reglamento</div>`;
+            html += relevantReglas.map(item => `
+              <a class="bl-gsr-page-item" href="${item.url}?q=${encodeURIComponent(item.name)}">
+                <div class="bl-gsr-page-icon" style="font-family:'Teko',sans-serif;font-size:.78rem;letter-spacing:1px">REG</div>
+                <div style="flex:1;min-width:0">
+                  <div class="bl-gsr-page-name">${hl(item.name, q)}</div>
+                  <div class="bl-gsr-page-desc">${hl(item.desc, q)}</div>
+                </div>
+                <span class="bl-gsr-page-arrow">→</span>
+              </a>`).join('');
+          }
         }
 
         if (comps.length) {
@@ -760,50 +795,6 @@
       } catch (_) {}
     })();
 
-    (async function loadSchedule() {
-      const featured = document.getElementById('bl-featured-round');
-      const grid = document.getElementById('bl-schedule-grid');
-      try {
-        const schedule = await fetch('/api/schedule').then(r => r.json());
-        if (!Array.isArray(schedule)) return;
-        const active = schedule.find(item => item.estado === 'activo') || schedule.find(item => item.estado === 'pendiente') || schedule[0];
-        if (active && featured) {
-          featured.innerHTML = `
-            <div class="bl-feat-round-num">Ronda ${active.ronda}</div>
-            <div class="bl-feat-round-name">${active.nombre}</div>
-            <div class="bl-feat-meta">
-              <div class="bl-feat-meta-item"><strong>Fecha</strong>${active.fecha}</div>
-              <div class="bl-feat-meta-item"><strong>País</strong>${active.pais}</div>
-            </div>
-            <span class="bl-badge-status ${active.estado}">${active.estado}</span>
-          `;
-          const heroTitle = document.getElementById('hero-round-title');
-          const heroCopy = document.getElementById('hero-round-copy');
-          const heroStatus = document.getElementById('hero-round-status');
-          const nextFocus = document.getElementById('hero-next-focus');
-          if (heroTitle) heroTitle.textContent = active.nombre;
-          if (heroCopy) heroCopy.textContent = `${active.fecha} · ${active.pais}`;
-          if (heroStatus) {
-            heroStatus.className = `bl-badge-status ${active.estado}`;
-            heroStatus.textContent = active.estado.toUpperCase();
-          }
-          if (nextFocus) nextFocus.textContent = `Ronda ${active.ronda}`;
-        }
-        if (grid) {
-          grid.innerHTML = schedule.map(item => `
-            <article class="bl-sched-card ${item.estado}">
-              <div class="bl-sched-ronda">R${String(item.ronda).padStart(2, '0')}</div>
-              <div class="bl-sched-name">${item.nombre}</div>
-              <div class="bl-sched-date">${item.fecha} · ${item.pais}</div>
-            </article>
-          `).join('');
-        }
-      } catch (_) {
-        if (featured) featured.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar la ronda.</div>';
-        if (grid) grid.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar el calendario.</div>';
-      }
-    })();
-
     (async function loadCompetitors() {
       const podium = document.getElementById('bl-home-podium');
       const standings = document.getElementById('bl-standings-mini');
@@ -815,23 +806,28 @@
           return;
         }
         if (podium) {
-          podium.innerHTML = data.slice(0, 3).map((item, index) => {
-            const rankClass = index === 0 ? 'p1' : index === 1 ? 'p2' : 'p3';
+          const topThree = data.slice(0, 3);
+          const podiumEntries = [
+            { item: topThree[1], rank: 2, suffix: 'ND', rankClass: 'p2' },
+            { item: topThree[0], rank: 1, suffix: 'ST', rankClass: 'p1' },
+            { item: topThree[2], rank: 3, suffix: 'RD', rankClass: 'p3' }
+          ].filter(entry => entry.item);
+          podium.innerHTML = podiumEntries.map(({ item, rank, suffix, rankClass }) => {
             const avatar = item.avatar_url && item.avatar_url !== '<nil>'
               ? `<img class="bl-podium-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
               : '';
             return `
               <a class="bl-podium-card ${rankClass}" href="${profileUrl(item.pseudonimo)}">
-                <div class="bl-podium-rank">${index + 1}<small>${index === 0 ? 'ST' : index === 1 ? 'ND' : 'RD'}</small></div>
+                <div class="bl-podium-rank">${rank}<small>${suffix}</small></div>
                 <div class="bl-podium-avatar-wrap">
                   ${avatar}
-                  <div class="bl-podium-placeholder" style="${item.avatar_url && item.avatar_url !== '<nil>' ? 'display:none' : ''}">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>
+                  <div class="bl-podium-placeholder" style="${item.avatar_url && item.avatar_url !== '<nil>' ? 'display:none' : ''}">${displayInitial(item.pseudonimo)}</div>
                 </div>
                 <div class="bl-podium-copy">
                   <div class="bl-podium-division">${item.division || 'Sin división'}</div>
                   <div class="bl-podium-name">${item.pseudonimo}</div>
                   <div class="bl-podium-meta">
-                    <div class="bl-podium-points">${index + 1}<span>POSICIÓN</span></div>
+                    <div class="bl-podium-points">${rank}<span>POSICIÓN</span></div>
                     <div class="bl-podium-cta">Abrir perfil →</div>
                   </div>
                 </div>
@@ -840,22 +836,53 @@
           }).join('');
         }
         if (standings) {
-          standings.innerHTML = data.slice(0, 6).map((item, index) => {
-            const avatar = item.avatar_url && item.avatar_url !== '<nil>'
-              ? `<img class="bl-mini-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none'">`
-              : `<div class="bl-mini-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
-            return `
+          const renderMiniAvatar = function(item) {
+            return item.avatar_url && item.avatar_url !== '<nil>'
+              ? `<img class="bl-mini-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` +
+                  `<div class="bl-mini-avatar-ph" style="display:none">${displayInitial(item.pseudonimo)}</div>`
+              : `<div class="bl-mini-avatar-ph">${displayInitial(item.pseudonimo)}</div>`;
+          };
+          const leaders = data.slice(0, 3);
+          const snapshotEntries = [
+            { item: leaders[1], rank: 2, suffix: 'ND', rankClass: 'is-p2' },
+            { item: leaders[0], rank: 1, suffix: 'ST', rankClass: 'is-p1' },
+            { item: leaders[2], rank: 3, suffix: 'RD', rankClass: 'is-p3' }
+          ].filter(entry => entry.item);
+          const rest = data.slice(3, 6);
+          standings.innerHTML = `
+            <div class="bl-mini-podium">
+              ${snapshotEntries.map(({ item, rank, suffix, rankClass }) => `
+                <a class="bl-mini-row bl-mini-row--podium ${rankClass}" href="${profileUrl(item.pseudonimo)}">
+                  <div class="bl-mini-podium-head">
+                    <div class="bl-mini-podium-rank">${rank}<small>${suffix}</small></div>
+                    <span class="bl-mini-podium-pip">P${rank}</span>
+                  </div>
+                  <div class="bl-mini-podium-body">
+                    ${renderMiniAvatar(item)}
+                    <span>
+                      <span class="bl-mini-name">${item.pseudonimo}</span>
+                      <span class="bl-mini-sub">${item.division || 'Sin división'}</span>
+                    </span>
+                  </div>
+                  <div class="bl-mini-podium-tail">
+                    <div class="bl-mini-podium-points">${rank}<span>Ranking</span></div>
+                    <div class="bl-mini-podium-cta">Abrir ficha →</div>
+                  </div>
+                </a>
+              `).join('')}
+            </div>
+            ${rest.length ? `<div class="bl-mini-rest">${rest.map((item, index) => `
               <a class="bl-mini-row" href="${profileUrl(item.pseudonimo)}">
-                <span class="bl-mini-pos">${index + 1}</span>
-                ${avatar}
+                <span class="bl-mini-pos">${index + 4}</span>
+                ${renderMiniAvatar(item)}
                 <span>
                   <span class="bl-mini-name">${item.pseudonimo}</span>
                   <span class="bl-mini-sub">${item.division || 'Sin división'}</span>
                 </span>
-                <span class="bl-mini-points">${index + 1}</span>
+                <span class="bl-mini-points">${index + 4}</span>
               </a>
-            `;
-          }).join('');
+            `).join('')}</div>` : ''}
+          `;
         }
       } catch (_) {
         if (podium) podium.innerHTML = '<div class="bl-featured-skeleton">No se pudo cargar el top 3.</div>';
@@ -873,45 +900,38 @@
           grid.innerHTML = '<div class="bl-featured-skeleton" style="grid-column:1/-1">No hay clanes registrados aún. <a href="/clanes" style="color:var(--bl-gold)">¡Crea el primero!</a></div>';
           return;
         }
-        grid.innerHTML = clanes.slice(0, 6).map(function(c) {
-          const color   = String(c.primary_color || '#D4AF37').trim();
-          const safeC   = /^#?[0-9a-f]{6}$/i.test(color) ? (color.startsWith('#') ? color : '#'+color) : '#D4AF37';
-          const initial = String(c.name || '?').charAt(0).toUpperCase();
-          const logo    = c.logo_url && c.logo_url !== 'null' && c.logo_url !== '<nil>' ? c.logo_url : null;
+        grid.innerHTML = clanes.slice(0, 6).map(function(c, index) {
+          const safeC = normalizeClanColor(c.primary_color);
+          const colorStyle = `--tc:${safeC};--driver-color:${safeC};--driver-color-rgb:${hexToRgbList(safeC)};`;
+          const name = String(c.name || 'Sin nombre').trim() || 'Sin nombre';
+          const leader = String(c.leader_pseudonimo || '').trim();
+          const initial = name.charAt(0).toUpperCase();
+          const logo = c.logo_url && c.logo_url !== 'null' && c.logo_url !== '<nil>' ? String(c.logo_url).trim() : '';
           const members = Array.isArray(c.members) ? c.members.length : 0;
-          const desc    = String(c.description || '').trim().slice(0, 80);
-          const name    = String(c.name || 'Sin nombre').slice(0, 30);
-          const leader  = String(c.leader_pseudonimo || '').slice(0, 24);
-          return `<a href="/clanes" style="
-              display:flex;flex-direction:column;gap:10px;
-              padding:16px 18px;border-radius:18px;text-decoration:none;color:inherit;
-              background:linear-gradient(160deg,rgba(17,22,31,.98),rgba(8,11,16,.98));
-              border:1px solid rgba(255,255,255,.07);
-              transition:transform .18s ease,border-color .18s ease;
-              border-top:3px solid ${safeC};
-            "
-            onmouseover="this.style.borderColor='${safeC}';this.style.transform='translateY(-4px)'"
-            onmouseout="this.style.borderColor='rgba(255,255,255,.07)';this.style.transform='translateY(0)'"
-          >
-            <div style="display:flex;align-items:center;gap:12px">
-              <div style="
-                width:44px;height:44px;border-radius:12px;flex-shrink:0;
-                background:${safeC}22;border:2px solid ${safeC}55;
-                display:flex;align-items:center;justify-content:center;
-                font-family:'Teko',sans-serif;font-size:1.5rem;color:${safeC};overflow:hidden;
-              ">${logo ? `<img src="${logo}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.parentElement.textContent='${initial}'">` : initial}</div>
-              <div style="min-width:0">
-                <div style="font-family:'Teko',sans-serif;font-size:1.15rem;letter-spacing:.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
-                ${leader ? `<div style="font-size:.72rem;color:rgba(238,244,255,.42);letter-spacing:1px;text-transform:uppercase;margin-top:1px">Líder: ${leader}</div>` : ''}
+          const descRaw = String(c.description || '').trim();
+          const desc = descRaw ? descRaw.slice(0, 92) + (descRaw.length > 92 ? '…' : '') : 'Linaje preparado para dominar el circuito Bellator.';
+          return `<a href="/clanes" class="bl-driver-card bl-clan-card bl-clan-card--compact bl-f1-card bl-clan-link" style="${colorStyle}">
+            <div class="bl-clan-watermark" aria-hidden="true">${escapeHtml(initial)}</div>
+            <div class="bl-clan-topline">
+              <div class="bl-driver-pos">C${index + 1}</div>
+              <span class="bl-clan-status">Destacado</span>
+            </div>
+            <div class="bl-clan-hero">
+              <div class="bl-clan-crest">
+                ${logo
+                  ? `<img class="bl-clan-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(name)}" onerror="this.outerHTML='<div class=&quot;bl-clan-logo-fallback&quot;>${escapeHtml(initial)}</div>'">`
+                  : `<div class="bl-clan-logo-fallback">${escapeHtml(initial)}</div>`}
+              </div>
+              <div class="bl-clan-copy">
+                <div class="bl-clan-kicker">Clanes destacados</div>
+                <div class="bl-driver-name bl-clan-name">${escapeHtml(name)}</div>
+                <div class="bl-clan-leader">${leader ? `Liderado por ${escapeHtml(leader)}` : 'Linaje listo para reclutar'}</div>
               </div>
             </div>
-            ${desc ? `<div style="font-size:.82rem;color:rgba(238,244,255,.55);line-height:1.5">${desc}${c.description && c.description.length > 80 ? '…' : ''}</div>` : ''}
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto">
-              <span style="
-                padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:700;
-                letter-spacing:1px;background:${safeC}18;border:1px solid ${safeC}44;color:${safeC};
-              ">${members} ${members === 1 ? 'miembro' : 'miembros'}</span>
-              <span style="font-size:.78rem;color:rgba(238,244,255,.3)">Ver clan →</span>
+            <div class="bl-clan-desc">${escapeHtml(desc)}</div>
+            <div class="bl-clan-footer">
+              <div class="bl-driver-stat"><strong>${members}</strong><span>${members === 1 ? 'Miembro' : 'Miembros'}</span></div>
+              <span class="bl-clan-link-arrow">Ver clan →</span>
             </div>
           </a>`;
         }).join('');
@@ -1073,7 +1093,8 @@
           if (active >= cards.length - 1) autoDirection = -1;
           else if (active <= 0) autoDirection = 1;
           active += autoDirection;
-          renderCarousel(true);
+          // On mobile, pass false so autoplay never hijacks page scroll
+          renderCarousel(isMobileCarousel() ? false : true);
         }, 4200);
       }
 
@@ -1118,6 +1139,9 @@
       }, { passive: true });
       section.addEventListener('pointerenter', stopAutoplay);
       section.addEventListener('pointerleave', startAutoplay);
+      // On touch devices pointerenter/leave are unreliable — use touch events instead
+      section.addEventListener('touchstart', stopAutoplay, { passive: true });
+      section.addEventListener('touchend', () => { setTimeout(startAutoplay, 2000); }, { passive: true });
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) stopAutoplay();
         else startAutoplay();
@@ -1200,129 +1224,14 @@
       setTimeout(step, T.start);
     })();
 
-    // ── Division Showcase ─────────────────────────────────────────
-    (function initDivShowcase() {
-      const sec = document.getElementById('bl-divshow');
-      if (!sec) return;
-      const io = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting) { sec.classList.add('bl-ds-visible'); io.disconnect(); }
-      }, { threshold: 0.06 });
-      io.observe(sec);
-      function syncCounts() {
-        const cu  = document.getElementById('chip-ciudad');
-        const un  = document.getElementById('chip-universal');
-        const dcu = document.getElementById('bl-ds-city-n');
-        const dun = document.getElementById('bl-ds-univ-n');
-        if (dcu && cu && cu.textContent !== '\u2013') dcu.textContent = cu.textContent;
-        if (dun && un && un.textContent !== '\u2013') dun.textContent = un.textContent;
-        if ((dcu && dcu.textContent === '\u2013') || (dun && dun.textContent === '\u2013'))
-          setTimeout(syncCounts, 400);
-      }
-      setTimeout(syncCounts, 250);
-    })();
-
-
-
   </script>
 
   <script>
-  /* ── División slots: PRÓXIMAMENTE hasta 28 Abr 2026 9pm Col · desaparece al llegar a 16 ── */
-  (async function checkSlots() {
-    const OPENS_DATE = new Date('2026-04-29T02:00:00Z'); // 28 abr 9pm Colombia = 29 abr 02:00 UTC
-    try {
-      const s = await fetch('/api/division-slots').then(r => r.json());
-      // Forzar bloqueo en cliente si la fecha aún no llegó (independiente del servidor)
-      if (!s.locked && new Date() < OPENS_DATE) s.locked = true;
-      if (!s.opens) s.opens = '2026-04-28';
-      const max     = s.max || 16;
-      const grid    = document.querySelector('.bl-divshow-grid');
-      const divshow = document.getElementById('bl-divshow');
-      const cityCard   = document.querySelector('.bl-ds-panel.bl-ds-city');
-      const univCard   = document.querySelector('.bl-ds-panel.bl-ds-univ');
-      const cityKicker = document.getElementById('ds-kicker-ciudad');
-      const univKicker = document.getElementById('ds-kicker-univ');
-      const cityCta    = document.getElementById('ds-cta-ciudad');
-      const univCta    = document.getElementById('ds-cta-univ');
-
-      function addLockOverlay(card) {
-        const ov = document.createElement('div');
-        ov.className = 'bl-ds-lock-overlay';
-        ov.innerHTML =
-          '<div class="bl-ds-lock-icon">🔐</div>' +
-          '<div class="bl-ds-lock-label">Próximamente</div>' +
-          '<div class="bl-ds-lock-date">Inscripciones abren el<br><strong>28 de abril · 9 p.m. (Colombia)</strong></div>';
-        card.appendChild(ov);
-        card.classList.add('bl-ds-panel--locked');
-        card.removeAttribute('href');
-        card.setAttribute('tabindex', '-1');
-        card.setAttribute('aria-disabled', 'true');
-      }
-
-      // ── TORNEO BLOQUEADO hasta la fecha de apertura ──
-      if (s.locked) {
-        if (cityCard) addLockOverlay(cityCard);
-        if (univCard) addLockOverlay(univCard);
-        if (cityKicker) { cityKicker.textContent = '🔒 Inscripciones cerradas'; cityKicker.style.color = '#d4af37'; }
-        if (univKicker) { univKicker.textContent = '🔒 Inscripciones cerradas'; univKicker.style.color = '#d4af37'; }
-        if (cityCta) cityCta.style.display = 'none';
-        if (univCta) univCta.style.display = 'none';
-        return;
-      }
-
-      // ── TORNEO ABIERTO: ocultar panel cuando llega a 16 ──
-      const cityFull = (s.ciudad || 0) >= max;
-      const univFull = (s.universal || 0) >= max;
-
-      if (!cityFull) {
-        const rem = max - (s.ciudad || 0);
-        if (cityKicker) cityKicker.textContent = 'Inscripción abierta — ' + rem + ' cupo' + (rem === 1 ? '' : 's');
-        if (cityCta)    cityCta.textContent = 'Entrar al registro +';
-      }
-      if (!univFull) {
-        const rem = max - (s.universal || 0);
-        if (univKicker) univKicker.textContent = 'Inscripción abierta — ' + rem + ' cupo' + (rem === 1 ? '' : 's');
-        if (univCta)    univCta.textContent = 'Entrar al registro +';
-      }
-
-      if (cityFull && cityCard) cityCard.style.display = 'none';
-      if (univFull && univCard) univCard.style.display = 'none';
-      // Si uno llena y el otro no: expandir el restante a ancho completo
-      if ((cityFull !== univFull) && grid) grid.style.gridTemplateColumns = '1fr';
-      // Si ambos llenos: ocultar toda la sección
-      if (cityFull && univFull && divshow) divshow.style.display = 'none';
-
-    } catch (_) {
-      // Si la API falla, aplicar lock por fecha en el cliente de todas formas
-      if (new Date() < OPENS_DATE) {
-        const cityCard = document.querySelector('.bl-ds-panel.bl-ds-city');
-        const univCard = document.querySelector('.bl-ds-panel.bl-ds-univ');
-        function addLockOverlay(card) {
-          if (!card) return;
-          const ov = document.createElement('div');
-          ov.className = 'bl-ds-lock-overlay';
-          ov.innerHTML = '<div class="bl-ds-lock-icon">🔐</div><div class="bl-ds-lock-label">Próximamente</div><div class="bl-ds-lock-date">Inscripciones abren el<br><strong>28 de abril · 9 p.m. (Colombia)</strong></div>';
-          card.appendChild(ov);
-          card.classList.add('bl-ds-panel--locked');
-          card.removeAttribute('href');
-          card.setAttribute('tabindex', '-1');
-        }
-        addLockOverlay(cityCard);
-        addLockOverlay(univCard);
-        const ck = document.getElementById('ds-kicker-ciudad');
-        const uk = document.getElementById('ds-kicker-univ');
-        const cc = document.getElementById('ds-cta-ciudad');
-        const uc = document.getElementById('ds-cta-univ');
-        if (ck) { ck.textContent = '🔒 Inscripciones cerradas'; ck.style.color = '#d4af37'; }
-        if (uk) { uk.textContent = '🔒 Inscripciones cerradas'; uk.style.color = '#d4af37'; }
-        if (cc) cc.style.display = 'none';
-        if (uc) uc.style.display = 'none';
-      }
-    }
-  })();
-
   // ── PRÓXIMAS PELEAS ─────────────────────────────────────────────
   (async function loadProximasPeleas() {
     const grid = document.getElementById('bl-proximas-grid');
+    const prevBtn = document.getElementById('bl-prox-prev');
+    const nextBtn = document.getElementById('bl-prox-next');
     if (!grid) return;
     try {
       const res = await fetch('/api/proximas-peleas');
@@ -1336,7 +1245,7 @@
         const dateStr = p.event_date ? new Date(p.event_date + 'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase() : '';
         const av1 = p.player1_avatar && p.player1_avatar !== '' ? `<img src="${p.player1_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player1_pseudo||'?').charAt(0).toUpperCase()}</span>`;
         const av2 = p.player2_avatar && p.player2_avatar !== '' ? `<img src="${p.player2_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player2_pseudo||'?').charAt(0).toUpperCase()}</span>`;
-        return `<div style="background:rgba(255,255,255,.035);border:1px solid rgba(212,175,55,.18);border-radius:16px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden">
+        return `<article class="bl-prox-card">
           <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(212,175,55,.06) 0%,transparent 70%);pointer-events:none"></div>
           <div style="font-family:'Teko',sans-serif;font-size:.62rem;letter-spacing:5px;text-transform:uppercase;color:var(--bl-gold);opacity:.75;margin-bottom:10px">${p.event_name || 'Bellator RolBattle'}</div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
@@ -1354,8 +1263,57 @@
             </div>
           </div>
           ${p.division ? `<div style="margin-top:14px;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;border-top:1px solid rgba(255,255,255,.06);padding-top:10px">${p.division}</div>` : ''}
-        </div>`;
+        </article>`;
       }).join('');
+
+      const isMobile = window.matchMedia('(max-width:960px)').matches;
+
+      const scrollByStep = function(direction) {
+        const firstCard = grid.children[0];
+        if (!firstCard) return;
+        const cardWidth = firstCard.getBoundingClientRect().width;
+        const step = cardWidth + 16;
+        const multiplier = isMobile ? 1 : 2;
+        grid.scrollBy({ left: direction * step * multiplier, behavior: 'smooth' });
+      };
+
+      if (prevBtn) prevBtn.onclick = function() { scrollByStep(-1); };
+      if (nextBtn) nextBtn.onclick = function() { scrollByStep(1); };
+
+      if (grid.getAttribute('data-auto-scroll') === 'true' && window.matchMedia('(max-width:768px)').matches) {
+        setTimeout(() => {
+          if (peleas.length > 1 && !grid.dataset.autoscrolled) {
+            const itemWidth = grid.children[0]?.getBoundingClientRect().width || 340;
+            const gapWidth = 16;
+            const scrollDist = itemWidth + gapWidth;
+            grid.scrollTo({ left: scrollDist, behavior: 'smooth' });
+            setTimeout(() => { grid.scrollTo({ left: 0, behavior: 'smooth' }); }, 700);
+            grid.dataset.autoscrolled = '1';
+          }
+        }, 300);
+      }
+
+      if (isMobile && peleas.length > 1 && grid.dataset.mobileTicker !== '1') {
+        grid.dataset.mobileTicker = '1';
+        let direction = 1;
+        let userInteracted = false;
+        const onUserInteraction = function() { userInteracted = true; };
+        grid.addEventListener('touchstart', onUserInteraction, { passive: true });
+        grid.addEventListener('pointerdown', onUserInteraction, { passive: true });
+        grid.addEventListener('wheel', onUserInteraction, { passive: true });
+
+        window.setInterval(function() {
+          if (userInteracted) return;
+          const firstCard = grid.children[0];
+          if (!firstCard) return;
+          const step = firstCard.getBoundingClientRect().width + 16;
+          const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+          if (maxScroll <= 0) return;
+          if (grid.scrollLeft >= maxScroll - step * 0.4) direction = -1;
+          if (grid.scrollLeft <= step * 0.2) direction = 1;
+          grid.scrollBy({ left: direction * step, behavior: 'smooth' });
+        }, 2600);
+      }
     } catch(e) {
       document.getElementById('bl-proximas-section').style.display = 'none';
     }

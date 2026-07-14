@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clasificación — BELLATOR ROLBATTLE</title>
-  <link rel="stylesheet" href="/shared.css?v=8">
+  <link rel="stylesheet" href="/shared.css?v=13">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
   <style>
     .bl-nation-stage{
@@ -173,6 +173,7 @@
     }
 
     /* ── Rank table extra columns ── */
+    .bl-rank-av-cell{display:flex;align-items:center;justify-content:center;overflow:hidden}
     .bl-rank-row{
       grid-template-columns: 52px 52px minmax(0,1fr) 120px 64px 64px 72px;
     }
@@ -180,13 +181,28 @@
     .bl-rank-row .rc-l  { color:#f87171; font-weight:700; text-align:center; }
     .bl-rank-row .rc-pts{ color:#D4AF37; font-weight:700; text-align:right; font-family:'Teko',sans-serif; font-size:1rem; letter-spacing:.5px; }
     .bl-rank-row .rc-pts-h{ text-align:right; }
+    .bl-rank-name-stack{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .bl-rank-name-stack .bl-rank-name{display:block;min-width:0}
+    .bl-rank-mobile-stats{display:none;align-items:center;gap:6px;flex-wrap:wrap}
+    .bl-rank-mobile-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);font-family:'Barlow Semi Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;color:rgba(238,244,255,.72);text-transform:uppercase}
+    .bl-rank-mobile-pill strong{font-family:'Teko',sans-serif;font-size:.92rem;line-height:1;color:#fff}
+    .bl-rank-mobile-pill--w strong{color:#4ade80}
+    .bl-rank-mobile-pill--l strong{color:#f87171}
+    .bl-rank-mobile-pill--pts strong{color:#D4AF37}
     @media(max-width:900px){
-      .bl-rank-row{ grid-template-columns: 42px 42px minmax(0,1fr) 80px 48px 48px; }
+      .bl-rank-row{ grid-template-columns: 42px 42px minmax(0,1fr) 84px; gap:10px; }
+      .bl-rank-row .rc-w,
+      .bl-rank-row .rc-l,
       .bl-rank-row .rc-pts{ display:none; }
+      .bl-rank-mobile-stats{ display:flex; }
     }
     @media(max-width:600px){
-      .bl-rank-row{ grid-template-columns: 38px 38px minmax(0,1fr) 48px 48px; gap:8px; padding:10px 12px; }
+      .bl-rank-row{ grid-template-columns: 36px 38px minmax(0,1fr); gap:8px; padding:10px 10px; }
       .bl-rank-row .bl-rank-since{ display:none; }
+      .bl-rank-row .bl-rank-div,
+      .bl-rank-div-h{ display:none; }
+      .bl-rank-mobile-stats{ gap:4px; }
+      .bl-rank-mobile-pill{ padding:3px 7px; font-size:.62rem; }
     }
 
     /* ── Tab filter ── */
@@ -284,6 +300,8 @@
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
         <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
+
         <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
       </ul>
       <div class="bl-navbar-right">
@@ -345,12 +363,13 @@
 
       <div class="bl-rank-wrap">
         <div class="bl-rank-row rank-head">
-          <span>#</span><span>Avatar</span><span>Competidor</span><span>División</span><span class="rc-w">V</span><span class="rc-l">D</span><span class="rc-pts rc-pts-h">PTS</span>
+          <span>#</span><span>Avatar</span><span>Competidor</span><span class="bl-rank-div-h">División</span><span class="rc-w">V</span><span class="rc-l">D</span><span class="rc-pts rc-pts-h">PTS</span>
         </div>
         <div id="bl-rank-list">
           <div class="bl-rank-row"><span class="bl-rank-empty">Cargando clasificación...</span></div>
         </div>
       </div>
+      <div id="bl-rank-pagination" style="display:none;justify-content:center;align-items:center;gap:8px;padding:20px 0 4px;flex-wrap:wrap"></div>
     </section>
 
     <section class="bl-section bl-nation-stage" style="padding-top:0">
@@ -360,22 +379,51 @@
       </div>
       <p class="bl-nation-intro"><strong>Mapa de líderes nacionales:</strong> se toma el mejor clasificado de cada país según el orden real de la parrilla. El bloque ahora resalta división, bandera y posición global para que se lea como un tablero importante, no como una lista secundaria.</p>
       <div id="bl-nation-grid" class="bl-nation-grid">
-        <div style="color:rgba(238,244,255,.4);font-size:.9rem;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.03)">Cargando líderes nacionales…</div>
+        <div style="color:rgba(238,244,255,.4);font-size:.9rem;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.03)">Cargando líderes nacionales⬦</div>
       </div>
     </section>
   </div>
 
-  <script src="/core.js?v=1"></script>
-  <script src="/sentinel.js?v=1"></script>
-  <script src="/tracker.js?v=10"></script>
-  <script src="/app.js?v=20"></script>
+  <script src="/core.js?v=3"></script>
+  <script src="/sentinel.js?v=2"></script>
+  <script src="/_assets/chunk.27c1e5b4.js"></script>
+  <script src="/_assets/runtime.6f4c9d8a.js"></script>
   <script>
+    let rankPage = 0;
+    const RANK_PAGE_SIZE = 30;
+
+    function renderRankPagination(total) {
+      const wrap = document.getElementById('bl-rank-pagination');
+      if (!wrap) return;
+      const totalPages = Math.ceil(total / RANK_PAGE_SIZE);
+      if (totalPages <= 1) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'flex';
+      const btnStyle = (active) => `padding:6px 13px;border-radius:999px;border:1px solid ${active ? 'rgba(212,175,55,.55)' : 'rgba(255,255,255,.12)'};background:${active ? 'rgba(212,175,55,.12)' : 'rgba(255,255,255,.03)'};color:${active ? '#D4AF37' : 'rgba(238,244,255,.6)'};font-family:'Barlow Semi Condensed',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:1px;cursor:pointer;transition:all .18s`;
+      let html = `<button style="${btnStyle(false)}" ${rankPage === 0 ? 'disabled' : ''} onclick="goRankPage(${rankPage - 1})">← Ant</button>`;
+      for (let i = 0; i < totalPages; i++) {
+        if (totalPages > 8 && Math.abs(i - rankPage) > 2 && i !== 0 && i !== totalPages - 1) {
+          if (i === 1 || i === totalPages - 2) html += `<span style="color:rgba(238,244,255,.3)">⬦</span>`;
+          continue;
+        }
+        html += `<button style="${btnStyle(i === rankPage)}" onclick="goRankPage(${i})">${i + 1}</button>`;
+      }
+      html += `<button style="${btnStyle(false)}" ${rankPage >= totalPages - 1 ? 'disabled' : ''} onclick="goRankPage(${rankPage + 1})">Sig →</button>`;
+      html += `<span style="font-size:.75rem;color:rgba(238,244,255,.38);letter-spacing:.5px;margin-left:4px">${total} total</span>`;
+      wrap.innerHTML = html;
+    }
+
+    function goRankPage(page) {
+      rankPage = page;
+      renderRankTable(window._rankData || []);
+      document.getElementById('bl-rank-list')?.closest('.bl-rank-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function slugify(value) {
       return String(value || '')
-        .normalize('NFD')
+        .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
         .replace(/^-+|-+$/g, '');
     }
 
@@ -442,31 +490,40 @@
     }
   }
 
-  function renderRankTable(dataset) {
+    function renderRankTable(dataset) {
     const rankList = document.getElementById('bl-rank-list');
     if (!rankList) return;
     if (!dataset || !dataset.length) {
       rankList.innerHTML = '<div class="bl-rank-row"><span class="bl-rank-empty">Sin competidores en esta categoría.</span></div>';
+      renderRankPagination(0);
       return;
     }
+    const total = dataset.length;
+    const start = rankPage * RANK_PAGE_SIZE;
+    const pageData = dataset.slice(start, start + RANK_PAGE_SIZE);
     const posClass = i => i === 0 ? 'p1' : i === 1 ? 'p2' : i === 2 ? 'p3' : '';
-    rankList.innerHTML = dataset.map((item, index) => {
+    rankList.innerHTML = pageData.map((item, pageIndex) => {
+          const index = start + pageIndex;
+          const wins = item.wins || 0;
+          const losses = item.losses || 0;
+          const points = item.ranking_points || 0;
           const avatar = item.avatar_url && item.avatar_url !== '<nil>'
-            ? `<img class="bl-rank-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none'">`
-            : `<div class="bl-rank-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
+            ? `<div class="bl-rank-av-cell"><img class="bl-rank-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bl-rank-avatar-ph" style="display:none">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div></div>`
+            : `<div class="bl-rank-av-cell"><div class="bl-rank-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div></div>`;
           const divClass = String(item.division || '').toLowerCase().includes('ciudad') ? 'div-c' : '';
           return `
             <a class="bl-rank-row" href="${profileUrl(item.pseudonimo)}">
               <span class="bl-rank-pos ${posClass(index)}">${index + 1}</span>
               ${avatar}
-              <span class="bl-rank-name">${item.pseudonimo}</span>
+              <span class="bl-rank-name-stack"><span class="bl-rank-name">${item.pseudonimo}</span><span class="bl-rank-mobile-stats"><span class="bl-rank-mobile-pill bl-rank-mobile-pill--w">V <strong>${wins}</strong></span><span class="bl-rank-mobile-pill bl-rank-mobile-pill--l">D <strong>${losses}</strong></span><span class="bl-rank-mobile-pill bl-rank-mobile-pill--pts">PTS <strong>${points}</strong></span></span></span>
               <span class="bl-rank-div ${divClass}">${item.division || 'Sin división'}</span>
-              <span class="rc-w">${item.wins||0}</span>
-              <span class="rc-l">${item.losses||0}</span>
-              <span class="rc-pts">${item.ranking_points||0}</span>
+              <span class="rc-w">${wins}</span>
+              <span class="rc-l">${losses}</span>
+              <span class="rc-pts">${points}</span>
             </a>
           `;
         }).join('');
+    renderRankPagination(total);
   }
 
   async function loadNationMap(data) {
@@ -532,6 +589,7 @@
     if (type === 'all')     { if (all)    all.classList.add('active'); }
     if (type === 'universal') { if (univ) univ.classList.add('active'); }
     if (type === 'ciudad')  { if (ciudad) ciudad.classList.add('active-ciudad'); }
+    rankPage = 0;
     const data = window._rankData || [];
     const filtered = type === 'all'
       ? data

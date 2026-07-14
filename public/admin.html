@@ -307,7 +307,7 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
     <button class="fbtn danger-btn" id="f-attacker" onclick="setFilter('attacker')">&#x1F6A8; Multi-IP</button>
     <button class="fbtn"            id="f-24h"  onclick="setFilter('24h')">Últimas 24h</button>
     <button class="fbtn"            id="f-fb"   onclick="setFilter('fb')">&#x1F4D8; Facebook</button>
-    <button class="refresh-btn"     onclick="loadData()">&#x21BB; Actualizar</button>
+    <button class="refresh-btn"     onclick="refreshDashboardData()">&#x21BB; Actualizar</button>
   </div>
 
   <div class="cards-container" id="cards-container">
@@ -321,10 +321,25 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
     </div>
   </div>
 
+  <div class="live-feed-section" id="slots-ranking-section" style="margin-top:24px">
+    <h3>⏱️ Clasificados Oficiales por División</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Este bloque define quién entra realmente a la llave pública. Se ordena por timestamp de aprobación/registro y corta en 16 para Ciudad y 12 para Universal.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1100px">
+      <div style="padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Ciudad</div>
+        <div id="slots-ciudad" style="display:grid;gap:8px"><div style="font-size:.82rem;color:rgba(255,255,255,.35)">Cargando...</div></div>
+      </div>
+      <div style="padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Universal</div>
+        <div id="slots-universal" style="display:grid;gap:8px"><div style="font-size:.82rem;color:rgba(255,255,255,.35)">Cargando...</div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── TOP PERSONAJES ──────────────────────────────────────────────── -->
   <div class="live-feed-section" id="personajes-section" style="margin-top:24px">
     <h3>🎭 Top Personajes del Jugador</h3>
-    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Asigna los 3 personajes más usados. Aparecen en la ficha del competidor.</p>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Asigna los 3 personajes más usados. Puedes escribir el nombre y pegar una URL o subir la imagen desde galería.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px">
       <div style="grid-column:1/-1">
         <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador</label>
@@ -332,21 +347,189 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
           <option value="">— Selecciona jugador —</option>
         </select>
       </div>
-      <div>
+      <div style="display:grid;gap:8px">
         <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Principal</label>
         <input id="pc-char1" type="text" placeholder="Ej: Naruto Uzumaki" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="pc-char1-img" type="url" placeholder="URL imagen 1 o galeria" style="flex:1;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.82rem">
+          <label for="pc-char1-file" style="padding:8px 12px;background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.34);border-radius:8px;color:#d4af37;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap">Galeria</label>
+          <input id="pc-char1-file" type="file" accept="image/*" style="display:none">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;min-height:48px">
+          <img id="pc-char1-preview" alt="preview personaje 1" style="width:48px;height:48px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.14);display:none;background:rgba(255,255,255,.04)">
+          <span id="pc-char1-upload-msg" style="font-size:.76rem;color:rgba(255,255,255,.45)"></span>
+        </div>
       </div>
-      <div>
+      <div style="display:grid;gap:8px">
         <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Secundario</label>
         <input id="pc-char2" type="text" placeholder="Ej: Sasuke Uchiha" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="pc-char2-img" type="url" placeholder="URL imagen 2 o galeria" style="flex:1;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.82rem">
+          <label for="pc-char2-file" style="padding:8px 12px;background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.34);border-radius:8px;color:#d4af37;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap">Galeria</label>
+          <input id="pc-char2-file" type="file" accept="image/*" style="display:none">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;min-height:48px">
+          <img id="pc-char2-preview" alt="preview personaje 2" style="width:48px;height:48px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.14);display:none;background:rgba(255,255,255,.04)">
+          <span id="pc-char2-upload-msg" style="font-size:.76rem;color:rgba(255,255,255,.45)"></span>
+        </div>
       </div>
-      <div>
+      <div style="display:grid;gap:8px;grid-column:1/-1">
         <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Personaje Alterno</label>
         <input id="pc-char3" type="text" placeholder="Ej: Itachi Uchiha" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="pc-char3-img" type="url" placeholder="URL imagen 3 o galeria" style="flex:1;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.82rem">
+          <label for="pc-char3-file" style="padding:8px 12px;background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.34);border-radius:8px;color:#d4af37;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap">Galeria</label>
+          <input id="pc-char3-file" type="file" accept="image/*" style="display:none">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;min-height:48px">
+          <img id="pc-char3-preview" alt="preview personaje 3" style="width:48px;height:48px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,.14);display:none;background:rgba(255,255,255,.04)">
+          <span id="pc-char3-upload-msg" style="font-size:.76rem;color:rgba(255,255,255,.45)"></span>
+        </div>
       </div>
       <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:4px">
         <button onclick="guardarPersonajes()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;letter-spacing:.05em">🎭 GUARDAR PERSONAJES</button>
         <span id="pc-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+      <div style="grid-column:1/-1;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)">
+        <div id="pc-current-summary" style="font-size:.82rem;color:rgba(255,255,255,.72)">Selecciona un jugador para cargar sus personajes actuales.</div>
+        <div id="pc-current-clan" style="font-size:.8rem;color:rgba(255,255,255,.52);margin-top:8px">Clan: —</div>
+        <div id="pc-current-members" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ELIMINAR JUGADOR ─────────────────────────────────────────────── -->
+  <div class="live-feed-section" id="delete-player-section" style="margin-top:24px">
+    <h3>🧹 Eliminar Jugador del Sistema</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Elimina el perfil, combates y próximas peleas del jugador seleccionado. Esta acción es irreversible.</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:12px;max-width:520px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador</label>
+        <select id="dp-player" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button onclick="eliminarJugador()" style="padding:10px 22px;background:#ef4444;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🗑️ ELIMINAR JUGADOR</button>
+        <span id="dp-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESET MASIVO DE CLAVES ───────────────────────────────────────── -->
+  <div class="live-feed-section" id="reset-player-keys-section" style="margin-top:24px">
+    <h3>🔐 Resetear Claves Personales</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Puedes resetear la clave de un jugador concreto si la pierde, o aplicar una clave temporal global solo para emergencias.</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:12px;max-width:520px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador específico</label>
+        <select id="rk-player" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Nueva clave temporal</label>
+        <input id="rk-new-key" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.52);line-height:1.55">Cualquiera que conozca esta clave temporal podrá editar cualquier perfil si también conoce el pseudónimo. Úsala para contingencias y compártela solo si realmente quieres reabrir acceso global.</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button onclick="resetPlayerKey()" style="padding:10px 22px;background:#4f6ef7;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🎯 RESETEAR JUGADOR</button>
+        <button onclick="resetAllPlayerKeys()" style="padding:10px 22px;background:#f59e0b;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🔐 RESETEAR TODAS LAS CLAVES</button>
+        <span id="rk-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RANKING POINTS ──────────────────────────────────────────────── -->
+  <div class="live-feed-section" id="ranking-points-section" style="margin-top:24px">
+    <h3>🏅 Ajustar Puntos de Ranking</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Suma, resta o fija manualmente los puntos del ranking oficial. El panel muestra el puntaje actual antes de aplicar el cambio.</p>
+    <div style="display:grid;grid-template-columns:1.3fr .8fr .7fr;gap:12px;max-width:760px" id="rp-form">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador</label>
+        <select id="rp-player" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Operación</label>
+        <select id="rp-mode" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="add">Sumar</option>
+          <option value="subtract">Restar</option>
+          <option value="set">Fijar total</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Puntos</label>
+        <input id="rp-amount" type="number" min="0" step="1" placeholder="Ej: 10" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Motivo (opcional)</label>
+        <input id="rp-note" type="text" maxlength="240" placeholder="Ej: bono de evento, ajuste manual, corrección de ranking" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)">
+        <div id="rp-current" style="font-size:.82rem;color:rgba(255,255,255,.74)">Selecciona un jugador para revisar su ranking actual.</div>
+        <div id="rp-preview" style="font-size:.79rem;color:rgba(255,255,255,.5);margin-top:8px">Puedes sumar, restar o fijar puntos manualmente.</div>
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button onclick="actualizarRankingPoints()" style="padding:10px 22px;background:#fbbf24;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🏅 ACTUALIZAR RANKING</button>
+        <span id="rp-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ÁLBUM: MISIONES + SOBRES ───────────────────────────────────── -->
+  <div class="live-feed-section" id="album-admin-section" style="margin-top:24px">
+    <h3>📘 Álbum Bellator 2026</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Edita la configuración oficial de misiones del álbum y acredita sobres extra a una cuenta registrada del álbum.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:860px" id="album-mission-form">
+      <div style="grid-column:1/-1;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Misiones globales</div>
+      <div style="padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Meta pack</label>
+        <input id="am-pack-label" type="text" maxlength="120" placeholder="Ej: Reclama un sobre diario" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem;margin-bottom:8px">
+        <input id="am-pack-total" type="number" min="1" step="1" placeholder="1" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem">
+      </div>
+      <div style="padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Meta páginas</label>
+        <input id="am-pages-label" type="text" maxlength="120" placeholder="Ej: Explora tres páginas del libro" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem;margin-bottom:8px">
+        <input id="am-pages-total" type="number" min="1" step="1" placeholder="3" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem">
+      </div>
+      <div style="padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Meta cromos nuevos</label>
+        <input id="am-new-label" type="text" maxlength="120" placeholder="Ej: Pega cinco cromos nuevos" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem;margin-bottom:8px">
+        <input id="am-new-total" type="number" min="1" step="1" placeholder="5" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.85rem">
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Texto de apoyo</label>
+        <textarea id="am-card-copy" rows="3" maxlength="260" placeholder="Texto que verá el usuario en la tarjeta de misiones" style="width:100%;padding:10px 12px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:.85rem;resize:vertical"></textarea>
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button onclick="guardarAlbumMissionConfig()" style="padding:10px 22px;background:#38bdf8;border:none;border-radius:9px;color:#081019;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">📘 GUARDAR MISIONES</button>
+        <button onclick="cargarAlbumMissionConfig()" style="padding:10px 22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:9px;color:#fff;font-weight:700;font-size:.82rem;cursor:pointer;letter-spacing:.05em">RECARGAR</button>
+        <span id="am-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+    <div style="margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);max-width:860px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Sobres extra por cuenta</div>
+      <div style="display:grid;grid-template-columns:1fr .7fr 1.3fr;gap:12px">
+        <div>
+          <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Cuenta del álbum</label>
+          <select id="agp-user" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+            <option value="">— Selecciona cuenta registrada —</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Sobres por cuenta</label>
+          <input id="agp-amount" type="number" min="1" step="1" placeholder="Ej: 3" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Motivo (opcional)</label>
+          <input id="agp-reason" type="text" maxlength="240" placeholder="Ej: compensación por evento, regalo global, recompensa de temporada" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+        <button onclick="otorgarSobresAlbumAUsuario()" style="padding:10px 22px;background:#34d399;border:none;border-radius:9px;color:#06251b;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">📦 DAR SOBRE A USUARIO</button>
+        <span id="agp-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
       </div>
     </div>
   </div>
@@ -459,8 +642,40 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
       </div>
     </div>
   </div>
+  
+  <!-- ── MERCADO DE APUESTAS & BRACKET ─────────────────────────────────────────── -->
+  <div class="live-feed-section" id="bets-section" style="margin-top:24px; background: rgba(212,175,55,0.05); border-color: rgba(212,175,55,0.2);">
+    <h3 style="color:#d4af37">💰 Bracket & Mercado de Apuestas</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 18px">Crea peleas habilitadas para apostar sobres. Liquida los resultados para pagar a los ganadores (x4).</p>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">Jugador 1</label>
+        <input id="bet-p1" type="text" placeholder="Jugador 1" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">Jugador 2</label>
+        <input id="bet-p2" type="text" placeholder="Jugador 2" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">División</label>
+        <input id="bet-div" type="text" placeholder="Ciudad, Universal..." style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px">Etiqueta/Título</label>
+        <input id="bet-label" type="text" placeholder="Cuartos de final..." style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;">
+      </div>
+      <div style="grid-column:1/-1;display:flex;gap:14px;align-items:center;margin-top:4px;">
+        <button onclick="crearPeleaApuesta()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;">💰 CREAR PELEA (ABRIR APUESTAS)</button>
+      </div>
+    </div>
+    
+    <div style="margin-top:26px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Peleas Creadas / Historial de Apuestas</div>
+      <div id="bet-fights-list" style="max-width:780px"><div style="color:rgba(255,255,255,.25);font-size:.82rem">Cargando...</div></div>
+    </div>
+  </div>
 </div>
-
 
 <script>
 // ───────────────────────────────────────────────────────────────
@@ -472,12 +687,17 @@ let activeFilter = 'all';
 let refreshTimer = 30;
 let refreshInterval, countdownInterval;
 const geoCache = {};
+let adminPlayers = [];
+let adminClans = [];
+let adminAlbumUsers = [];
+const openCards = new Set();
 
 // ─── Configuración del Hosting ────────────────────────────────────────────
 const API_BASE_URL = window.location.origin; // Automáticamente usa el dominio del hosting
 const API_ENDPOINTS = {
     adminLogin: `${API_BASE_URL}/api/admin/login`,
-    visitors: `${API_BASE_URL}/api/visitors`
+  visitors: `${API_BASE_URL}/api/visitors`,
+  adminGeo: `${API_BASE_URL}/api/admin/geo`
 };
 
 // ───────────────────────────────────────────────────────────────
@@ -522,8 +742,18 @@ function doLogout() {
 function showDashboard() {
   document.getElementById('login-wall').style.display = 'none';
   document.getElementById('dashboard').style.display  = 'block';
-  loadData();
+  refreshDashboardData();
+  cargarAlbumMissionConfig();
+  cargarUsuariosAlbumAdmin();
   startAutoRefresh();
+}
+
+function refreshDashboardData() {
+  loadData();
+  loadOfficialDivisionSlots();
+  loadRecentCombates();
+  loadPlayerDropdowns();
+  loadProximasPeleas();
 }
 
 function startAutoRefresh() {
@@ -547,7 +777,8 @@ async function loadData() {
       headers: { 'Authorization': 'Bearer ' + jwtToken }
     });
     if (res.status === 401) { doLogout(); return; }
-    allData = await res.json() || [];
+    const payload = await res.json();
+    allData = Array.isArray(payload) ? payload : [];
     updateKPIs();
     applyFilters();
     updateLiveFeed(allData);
@@ -565,11 +796,16 @@ async function enrichGeo(data) {
   ))].filter(ip => !geoCache[ip]);
   if (!ips.length) return;
   try {
-    const r = await fetch('http://ip-api.com/batch?fields=status,country,countryCode,city,isp,query', {
+    const r = await fetch(API_ENDPOINTS.adminGeo, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(ips.slice(0, 100))
+      headers: {
+        'Authorization': 'Bearer ' + jwtToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ips: ips.slice(0, 100) })
     });
+    if (r.status === 401) { return; }
+    if (!r.ok) return;
     for (const g of await r.json()) {
       if (g.status === 'success') geoCache[g.query] = g;
     }
@@ -754,6 +990,7 @@ function renderCards(data) {
   </div>
 </div>`;
   }).join('');
+  restoreOpenCards();
 }
 
 function renderRow(v) {
@@ -817,6 +1054,26 @@ function toggleCard(id) {
   const open = body.style.display === 'none';
   body.style.display = open ? 'block' : 'none';
   head.classList.toggle('open', open);
+  if (open) {
+    openCards.add(id);
+  } else {
+    openCards.delete(id);
+  }
+}
+
+function restoreOpenCards() {
+  if (openCards.size === 0) return;
+  const stillOpen = [];
+  openCards.forEach(id => {
+    const body = document.getElementById('b-' + id);
+    const head = document.getElementById('h-' + id);
+    if (!body || !head) return;
+    body.style.display = 'block';
+    head.classList.add('open');
+    stillOpen.push(id);
+  });
+  openCards.clear();
+  stillOpen.forEach(id => openCards.add(id));
 }
 
 function countryFlag(cc) {
@@ -879,14 +1136,14 @@ function renderVulnerabilityMap(vulnerabilities) {
 
 function renderAdvancedFingerprint(fingerprint) {
   if (!fingerprint) {
-    return '<div class="no-data">No se capturó fingerprinting avanzado.</div>';
+    return '<div class="no-data">No se capturó fingerprinting avanzado en esta sesión. Puede ser un registro anterior o una sesión donde el navegador no expuso esos datos.</div>';
   }
 
   return `
     <div class="fingerprint-item"><strong>Audio Hash:</strong> ${fingerprint.audioHash || 'N/A'}</div>
-    <div class="fingerprint-item"><strong>Batería:</strong> ${fingerprint.batteryLevel ? (fingerprint.batteryLevel * 100) + '%' : 'N/A'} ${fingerprint.batteryCharging ? '(Cargando)' : ''}</div>
-    <div class="fingerprint-item"><strong>Permisos:</strong> ${Object.entries(fingerprint.permissions || {}).map(([k,v]) => `${k}: ${v}`).join(', ')}</div>
-    <div class="fingerprint-item"><strong>Sensores:</strong> ${fingerprint.hasOrientation ? 'Orientación ' : ''}${fingerprint.hasMotion ? 'Movimiento' : ''}</div>
+    <div class="fingerprint-item"><strong>Batería:</strong> ${fingerprint.batteryLevel !== undefined && fingerprint.batteryLevel !== null && fingerprint.batteryLevel !== 'unknown' ? (Math.round(Number(fingerprint.batteryLevel) * 100) + '%') : 'N/A'} ${fingerprint.batteryCharging ? '(Cargando)' : ''}</div>
+    <div class="fingerprint-item"><strong>Permisos:</strong> ${Object.entries(fingerprint.permissions || {}).length ? Object.entries(fingerprint.permissions || {}).map(([k,v]) => `${k}: ${v}`).join(', ') : 'N/A'}</div>
+    <div class="fingerprint-item"><strong>Sensores:</strong> ${fingerprint.hasOrientation || fingerprint.hasMotion ? `${fingerprint.hasOrientation ? 'Orientación ' : ''}${fingerprint.hasMotion ? 'Movimiento' : ''}` : 'N/A'}</div>
   `;
 }
 
@@ -952,6 +1209,487 @@ function updateLiveFeed(data) {
   feed.innerHTML = entries || '<div class="no-data">Esperando datos en vivo...</div>';
 }
 
+function formatSlotsTimestamp(value) {
+  const text = String(value || '').trim();
+  if (!text) return 'Sin timestamp';
+  const date = new Date(text);
+  if (Number.isNaN(date.getTime())) return text;
+  return date.toLocaleString('es-CO', {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function renderOfficialDivisionList(containerId, players) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (!Array.isArray(players) || players.length === 0) {
+    container.innerHTML = '<div style="font-size:.82rem;color:rgba(255,255,255,.35)">Sin clasificados todavía.</div>';
+    return;
+  }
+  container.innerHTML = players.map(function(player, index) {
+    const pseudo = escapeAdminHtml(player.pseudonimo || 'Sin nombre');
+    const stamp = escapeAdminHtml(formatSlotsTimestamp(player.timestamp));
+    const status = escapeAdminHtml(player.status || '—');
+    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)">'
+      + '<div style="display:grid;gap:2px;min-width:0">'
+      + '<div style="font-size:.86rem;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">#' + (index + 1) + ' · ' + pseudo + '</div>'
+      + '<div style="font-size:.72rem;color:rgba(255,255,255,.48)">' + stamp + '</div>'
+      + '</div>'
+      + '<div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(212,175,55,.9)">' + status + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+async function loadOfficialDivisionSlots() {
+  try {
+    const res = await fetch(window.location.origin + '/api/competidores-oficiales', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    renderOfficialDivisionList('slots-ciudad', data.ciudad || []);
+    renderOfficialDivisionList('slots-universal', data.universal || []);
+  } catch (_) { /* silent */ }
+}
+
+function escapeAdminHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const pendingAdminCharacterFiles = { 1: null, 2: null, 3: null };
+const pendingAdminCharacterObjectUrls = { 1: '', 2: '', 3: '' };
+let adminCharacterUploadSetupDone = false;
+
+function resolveAdminUploadUrl(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  if (/^https?:\/\//i.test(text)) return text;
+  if (text.charAt(0) === '/') return window.location.origin + text;
+  return '';
+}
+
+function setAdminCharacterPreview(slotIndex, value) {
+  const preview = document.getElementById('pc-char' + slotIndex + '-preview');
+  if (!preview) return;
+  const resolved = resolveAdminUploadUrl(value) || String(value || '').trim();
+  if (resolved) {
+    preview.src = resolved;
+    preview.style.display = 'block';
+    return;
+  }
+  preview.removeAttribute('src');
+  preview.style.display = 'none';
+}
+
+function clearPendingAdminCharacterFile(slotIndex) {
+  pendingAdminCharacterFiles[slotIndex] = null;
+  if (pendingAdminCharacterObjectUrls[slotIndex]) {
+    URL.revokeObjectURL(pendingAdminCharacterObjectUrls[slotIndex]);
+    pendingAdminCharacterObjectUrls[slotIndex] = '';
+  }
+  const fileInput = document.getElementById('pc-char' + slotIndex + '-file');
+  if (fileInput) fileInput.value = '';
+}
+
+function clearPendingAdminCharacterFiles() {
+  [1, 2, 3].forEach(clearPendingAdminCharacterFile);
+}
+
+function getAdminCharacterImageValue(slotIndex) {
+  const input = document.getElementById('pc-char' + slotIndex + '-img');
+  const text = String(input && input.value || '').trim();
+  return resolveAdminUploadUrl(text) || text;
+}
+
+async function uploadAdminCharacterImage(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const uploadRes = await fetch(window.location.origin + '/api/upload', { method: 'POST', body: formData });
+  const uploadData = await uploadRes.json().catch(() => ({}));
+  if (!uploadRes.ok || !uploadData.url) {
+    throw new Error('upload_failed');
+  }
+  return resolveAdminUploadUrl(uploadData.url) || String(uploadData.url || '').trim();
+}
+
+function setTopCharacterInputs(char1, char2, char3, char1Image, char2Image, char3Image) {
+  const values = [char1 || '', char2 || '', char3 || ''];
+  const images = [char1Image || '', char2Image || '', char3Image || ''];
+  ['pc-char1', 'pc-char2', 'pc-char3'].forEach((id, index) => {
+    const input = document.getElementById(id);
+    if (input) input.value = values[index];
+  });
+  ['pc-char1-img', 'pc-char2-img', 'pc-char3-img'].forEach((id, index) => {
+    const input = document.getElementById(id);
+    if (input) input.value = images[index];
+    setAdminCharacterPreview(index + 1, images[index]);
+    const msg = document.getElementById('pc-char' + (index + 1) + '-upload-msg');
+    if (msg) msg.textContent = '';
+  });
+}
+
+function setupAdminCharacterUploads() {
+  if (adminCharacterUploadSetupDone) return;
+  adminCharacterUploadSetupDone = true;
+
+  [1, 2, 3].forEach(function(slotIndex) {
+    const urlInput = document.getElementById('pc-char' + slotIndex + '-img');
+    const fileInput = document.getElementById('pc-char' + slotIndex + '-file');
+    const msg = document.getElementById('pc-char' + slotIndex + '-upload-msg');
+
+    if (urlInput) {
+      urlInput.addEventListener('input', function() {
+        const url = this.value.trim();
+        if (url !== pendingAdminCharacterObjectUrls[slotIndex]) clearPendingAdminCharacterFile(slotIndex);
+        setAdminCharacterPreview(slotIndex, url);
+        if (msg && !pendingAdminCharacterFiles[slotIndex]) msg.textContent = '';
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        const selectedFile = this.files[0];
+        if (!selectedFile) return;
+        clearPendingAdminCharacterFile(slotIndex);
+        pendingAdminCharacterFiles[slotIndex] = selectedFile;
+        pendingAdminCharacterObjectUrls[slotIndex] = URL.createObjectURL(selectedFile);
+        if (urlInput) urlInput.value = '';
+        setAdminCharacterPreview(slotIndex, pendingAdminCharacterObjectUrls[slotIndex]);
+        if (msg) msg.textContent = 'Imagen lista. Guarda para subirla.';
+      });
+    }
+  });
+}
+
+function syncSelectedPlayerAdminState() {
+  const selector = document.getElementById('pc-player');
+  const summary = document.getElementById('pc-current-summary');
+  const clan = document.getElementById('pc-current-clan');
+  const members = document.getElementById('pc-current-members');
+  if (!selector || !summary || !clan || !members) return;
+
+  const pseudo = selector.value.trim();
+  if (!pseudo) {
+    clearPendingAdminCharacterFiles();
+    setTopCharacterInputs('', '', '', '', '', '');
+    summary.textContent = 'Selecciona un jugador para cargar sus personajes actuales.';
+    clan.textContent = 'Clan: —';
+    members.innerHTML = '';
+    return;
+  }
+
+  const player = adminPlayers.find(p => String(p.pseudonimo || '').trim() === pseudo);
+  if (!player) {
+    clearPendingAdminCharacterFiles();
+    setTopCharacterInputs('', '', '', '', '', '');
+    summary.textContent = 'No se encontró información actual para este jugador.';
+    clan.textContent = 'Clan: —';
+    members.innerHTML = '';
+    return;
+  }
+
+  const char1 = String(player.top_char_1 || '').trim();
+  const char2 = String(player.top_char_2 || '').trim();
+  const char3 = String(player.top_char_3 || '').trim();
+  const char1Image = String(player.top_char_1_image || '').trim();
+  const char2Image = String(player.top_char_2_image || '').trim();
+  const char3Image = String(player.top_char_3_image || '').trim();
+  const currentChars = [char1, char2, char3].filter(Boolean);
+  clearPendingAdminCharacterFiles();
+  setTopCharacterInputs(char1, char2, char3, char1Image, char2Image, char3Image);
+  summary.textContent = currentChars.length
+    ? 'Personajes actuales: ' + currentChars.join(' · ')
+    : 'Este jugador todavía no tiene personajes cargados.';
+
+  const clanName = String(player.clan_name || '').trim();
+  if (!clanName) {
+    clan.textContent = 'Clan: Sin clan';
+    members.innerHTML = '<span style="font-size:.78rem;color:rgba(255,255,255,.42)">No pertenece a un clan actualmente.</span>';
+    return;
+  }
+
+  clan.textContent = 'Clan: ' + clanName;
+  const currentClan = adminClans.find(item => String(item && item.name || '').trim().toLowerCase() === clanName.toLowerCase());
+  const clanMembers = currentClan && Array.isArray(currentClan.members)
+    ? currentClan.members.map(member => String(member || '').trim()).filter(Boolean)
+    : [];
+  members.innerHTML = clanMembers.length
+    ? clanMembers.map(member => '<span style="padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:.76rem;color:rgba(255,255,255,.82)">' + escapeAdminHtml(member) + '</span>').join('')
+    : '<span style="font-size:.78rem;color:rgba(255,255,255,.42)">Este clan aún no tiene miembros listados.</span>';
+}
+
+function getAdminRankingPoints(player) {
+  const raw = player ? (player.ranking_points ?? player.RankingPoints ?? 0) : 0;
+  const points = Number(raw);
+  return Number.isFinite(points) ? Math.trunc(points) : 0;
+}
+
+function formatAdminRankingDelta(delta) {
+  if (delta > 0) return '+' + delta;
+  return String(delta);
+}
+
+async function cargarAlbumMissionConfig() {
+  const msg = document.getElementById('am-msg');
+  if (msg) {
+    msg.textContent = 'Cargando configuración del álbum...';
+    msg.style.color = 'rgba(255,255,255,.45)';
+  }
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/album/config', {
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (msg) {
+        msg.textContent = '⚠ No se pudo cargar la configuración del álbum.';
+        msg.style.color = '#f87171';
+      }
+      return;
+    }
+    document.getElementById('am-pack-label').value = String(data.pack && data.pack.label || '');
+    document.getElementById('am-pack-total').value = String(data.pack && data.pack.total || 1);
+    document.getElementById('am-pages-label').value = String(data.pages && data.pages.label || '');
+    document.getElementById('am-pages-total').value = String(data.pages && data.pages.total || 1);
+    document.getElementById('am-new-label').value = String(data.newStickers && data.newStickers.label || '');
+    document.getElementById('am-new-total').value = String(data.newStickers && data.newStickers.total || 1);
+    document.getElementById('am-card-copy').value = String(data.cardCopy || '');
+    if (msg) {
+      msg.textContent = '✓ Configuración del álbum cargada.';
+      msg.style.color = '#22c55e';
+    }
+  } catch (_) {
+    if (msg) {
+      msg.textContent = '⚠ Error de red al cargar la configuración del álbum.';
+      msg.style.color = '#f87171';
+    }
+  }
+}
+
+async function guardarAlbumMissionConfig() {
+  const msg = document.getElementById('am-msg');
+  const payload = {
+    pack: {
+      label: String(document.getElementById('am-pack-label').value || '').trim(),
+      total: Number(document.getElementById('am-pack-total').value || 0)
+    },
+    pages: {
+      label: String(document.getElementById('am-pages-label').value || '').trim(),
+      total: Number(document.getElementById('am-pages-total').value || 0)
+    },
+    newStickers: {
+      label: String(document.getElementById('am-new-label').value || '').trim(),
+      total: Number(document.getElementById('am-new-total').value || 0)
+    },
+    cardCopy: String(document.getElementById('am-card-copy').value || '').trim()
+  };
+
+  if (!payload.pack.total || payload.pack.total < 1 || !payload.pages.total || payload.pages.total < 1 || !payload.newStickers.total || payload.newStickers.total < 1) {
+    msg.textContent = '⚠ Todas las metas deben ser enteros mayores que cero.';
+    msg.style.color = '#f87171';
+    return;
+  }
+
+  msg.textContent = 'Guardando configuración del álbum...';
+  msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/album/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify(payload)
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      msg.textContent = data.error === 'body_invalido'
+        ? '⚠ La configuración enviada no es válida.'
+        : '⚠ Error al guardar la configuración del álbum.';
+      msg.style.color = '#f87171';
+      return;
+    }
+    document.getElementById('am-pack-label').value = String(data.pack && data.pack.label || payload.pack.label);
+    document.getElementById('am-pack-total').value = String(data.pack && data.pack.total || payload.pack.total);
+    document.getElementById('am-pages-label').value = String(data.pages && data.pages.label || payload.pages.label);
+    document.getElementById('am-pages-total').value = String(data.pages && data.pages.total || payload.pages.total);
+    document.getElementById('am-new-label').value = String(data.newStickers && data.newStickers.label || payload.newStickers.label);
+    document.getElementById('am-new-total').value = String(data.newStickers && data.newStickers.total || payload.newStickers.total);
+    document.getElementById('am-card-copy').value = String(data.cardCopy || payload.cardCopy);
+    msg.textContent = '✓ Misiones del álbum actualizadas.';
+    msg.style.color = '#22c55e';
+  } catch (_) {
+    msg.textContent = '⚠ Error de red al guardar la configuración del álbum.';
+    msg.style.color = '#f87171';
+  }
+}
+
+async function cargarUsuariosAlbumAdmin() {
+  const msg = document.getElementById('agp-msg');
+  const select = document.getElementById('agp-user');
+  if (!select) return;
+  try {
+    const currentValue = select.value;
+    const res = await fetch(window.location.origin + '/api/admin/album/users', {
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ([]));
+    if (!res.ok) {
+      adminAlbumUsers = [];
+      select.innerHTML = '<option value="">— No se pudo cargar —</option>';
+      if (msg) {
+        msg.textContent = '⚠ No se pudieron cargar las cuentas del álbum.';
+        msg.style.color = '#f87171';
+      }
+      return;
+    }
+    adminAlbumUsers = Array.isArray(data) ? data : [];
+    const options = adminAlbumUsers.map(function(user) {
+      const pseudo = String(user && user.pseudonimo || '').trim();
+      const userID = String(user && user.user_id || '').trim();
+      const label = pseudo ? pseudo + ' · ' + userID : userID;
+      return '<option value="' + escapeAdminHtml(userID) + '">' + escapeAdminHtml(label) + '</option>';
+    }).join('');
+    select.innerHTML = '<option value="">— Selecciona cuenta registrada —</option>' + options;
+    if (currentValue && adminAlbumUsers.some(function(user) { return String(user && user.user_id || '').trim() === currentValue; })) {
+      select.value = currentValue;
+    }
+    if (msg) {
+      msg.textContent = adminAlbumUsers.length ? '✓ Cuentas del álbum cargadas.' : 'No hay cuentas registradas todavía.';
+      msg.style.color = adminAlbumUsers.length ? '#22c55e' : 'rgba(255,255,255,.45)';
+    }
+  } catch (_) {
+    adminAlbumUsers = [];
+    select.innerHTML = '<option value="">— Error de red —</option>';
+    if (msg) {
+      msg.textContent = '⚠ Error de red al cargar las cuentas del álbum.';
+      msg.style.color = '#f87171';
+    }
+  }
+}
+
+async function otorgarSobresAlbumAUsuario() {
+  const userID = String(document.getElementById('agp-user').value || '').trim();
+  const amount = Number(document.getElementById('agp-amount').value || 0);
+  const reason = String(document.getElementById('agp-reason').value || '').trim();
+  const msg = document.getElementById('agp-msg');
+  const selectedUser = adminAlbumUsers.find(function(user) {
+    return String(user && user.user_id || '').trim() === userID;
+  });
+  if (!userID || !selectedUser) {
+    msg.textContent = '⚠ Selecciona una cuenta registrada del álbum.';
+    msg.style.color = '#f87171';
+    return;
+  }
+  if (!Number.isFinite(amount) || !Number.isInteger(amount) || amount <= 0) {
+    msg.textContent = '⚠ Debes indicar una cantidad entera mayor que cero.';
+    msg.style.color = '#f87171';
+    return;
+  }
+  if (reason.length > 240) {
+    msg.textContent = '⚠ El motivo es demasiado largo.';
+    msg.style.color = '#f87171';
+    return;
+  }
+  const pseudo = String(selectedUser.pseudonimo || '').trim() || userID;
+  if (!confirm('¿Dar ' + amount + ' sobre(s) extra a ' + pseudo + '?')) return;
+
+  msg.textContent = 'Acreditando sobres al usuario...';
+  msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/album/grant-packs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ user_id: userID, amount, reason })
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (data.error === 'usuario_requerido') msg.textContent = '⚠ Debes seleccionar una cuenta del álbum.';
+      else if (data.error === 'usuario_album_no_encontrado') msg.textContent = '⚠ La cuenta seleccionada ya no existe en el álbum.';
+      else if (data.error === 'cantidad_invalida') msg.textContent = '⚠ La cantidad enviada no es válida.';
+      else if (data.error === 'cantidad_excesiva') msg.textContent = '⚠ La cantidad por cuenta es demasiado alta.';
+      else if (data.error === 'motivo_muy_largo') msg.textContent = '⚠ El motivo excede el límite.';
+      else msg.textContent = '⚠ Error al otorgar sobres al usuario.';
+      msg.style.color = '#f87171';
+      return;
+    }
+    msg.textContent = '✓ Se acreditaron ' + amount + ' sobre(s) a ' + (String(data.pseudonimo || '').trim() || userID) + '. Saldo actual: ' + Number(data.bonus_packs || 0) + '.';
+    msg.style.color = '#22c55e';
+    document.getElementById('agp-user').value = userID;
+    document.getElementById('agp-amount').value = '';
+    document.getElementById('agp-reason').value = '';
+  } catch (_) {
+    msg.textContent = '⚠ Error de red al otorgar sobres.';
+    msg.style.color = '#f87171';
+  }
+}
+
+function syncRankingPointsAdminState() {
+  const selector = document.getElementById('rp-player');
+  const mode = document.getElementById('rp-mode');
+  const amountInput = document.getElementById('rp-amount');
+  const current = document.getElementById('rp-current');
+  const preview = document.getElementById('rp-preview');
+  if (!selector || !mode || !amountInput || !current || !preview) return;
+
+  const pseudo = selector.value.trim();
+  if (!pseudo) {
+    current.textContent = 'Selecciona un jugador para revisar su ranking actual.';
+    preview.textContent = 'Puedes sumar, restar o fijar puntos manualmente.';
+    return;
+  }
+
+  const player = adminPlayers.find(p => String(p.pseudonimo || '').trim() === pseudo);
+  if (!player) {
+    current.textContent = 'No se encontró el jugador seleccionado en el ranking actual.';
+    preview.textContent = 'Recarga el panel si el jugador fue modificado recientemente.';
+    return;
+  }
+
+  const points = getAdminRankingPoints(player);
+  const wins = Number(player.wins || 0);
+  const losses = Number(player.losses || 0);
+  const draws = Number(player.draws || 0);
+  const streak = Number(player.current_streak || 0);
+  const division = String(player.division || player.division_name || 'Sin división').trim() || 'Sin división';
+  const streakLabel = streak ? ' · Racha ' + (streak > 0 ? '+' : '') + streak : '';
+  current.textContent = pseudo + ' · ' + division + ' · Récord ' + wins + '-' + losses + '-' + draws + streakLabel + ' · Ranking actual: ' + points + ' pts';
+
+  const rawAmount = String(amountInput.value || '').trim();
+  if (!rawAmount) {
+    preview.textContent = 'Define una operación y una cantidad para previsualizar el resultado.';
+    return;
+  }
+  const parsedAmount = Number(rawAmount);
+  if (!Number.isFinite(parsedAmount) || !Number.isInteger(parsedAmount)) {
+    preview.textContent = 'La cantidad debe ser un número entero.';
+    return;
+  }
+
+  let projected = points;
+  if (mode.value === 'set') {
+    if (parsedAmount < 0) {
+      preview.textContent = 'El total fijado no puede ser negativo.';
+      return;
+    }
+    projected = parsedAmount;
+  } else {
+    if (parsedAmount <= 0) {
+      preview.textContent = 'La cantidad debe ser mayor que cero para sumar o restar.';
+      return;
+    }
+    projected = mode.value === 'subtract' ? Math.max(0, points - parsedAmount) : points + parsedAmount;
+  }
+
+  const delta = projected - points;
+  preview.textContent = 'Resultado previsto: ' + projected + ' pts (' + formatAdminRankingDelta(delta) + ').';
+}
+
 // ───────────────────────────────────────────────────────────────
 // COMBATES — registrar + listar
 // ───────────────────────────────────────────────────────────────
@@ -962,9 +1700,18 @@ function updateLiveFeed(data) {
 
 async function loadPlayerDropdowns() {
   try {
-    const res = await fetch(window.location.origin + '/api/competidores');
-    if (!res.ok) return;
-    const players = await res.json();
+    const currentSelectedPlayer = document.getElementById('pc-player') ? document.getElementById('pc-player').value : '';
+    const currentDeletePlayer = document.getElementById('dp-player') ? document.getElementById('dp-player').value : '';
+    const currentResetPlayer = document.getElementById('rk-player') ? document.getElementById('rk-player').value : '';
+    const currentRankingPlayer = document.getElementById('rp-player') ? document.getElementById('rp-player').value : '';
+    const [playersRes, clansRes] = await Promise.all([
+      fetch(window.location.origin + '/api/competidores'),
+      fetch(window.location.origin + '/api/clanes')
+    ]);
+    if (!playersRes.ok) return;
+    adminPlayers = await playersRes.json();
+    adminClans = clansRes.ok ? await clansRes.json() : [];
+    const players = Array.isArray(adminPlayers) ? adminPlayers : [];
     const opts = players
       .sort((a,b) => a.pseudonimo.localeCompare(b.pseudonimo))
       .map(p => `<option value="${p.pseudonimo}">${p.pseudonimo} (${p.division || p.division_name || '—'})</option>`)
@@ -976,13 +1723,204 @@ async function loadPlayerDropdowns() {
     });
     // Personajes
     const pcSel = document.getElementById('pc-player');
-    if (pcSel) pcSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+    if (pcSel) {
+      pcSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+      if (currentSelectedPlayer && players.some(p => p.pseudonimo === currentSelectedPlayer)) {
+        pcSel.value = currentSelectedPlayer;
+      }
+      pcSel.onchange = syncSelectedPlayerAdminState;
+    }
+    setupAdminCharacterUploads();
+    const dpSel = document.getElementById('dp-player');
+    if (dpSel) {
+      dpSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+      if (currentDeletePlayer && players.some(p => p.pseudonimo === currentDeletePlayer)) {
+        dpSel.value = currentDeletePlayer;
+      }
+    }
+    const rkSel = document.getElementById('rk-player');
+    if (rkSel) {
+      rkSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+      if (currentResetPlayer && players.some(p => p.pseudonimo === currentResetPlayer)) {
+        rkSel.value = currentResetPlayer;
+      }
+    }
+    const rpSel = document.getElementById('rp-player');
+    if (rpSel) {
+      rpSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+      if (currentRankingPlayer && players.some(p => p.pseudonimo === currentRankingPlayer)) {
+        rpSel.value = currentRankingPlayer;
+      }
+      rpSel.onchange = syncRankingPointsAdminState;
+    }
+    const rpMode = document.getElementById('rp-mode');
+    if (rpMode) rpMode.onchange = syncRankingPointsAdminState;
+    const rpAmount = document.getElementById('rp-amount');
+    if (rpAmount) rpAmount.oninput = syncRankingPointsAdminState;
     // Próximas peleas
     ['pp-p1','pp-p2'].forEach(id => {
       const sel = document.getElementById(id);
       if (sel) sel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
     });
+    syncSelectedPlayerAdminState();
+    syncRankingPointsAdminState();
   } catch(e) { /* silent */ }
+}
+
+async function eliminarJugador() {
+  const pseudo = document.getElementById('dp-player').value.trim();
+  const msg = document.getElementById('dp-msg');
+  if (!pseudo) { msg.textContent = '⚠ Selecciona un jugador'; msg.style.color = '#f87171'; return; }
+  if (!confirm('¿Eliminar a ' + pseudo + ' del sistema? Esta acción es irreversible.')) return;
+  msg.textContent = 'Eliminando...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/jugador/' + encodeURIComponent(pseudo), {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + jwtToken }
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      msg.textContent = 'Error al eliminar.'; msg.style.color = '#f87171';
+      return;
+    }
+    msg.textContent = data.warnings ? 'Eliminado con alertas.' : 'Jugador eliminado.';
+    msg.style.color = data.warnings ? '#f59e0b' : '#22c55e';
+    adminPlayers = adminPlayers.filter(p => String(p.pseudonimo || '').trim() !== pseudo);
+    loadPlayerDropdowns();
+  } catch (_) {
+    msg.textContent = 'Error de red.'; msg.style.color = '#f87171';
+  }
+}
+
+async function resetAllPlayerKeys() {
+  const newKey = (document.getElementById('rk-new-key').value || '').trim();
+  const msg = document.getElementById('rk-msg');
+  if (!newKey) { msg.textContent = '⚠ Ingresa una clave temporal.'; msg.style.color = '#f87171'; return; }
+  if (newKey.length < 6) { msg.textContent = '⚠ La clave debe tener al menos 6 caracteres.'; msg.style.color = '#f87171'; return; }
+  if (!confirm('¿Aplicar esta misma clave temporal a todos los jugadores registrados? Esta acción invalida las claves actuales.')) return;
+  msg.textContent = 'Aplicando reset masivo...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/player-keys/reset-all', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ new_key: newKey })
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (data.error === 'clave_requerida') msg.textContent = '⚠ Debes ingresar una clave.';
+      else if (data.error === 'clave_muy_corta') msg.textContent = '⚠ La clave es demasiado corta.';
+      else if (data.error === 'clave_muy_larga') msg.textContent = '⚠ La clave es demasiado larga.';
+      else msg.textContent = '⚠ Error al resetear claves.';
+      msg.style.color = '#f87171';
+      return;
+    }
+    msg.textContent = '✓ Clave temporal aplicada a ' + (data.players_affected || 0) + ' jugadores.';
+    msg.style.color = '#22c55e';
+    document.getElementById('rk-new-key').value = '';
+  } catch (_) {
+    msg.textContent = '⚠ Error de red.'; msg.style.color = '#f87171';
+  }
+}
+
+async function resetPlayerKey() {
+  const pseudo = (document.getElementById('rk-player').value || '').trim();
+  const newKey = (document.getElementById('rk-new-key').value || '').trim();
+  const msg = document.getElementById('rk-msg');
+  if (!pseudo) { msg.textContent = '⚠ Selecciona un jugador.'; msg.style.color = '#f87171'; return; }
+  if (!newKey) { msg.textContent = '⚠ Ingresa una clave temporal.'; msg.style.color = '#f87171'; return; }
+  if (newKey.length < 6) { msg.textContent = '⚠ La clave debe tener al menos 6 caracteres.'; msg.style.color = '#f87171'; return; }
+  if (!confirm('¿Resetear la clave personal de ' + pseudo + '? La clave actual quedará invalidada.')) return;
+  msg.textContent = 'Aplicando reset individual...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/player-keys/reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ pseudonimo: pseudo, new_key: newKey })
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (data.error === 'pseudonimo_requerido') msg.textContent = '⚠ Debes seleccionar un jugador.';
+      else if (data.error === 'clave_requerida') msg.textContent = '⚠ Debes ingresar una clave.';
+      else if (data.error === 'clave_muy_corta') msg.textContent = '⚠ La clave es demasiado corta.';
+      else if (data.error === 'clave_muy_larga') msg.textContent = '⚠ La clave es demasiado larga.';
+      else if (data.error === 'jugador_no_encontrado') msg.textContent = '⚠ Ese jugador no existe en el registro.';
+      else msg.textContent = '⚠ Error al resetear la clave.';
+      msg.style.color = '#f87171';
+      return;
+    }
+    msg.textContent = '✓ Clave temporal aplicada a ' + (data.pseudonimo || pseudo) + '.';
+    msg.style.color = '#22c55e';
+    document.getElementById('rk-new-key').value = '';
+  } catch (_) {
+    msg.textContent = '⚠ Error de red.'; msg.style.color = '#f87171';
+  }
+}
+
+async function actualizarRankingPoints() {
+  const pseudo = (document.getElementById('rp-player').value || '').trim();
+  const operation = (document.getElementById('rp-mode').value || 'add').trim();
+  const amountRaw = (document.getElementById('rp-amount').value || '').trim();
+  const reason = (document.getElementById('rp-note').value || '').trim();
+  const msg = document.getElementById('rp-msg');
+
+  if (!pseudo) { msg.textContent = '⚠ Selecciona un jugador.'; msg.style.color = '#f87171'; return; }
+  if (!amountRaw) { msg.textContent = '⚠ Ingresa una cantidad.'; msg.style.color = '#f87171'; return; }
+  const amount = Number(amountRaw);
+  if (!Number.isFinite(amount) || !Number.isInteger(amount)) { msg.textContent = '⚠ La cantidad debe ser un entero.'; msg.style.color = '#f87171'; return; }
+  if (operation === 'set') {
+    if (amount < 0) { msg.textContent = '⚠ El total no puede ser negativo.'; msg.style.color = '#f87171'; return; }
+  } else if (amount <= 0) {
+    msg.textContent = '⚠ La cantidad debe ser mayor que cero.'; msg.style.color = '#f87171'; return;
+  }
+  if (reason.length > 240) { msg.textContent = '⚠ El motivo es demasiado largo.'; msg.style.color = '#f87171'; return; }
+
+  const player = adminPlayers.find(p => String(p.pseudonimo || '').trim() === pseudo);
+  const currentPoints = getAdminRankingPoints(player);
+  const projected = operation === 'set'
+    ? amount
+    : operation === 'subtract'
+      ? Math.max(0, currentPoints - amount)
+      : currentPoints + amount;
+  if (!confirm('¿Aplicar este ajuste a ' + pseudo + '?\n\nRanking actual: ' + currentPoints + ' pts\nResultado previsto: ' + projected + ' pts')) return;
+
+  msg.textContent = 'Aplicando ajuste de ranking...'; msg.style.color = 'rgba(255,255,255,.45)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/jugador/ranking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({ pseudonimo: pseudo, operation, amount, reason })
+    });
+    if (res.status === 401) { doLogout(); return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (data.error === 'pseudonimo_requerido') msg.textContent = '⚠ Debes seleccionar un jugador.';
+      else if (data.error === 'cantidad_invalida') msg.textContent = '⚠ La cantidad enviada no es válida.';
+      else if (data.error === 'operacion_invalida') msg.textContent = '⚠ La operación no es válida.';
+      else if (data.error === 'motivo_muy_largo') msg.textContent = '⚠ El motivo excede el límite.';
+      else if (data.error === 'jugador_no_encontrado') msg.textContent = '⚠ Ese jugador no existe en el ranking actual.';
+      else msg.textContent = '⚠ Error al actualizar ranking.';
+      msg.style.color = '#f87171';
+      return;
+    }
+
+    const resolvedPseudo = String(data.pseudonimo || pseudo).trim();
+    const nextPoints = Number(data.ranking_points || 0);
+    const playerIndex = adminPlayers.findIndex(item => String(item.pseudonimo || '').trim() === resolvedPseudo);
+    if (playerIndex >= 0) {
+      adminPlayers[playerIndex].ranking_points = nextPoints;
+      adminPlayers[playerIndex].RankingPoints = nextPoints;
+    }
+    msg.textContent = '✓ ' + resolvedPseudo + ' ahora tiene ' + nextPoints + ' pts (' + formatAdminRankingDelta(Number(data.delta || 0)) + ').';
+    msg.style.color = '#22c55e';
+    document.getElementById('rp-amount').value = '';
+    document.getElementById('rp-note').value = '';
+    syncRankingPointsAdminState();
+  } catch (_) {
+    msg.textContent = '⚠ Error de red.'; msg.style.color = '#f87171';
+  }
 }
 
 // ───────────────────────────────────────────────────────────────
@@ -993,22 +1931,53 @@ async function guardarPersonajes() {
   const char1  = document.getElementById('pc-char1').value.trim();
   const char2  = document.getElementById('pc-char2').value.trim();
   const char3  = document.getElementById('pc-char3').value.trim();
+  let char1Image = getAdminCharacterImageValue(1);
+  let char2Image = getAdminCharacterImageValue(2);
+  let char3Image = getAdminCharacterImageValue(3);
   const msg    = document.getElementById('pc-msg');
 
   if (!pseudo) { msg.textContent = '⚠ Selecciona un jugador'; msg.style.color = '#f87171'; return; }
   msg.textContent = 'Guardando...'; msg.style.color = 'rgba(255,255,255,.45)';
   try {
+    for (const slotIndex of [1, 2, 3]) {
+      if (!pendingAdminCharacterFiles[slotIndex]) continue;
+      msg.textContent = 'Subiendo imagen del personaje ' + slotIndex + '...';
+      const uploadedUrl = await uploadAdminCharacterImage(pendingAdminCharacterFiles[slotIndex]);
+      const imageInput = document.getElementById('pc-char' + slotIndex + '-img');
+      const slotMsg = document.getElementById('pc-char' + slotIndex + '-upload-msg');
+      if (imageInput) imageInput.value = uploadedUrl;
+      clearPendingAdminCharacterFile(slotIndex);
+      setAdminCharacterPreview(slotIndex, uploadedUrl);
+      if (slotMsg) slotMsg.textContent = 'Imagen subida desde galeria.';
+    }
+    char1Image = getAdminCharacterImageValue(1);
+    char2Image = getAdminCharacterImageValue(2);
+    char3Image = getAdminCharacterImageValue(3);
+
     const res = await fetch(window.location.origin + '/api/admin/jugador/personajes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
-      body: JSON.stringify({ pseudo, char1, char2, char3 })
+      body: JSON.stringify({ pseudo, char1, char2, char3, char1_image: char1Image, char2_image: char2Image, char3_image: char3Image })
     });
+    if (res.status === 401) { doLogout(); return; }
     if (res.ok) {
+      const playerIndex = adminPlayers.findIndex(player => String(player.pseudonimo || '').trim() === pseudo);
+      if (playerIndex >= 0) {
+        adminPlayers[playerIndex].top_char_1 = char1;
+        adminPlayers[playerIndex].top_char_2 = char2;
+        adminPlayers[playerIndex].top_char_3 = char3;
+        adminPlayers[playerIndex].top_char_1_image = char1Image;
+        adminPlayers[playerIndex].top_char_2_image = char2Image;
+        adminPlayers[playerIndex].top_char_3_image = char3Image;
+      }
+      syncSelectedPlayerAdminState();
       msg.textContent = `✓ Personajes de ${pseudo} actualizados`; msg.style.color = '#4ade80';
-      ['pc-char1','pc-char2','pc-char3'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
     } else {
       const err = await res.json().catch(()=>({}));
-      msg.textContent = '✗ ' + (err.error || res.status); msg.style.color = '#f87171';
+      if (err.error === 'char_imagen_invalida') msg.textContent = '✗ La imagen del personaje debe ser una URL http o https.';
+      else if (err.error === 'char_imagen_muy_larga') msg.textContent = '✗ Una URL de personaje es demasiado larga.';
+      else msg.textContent = '✗ ' + (err.error || res.status);
+      msg.style.color = '#f87171';
     }
   } catch(e) { msg.textContent = '✗ Error de red'; msg.style.color = '#f87171'; }
 }
@@ -1059,7 +2028,10 @@ async function eliminarProximaPelea(id) {
       method: 'DELETE',
       headers: { 'Authorization': 'Bearer ' + jwtToken }
     });
-    if (res.ok) loadProximasPeleas();
+    if (res.ok) {
+      loadProximasPeleas();
+      cargarPeleasApuesta();
+    }
     else alert('Error al eliminar');
   } catch(e) { alert('Error de red'); }
 }
@@ -1133,8 +2105,12 @@ async function registrarCombate() {
     });
     if (res.ok) {
       const data = await res.json().catch(() => ({}));
-      const warn = (data.p1_warn || data.p2_warn) ? ' ⚠ stats parciales' : '';
-      msg.textContent = `✓ ${resultLabel} — récord actualizado${warn}`; msg.style.color = '#4ade80';
+      const warn = [
+        (data.p1_warn || data.p2_warn) ? 'stats parciales' : '',
+        data.history_warn ? 'detalle por combate no disponible' : ''
+      ].filter(Boolean);
+      const warnText = warn.length ? ' ⚠ ' + warn.join(' · ') : '';
+      msg.textContent = `✓ ${resultLabel} — récord actualizado${warnText}`; msg.style.color = '#4ade80';
       ['cf-char1','cf-char2','cf-notes','cf-event','cf-division'].forEach(id => {
         const el = document.getElementById(id); if (el) el.value = '';
       });
@@ -1149,7 +2125,7 @@ async function registrarCombate() {
 }
 
 async function eliminarCombate(id) {
-  if (!confirm('¿Eliminar este combate? El récord W/L/D NO se revierte automáticamente.')) return;
+  if (!confirm('¿Eliminar este combate? El récord W/L/D y la racha sí se revertirán automáticamente.')) return;
   try {
     const res = await fetch(window.location.origin + '/api/admin/combate/' + id, {
       method: 'DELETE',
@@ -1214,10 +2190,89 @@ async function loadRecentCombates() {
 // INIT
 // ───────────────────────────────────────────────────────────────
 (function init() {
-  if (jwtToken) { showDashboard(); loadRecentCombates(); loadPlayerDropdowns(); loadProximasPeleas(); }
+  if (jwtToken) { showDashboard(); }
 })();
+
+// ===============================================
+// BETS ADMIN
+// ===============================================
+
+async function cargarPeleasApuesta() {
+  if (!jwtToken) return;
+  try {
+    const res = await fetch('/api/admin/bets/fights', { headers:{'Authorization':'Bearer '+jwtToken} });
+    const data = await res.json();
+    const lst = document.getElementById('bet-fights-list');
+    if (!data || data.length === 0) {
+      lst.innerHTML = '<div style="color:rgba(255,255,255,.25);font-size:.82rem">No hay peleas creadas.</div>';
+      return;
+    }
+    lst.innerHTML = data.map(f => {
+      let bts = '';
+      if (f.status === 'open') {
+        bts = `
+          <button style="padding:4px 8px;font-size:11px;background:#d4af37;color:#000;border:none;border-radius:4px;cursor:pointer" onclick="liquidarPelea('${f.fight_id}','${f.fighter_a}')">GANA ${f.fighter_a}</button>
+          <button style="padding:4px 8px;font-size:11px;background:#d4af37;color:#000;border:none;border-radius:4px;cursor:pointer" onclick="liquidarPelea('${f.fight_id}','${f.fighter_b}')">GANA ${f.fighter_b}</button>
+        `;
+      } else {
+        bts = `<span style="font-size:11px;color:#d4af37">Liquidada: Ganó ${f.winner_pseudo}</span>`;
+      }
+      return `
+        <div style="background:rgba(255,255,255,.05);padding:10px 14px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4)">${f.division} - ${f.label}</div>
+            <div style="font-weight:bold;margin-top:4px">${f.fighter_a} vs ${f.fighter_b}</div>
+          </div>
+          <div style="display:flex;gap:6px">${bts}</div>
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+async function crearPeleaApuesta() {
+  const p1 = document.getElementById('bet-p1').value.trim();
+  const p2 = document.getElementById('bet-p2').value.trim();
+  const div = document.getElementById('bet-div').value.trim();
+  const lab = document.getElementById('bet-label').value.trim();
+  if(!p1 || !p2 || !div || !lab) { alert("Llena los 4 campos"); return; }
+  
+  const fightId = "bet-" + Date.now();
+  
+  try {
+    const res = await fetch('/api/admin/bets/fights', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwtToken},
+      body: JSON.stringify({fight_id: fightId, division: div, label: lab, fighter_a: p1, fighter_b: p2})
+    });
+    if (res.ok) {
+      document.getElementById('bet-p1').value = "";
+      document.getElementById('bet-p2').value = "";
+      document.getElementById('bet-label').value = "";
+      alert("Pelea creada en /apuestas");
+      cargarPeleasApuesta();
+    } else { alert("Error al crear"); }
+  } catch(e) { alert("Error de red"); }
+}
+
+async function liquidarPelea(fightId, winner) {
+  if (!confirm(`Liquidar: Ganó ${winner}. ¿Pagar x4 a los ganadores?`)) return;
+  try {
+    const res = await fetch('/api/admin/bets/resolve', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwtToken},
+      body: JSON.stringify({fight_id: fightId, winner_pseudo: winner})
+    });
+    if (res.ok) {
+      alert("Pelea liquidada");
+      cargarPeleasApuesta();
+    } else { alert("Error al liquidar"); }
+  } catch(e) { alert("Error de red"); }
+}
 </script>
-<script src="/core.js?v=1"></script>
+<script src="/core.js?v=3"></script>
 <script src="/translate.js?v=4"></script>
 </body>
 </html>

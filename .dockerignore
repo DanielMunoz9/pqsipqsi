@@ -1,11 +1,14 @@
 .git
 .gitignore
 README.md
+.env
+.env.*
 *.log
 .DS_Store
 .vscode/
 node_modules/
-public/audio/
+.hf-deploy/
+tts/
 public/tts/
 public/downloads/
 public/voices/
