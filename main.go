@@ -3670,7 +3670,8 @@ func isSupabaseMissingTableError(err error, table string) bool {
 	if target == "" {
 		return false
 	}
-	return (strings.Contains(message, "could not find the table") && strings.Contains(message, target)) ||
+	return strings.Contains(message, "pgrst205") ||
+		(strings.Contains(message, "could not find the table") && strings.Contains(message, target)) ||
 		(strings.Contains(message, "relation") && strings.Contains(message, target) && strings.Contains(message, "does not exist")) ||
 		(strings.Contains(message, "schema cache") && strings.Contains(message, "table") && strings.Contains(message, target))
 }
@@ -3780,6 +3781,8 @@ func matchHistoryRecentSelectFallbacks() []string {
 	return []string{
 		"id,event_date,event_name,player1_pseudo,player2_pseudo,result,division,notes",
 		"id,event_date,event_name,player1_pseudo,player2_pseudo,result",
+		"id,event_date,player1_pseudo,player2_pseudo,result",
+		"id,player1_pseudo,player2_pseudo,result",
 	}
 }
 
