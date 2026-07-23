@@ -116,7 +116,10 @@ Push-Location $repoRoot
 try {
     & $gcloud config set project $ProjectId | Out-Host
     & $gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com --project $ProjectId --quiet | Out-Host
-    & $gcloud run deploy $ServiceName --source . --project $ProjectId --region $Region --allow-unauthenticated --max-instances $MaxInstances --timeout $TimeoutSeconds --env-vars-file $tempEnvFile --quiet | Out-Host
+    Write-Host "Construyendo imagen en Google Cloud Build..."
+    & $gcloud builds submit --tag "gcr.io/${ProjectId}/${ServiceName}:latest" . --project $ProjectId | Out-Host
+    Write-Host "Desplegando en Cloud Run..."
+    & $gcloud run deploy $ServiceName --image "gcr.io/${ProjectId}/${ServiceName}:latest" --project $ProjectId --region $Region --allow-unauthenticated --max-instances $MaxInstances --timeout $TimeoutSeconds --env-vars-file $tempEnvFile --quiet | Out-Host
     $serviceUrl = & $gcloud run services describe $ServiceName --project $ProjectId --region $Region '--format=value(status.url)'
     Write-Host ('Cloud Run URL: ' + $serviceUrl)
 }

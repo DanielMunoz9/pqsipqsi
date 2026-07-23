@@ -684,41 +684,50 @@
     }
 
     function renderUniversalPairingBoard(players, config, slotCap) {
-      const matches = Draw.buildOrderedPairingMatches(players, 'universal', slotCap);
-      const openSlots = Math.max(0, slotCap - players.length);
-      const leftMatches = matches.slice(0, 3);
-      const rightMatches = matches.slice(3);
+      const semifinalists = ['Khamzat The Borz Reaper', 'NEPHALEM', 'Mel', 'JIM Merus Jr.', 'Vertic', 'Inverse Bernkastel'];
+      const sfSlots = semifinalists.map(name => {
+         const p = players.find(x => x.pseudonimo === name || x.pseudonimo === name.replace(' The Borz Reaper', ''));
+         if (p) {
+             return {
+                 kind: 'player', code: 'SF', name: p.pseudonimo, note: p.clan_name || 'Universal',
+                 avatar: p.avatar_url && p.avatar_url !== '<nil>' ? p.avatar_url : '',
+                 initial: Array.from(p.pseudonimo.normalize('NFKC'))[0].toUpperCase()
+             };
+         }
+         return {
+             kind: 'player', code: 'SF', name: name, note: 'Universal', avatar: '', initial: Array.from(name)[0].toUpperCase()
+         };
+      });
+
+      const semiMatches = [
+         { code: 'U_SF1', teamA: sfSlots[0], teamB: sfSlots[1] },
+         { code: 'U_SF2', teamA: sfSlots[2], teamB: sfSlots[3] },
+         { code: 'U_SF3', teamA: sfSlots[4], teamB: sfSlots[5] }
+      ];
 
       return [
         '<div class="drw-board-top">',
         '<div>',
         '<div class="drw-board-kicker">' + escapeHtml(config.kicker) + '</div>',
-        '<h2 class="drw-board-title">' + escapeHtml(config.title) + '</h2>',
-        '<p class="drw-board-meta">' + config.copy + '</p>',
-        '</div>',
-        '<div class="drw-board-chips">',
-        '<span class="drw-board-chip"><strong>' + players.length + '/' + slotCap + '</strong>&nbsp;inscritos</span>',
-        '<span class="drw-board-chip">' + openSlots + ' cupos libres</span>',
-        '<span class="drw-board-chip">6 duelos fijos</span>',
+        '<h2 class="drw-board-title">Semifinales Universal</h2>',
+        '<p class="drw-board-meta">Los 6 clasificados se enfrentan en 3 duelos a muerte súbita para definir a los 3 Gran Finalistas.</p>',
         '</div>',
         '</div>',
-        '<div class="drw-pairings-grid">',
-        '<div class="drw-pairings-col">',
-        '<div class="drw-round-label">Ronda Clasificatoria A</div>',
-        leftMatches.map(renderDrawMatch).join(''),
+        '<div class="drw-pairings-grid" style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin-top:24px;">',
+        semiMatches.map(m => `
+          <div class="drw-match" style="width:280px;background:rgba(255,255,255,0.02);">
+            <div class="drw-match-kicker" style="margin-bottom:6px;color:#d4af37;text-transform:uppercase;font-size:0.75rem;letter-spacing:1px;">Semifinal Universal</div>
+            <div class="drw-team">${renderDrawAvatar(m.teamA)}<span class="drw-team-copy"><span class="drw-team-name">${m.teamA.name}</span><span class="drw-team-note">${m.teamA.note}</span></span><span class="drw-team-seed" style="display:none">${m.code}</span></div>
+            <div class="drw-team">${renderDrawAvatar(m.teamB)}<span class="drw-team-copy"><span class="drw-team-name">${m.teamB.name}</span><span class="drw-team-note">${m.teamB.note}</span></span><span class="drw-team-seed" style="display:none">${m.code}</span></div>
+          </div>
+        `).join(''),
         '</div>',
-        '<div class="drw-pairings-col">',
-        '<div class="drw-round-label">Ronda Clasificatoria B</div>',
-        rightMatches.map(renderDrawMatch).join(''),
-        '</div>',
-        '</div>',
-        '<div class="drw-round-label" style="margin-top:32px;text-align:center;font-size:1rem;color:#d4af37">🏆 Gran Final Universal (Combate de 3)</div>',
+        '<div class="drw-round-label" style="margin-top:40px;text-align:center;font-size:1.1rem;color:#d4af37">🏆 Gran Final Universal (Combate de 3)</div>',
         '<div style="display:flex;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap;">',
-        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 1</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-1">Por Definir</div></div>',
-        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 2</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-2">Por Definir</div></div>',
-        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 3</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-3">Por Definir</div></div>',
-        '</div>',
-        '<div class="drw-board-foot" style="margin-top:24px">Se muestran los 6 emparejamientos clasificatorios. Los 3 ganadores (elegidos por desempeño) avanzan a la Final de 3.</div>'
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px;background:rgba(212,175,55,0.05);border-color:rgba(212,175,55,0.2);"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 1</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-1">Por Definir</div></div>',
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px;background:rgba(212,175,55,0.05);border-color:rgba(212,175,55,0.2);"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 2</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-2">Por Definir</div></div>',
+        '<div class="drw-match" style="min-width:220px;text-align:center;padding:16px;background:rgba(212,175,55,0.05);border-color:rgba(212,175,55,0.2);"><span style="color:#d4af37;font-size:.7rem;letter-spacing:2px;text-transform:uppercase">Finalista 3</span><div style="font-size:1.6rem;font-family:\'Teko\',sans-serif;margin-top:8px" id="u-final-3">Por Definir</div></div>',
+        '</div>'
       ].join('');
     }
 
@@ -898,13 +907,58 @@
         universalEl.innerHTML = renderDrawBoard('universal', grouped.universal, seedInfo, universalSlotCap);
         initDrawScrollbars();
         
-        // Aplicar resultados Final de 3 Universal
+        // Aplicar resultados de llaves
         if (bracketResults && bracketResults.length > 0) {
           bracketResults.forEach(r => {
             if (r.division === 'universal' && r.match_code.startsWith('U_FINAL_')) {
-               const idx = r.match_code.split('_')[2]; // 1, 2, 3
+               const idx = r.match_code.split('_')[2];
                const el = document.getElementById('u-final-' + idx);
                if (el) { el.innerText = r.winner_pseudo; el.style.color = "#fff"; }
+            } else {
+               // 1) En la celda del cruce actual, marcar al ganador
+               const matches = document.querySelectorAll('.drw-match');
+               matches.forEach(m => {
+                 const codeEl = m.querySelector('.drw-match-code');
+                 if (codeEl && codeEl.innerText.trim() === r.match_code) {
+                   const teams = m.querySelectorAll('.drw-team');
+                   teams.forEach(t => {
+                     const nameEl = t.querySelector('.drw-team-name');
+                     if (nameEl && nameEl.innerText.trim() === r.winner_pseudo) {
+                       t.style.borderColor = 'var(--bl-gold)';
+                       t.style.background = 'rgba(212,175,55,0.08)';
+                       const noteEl = t.querySelector('.drw-team-note');
+                       if (noteEl) noteEl.innerText = 'Ganador';
+                     }
+                   });
+                 }
+               });
+               // 2) Avanzar al ganador a la siguiente ronda (cuyo seed es el match_code)
+               const seeds = document.querySelectorAll('.drw-team-seed');
+               seeds.forEach(s => {
+                 if (s.innerText.trim() === r.match_code) {
+                   const teamEl = s.closest('.drw-team');
+                   if (teamEl) {
+                     teamEl.classList.remove('drw-team--ghost');
+                     const nameEl = teamEl.querySelector('.drw-team-name');
+                     if (nameEl) nameEl.innerText = r.winner_pseudo;
+                     const noteEl = teamEl.querySelector('.drw-team-note');
+                     if (noteEl) noteEl.innerText = 'Avanza';
+                     const parent = teamEl.querySelector('.drw-team-avatar') || teamEl.querySelector('.drw-team-ph');
+                     const winnerPlayer = [...(grouped.ciudad||[]), ...(grouped.universal||[])].find(p => p.pseudonimo === r.winner_pseudo);
+                     const avatarUrl = winnerPlayer && winnerPlayer.avatar_url && winnerPlayer.avatar_url !== '<nil>' ? winnerPlayer.avatar_url : '';
+                     
+                     if (parent) {
+                        if (avatarUrl) {
+                            parent.className = 'drw-team-avatar';
+                            parent.innerHTML = '<img src="' + escapeHtml(avatarUrl) + '" alt="' + escapeHtml(r.winner_pseudo) + '" loading="lazy">';
+                        } else {
+                            parent.className = 'drw-team-ph';
+                            parent.innerText = Array.from(r.winner_pseudo.normalize('NFKC'))[0].toUpperCase();
+                        }
+                     }
+                   }
+                 }
+               });
             }
           });
         }

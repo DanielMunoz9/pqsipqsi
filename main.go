@@ -433,6 +433,8 @@ func main() {
 	router.HandleFunc("/api/fights", cachePublicResponse(20*time.Second, tournamentFightsHandler)).Methods("GET")
 	router.HandleFunc("/api/bracket/results", cachePublicResponse(10*time.Second, getBracketResultsHandler)).Methods("GET")
 	router.HandleFunc("/api/bets/fights", cachePublicResponse(10*time.Second, getOpenBetFightsHandler)).Methods("GET")
+	router.HandleFunc("/api/bets/fights/{id}/details", cachePublicResponse(10*time.Second, getBetFightDetailsHandler)).Methods("GET")
+	router.HandleFunc("/api/bets/stats", cachePublicResponse(15*time.Second, getBetsStatsHandler)).Methods("GET")
 	
 	// Álbum Bellator
 	router.HandleFunc("/api/album/catalog", albumCatalogHandler).Methods("GET")
@@ -497,9 +499,6 @@ func main() {
 	router.Handle("/api/admin/album/grant-packs", jwtMiddleware(http.HandlerFunc(adminAlbumGrantPacksHandler))).Methods("POST")
 	router.Handle("/api/admin/bracket/result", jwtMiddleware(http.HandlerFunc(adminBracketResultHandler))).Methods("POST")
 	router.Handle("/api/admin/bets", jwtMiddleware(http.HandlerFunc(adminBetsHandler))).Methods("GET")
-	router.Handle("/api/admin/bets/fights", jwtMiddleware(http.HandlerFunc(adminBetFightsHandler))).Methods("GET")
-	router.Handle("/api/admin/bets/fights", jwtMiddleware(http.HandlerFunc(adminCreateBetFightHandler))).Methods("POST")
-	router.Handle("/api/admin/bets/resolve", jwtMiddleware(http.HandlerFunc(adminResolveBetFightHandler))).Methods("POST")
 	
 	// Admin: eliminar jugador
 	router.Handle("/api/admin/jugador/{pseudonimo}", jwtMiddleware(http.HandlerFunc(eliminarJugadorHandler))).Methods("DELETE")
@@ -4269,6 +4268,13 @@ func registrarCombateHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("⚔️  Combate: %s vs %s → %s | Stats actualizados: P1_err=%v P2_err=%v",
 		req.Player1Pseudo, req.Player2Pseudo, winnerLabel, errStats1, errStats2)
 
+	// Resolver apuestas de upcoming_fights y limpiar
+	go func() {
+		resolveBetsForMatch(req.Player1Pseudo, req.Player2Pseudo, winnerLabel)
+		supabaseClient.From("upcoming_fights").Delete("", "").Eq("player1_pseudo", req.Player1Pseudo).Eq("player2_pseudo", req.Player2Pseudo).Execute()
+		supabaseClient.From("upcoming_fights").Delete("", "").Eq("player1_pseudo", req.Player2Pseudo).Eq("player2_pseudo", req.Player1Pseudo).Execute()
+	}()
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -5154,50 +5160,69 @@ func verifyPlayerCredentials(pseudonimo, playerKey string) (map[string]interface
 	keyHash := hex.EncodeToString(h[:])
 	normalizedPseudo := normalizedPseudoMatchKey(trimmedPseudo)
 
-	var rows []map[string]interface{}
+	var matchedRows []map[string]interface{}
 	_, err := supabaseClient.From("audit_logs").
 		Select("id,pseudonimo,division,avatar_url,hardware_fingerprint,player_key_hash", "", false).
 		Filter("pseudonimo", "ilike", trimmedPseudo).
+		Filter("player_key_hash", "eq", keyHash).
 		Order("timestamp", &postgrest.OrderOpts{Ascending: false}).
-		Limit(25, "").
-		ExecuteTo(&rows)
+		Limit(1, "").
+		ExecuteTo(&matchedRows)
+
 	if err != nil {
 		return nil, "", err
 	}
-	if len(rows) == 0 && normalizedPseudo != "" {
+
+	if len(matchedRows) > 0 {
+		return matchedRows[0], "", nil
+	}
+
+	// Si no coincide el hash, verificamos si el jugador existe
+	var existsRows []map[string]interface{}
+	_, err = supabaseClient.From("audit_logs").
+		Select("id,player_key_hash", "", false).
+		Filter("pseudonimo", "ilike", trimmedPseudo).
+		Limit(25, "").
+		ExecuteTo(&existsRows)
+	
+	if err != nil {
+		return nil, "", err
+	}
+
+	if len(existsRows) == 0 && normalizedPseudo != "" {
 		var fallbackRows []map[string]interface{}
 		_, err = supabaseClient.From("audit_logs").
-			Select("id,pseudonimo,division,avatar_url,hardware_fingerprint,player_key_hash", "", false).
+			Select("id,pseudonimo,player_key_hash", "", false).
 			Order("timestamp", &postgrest.OrderOpts{Ascending: false}).
 			Limit(250, "").
 			ExecuteTo(&fallbackRows)
-		if err != nil {
-			return nil, "", err
-		}
-		for _, row := range fallbackRows {
-			if sameNormalizedPseudo(normalizeNullableString(row["pseudonimo"]), trimmedPseudo) {
-				rows = append(rows, row)
+		if err == nil {
+			for _, row := range fallbackRows {
+				if sameNormalizedPseudo(normalizeNullableString(row["pseudonimo"]), trimmedPseudo) {
+					existsRows = append(existsRows, row)
+					break
+				}
 			}
 		}
 	}
-	if len(rows) == 0 {
+
+	if len(existsRows) == 0 {
 		return nil, "jugador_no_encontrado", nil
 	}
-	var firstMatch map[string]interface{}
-	for _, row := range rows {
+
+	hasAnyPassword := false
+	for _, row := range existsRows {
 		storedHash := normalizeNullableString(row["player_key_hash"])
-		if storedHash != "" && storedHash == keyHash {
-			if firstMatch == nil {
-				firstMatch = row
-			}
-			if strings.TrimSpace(normalizeNullableString(row["hardware_fingerprint"])) != "" {
-				return row, "", nil
-			}
+		if storedHash != "" {
+			hasAnyPassword = true
+			break
 		}
 	}
-	if firstMatch != nil {
-		return firstMatch, "", nil
+
+	if !hasAnyPassword {
+		return nil, "jugador_sin_clave", nil
 	}
+
 	return nil, "clave_incorrecta", nil
 }
 

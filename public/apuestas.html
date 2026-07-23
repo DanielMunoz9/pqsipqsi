@@ -35,28 +35,38 @@
     .bet-tab { padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; }
     .bet-tab.active { background: #d4af37; border-color: #d4af37; color: #0d1117; font-weight: bold; }
     
-    .bet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .bet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
     .fight-card { background: linear-gradient(180deg, rgba(16,21,31,0.9), rgba(11,15,22,0.9)); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; }
     .fight-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg, #429fff, #ff5c40); }
     .fight-card.univ::before { background: linear-gradient(90deg, #d4af37, #ff5c40); }
     .fight-kicker { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; margin-bottom: 12px; }
     .fight-title { font-family: 'Teko', sans-serif; font-size: 1.6rem; line-height: 1; margin-bottom: 20px; color: #fff; }
     
-    .fight-vs-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
-    .fighter-btn { flex: 1; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; color: #fff; }
+    .fight-vs-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 24px; }
+    .fighter-btn { flex: 1; min-width: 0; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; color: #fff; display:flex; flex-direction:column; align-items:center; gap:8px; }
     .fighter-btn:hover { background: rgba(255,255,255,0.1); }
     .fighter-btn.selected { background: rgba(212,175,55,0.15); border-color: #d4af37; box-shadow: 0 0 16px rgba(212,175,55,0.2); }
-    .fighter-btn span { display: block; font-family: 'Teko', sans-serif; font-size: 1.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fighter-btn span { display: block; width:100%; font-family: 'Teko', sans-serif; font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fighter-btn img { width:48px; height:48px; object-fit:cover; border-radius:50%; border:2px solid rgba(255,255,255,0.2); }
+    .fighter-btn.selected img { border-color:#d4af37; }
     .vs-badge { flex: 0 0 auto; font-family: 'Teko', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,0.4); }
     
     .bet-action { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
     .bet-action-row { display: flex; gap: 10px; align-items: center; }
-    .bet-amt-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.4rem; font-family: 'Teko', sans-serif; text-align: center; padding: 4px; outline: none; }
+    .bet-amt-input { flex: 1; min-width:0; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1.4rem; font-family: 'Teko', sans-serif; text-align: center; padding: 4px; outline: none; }
     .bet-amt-input:focus { border-bottom-color: #d4af37; }
-    .bet-submit { background: #d4af37; color: #0d1117; border: none; border-radius: 8px; padding: 0 20px; font-family: 'Teko', sans-serif; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; height: 42px; font-weight: bold; transition: opacity 0.2s; }
+    .bet-submit { background: #d4af37; color: #0d1117; border: none; border-radius: 8px; padding: 0 16px; font-family: 'Teko', sans-serif; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; height: 42px; font-weight: bold; transition: opacity 0.2s; white-space:nowrap; }
     .bet-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .bet-return { text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
     .bet-return strong { color: #d4af37; }
+    
+    @media (max-width: 500px) {
+      .bet-container { padding: 0 12px; margin: 20px auto; }
+      .fight-card { padding: 16px; }
+      .bet-title h1 { font-size: 2.2rem; }
+      .bet-action-row { flex-direction: row; flex-wrap:wrap; }
+      .bet-amt-input { flex:1; min-width:100px; }
+    }
     
     .mybet-card { background: rgba(16,21,31,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 12px; }
     .mybet-info h4 { margin: 0 0 4px; font-family: 'Teko', sans-serif; font-size: 1.4rem; font-weight: normal; color: #fff; }
@@ -80,6 +90,21 @@
       margin: 0 0 10px;
       letter-spacing: 1px;
     }
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      display: inline-block;
+    }
+    @keyframes pulseGlow {
+      0% { transform: scale(1); text-shadow: none; color: var(--accent); }
+      50% { transform: scale(1.3); text-shadow: 0 0 15px var(--accent); color: #fff; }
+      100% { transform: scale(1); text-shadow: none; color: var(--accent); }
+    }
+    .balance-anim {
+      animation: pulseGlow 0.6s ease-in-out;
+    }
     .empty-state-box p {
       color: rgba(255,255,255,0.6);
       font-size: 1.05rem;
@@ -96,6 +121,32 @@
     
     .bl-spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Stats & Modal UI */
+    .trend-row { display: flex; align-items: center; margin-bottom: 12px; }
+    .trend-rank { width: 30px; font-family: 'Teko', sans-serif; font-size: 1.5rem; color: #d4af37; }
+    .trend-name { width: 120px; font-weight: bold; font-size: 0.9rem; }
+    .trend-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin: 0 14px; }
+    .trend-bar { height: 100%; background: linear-gradient(90deg, #d4af37, #fde047); border-radius: 4px; }
+    .trend-val { font-family: 'Teko', sans-serif; font-size: 1.2rem; width: 50px; text-align: right; }
+    
+    .fighter-odds { font-size: 0.8rem; color: #d4af37; margin-top: 4px; background: rgba(212,175,55,0.1); padding: 2px 8px; border-radius: 12px; font-weight: bold; }
+
+    .vs-prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 12px 0; background: rgba(255,255,255,0.1); }
+    .vs-prob-a { height: 100%; background: #4f46e5; transition: width 0.5s; }
+    .vs-prob-b { height: 100%; background: #e11d48; transition: width 0.5s; }
+    .vs-prob-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: rgba(255,255,255,0.5); font-family: 'Teko', sans-serif; font-size: 1.1rem; }
+    
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+    .modal-box { background: #111520; border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 24px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+    .modal-close { float: right; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; line-height: 1; }
+    .modal-title { font-family: 'Teko', sans-serif; font-size: 1.8rem; color: #d4af37; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+    .det-col { flex: 1; }
+    .det-col h4 { margin: 0 0 10px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; }
+    .det-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; padding: 4px 8px; background: rgba(255,255,255,0.03); border-radius: 4px; }
+    .det-row:nth-child(even) { background: transparent; }
+    .btn-detalles { background: none; border: 1px solid rgba(212,175,55,0.3); color: #d4af37; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.2s; }
+    .btn-detalles:hover { background: rgba(212,175,55,0.1); }
   </style>
 </head>
 <body>
@@ -134,7 +185,8 @@
       <div class="bet-header">
         <div class="bet-title">
           <h1>Mercado de Apuestas</h1>
-          <p>Multiplica tus sobres (Pago 4×). Las apuestas se descuentan de tu inventario del álbum.</p>
+          <p><strong>Apuestas Mutuas:</strong> ¡La cuota final se define al cerrar la pelea según cómo apueste la comunidad! Apoyar a la sorpresa paga más.</p>
+          <div id="countdown-timer" style="margin-top:8px;font-size:1.1rem;color:#e11d48;font-weight:bold;font-family:'Teko',sans-serif;letter-spacing:1px;background:rgba(225,29,72,0.1);padding:4px 10px;border-radius:6px;display:inline-block;border:1px solid rgba(225,29,72,0.3);">Cierre: Calculando...</div>
         </div>
         <div class="bet-balance">
           <span class="bet-balance-label">Sobres Extra (Stock)</span>
@@ -145,6 +197,7 @@
       <div class="bet-tabs">
         <div class="bet-tab active" data-tab="fights">Peleas Abiertas</div>
         <div class="bet-tab" data-tab="history">Mis Apuestas</div>
+        <div class="bet-tab" data-tab="trends">Tendencias</div>
       </div>
       
       <!-- Fights Tab -->
@@ -155,6 +208,26 @@
       <!-- History Tab -->
       <div id="tab-history" style="display:none;">
         <div id="history-container"></div>
+      </div>
+
+      <!-- Trends Tab -->
+      <div id="tab-trends" style="display:none; max-width: 600px; margin: 0 auto;">
+        <h2 style="font-family:'Teko',sans-serif;font-size:2rem;color:#fff;margin-bottom:20px;text-align:center;">Luchadores Más Apostados</h2>
+        <div id="trends-container">
+          <div style="text-align:center;color:rgba(255,255,255,0.4);">Cargando estadísticas...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Detalles -->
+  <div class="modal-overlay" id="det-modal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-box">
+      <button class="modal-close" onclick="document.getElementById('det-modal').style.display='none'">×</button>
+      <div class="modal-title" id="det-title">Detalles de Apuestas</div>
+      <div style="display:flex; gap:20px;">
+        <div class="det-col" id="det-col-a"></div>
+        <div class="det-col" id="det-col-b"></div>
       </div>
     </div>
   </div>
@@ -169,6 +242,30 @@
     const userBalance = document.getElementById('user-balance');
     let currentUser = null;
     let balance = 0;
+    let currentStats = null;
+    let playersDict = {};
+    
+    function startCountdown() {
+      const deadline = new Date("2026-07-19T05:00:00Z").getTime();
+      const el = document.getElementById('countdown-timer');
+      if (!el) return;
+      setInterval(() => {
+        const now = new Date().getTime();
+        const dist = deadline - now;
+        if (dist < 0) {
+          el.innerText = "MERCADO CERRADO";
+          el.style.color = "#888";
+          el.style.borderColor = "#444";
+          return;
+        }
+        const d = Math.floor(dist / (1000 * 60 * 60 * 24));
+        const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((dist % (1000 * 60)) / 1000);
+        el.innerText = `CIERRE DE APUESTAS: ${d}d ${h}h ${m}m ${s}s`;
+      }, 1000);
+    }
+    startCountdown();
 
     document.querySelectorAll('.bet-tab').forEach(t => {
       t.addEventListener('click', () => {
@@ -177,11 +274,18 @@
         if (t.dataset.tab === 'fights') {
           fightsGrid.style.display = 'grid';
           historyContainer.parentElement.style.display = 'none';
+          document.getElementById('tab-trends').style.display = 'none';
           loadFights();
-        } else {
+        } else if (t.dataset.tab === 'history') {
           fightsGrid.style.display = 'none';
           historyContainer.parentElement.style.display = 'block';
+          document.getElementById('tab-trends').style.display = 'none';
           loadHistory();
+        } else if (t.dataset.tab === 'trends') {
+          fightsGrid.style.display = 'none';
+          historyContainer.parentElement.style.display = 'none';
+          document.getElementById('tab-trends').style.display = 'block';
+          // Ya se cargan en loadFights(), pero podemos forzar refresh si queremos
         }
       });
     });
@@ -193,8 +297,11 @@
         if (res.ok) {
           const data = await res.json();
           currentUser = data;
-          balance = data.sobres_extra || 0;
+          balance = data.bonus_packs || 0;
           userBalance.textContent = balance;
+          userBalance.classList.remove('balance-anim');
+          void userBalance.offsetWidth;
+          userBalance.classList.add('balance-anim');
           loginView.style.display = 'none';
           dashView.style.display = 'block';
           loadFights();
@@ -221,8 +328,8 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username: document.getElementById('l-user').value.trim(),
-            password: document.getElementById('l-pass').value.trim()
+            pseudonimo: document.getElementById('l-user').value.trim(),
+            player_key: document.getElementById('l-pass').value.trim()
           })
         });
         if (res.ok) {
@@ -236,10 +343,44 @@
       btn.innerHTML = 'Entrar a Apostar';
     });
 
+    document.querySelectorAll('.bet-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.bet-tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        if (t.dataset.tab === 'fights') {
+          fightsGrid.style.display = 'grid';
+          historyContainer.parentElement.style.display = 'none';
+          document.getElementById('tab-trends').style.display = 'none';
+          loadFights();
+        } else if (t.dataset.tab === 'history') {
+          fightsGrid.style.display = 'none';
+          historyContainer.parentElement.style.display = 'block';
+          document.getElementById('tab-trends').style.display = 'none';
+          loadHistory();
+        } else if (t.dataset.tab === 'trends') {
+          fightsGrid.style.display = 'none';
+          historyContainer.parentElement.style.display = 'none';
+          document.getElementById('tab-trends').style.display = 'block';
+        }
+      });
+    });
+
     async function loadFights() {
       try {
-        const res = await fetch('/api/bets/fights');
-        const fights = await res.json();
+        const [resFights, resStats, resPlayers] = await Promise.all([
+          fetch('/api/bets/fights'),
+          fetch('/api/bets/stats'),
+          fetch('/api/competidores')
+        ]);
+        const fights = await resFights.json();
+        currentStats = await resStats.json();
+        const players = await resPlayers.json();
+        
+        if (players && players.length) {
+          players.forEach(p => { playersDict[p.pseudonimo] = p.top_char_1_image; });
+        }
+        
+        renderTrends(currentStats.trending_fighters);
         
         if (!fights || fights.length === 0) {
           fightsGrid.innerHTML = `
@@ -252,27 +393,95 @@
 
         fightsGrid.innerHTML = fights.map(f => {
           const isUniv = (f.division || '').toLowerCase().includes('universal');
+          
+          let probHtml = '';
+          let btnHtml = '';
+          if (currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id]) {
+            const fs = currentStats.fight_stats[f.fight_id];
+            
+            probHtml = `
+              <div class="vs-prob-bar">
+                <div class="vs-prob-a" style="width:${fs.pct_a}%"></div>
+                <div class="vs-prob-b" style="width:${fs.pct_b}%"></div>
+              </div>
+              <div class="vs-prob-labels">
+                <span style="color:#4f46e5">${fs.pct_a}% (${fs.total_a} sobres)</span>
+                <span style="color:#e11d48">${fs.pct_b}% (${fs.total_b} sobres)</span>
+              </div>
+            `;
+            btnHtml = `<button class="btn-detalles" onclick="openDetalles('${f.fight_id}')">Ver más detalles</button>`;
+          }
+          
+          const imgA = playersDict[f.fighter_a] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const imgB = playersDict[f.fighter_b] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          
+          let oddsA = 2.00, oddsB = 2.00;
+          let pctA = 50, pctB = 50;
+          
+          if (currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id]) {
+            const fs = currentStats.fight_stats[f.fight_id];
+            oddsA = parseFloat(fs.odds_a) || 2.00;
+            oddsB = parseFloat(fs.odds_b) || 2.00;
+            pctA = fs.pct_a || 50;
+            pctB = fs.pct_b || 50;
+          }
+
+          const favBadge = '<div style="background:rgba(74,222,128,0.2);color:#4ade80;font-size:0.65rem;padding:2px 8px;border-radius:12px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;font-weight:bold;width:fit-content;margin-left:auto;margin-right:auto;">Favorito</div>';
+          const noBadge = '<div style="height:22px;margin-bottom:8px;"></div>';
+          
+          let htmlFavA = noBadge, htmlFavB = noBadge;
+          let colorA = 'rgba(255,255,255,0.1)', colorB = 'rgba(255,255,255,0.1)';
+          let textA = '#fff', textB = '#fff';
+          
+          if (oddsA < oddsB) {
+             htmlFavA = favBadge;
+             colorA = 'rgba(74,222,128,0.15)';
+             textA = '#4ade80';
+          } else if (oddsB < oddsA) {
+             htmlFavB = favBadge;
+             colorB = 'rgba(74,222,128,0.15)';
+             textB = '#4ade80';
+          }
+
+          const limit = Math.min(balance, 5);
+
           return `
             <div class="fight-card ${isUniv ? 'univ' : ''}" id="fc-${f.fight_id}">
               <div class="fight-kicker">${f.division}</div>
               <div class="fight-title">${f.label}</div>
               <div class="fight-vs-row">
-                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_a}')" id="fb-${f.fight_id}-a">
-                  <span>${f.fighter_a}</span>
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_a}', 'a')" id="fb-${f.fight_id}-a" style="display:flex;flex-direction:column;align-items:center;">
+                  ${htmlFavA}
+                  <img src="${imgA}" alt="P1">
+                  <span style="margin-bottom:2px;">${f.fighter_a}</span>
+                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctA}% de probabilidad</div>
+                  <div class="fighter-odds" style="font-size:1.1rem;color:${textA};background:${colorA};padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid ${colorA};">
+                     <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
+                     <span>${oddsA.toFixed(2)}x</span>
+                  </div>
                 </div>
-                <div class="vs-badge">VS</div>
-                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_b}')" id="fb-${f.fight_id}-b">
-                  <span>${f.fighter_b}</span>
+                <div class="vs-badge" style="align-self:center;">VS</div>
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_b}', 'b')" id="fb-${f.fight_id}-b" style="display:flex;flex-direction:column;align-items:center;">
+                  ${htmlFavB}
+                  <img src="${imgB}" alt="P2">
+                  <span style="margin-bottom:2px;">${f.fighter_b}</span>
+                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctB}% de probabilidad</div>
+                  <div class="fighter-odds" style="font-size:1.1rem;color:${textB};background:${colorB};padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid ${colorB};">
+                     <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
+                     <span>${oddsB.toFixed(2)}x</span>
+                  </div>
                 </div>
               </div>
+              ${probHtml}
               <div class="bet-action">
                 <input type="hidden" id="fpick-${f.fight_id}" value="">
                 <div class="bet-action-row">
-                  <input type="number" id="famt-${f.fight_id}" class="bet-amt-input" min="1" max="${balance}" value="1" oninput="updateReturn('${f.fight_id}')">
+                  <input type="number" id="famt-${f.fight_id}" class="bet-amt-input" min="1" max="${limit}" value="1" oninput="updateReturn('${f.fight_id}')">
                   <button class="bet-submit" onclick="placeBet('${f.fight_id}', '${f.division}', '${f.fighter_a}', '${f.fighter_b}')" id="fbtn-${f.fight_id}" disabled>Apostar</button>
                 </div>
-                <div class="bet-return" id="fret-${f.fight_id}">Selecciona un luchador (Pago x4.0)</div>
+                <div class="bet-return" id="fret-${f.fight_id}">Selecciona un luchador para ver cuota</div>
               </div>
+              ${btnHtml}
             </div>
           `;
         }).join('');
@@ -280,17 +489,48 @@
         console.error(e);
       }
     }
+    
+    function renderTrends(list) {
+      const container = document.getElementById('trends-container');
+      if (!list || list.length === 0) {
+        container.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);">Aún no hay suficientes datos para las tendencias.</div>';
+        return;
+      }
+      const maxSobres = Math.max(...list.map(x => x.total_sobres));
+      container.innerHTML = list.map((item, idx) => {
+        const pct = (item.total_sobres / maxSobres) * 100;
+        return `
+          <div class="trend-row">
+            <div class="trend-rank">#${idx+1}</div>
+            <div class="trend-name">${item.pseudo}</div>
+            <div class="trend-bar-wrap"><div class="trend-bar" style="width:${pct}%"></div></div>
+            <div class="trend-val">${item.total_sobres}</div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+      window.openDetalles = function(fightId) {
+        if (!currentStats || !currentStats.fight_stats || !currentStats.fight_stats[fightId]) return;
+        const fs = currentStats.fight_stats[fightId];
+        document.getElementById('det-title').innerText = `Detalles: ${fs.fighter_a} vs ${fs.fighter_b}`;
+        
+        const renderList = (bets) => {
+          if (!bets || bets.length === 0) return '<div style="color:rgba(255,255,255,0.3);font-size:0.8rem;text-align:center;">Ninguna apuesta</div>';
+          return bets.sort((a,b)=>b.sobres-a.sobres).map(b => `<div class="det-row"><span>${b.username}</span><span>${b.sobres}</span></div>`).join('');
+        };
+        
+        document.getElementById('det-col-a').innerHTML = `<h4 style="color:#4f46e5">${fs.fighter_a} <span style="font-size:0.75rem;opacity:0.8;font-weight:normal">(Paga ${fs.odds_a}x)</span></h4>` + renderList(fs.bets_a);
+        document.getElementById('det-col-b').innerHTML = `<h4 style="color:#e11d48">${fs.fighter_b} <span style="font-size:0.75rem;opacity:0.8;font-weight:normal">(Paga ${fs.odds_b}x)</span></h4>` + renderList(fs.bets_b);
+        
+        document.getElementById('det-modal').style.display = 'flex';
+      };
 
-    window.selectFighter = function(fightId, fighter) {
+    window.selectFighter = function(fightId, fighter, side) {
       document.getElementById(`fb-${fightId}-a`).classList.remove('selected');
       document.getElementById(`fb-${fightId}-b`).classList.remove('selected');
       
-      const btnA = document.getElementById(`fb-${fightId}-a`).innerText;
-      if (btnA.trim() === fighter.trim()) {
-        document.getElementById(`fb-${fightId}-a`).classList.add('selected');
-      } else {
-        document.getElementById(`fb-${fightId}-b`).classList.add('selected');
-      }
+      document.getElementById(`fb-${fightId}-${side}`).classList.add('selected');
       
       document.getElementById(`fpick-${fightId}`).value = fighter;
       document.getElementById(`fbtn-${fightId}`).disabled = false;
@@ -302,8 +542,16 @@
       if (!pick) return;
       let amt = parseInt(document.getElementById(`famt-${fightId}`).value) || 0;
       if (amt < 1) amt = 1;
-      const payout = amt * 4;
-      document.getElementById(`fret-${fightId}`).innerHTML = `Ganancia potencial: <strong>${payout} sobres</strong> si gana ${pick}`;
+      
+      let odds = 2.0;
+      if (currentStats && currentStats.fight_stats && currentStats.fight_stats[fightId]) {
+        const fs = currentStats.fight_stats[fightId];
+        if (pick === fs.fighter_a) odds = fs.odds_a;
+        else if (pick === fs.fighter_b) odds = fs.odds_b;
+      }
+      
+      const payout = Math.round(amt * odds);
+      document.getElementById(`fret-${fightId}`).innerHTML = `Ganancia potencial: <strong>${payout} sobres</strong> (Cuota: ${odds}x)`;
     };
 
     window.placeBet = async function(fightId, division, fa, fb) {

@@ -1943,7 +1943,7 @@ func albumRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"pseudonimo_taken"}`, http.StatusConflict)
 		return
 	}
-	if authCode != "" && authCode != "jugador_no_encontrado" {
+	if authCode != "" && authCode != "jugador_no_encontrado" && authCode != "jugador_sin_clave" {
 		http.Error(w, fmt.Sprintf(`{"error":"%s"}`, authCode), http.StatusBadRequest)
 		return
 	}

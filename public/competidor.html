@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -2693,10 +2693,16 @@
           renderFightHistorySummary(container, driver, 'Aún no hay combates detallados guardados. Mostrando la gráfica del récord actual.');
           return;
         }
-        const fightCards = fights.map(function(f) {
-          const mySlot    = f.player1_pseudo.toLowerCase() === pseudonimo.toLowerCase() ? 1 : 2;
-          const myPseudo  = mySlot === 1 ? f.player1_pseudo : f.player2_pseudo;
-          const oppoPseudo= mySlot === 1 ? f.player2_pseudo : f.player1_pseudo;
+        // Filtrar registros inválidos para evitar crash por campos null/undefined
+        const validFights = fights.filter(function(f) {
+          return f && (typeof f.player1_pseudo === 'string' || typeof f.player2_pseudo === 'string');
+        });
+        const fightCards = validFights.map(function(f) {
+          const p1 = String(f.player1_pseudo || '');
+          const p2 = String(f.player2_pseudo || '');
+          const mySlot    = p1.toLowerCase() === pseudonimo.toLowerCase() ? 1 : 2;
+          const myPseudo  = mySlot === 1 ? p1 : p2;
+          const oppoPseudo= mySlot === 1 ? p2 : p1;
           const myAvatar  = (mySlot === 1 ? f.player1_avatar : f.player2_avatar);
           const oppoAvatar= (mySlot === 1 ? f.player2_avatar : f.player1_avatar);
           const myChar    = (mySlot === 1 ? f.player1_char : f.player2_char) || '';
@@ -2757,13 +2763,17 @@
   </details>
 </div>`;
         });
+        if (validFights.length === 0) {
+          renderFightHistorySummary(container, driver, 'Aún no hay combates detallados guardados. Mostrando la gráfica del récord actual.');
+          return;
+        }
         const visibleCards = fightCards.slice(0, maxVisibleFights).join('');
         const hiddenCards = fightCards.slice(maxVisibleFights).join('');
-        const visibleCount = Math.min(fights.length, maxVisibleFights);
-        const historyCopy = fights.length > maxVisibleFights
-          ? `Mostrando ${visibleCount} de ${fights.length} combates. Abre cada tarjeta para ver datos completos.`
-          : `Mostrando ${fights.length} combate${fights.length === 1 ? '' : 's'} registrados. Abre cada tarjeta para ver datos completos.`;
-        const hiddenCount = fights.length - visibleCount;
+        const visibleCount = Math.min(validFights.length, maxVisibleFights);
+        const historyCopy = validFights.length > maxVisibleFights
+          ? `Mostrando ${visibleCount} de ${validFights.length} combates. Abre cada tarjeta para ver datos completos.`
+          : `Mostrando ${validFights.length} combate${validFights.length === 1 ? '' : 's'} registrados. Abre cada tarjeta para ver datos completos.`;
+        const hiddenCount = validFights.length - visibleCount;
         container.innerHTML = buildFightHistorySummaryMarkup(driver, 'Gráfica del récord actual y detalle de combates registrados.') + `
           <div class="bl-fight-history-shell">
             <div class="bl-fight-history-head"><div class="bl-fight-history-copy">${escapeHtml(historyCopy)}</div></div>

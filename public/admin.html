@@ -578,6 +578,42 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
       <div id="pp-list" style="max-width:780px"><div style="color:rgba(255,255,255,.25);font-size:.82rem">Cargando...</div></div>
     </div>
   </div>
+  <!-- ── MERCADO DE APUESTAS ─────────────────────────────────────────── -->
+  <div class="live-feed-section" id="bets-section" style="margin-top:24px">
+    <h3>💰 Mercado de Apuestas</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Crea peleas de apuestas para que los usuarios inviertan sus sobres, y resuelve las ganancias.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px" id="bets-form">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador A</label>
+        <select id="bf-p1" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador B</label>
+        <select id="bf-p2" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">División / Fase</label>
+        <input id="bf-div" type="text" placeholder="Ej: Octavos - Ciudad" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Etiqueta de Pelea (Label)</label>
+        <input id="bf-label" type="text" placeholder="Ej: Amiya vs Khamzat" style="width:100%;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:4px">
+        <button onclick="crearPeleaApuestas()" style="padding:10px 24px;background:#D4AF37;border:none;border-radius:9px;color:#0d1117;font-weight:800;font-size:.88rem;cursor:pointer;letter-spacing:.05em">💰 ABRIR APUESTAS</button>
+        <span id="bf-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+    <!-- Peleas abiertas de apuestas -->
+    <div style="margin-top:22px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Apuestas Abiertas</div>
+      <div id="bf-list" style="max-width:780px"><div style="color:rgba(255,255,255,.25);font-size:.82rem">Cargando...</div></div>
+    </div>
+  </div>
 
   <!-- ── REGISTRAR COMBATE ─────────────────────────────────────────── -->
   <div class="live-feed-section" id="combate-section" style="margin-top:24px">
@@ -1717,7 +1753,7 @@ async function loadPlayerDropdowns() {
       .map(p => `<option value="${p.pseudonimo}">${p.pseudonimo} (${p.division || p.division_name || '—'})</option>`)
       .join('');
     // Combates
-    ['cf-p1','cf-p2'].forEach(id => {
+    ['pp-p1','pp-p2','cf-p1','cf-p2','rp-player','bf-p1','bf-p2'].forEach(id => {
       const sel = document.getElementById(id);
       if (sel) sel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
     });
@@ -2136,6 +2172,46 @@ async function eliminarCombate(id) {
   } catch(e) { alert('Error de red'); }
 }
 
+async function registrarBracket() {
+  const div = document.getElementById('br-div').value.trim();
+  const code = document.getElementById('br-code').value.trim().toUpperCase();
+  const winner = document.getElementById('br-winner').value.trim();
+  const loser = document.getElementById('br-loser').value.trim();
+  const round = parseInt(document.getElementById('br-round').value.trim()) || 1;
+
+  if (!code || !winner) return alert('Código de llave y ganador son obligatorios.');
+
+  const msg = document.getElementById('br-msg');
+  msg.textContent = 'Guardando...';
+  msg.style.color = 'rgba(255,255,255,.45)';
+
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/bracket/result', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwtToken },
+      body: JSON.stringify({
+        division: div,
+        match_code: code,
+        winner_pseudo: winner,
+        loser_pseudo: loser,
+        round: round
+      })
+    });
+    if (res.ok) {
+      msg.textContent = '¡Gráfica del Sorteo actualizada!';
+      msg.style.color = '#22c55e';
+      document.getElementById('br-winner').value = '';
+      document.getElementById('br-loser').value = '';
+    } else {
+      msg.textContent = 'Error al actualizar.';
+      msg.style.color = '#ef4444';
+    }
+  } catch (e) {
+    msg.textContent = 'Error de red.';
+    msg.style.color = '#ef4444';
+  }
+}
+
 async function loadRecentCombates() {
   const container = document.getElementById('cf-recent');
   if (!container) return;
@@ -2193,86 +2269,9 @@ async function loadRecentCombates() {
   if (jwtToken) { showDashboard(); }
 })();
 
-// ===============================================
-// BETS ADMIN
-// ===============================================
-
-async function cargarPeleasApuesta() {
-  if (!jwtToken) return;
-  try {
-    const res = await fetch('/api/admin/bets/fights', { headers:{'Authorization':'Bearer '+jwtToken} });
-    const data = await res.json();
-    const lst = document.getElementById('bet-fights-list');
-    if (!data || data.length === 0) {
-      lst.innerHTML = '<div style="color:rgba(255,255,255,.25);font-size:.82rem">No hay peleas creadas.</div>';
-      return;
-    }
-    lst.innerHTML = data.map(f => {
-      let bts = '';
-      if (f.status === 'open') {
-        bts = `
-          <button style="padding:4px 8px;font-size:11px;background:#d4af37;color:#000;border:none;border-radius:4px;cursor:pointer" onclick="liquidarPelea('${f.fight_id}','${f.fighter_a}')">GANA ${f.fighter_a}</button>
-          <button style="padding:4px 8px;font-size:11px;background:#d4af37;color:#000;border:none;border-radius:4px;cursor:pointer" onclick="liquidarPelea('${f.fight_id}','${f.fighter_b}')">GANA ${f.fighter_b}</button>
-        `;
-      } else {
-        bts = `<span style="font-size:11px;color:#d4af37">Liquidada: Ganó ${f.winner_pseudo}</span>`;
-      }
-      return `
-        <div style="background:rgba(255,255,255,.05);padding:10px 14px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:11px;color:rgba(255,255,255,.4)">${f.division} - ${f.label}</div>
-            <div style="font-weight:bold;margin-top:4px">${f.fighter_a} vs ${f.fighter_b}</div>
-          </div>
-          <div style="display:flex;gap:6px">${bts}</div>
-        </div>
-      `;
-    }).join('');
-  } catch(e) {
-    console.error(e);
-  }
-}
-
-async function crearPeleaApuesta() {
-  const p1 = document.getElementById('bet-p1').value.trim();
-  const p2 = document.getElementById('bet-p2').value.trim();
-  const div = document.getElementById('bet-div').value.trim();
-  const lab = document.getElementById('bet-label').value.trim();
-  if(!p1 || !p2 || !div || !lab) { alert("Llena los 4 campos"); return; }
-  
-  const fightId = "bet-" + Date.now();
-  
-  try {
-    const res = await fetch('/api/admin/bets/fights', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwtToken},
-      body: JSON.stringify({fight_id: fightId, division: div, label: lab, fighter_a: p1, fighter_b: p2})
-    });
-    if (res.ok) {
-      document.getElementById('bet-p1').value = "";
-      document.getElementById('bet-p2').value = "";
-      document.getElementById('bet-label').value = "";
-      alert("Pelea creada en /apuestas");
-      cargarPeleasApuesta();
-    } else { alert("Error al crear"); }
-  } catch(e) { alert("Error de red"); }
-}
-
-async function liquidarPelea(fightId, winner) {
-  if (!confirm(`Liquidar: Ganó ${winner}. ¿Pagar x4 a los ganadores?`)) return;
-  try {
-    const res = await fetch('/api/admin/bets/resolve', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+jwtToken},
-      body: JSON.stringify({fight_id: fightId, winner_pseudo: winner})
-    });
-    if (res.ok) {
-      alert("Pelea liquidada");
-      cargarPeleasApuesta();
-    } else { alert("Error al liquidar"); }
-  } catch(e) { alert("Error de red"); }
-}
 </script>
 <script src="/core.js?v=3"></script>
 <script src="/translate.js?v=4"></script>
 </body>
 </html>
+
