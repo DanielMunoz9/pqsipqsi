@@ -4274,8 +4274,8 @@ func registrarCombateHandler(w http.ResponseWriter, r *http.Request) {
 	// Resolver apuestas de upcoming_fights y limpiar
 	go func() {
 		resolveBetsForMatch(req.Player1Pseudo, req.Player2Pseudo, winnerLabel)
-		supabaseClient.From("upcoming_fights").Delete("", "").Eq("player1_pseudo", req.Player1Pseudo).Eq("player2_pseudo", req.Player2Pseudo).Execute()
-		supabaseClient.From("upcoming_fights").Delete("", "").Eq("player1_pseudo", req.Player2Pseudo).Eq("player2_pseudo", req.Player1Pseudo).Execute()
+		supabaseClient.From("upcoming_fights").Delete("", "").Filter("notes", "not.like", "__bellator_completed__*").Eq("player1_pseudo", req.Player1Pseudo).Eq("player2_pseudo", req.Player2Pseudo).Execute()
+		supabaseClient.From("upcoming_fights").Delete("", "").Filter("notes", "not.like", "__bellator_completed__*").Eq("player1_pseudo", req.Player2Pseudo).Eq("player2_pseudo", req.Player1Pseudo).Execute()
 	}()
 
 	w.Header().Set("Content-Type", "application/json")
