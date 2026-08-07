@@ -246,7 +246,7 @@
     let playersDict = {};
     
     function startCountdown() {
-      const deadline = new Date("2026-07-19T05:00:00Z").getTime();
+      const deadline = new Date("2026-08-10T05:00:00Z").getTime();
       const el = document.getElementById('countdown-timer');
       if (!el) return;
       setInterval(() => {
@@ -473,6 +473,12 @@
                 </div>
               </div>
               ${probHtml}
+              ${ (f.division || '').toUpperCase().includes('FASE II') || (f.label || '').toUpperCase().includes('FASE II') ? `
+              <div class="bet-action" style="background: rgba(225,29,72,0.1); border-color: rgba(225,29,72,0.3); text-align: center;">
+                <div style="color: #e11d48; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 1px;">APUESTAS CERRADAS</div>
+                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 4px;">El mercado para esta pelea ha cerrado</div>
+              </div>
+              ` : `
               <div class="bet-action">
                 <input type="hidden" id="fpick-${f.fight_id}" value="">
                 <div class="bet-action-row">
@@ -481,6 +487,7 @@
                 </div>
                 <div class="bet-return" id="fret-${f.fight_id}">Selecciona un luchador para ver cuota</div>
               </div>
+              `}
               ${btnHtml}
             </div>
           `;
