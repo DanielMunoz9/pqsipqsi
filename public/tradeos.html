@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bellator Album 2026</title>
+<title>Mercado Bellator - Tradeos</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap');
 
@@ -7001,10 +7001,100 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   .pk-selling-points { position: relative; bottom: auto; right: auto; flex-direction: column; padding: 20px; }
   .pk-card { width: 100%; }
 }
+
+/* 2-Column Grid Layout for Trade Panels */
+.trade-modal {
+    max-width: 1400px;
+    padding: 30px;
+}
+.trade-modal > div:not(.trade-modal-header):not(.trade-feedback-banner) {
+    display: none;
+}
+.trade-feedback-banner {
+    display: block;
+    grid-column: 1 / -1;
+}
+/* Create a wrapper for panels */
+.trade-panels-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 900px) {
+    .trade-panels-wrapper {
+        grid-template-columns: 1fr 1.2fr;
+    }
+}
+.always-active {
+    display: flex !important;
+}
+
 </style>
   <!-- Confetti para revelaciones épicas -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+/* Tradeos Page Specific Overrides */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background: radial-gradient(circle at 50% 42%, rgba(13, 22, 48, 0.8), #020a18);
+}
+#trade-modal-backdrop {
+    position: static;
+    display: flex;
+    background: transparent;
+    backdrop-filter: none;
+    padding: 0;
+    width: 100%;
+    max-width: 1200px;
+}
+.trade-modal {
+    max-height: none;
+    width: 100%;
+    margin: 0 auto;
+}
+#trade-modal-close {
+    display: none;
+}
+/* Hide the rest of the album UI */
+#intro-scene, #album-scene, #reveal-scene, .music-fab, #identity-panel-wrap, .acceder-toggle {
+    display: none !important;
+}
+
+/* 2-Column Grid Layout for Trade Panels */
+.trade-modal {
+    max-width: 1400px;
+    padding: 30px;
+}
+.trade-modal > div:not(.trade-modal-header):not(.trade-feedback-banner) {
+    display: none;
+}
+.trade-feedback-banner {
+    display: block;
+    grid-column: 1 / -1;
+}
+/* Create a wrapper for panels */
+.trade-panels-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+@media (min-width: 900px) {
+    .trade-panels-wrapper {
+        grid-template-columns: 1fr 1.2fr;
+    }
+}
+.always-active {
+    display: flex !important;
+}
+
+</style>
 </head>
+
 <body data-scene="intro">
   <main class="app-shell">
     <section class="scene intro-screen active" id="scene-intro">
@@ -7457,19 +7547,26 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
     </div>
   </div>
 
-  <div class="trade-modal-backdrop" id="trade-modal-backdrop">
+  <div class="trade-modal-backdrop show" id="trade-modal-backdrop">
   <div class="trade-modal" role="dialog" aria-modal="true" aria-label="Intercambio de cromos">
     <div class="trade-modal-header">
       <h2>Mercado Bellator</h2>
+      <a href="album.html" class="primary-button" style="text-decoration:none; padding: 10px 20px; font-size: 1.2rem;">Volver al Álbum</a>
       <button class="trade-modal-close" id="trade-modal-close" type="button" aria-label="Cerrar">×</button>
     </div>
-    <div class="trade-tabs">
-      <button class="trade-tab active" id="trade-tab-offer" type="button">Mi solicitud</button>
-      <button class="trade-tab" id="trade-tab-import" type="button">Solicitudes</button>
-    </div>
+    
     <div class="trade-feedback-banner" id="trade-feedback-banner" hidden></div>
-    <div class="trade-panel active" id="trade-panel-offer">
-      <input type="hidden" id="trade-target-select" value="">
+<div class="trade-panels-wrapper">
+    <div class="trade-panel always-active" id="trade-panel-offer">
+      
+      <div style="margin-bottom: 20px;">
+          <label style="font-family: Teko, sans-serif; font-size: 1.2rem; color: #d4af37; letter-spacing: 1px;">SELECCIONA JUGADOR DESTINO:</label>
+          <select id="trade-target-select" class="trade-filter-input" style="width: 100%; margin-top: 8px;">
+              <option value="">Selecciona un jugador...</option>
+          </select>
+          <div id="trade-target-hint" style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 8px;">Debes elegir a quién le envías la solicitud.</div>
+      </div>
+
       <span id="trade-builder-player" style="display:none;">-</span>
       <span id="trade-builder-offer-count" style="display:none;">0</span>
       <span id="trade-builder-want-count" style="display:none;">0</span>
@@ -7516,7 +7613,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
         </div>
       </div>
     </div>
-    <div class="trade-panel" id="trade-panel-import">
+    <div class="trade-panel always-active" id="trade-panel-import">
       <p style="font-size:.96rem;color:rgba(255,255,255,.72);line-height:1.24; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
         <strong>Bandeja de Entrada:</strong> Aquí aparecen las solicitudes de intercambio que otros jugadores te han enviado directamente a ti. Revisa qué te piden y qué te ofrecen.
       </p>
@@ -7543,6 +7640,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   </div>
 </div>
 
+</div>
 <div class="overlay" id="overlay" aria-hidden="true">
     <button class="overlay-close" id="overlay-close" type="button" aria-label="Cerrar">&#10005;</button>
     <div class="overlay-panel">
@@ -9119,7 +9217,12 @@ async function fetchTradeTargets() {
     const targets = Array.isArray(data)
       ? data.map((item) => safeText(item && item.pseudonimo, '')).filter(Boolean)
       : [];
+    
     state.tradeTargets = targets;
+    if (refs.tradeTargetSelect) {
+        refs.tradeTargetSelect.innerHTML = '<option value="">Selecciona un jugador...</option>' + targets.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+
     const selected = targets.find((pseudo) => sameTradePlayer(pseudo, state.tradeTargetPlayer));
     state.tradeTargetPlayer = selected || targets[0] || '';
     return state.tradeTargets;
@@ -11245,7 +11348,7 @@ function bindEvents() {
     setStatus(hasAlbumIdentity() ? 'Gestiona tu acceso Bellator desde este panel.' : 'Entra o crea tu perfil Bellator desde este panel.', '');
   });
   refs.hubLogout.addEventListener('click', clearKey);
-  refs.hubOpenTrade.addEventListener('click', () => { window.location.href = 'tradeos.html'; });
+  refs.hubOpenTrade.addEventListener('click', openTradeModal);
   refs.tradeModalClose.addEventListener('click', closeTradeModal);
   refs.tradeModalBackdrop.addEventListener('click', (e) => {
     if (e.target === refs.tradeModalBackdrop) closeTradeModal();
@@ -11688,7 +11791,7 @@ function openTradeModal() {
 }
 
 function closeTradeModal() {
-  refs.tradeModalBackdrop.classList.remove('show');
+  
 }
 
 function renderTradeBoard() {
@@ -11745,7 +11848,7 @@ function renderTradeBoard() {
         : `${safeText(request.player, 'Coleccionista')} se la mandó a ${targetPlayer}.`;
     
     const renderVisualSticker = (item, isWant = false) => {
-      const localSticker = state.stickers.find(s => s.id === item.id) || {};
+      const localSticker = (state.baseStickers || []).find(s => s.id === item.id) || (state.stickers || []).find(s => s.id === item.id) || {};
       const imgUrl = localSticker.imageUrl || '';
       const fallback = `<div class="trade-slot-placeholder">${isWant ? '?' : '✓'}</div>`;
       const encodedFallback = fallback.replace(/"/g, '&quot;');
@@ -11843,9 +11946,7 @@ function renderTradeOfferPanel() {
   if (refs.tradeBuilderOfferCount) refs.tradeBuilderOfferCount.textContent = String(state.tradeOfferSelection.size);
   if (refs.tradeBuilderWantCount) refs.tradeBuilderWantCount.textContent = String(state.tradeWantSelection.size);
 
-  if (refs.tradeTargetSelect) {
-    refs.tradeTargetSelect.style.display = 'none'; // Hidden for global market
-  }
+  
   if (refs.tradeTargetHint) {
     const isReady = state.tradeOfferSelection.size === 1 && state.tradeWantSelection.size === 1;
     refs.tradeTargetHint.textContent = isReady

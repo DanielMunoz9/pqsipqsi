@@ -100,6 +100,10 @@ func getOpenBetFightsHandler(w http.ResponseWriter, r *http.Request) {
 		// 	continue
 		// }
 
+		statusStr := "open"
+		if strings.Contains(strings.ToUpper(event), "FASE II") {
+			statusStr = "closed"
+		}
 		bets = append(bets, BetFight{
 			ID:       id,
 			FightID:  id,
@@ -107,7 +111,7 @@ func getOpenBetFightsHandler(w http.ResponseWriter, r *http.Request) {
 			Label:    event,
 			FighterA: p1,
 			FighterB: p2,
-			Status:   "open",
+			Status:   statusStr,
 		})
 	}
 	out, _ := json.Marshal(bets)
@@ -464,17 +468,21 @@ func getBetsStatsHandler(w http.ResponseWriter, r *http.Request) {
 			p1, _ := p["player1_pseudo"].(string)
 			p2, _ := p["player2_pseudo"].(string)
 			div, _ := p["division"].(string)
-			event, _ := p["event_name"].(string)
+			_, _ = p["event_name"].(string)
 			// if !strings.Contains(strings.ToUpper(div), "FASE II") && !strings.Contains(strings.ToUpper(event), "FASE II") {
 			// 	continue
 			// }
+			statusStr := "open"
+			if strings.Contains(strings.ToUpper(event), "FASE II") {
+				statusStr = "closed"
+			}
 			openFights = append(openFights, BetFight{
 				ID:       id,
 				FightID:  id,
 				Division: div,
 				FighterA: p1,
 				FighterB: p2,
-				Status:   "open",
+				Status:   statusStr,
 			})
 		}
 	}
