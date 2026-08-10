@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificador Bellator | Anti-Fraude</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --dark: #090e15;
+    --panel: rgba(12, 17, 25, 0.9);
+  }
+  body {
+    background: radial-gradient(circle at 50% 50%, #1e283c, var(--dark));
+    color: white;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    margin: 0; padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    background: var(--panel);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  h1 { font-family: 'Teko', sans-serif; font-size: 2.5rem; color: var(--gold); margin: 0 0 10px 0; }
+  p { color: rgba(255,255,255,0.7); margin-bottom: 20px; }
+  input {
+    width: 100%; padding: 15px; font-size: 1.2rem;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+    color: white; border-radius: 8px; text-align: center; font-family: monospace;
+    text-transform: uppercase;
+  }
+  input:focus { border-color: var(--gold); outline: none; }
+  button {
+    width: 100%; padding: 15px; margin-top: 15px;
+    background: var(--gold); color: black; font-weight: bold; font-size: 1.1rem;
+    border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase;
+  }
+  button:hover { filter: brightness(1.1); }
+  
+  .result { margin-top: 30px; display: none; text-align: left; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; }
+  .result.valid { border: 2px solid #00ff80; }
+  .result.invalid { border: 2px solid #ff3366; }
+  .result.expired { border: 2px solid #ffb700; }
+  
+  .badge { display: inline-block; padding: 5px 10px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
+  .badge.valid { background: rgba(0,255,128,0.2); color: #00ff80; }
+  .badge.invalid { background: rgba(255,51,102,0.2); color: #ff3366; }
+  .badge.expired { background: rgba(255,183,0,0.2); color: #ffb700; }
+  
+  .r-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+  .r-label { color: rgba(255,255,255,0.5); }
+  .r-val { font-weight: 600; text-align: right; }
+  .wish-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 6px; margin-top: 15px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>VERIFICADOR BELLATOR</h1>
+  <p>Ingresa el código anti-fraude del cromo especial.</p>
+  
+  <input type="text" id="codeInput" placeholder="BLT-EM-XXXX-PLAYER" autocomplete="off" spellcheck="false">
+  <button id="verifyBtn">Verificar Autenticidad</button>
+  
+  <div id="resultBox" class="result">
+    <div id="badge" class="badge"></div>
+    <div id="details"></div>
+  </div>
+</div>
+
+<script>
+  const verifyBtn = document.getElementById('verifyBtn');
+  const codeInput = document.getElementById('codeInput');
+  const resultBox = document.getElementById('resultBox');
+  const badge = document.getElementById('badge');
+  const details = document.getElementById('details');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const codeParam = urlParams.get('code');
+  if (codeParam) {
+    codeInput.value = codeParam;
+    verifyCode(codeParam);
+  }
+
+  verifyBtn.addEventListener('click', () => {
+    const code = codeInput.value.trim().toUpperCase();
+    if (code) verifyCode(code);
+  });
+
+  codeInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') verifyBtn.click();
+  });
+
+  async function verifyCode(code) {
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'Verificando...';
+    resultBox.style.display = 'none';
+    
+    try {
+      const res = await fetch(`/api/album/verify/${encodeURIComponent(code)}`);
+      
+      if (!res.ok) {
+        throw new Error('Código no encontrado o falso.');
+      }
+      
+      const data = await res.json();
+      showResult(data);
+    } catch (err) {
+      resultBox.className = 'result invalid';
+      badge.className = 'badge invalid';
+      badge.textContent = '❌ CÓDIGO FALSO O NO ENCONTRADO';
+      details.innerHTML = '<p style="text-align:center;color:#ff3366">Este código no existe en la base de datos o su firma criptográfica no coincide. Posible captura editada.</p>';
+      resultBox.style.display = 'block';
+    } finally {
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Verificar Autenticidad';
+    }
+  }
+
+  function showResult(data) {
+    let statusClass = 'valid';
+    let statusText = '✅ CÓDIGO VÁLIDO';
+    
+    if (data.status === 'expired') {
+      statusClass = 'expired';
+      statusText = '⏰ CÓDIGO EXPIRADO';
+    } else if (data.status === 'used') {
+      statusClass = 'invalid';
+      statusText = '❌ CÓDIGO YA FUE USADO';
+    }
+    
+    resultBox.className = `result ${statusClass}`;
+    badge.className = `badge ${statusClass}`;
+    badge.textContent = statusText;
+    
+    const actDate = new Date(data.activated_at).toLocaleString('es-ES');
+    const expDate = new Date(data.expires_at).toLocaleString('es-ES');
+    
+    let html = `
+      <div class="r-row"><span class="r-label">Jugador:</span> <span class="r-val">${data.pseudonimo}</span></div>
+      <div class="r-row"><span class="r-label">Cromo:</span> <span class="r-val" style="color:var(--gold)">${data.sticker_name}</span></div>
+      <div class="r-row"><span class="r-label">Tipo:</span> <span class="r-val" style="text-transform:uppercase">${data.special_type}</span></div>
+      <div class="r-row"><span class="r-label">Generado:</span> <span class="r-val">${actDate}</span></div>
+      <div class="r-row"><span class="r-label">Expira:</span> <span class="r-val">${expDate}</span></div>
+    `;
+    
+    if (data.wish_text && data.wish_text.trim() !== '') {
+      html += `<div class="wish-box"><strong>Deseo escrito:</strong><br>"${data.wish_text}"</div>`;
+    }
+    
+    details.innerHTML = html;
+    resultBox.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

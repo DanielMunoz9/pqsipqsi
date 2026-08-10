@@ -2469,6 +2469,46 @@
         document.title = `${driver.pseudonimo} - BELLATOR ROLBATTLE`;
         applyTheme(primaryColor);
 
+        // Easter Egg: Heather Yack Confetti/Balloons (for 24 hours around August 8)
+        if (driver.pseudonimo.toLowerCase() === 'heather yack') {
+          const now = new Date();
+          const targetDate = new Date("2026-08-08T00:00:00-05:00");
+          // check if we are within August 8th 2026 (local time)
+          if (now.getFullYear() === 2026 && now.getMonth() === 7 && now.getDate() === 8) {
+             if (window.confetti) {
+                const duration = 15 * 1000;
+                const animationEnd = Date.now() + duration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 99999 };
+                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+                const interval = setInterval(function() {
+                  const timeLeft = animationEnd - Date.now();
+                  if (timeLeft <= 0) return clearInterval(interval);
+                  const particleCount = 50 * (timeLeft / duration);
+                  window.confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                  window.confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+             }
+             // Add CSS Balloons
+             const style = document.createElement('style');
+             style.innerHTML = `
+               @keyframes floatUp { 0% { transform: translateY(100vh) rotate(-10deg); opacity: 1; } 100% { transform: translateY(-100vh) rotate(10deg); opacity: 0; } }
+               .balloon-egg { position: fixed; bottom: -100px; font-size: 3rem; z-index: 99998; animation: floatUp linear forwards; pointer-events: none; }
+             `;
+             document.head.appendChild(style);
+             for(let i = 0; i < 20; i++) {
+               setTimeout(() => {
+                 const balloon = document.createElement('div');
+                 balloon.className = 'balloon-egg';
+                 balloon.innerHTML = ['🎈','🎂','🎉','🎈','✨'][Math.floor(Math.random()*5)];
+                 balloon.style.left = Math.random() * 90 + 'vw';
+                 balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                 document.body.appendChild(balloon);
+                 setTimeout(() => balloon.remove(), 7000);
+               }, i * 300);
+             }
+          }
+        }
+
         document.getElementById('profile-breadcrumb').textContent = `Perfil de ${driver.pseudonimo}`;
 
         // Position number
@@ -3074,5 +3114,6 @@
       }
     });
   </script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </body>
 </html>

@@ -36,11 +36,35 @@
     .bet-tab.active { background: #d4af37; border-color: #d4af37; color: #0d1117; font-weight: bold; }
     
     .bet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .fight-card { background: linear-gradient(180deg, rgba(16,21,31,0.9), rgba(11,15,22,0.9)); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; }
+    .fight-card { background: linear-gradient(180deg, rgba(16,21,31,0.9), rgba(11,15,22,0.9)); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
     .fight-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg, #429fff, #ff5c40); }
     .fight-card.univ::before { background: linear-gradient(90deg, #d4af37, #ff5c40); }
+    .fight-card.closed-card { opacity: 0.6; }
+    .fight-card.closed-card:hover { opacity: 0.8; }
+    
+    /* Estelar fight card glow */
+    .fight-card.estelar { border-color: rgba(212,175,55,0.35); box-shadow: 0 0 20px rgba(212,175,55,0.08); animation: estelarGlow 4s ease-in-out infinite; }
+    .fight-card.estelar::before { height: 5px; background: linear-gradient(90deg, #d4af37, #fde047, #d4af37); background-size: 200% 100%; animation: estelarShine 3s linear infinite; }
+    @keyframes estelarGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(212,175,55,0.06); }
+      50% { box-shadow: 0 0 25px rgba(212,175,55,0.15); }
+    }
+    @keyframes estelarShine {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    /* Co-Estelar subtle shimmer */
+    .fight-card.co-estelar { border-color: rgba(168,139,250,0.25); }
+    .fight-card.co-estelar::before { height: 4px; background: linear-gradient(90deg, #a78bfa, #d4af37, #a78bfa); background-size: 200% 100%; animation: estelarShine 5s linear infinite; }
+    
     .fight-kicker { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; margin-bottom: 12px; }
     .fight-title { font-family: 'Teko', sans-serif; font-size: 1.6rem; line-height: 1; margin-bottom: 20px; color: #fff; }
+    .fight-card.estelar .fight-title { font-size: 1.9rem; background: linear-gradient(135deg, #d4af37, #fde047, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .fight-card.co-estelar .fight-title { font-size: 1.7rem; color: #c4b5fd; }
+    
+    .section-divider { grid-column: 1/-1; text-align: center; padding: 16px 0; margin: 8px 0; }
+    .section-divider h2 { font-family: 'Teko', sans-serif; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 4px; color: rgba(255,255,255,0.3); margin: 0; }
+    .section-divider hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 8px; }
     
     .fight-vs-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 24px; }
     .fighter-btn { flex: 1; min-width: 0; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; color: #fff; display:flex; flex-direction:column; align-items:center; gap:8px; }
@@ -246,7 +270,7 @@
     let playersDict = {};
     
     function startCountdown() {
-      const deadline = new Date("2026-08-30T05:00:00Z").getTime();
+      const deadline = new Date("2026-08-10T05:00:00Z").getTime();
       const el = document.getElementById('countdown-timer');
       if (!el) return;
       setInterval(() => {
@@ -391,8 +415,37 @@
           return;
         }
 
-        fightsGrid.innerHTML = fights.map(f => {
+        // Classify fights
+        const validLabels = ['Pelea Estelar', 'Pelea Co-Estelar', 'Pelea Oficial'];
+        const isClosed = f => (f.status === 'closed') || (f.label || '').toUpperCase().includes('FASE II') || (f.division || '').toUpperCase().includes('FASE II');
+        const isValidFight = f => validLabels.some(l => (f.label || '').includes(l)) || isClosed(f);
+        
+        const filtered = fights.filter(isValidFight);
+        const openFights = filtered.filter(f => !isClosed(f));
+        const closedFights = filtered.filter(f => isClosed(f));
+        
+        // Sort open fights: Estelar first, then Co-Estelar, then Oficial
+        const priority = f => {
+          const label = (f.label || '').toLowerCase();
+          if (label.includes('estelar') && !label.includes('co-estelar')) return 0;
+          if (label.includes('co-estelar')) return 1;
+          return 2;
+        };
+        openFights.sort((a, b) => priority(a) - priority(b));
+        
+        const allSorted = [...openFights, ...(closedFights.length ? closedFights : [])];
+
+        function renderFightCard(f, idx) {
           const isUniv = (f.division || '').toLowerCase().includes('universal');
+          const closed = isClosed(f);
+          const label = (f.label || '').toLowerCase();
+          const isEstelar = label.includes('estelar') && !label.includes('co-estelar');
+          const isCoEstelar = label.includes('co-estelar');
+          
+          let extraClass = isUniv ? 'univ' : '';
+          if (isEstelar && !closed) extraClass += ' estelar';
+          if (isCoEstelar && !closed) extraClass += ' co-estelar';
+          if (closed) extraClass += ' closed-card';
           
           let probHtml = '';
           let btnHtml = '';
@@ -444,10 +497,15 @@
           }
 
           const limit = Math.min(balance, 5);
+          
+          // Estelar badge
+          let kickerExtra = '';
+          if (isEstelar && !closed) kickerExtra = ' ⭐ EVENTO PRINCIPAL';
+          else if (isCoEstelar && !closed) kickerExtra = ' ✦ CO-ESTELAR';
 
           return `
-            <div class="fight-card ${isUniv ? 'univ' : ''}" id="fc-${f.fight_id}">
-              <div class="fight-kicker">${f.division}</div>
+            <div class="fight-card ${extraClass}" id="fc-${f.fight_id}">
+              <div class="fight-kicker">${f.division}${kickerExtra}</div>
               <div class="fight-title">${f.label}</div>
               <div class="fight-vs-row">
                 <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_a}', 'a')" id="fb-${f.fight_id}-a" style="display:flex;flex-direction:column;align-items:center;">
@@ -473,7 +531,7 @@
                 </div>
               </div>
               ${probHtml}
-              ${ (f.division || '').toUpperCase().includes('FASE II') || (f.label || '').toUpperCase().includes('FASE II') ? `
+              ${ closed ? `
               <div class="bet-action" style="background: rgba(225,29,72,0.1); border-color: rgba(225,29,72,0.3); text-align: center;">
                 <div style="color: #e11d48; font-family: 'Teko', sans-serif; font-size: 1.5rem; letter-spacing: 1px;">APUESTAS CERRADAS</div>
                 <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 4px;">El mercado para esta pelea ha cerrado</div>
@@ -491,7 +549,17 @@
               ${btnHtml}
             </div>
           `;
-        }).join('');
+        }
+        
+        let html = '';
+        // Open fights section
+        openFights.forEach((f, i) => { html += renderFightCard(f, i); });
+        // Closed fights section divider
+        if (closedFights.length > 0) {
+          html += '<div class="section-divider"><h2>Peleas Cerradas</h2><hr></div>';
+          closedFights.forEach((f, i) => { html += renderFightCard(f, i); });
+        }
+        fightsGrid.innerHTML = html;
       } catch (e) {
         console.error(e);
       }

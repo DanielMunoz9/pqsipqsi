@@ -6,7 +6,7 @@ import (
 	"log"
 	"math"
 	"net/http"
-	// "strings"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -468,7 +468,7 @@ func getBetsStatsHandler(w http.ResponseWriter, r *http.Request) {
 			p1, _ := p["player1_pseudo"].(string)
 			p2, _ := p["player2_pseudo"].(string)
 			div, _ := p["division"].(string)
-			_, _ = p["event_name"].(string)
+			event, _ := p["event_name"].(string)
 			// if !strings.Contains(strings.ToUpper(div), "FASE II") && !strings.Contains(strings.ToUpper(event), "FASE II") {
 			// 	continue
 			// }

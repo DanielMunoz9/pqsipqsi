@@ -435,7 +435,7 @@ func main() {
 	router.HandleFunc("/api/bets/fights", cachePublicResponse(10*time.Second, getOpenBetFightsHandler)).Methods("GET")
 	router.HandleFunc("/api/bets/fights/{id}/details", cachePublicResponse(10*time.Second, getBetFightDetailsHandler)).Methods("GET")
 	router.HandleFunc("/api/bets/stats", cachePublicResponse(15*time.Second, getBetsStatsHandler)).Methods("GET")
-	
+
 	// Álbum Bellator
 	router.HandleFunc("/api/album/catalog", albumCatalogHandler).Methods("GET")
 	router.HandleFunc("/api/album/config", albumConfigHandler).Methods("GET")
@@ -450,6 +450,8 @@ func main() {
 	router.HandleFunc("/api/album/trades/accept", albumTradeAcceptHandler).Methods("POST")
 	router.HandleFunc("/api/album/collection", albumCollectionHandler).Methods("GET")
 	router.HandleFunc("/api/album/open-pack", albumOpenPackHandler).Methods("POST")
+	router.HandleFunc("/api/album/activate", albumActivateHandler).Methods("POST")
+	router.HandleFunc("/api/album/verify/{code}", albumVerifyHandler).Methods("GET")
 	router.HandleFunc("/api/bets/my", myBetsHandler).Methods("GET")
 	router.HandleFunc("/api/bets/place", placeBetHandler).Methods("POST")
 
@@ -499,7 +501,7 @@ func main() {
 	router.Handle("/api/admin/album/grant-packs", jwtMiddleware(http.HandlerFunc(adminAlbumGrantPacksHandler))).Methods("POST")
 	router.Handle("/api/admin/bracket/result", jwtMiddleware(http.HandlerFunc(adminBracketResultHandler))).Methods("POST")
 	router.Handle("/api/admin/bets", jwtMiddleware(http.HandlerFunc(adminBetsHandler))).Methods("GET")
-	
+
 	// Admin: eliminar jugador
 	router.Handle("/api/admin/jugador/{pseudonimo}", jwtMiddleware(http.HandlerFunc(eliminarJugadorHandler))).Methods("DELETE")
 
@@ -5187,7 +5189,7 @@ func verifyPlayerCredentials(pseudonimo, playerKey string) (map[string]interface
 		Filter("pseudonimo", "ilike", trimmedPseudo).
 		Limit(25, "").
 		ExecuteTo(&existsRows)
-	
+
 	if err != nil {
 		return nil, "", err
 	}

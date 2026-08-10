@@ -7547,7 +7547,23 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
     <button class="overlay-close" id="overlay-close" type="button" aria-label="Cerrar">&#10005;</button>
     <div class="overlay-panel">
       <button class="side-nav light" id="overlay-prev" type="button" aria-label="Anterior">&#8249;</button>
-      <div class="sticker-frame" id="overlay-card-host"></div>
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div class="sticker-frame" id="overlay-card-host"></div>
+        <div id="activation-container" style="display:none; margin-top: 20px; text-align:center; max-width: 300px; width:100%;">
+          <button id="activate-skill-btn" style="background:#D4AF37; color:#000; font-family:Teko, sans-serif; font-size:1.3rem; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; width:100%; box-shadow:0 4px 15px rgba(212,175,55,0.4);">⚡ ACTIVAR HABILIDAD</button>
+          <div id="activation-form" style="display:none; margin-top:15px; background:rgba(0,0,0,0.6); padding:15px; border-radius:8px; border:1px solid #D4AF37;">
+            <p style="font-size:0.85rem; color:#fff; margin-bottom:10px; line-height:1.2;">Al activar, perderás esta copia del cromo y recibirás un código anti-fraude para usar en combate.</p>
+            <textarea id="activation-wish" placeholder="Escribe tu deseo (opcional)" style="width:100%; padding:10px; border-radius:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:#fff; margin-bottom:10px; display:none; resize:none;" rows="3"></textarea>
+            <button id="confirm-activation-btn" style="background:#ff3366; color:#fff; font-weight:bold; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; width:100%;">CONFIRMAR CONSUMO</button>
+          </div>
+          <div id="activation-result" style="display:none; margin-top:15px; background:rgba(212,175,55,0.1); border:2px dashed #D4AF37; padding:15px; border-radius:8px;">
+            <div style="font-family:Teko, sans-serif; font-size:1.1rem; color:#D4AF37;">CÓDIGO GENERADO:</div>
+            <div id="activation-code" style="font-family:monospace; font-size:1.2rem; color:#fff; font-weight:bold; margin:10px 0; user-select:all; background:#000; padding:10px; border-radius:6px;">BLT-EM-XXXX-PLAYER</div>
+            <p style="font-size:0.75rem; color:rgba(255,255,255,0.7); margin-bottom:0;">Toma screenshot de esto. Es válido por 7 días.</p>
+            <button id="activation-copy-btn" style="background:#fff; color:#000; font-size:0.8rem; font-weight:bold; padding:5px 10px; margin-top:10px; border:none; border-radius:4px; cursor:pointer;">Copiar Código</button>
+          </div>
+        </div>
+      </div>
       <button class="side-nav" id="overlay-next" type="button" aria-label="Siguiente">&#8250;</button>
     </div>
   </div>
@@ -10406,6 +10422,77 @@ function renderOverlay() {
   refs.overlayCardHost.innerHTML = stickerCardMarkup(sticker);
   refs.overlayPrev.disabled = state.overlayIndex === 0;
   refs.overlayNext.disabled = state.overlayIndex === state.overlayPool.length - 1;
+
+  // Activa UI de consumo si es especial
+  const actContainer = document.getElementById('activation-container');
+  const actBtn = document.getElementById('activate-skill-btn');
+  const actForm = document.getElementById('activation-form');
+  const actResult = document.getElementById('activation-result');
+  const actWish = document.getElementById('activation-wish');
+  
+  if (actContainer) {
+    actForm.style.display = 'none';
+    actResult.style.display = 'none';
+    actBtn.style.display = 'block';
+    
+    const specialType = safeText(sticker.specialType, '').toLowerCase();
+    const canActivate = ['esmeralda', 'iconico', 'extra', 'diamante'].includes(specialType);
+    
+    if (canActivate && sticker.quantity >= 1) {
+      actContainer.style.display = 'block';
+      actBtn.onclick = () => {
+        actBtn.style.display = 'none';
+        actForm.style.display = 'block';
+        actWish.style.display = specialType === 'esmeralda' ? 'block' : 'none';
+        actWish.value = '';
+      };
+      
+      const confirmBtn = document.getElementById('confirm-activation-btn');
+      confirmBtn.onclick = async () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'PROCESANDO...';
+        try {
+          const res = await fetch(albumApiUrl('/api/album/activate'), {
+            method: 'POST',
+            headers: requestHeaders(true),
+            body: JSON.stringify({
+              sticker_id: sticker.id,
+              wish_text: actWish.value
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Error al activar');
+          
+          actForm.style.display = 'none';
+          document.getElementById('activation-code').textContent = data.code;
+          actResult.style.display = 'block';
+          
+          // Actualizar inventario local para reflejar que se gastó
+          sticker.quantity -= 1;
+          if (sticker.quantity <= 0) {
+            sticker.collected = false;
+          }
+          renderOverlay(); // Refresh UI
+          loadAlbumData({silent: true}); // Refresh background data
+          
+        } catch (err) {
+          alert('No se pudo activar: ' + err.message);
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'CONFIRMAR CONSUMO';
+        }
+      };
+      
+      document.getElementById('activation-copy-btn').onclick = () => {
+        navigator.clipboard.writeText(document.getElementById('activation-code').textContent);
+        document.getElementById('activation-copy-btn').textContent = '¡Copiado!';
+        setTimeout(() => document.getElementById('activation-copy-btn').textContent = 'Copiar Código', 2000);
+      };
+      
+    } else {
+      actContainer.style.display = 'none';
+    }
+  }
+
 }
 
 function openOverlay(stickerId) {

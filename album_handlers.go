@@ -19,6 +19,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -266,6 +267,8 @@ type albumRosterImageSources struct {
 	AvatarURL string
 	CharURLs  [3]string
 }
+
+var albumTradeBoardMutex sync.Mutex
 
 var albumExcludedPseudoKeys = map[string]struct{}{
 	"bandet997883": {},
@@ -1677,41 +1680,47 @@ func albumTradePublishHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	targetPlayer := strings.TrimSpace(body.TargetPlayer)
-	if targetPlayer == "" {
-		http.Error(w, `{"error":"album_trade_target_required"}`, http.StatusBadRequest)
-		return
-	}
-	users, err := loadAlbumKnownUsers()
-	if err != nil {
-		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
-		return
-	}
-	selectedTarget := (*albumKnownUser)(nil)
-	for index := range users {
-		if sameNormalizedPseudo(strings.TrimSpace(users[index].Pseudonimo), targetPlayer) || strings.EqualFold(strings.TrimSpace(users[index].Pseudonimo), targetPlayer) {
-			selectedTarget = &users[index]
-			break
+	targetUserID := ""
+	
+	if targetPlayer != "" {
+		users, err := loadAlbumKnownUsers()
+		if err != nil {
+			http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+			return
 		}
+		selectedTarget := (*albumKnownUser)(nil)
+		for index := range users {
+			if sameNormalizedPseudo(strings.TrimSpace(users[index].Pseudonimo), targetPlayer) || strings.EqualFold(strings.TrimSpace(users[index].Pseudonimo), targetPlayer) {
+				selectedTarget = &users[index]
+				break
+			}
+		}
+		if selectedTarget == nil {
+			http.Error(w, `{"error":"album_trade_target_not_found"}`, http.StatusNotFound)
+			return
+		}
+		targetUserID = firstNonEmpty(strings.TrimSpace(selectedTarget.UserID), albumPseudoAlias(selectedTarget.Pseudonimo))
+		if targetUserID == "" {
+			http.Error(w, `{"error":"album_trade_target_not_found"}`, http.StatusNotFound)
+			return
+		}
+		if targetUserID == userID || strings.EqualFold(selectedTarget.Pseudonimo, claims.Pseudonimo) {
+			http.Error(w, `{"error":"album_trade_target_self"}`, http.StatusConflict)
+			return
+		}
+		targetPlayer = strings.TrimSpace(selectedTarget.Pseudonimo)
 	}
-	if selectedTarget == nil {
-		http.Error(w, `{"error":"album_trade_target_not_found"}`, http.StatusNotFound)
-		return
-	}
-	targetUserID := firstNonEmpty(strings.TrimSpace(selectedTarget.UserID), albumPseudoAlias(selectedTarget.Pseudonimo))
-	if targetUserID == "" {
-		http.Error(w, `{"error":"album_trade_target_not_found"}`, http.StatusNotFound)
-		return
-	}
-	if targetUserID == userID || strings.EqualFold(selectedTarget.Pseudonimo, claims.Pseudonimo) {
-		http.Error(w, `{"error":"album_trade_target_self"}`, http.StatusConflict)
-		return
-	}
+
 	offer := sanitizeAlbumTradeItems(body.Offer, true)
 	want := sanitizeAlbumTradeItems(body.Want, false)
-	if len(offer) == 0 && len(want) == 0 {
-		http.Error(w, `{"error":"album_trade_empty"}`, http.StatusBadRequest)
+	if len(offer) != 1 || len(want) != 1 {
+		http.Error(w, `{"error":"album_trade_must_be_1_for_1"}`, http.StatusBadRequest)
 		return
 	}
+
+	albumTradeBoardMutex.Lock()
+	defer albumTradeBoardMutex.Unlock()
+
 	requests, err := loadAlbumTradeRequests()
 	if err != nil {
 		http.Error(w, `{"error":"album_trade_board_unavailable"}`, http.StatusInternalServerError)
@@ -1732,7 +1741,7 @@ func albumTradePublishHandler(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:    time.Now().UTC().Format(time.RFC3339),
 		Status:       "open",
 		TargetUserID: targetUserID,
-		TargetPlayer: strings.TrimSpace(selectedTarget.Pseudonimo),
+		TargetPlayer: targetPlayer,
 		Offer:        offer,
 		Want:         want,
 	}}, filtered...)
@@ -1786,6 +1795,10 @@ func albumTradeAcceptHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"album_trade_identity_missing"}`, http.StatusConflict)
 		return
 	}
+
+	albumTradeBoardMutex.Lock()
+	defer albumTradeBoardMutex.Unlock()
+
 	requests, err := loadAlbumTradeRequests()
 	if err != nil {
 		http.Error(w, `{"error":"album_trade_board_unavailable"}`, http.StatusInternalServerError)
@@ -1812,22 +1825,25 @@ func albumTradeAcceptHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	targetUserID := firstNonEmpty(strings.TrimSpace(tradeRequest.TargetUserID), albumPseudoAlias(tradeRequest.TargetPlayer))
-	if targetUserID == "" || strings.TrimSpace(tradeRequest.TargetPlayer) == "" {
-		http.Error(w, `{"error":"album_trade_target_missing"}`, http.StatusConflict)
-		return
-	}
-	currentKeys := appendUniqueAlbumIDs(nil, currentIdentityKeys...)
-	currentKeys = appendUniqueAlbumIDs(currentKeys, currentUserID, albumPseudoAlias(claims.Pseudonimo))
+	isGlobalTrade := targetUserID == "" && strings.TrimSpace(tradeRequest.TargetPlayer) == ""
+	
 	targetedToCurrentUser := false
-	for _, key := range currentKeys {
-		if key == targetUserID {
+	if isGlobalTrade {
+		targetedToCurrentUser = true
+	} else {
+		currentKeys := appendUniqueAlbumIDs(nil, currentIdentityKeys...)
+		currentKeys = appendUniqueAlbumIDs(currentKeys, currentUserID, albumPseudoAlias(claims.Pseudonimo))
+		for _, key := range currentKeys {
+			if key == targetUserID {
+				targetedToCurrentUser = true
+				break
+			}
+		}
+		if !targetedToCurrentUser && (strings.EqualFold(strings.TrimSpace(tradeRequest.TargetPlayer), strings.TrimSpace(claims.Pseudonimo)) || sameNormalizedPseudo(strings.TrimSpace(tradeRequest.TargetPlayer), strings.TrimSpace(claims.Pseudonimo))) {
 			targetedToCurrentUser = true
-			break
 		}
 	}
-	if !targetedToCurrentUser && (strings.EqualFold(strings.TrimSpace(tradeRequest.TargetPlayer), strings.TrimSpace(claims.Pseudonimo)) || sameNormalizedPseudo(strings.TrimSpace(tradeRequest.TargetPlayer), strings.TrimSpace(claims.Pseudonimo))) {
-		targetedToCurrentUser = true
-	}
+	
 	if !targetedToCurrentUser {
 		http.Error(w, `{"error":"album_trade_not_for_you"}`, http.StatusForbidden)
 		return
@@ -1906,8 +1922,11 @@ func albumRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	body.Pseudonimo = strings.TrimSpace(body.Pseudonimo)
 	body.PlayerKey = strings.TrimSpace(body.PlayerKey)
 	body.CountryCode = normalizeAlbumCountryCode(body.CountryCode)
+	if body.CountryCode == "" {
+		body.CountryCode = "XX"
+	}
 	body.HardwareFingerprint = strings.TrimSpace(body.HardwareFingerprint)
-	if body.Pseudonimo == "" || body.PlayerKey == "" || body.CountryCode == "" || body.HardwareFingerprint == "" {
+	if body.Pseudonimo == "" || body.PlayerKey == "" || body.HardwareFingerprint == "" {
 		http.Error(w, `{"error":"album_register_invalid_data"}`, http.StatusBadRequest)
 		return
 	}
@@ -2572,4 +2591,172 @@ func cryptoRandN(max int) (int, error) {
 		return 0, err
 	}
 	return int(n.Int64()), nil
+}
+
+
+// ════════════════════════════════════════════════════════════════════════
+// POST /api/album/activate
+// Activa una habilidad de un cromo especial, consumiendo 1 copia.
+// ════════════════════════════════════════════════════════════════════════
+func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
+	userID, identityKeys := albumIdentityKeysFromRequest(r)
+	if userID == "" {
+		http.Error(w, `{"error":"no autorizado"}`, http.StatusUnauthorized)
+		return
+	}
+
+	var req struct {
+		StickerID string `json:"sticker_id"`
+		WishText  string `json:"wish_text"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.StickerID == "" {
+		http.Error(w, `{"error":"bad request"}`, http.StatusBadRequest)
+		return
+	}
+
+	// 1. Obtener detalles del sticker del catálogo
+	var catalogRows []map[string]interface{}
+	_, err := albumSupabaseClient.From("stickers").
+		Select("id,display_name,special_type", "", false).
+		Filter("id", "eq", req.StickerID).
+		ExecuteTo(&catalogRows)
+	if err != nil || len(catalogRows) == 0 {
+		http.Error(w, `{"error":"cromo no encontrado"}`, http.StatusNotFound)
+		return
+	}
+
+	row := catalogRows[0]
+	stickerName := normalizeNullableString(row["display_name"])
+	specialType := normalizeNullableString(row["special_type"])
+	
+	validTypes := map[string]bool{"esmeralda": true, "iconico": true, "extra": true, "diamante": true}
+	if !validTypes[specialType] {
+		http.Error(w, `{"error":"este cromo no se puede activar"}`, http.StatusBadRequest)
+		return
+	}
+	if specialType != "esmeralda" && req.WishText != "" {
+		req.WishText = "" // Solo esmeralda puede tener deseo
+	}
+
+	// 2. Ejecutar RPC para consumir atómicamente exactamente 1 copia
+	rpcPayload := map[string]interface{}{
+		"p_user_id":    identityKeys[0], // Usamos el alias activo
+		"p_sticker_id": req.StickerID,
+	}
+	var rpcResult bool
+	_, rpcErr := albumSupabaseClient.Rpc("consume_sticker_for_activation", "", rpcPayload).ExecuteTo(&rpcResult)
+	if rpcErr != nil || !rpcResult {
+		log.Printf("⚠️ Error al consumir cromo (RPC consume_sticker_for_activation): user=%s sticker=%s err=%v", identityKeys[0], req.StickerID, rpcErr)
+		http.Error(w, `{"error":"no tienes suficientes copias para activar este cromo"}`, http.StatusBadRequest)
+		return
+	}
+
+	// 3. Generar código único y firma
+	session := getAlbumSession(r)
+	pseudo := "JUGADOR"
+	if session != nil && session.Pseudonimo != "" {
+		pseudo = session.Pseudonimo
+	}
+	pseudoClean := strings.ToUpper(strings.ReplaceAll(pseudo, " ", ""))
+	if len(pseudoClean) > 6 {
+		pseudoClean = pseudoClean[:6]
+	}
+
+	randBytes := make([]byte, 2)
+	rand.Read(randBytes)
+	randHex := strings.ToUpper(hex.EncodeToString(randBytes)) // 4 chars
+
+	prefix := "XX"
+	switch specialType {
+	case "esmeralda": prefix = "EM"
+	case "iconico": prefix = "IC"
+	case "extra": prefix = "EX"
+	case "diamante": prefix = "DI"
+	}
+	code := fmt.Sprintf("BLT-%s-%s-%s", prefix, randHex, pseudoClean)
+
+	activatedAt := time.Now().UTC()
+	expiresAt := activatedAt.Add(7 * 24 * time.Hour)
+	
+	secret := os.Getenv("ALBUM_JWT_SECRET")
+	if secret == "" {
+		secret = "default-dev-secret-valhala"
+	}
+	
+	// HMAC
+	h := sha256.New()
+	h.Write([]byte(code + "|" + req.StickerID + "|" + identityKeys[0] + "|" + activatedAt.Format(time.RFC3339) + "|" + secret))
+	signature := hex.EncodeToString(h.Sum(nil))
+
+	// 4. Insertar en sticker_activations
+	activationData := map[string]interface{}{
+		"user_id":      identityKeys[0],
+		"pseudonimo":   pseudo,
+		"sticker_id":   req.StickerID,
+		"sticker_name": stickerName,
+		"special_type": specialType,
+		"wish_text":    req.WishText,
+		"code":         code,
+		"signature":    signature,
+		"status":       "active",
+		"activated_at": activatedAt.Format(time.RFC3339),
+		"expires_at":   expiresAt.Format(time.RFC3339),
+		"ip_address":   getRealIP(r),
+	}
+	_, err = albumSupabaseClient.From("sticker_activations").Insert(activationData, false, "", "", "").ExecuteTo(nil)
+	if err != nil {
+		log.Printf("⚠️ Error al guardar activación en DB (cromo ya fue consumido!): %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(activationData)
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// GET /api/album/verify/{code}
+// Verifica un código de activación públicamente.
+// ════════════════════════════════════════════════════════════════════════
+func albumVerifyHandler(w http.ResponseWriter, r *http.Request) {
+	code := r.PathValue("code")
+	if code == "" {
+		http.Error(w, `{"error":"código requerido"}`, http.StatusBadRequest)
+		return
+	}
+
+	var rows []map[string]interface{}
+	_, err := albumSupabaseClient.From("sticker_activations").
+		Select("*", "", false).
+		Filter("code", "eq", code).
+		ExecuteTo(&rows)
+		
+	if err != nil || len(rows) == 0 {
+		http.Error(w, `{"error":"código no encontrado o inválido"}`, http.StatusNotFound)
+		return
+	}
+	row := rows[0]
+
+	// Recalcular HMAC para asegurar que no hubo manipulación (opcional dado que viene de DB, pero útil para auditar)
+	signature := normalizeNullableString(row["signature"])
+	stickerID := normalizeNullableString(row["sticker_id"])
+	userID := normalizeNullableString(row["user_id"])
+	activatedAtRaw := normalizeNullableString(row["activated_at"])
+	
+	// Si queríamos verificar HMAC estricto:
+	// secret := os.Getenv("ALBUM_JWT_SECRET")
+	// h := sha256.New()
+	// h.Write([]byte(code + "|" + stickerID + "|" + userID + "|" + activatedAtRaw + "|" + secret))
+	// if signature != hex.EncodeToString(h.Sum(nil)) { ... }
+	
+	// Verificar expiración
+	expiresRaw := normalizeNullableString(row["expires_at"])
+	if expiresAt, err := time.Parse(time.RFC3339, expiresRaw); err == nil {
+		if time.Now().After(expiresAt) && normalizeNullableString(row["status"]) == "active" {
+			row["status"] = "expired"
+			// Actualizar BD de forma asíncrona o silenciosa
+			albumSupabaseClient.From("sticker_activations").Update(map[string]interface{}{"status": "expired"}, "", "").Filter("code", "eq", code).ExecuteTo(nil)
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(row)
 }

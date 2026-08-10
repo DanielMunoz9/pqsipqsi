@@ -1,0 +1,35 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/supabase-community/postgrest-go"
+)
+
+func main() {
+	var results []map[string]interface{}
+	err := runMatchHistorySelectWithFallback(matchHistoryRecentSelectFallbacks(), func(selectExpr string) error {
+		results = nil
+		_, err := supabaseClient.From("match_history").
+			Select(selectExpr, "", false).
+			Order("event_date", &postgrest.OrderOpts{Ascending: false}).
+			Limit(20, "").
+			ExecuteTo(&results)
+		return err
+	})
+	if err != nil {
+		fmt.Printf("Error match_history: %v\n", err)
+	}
+	fmt.Printf("match_history count: %d\n", len(results))
+	b, _ := json.MarshalIndent(results, "", "  ")
+	fmt.Println(string(b))
+
+	upcomingOut, err2 := queryRecentCompletedFightsFromUpcoming(20)
+	if err2 != nil {
+		fmt.Printf("Error upcoming_fights: %v\n", err2)
+	}
+	fmt.Printf("upcoming_fights fallback count: %d\n", len(upcomingOut))
+	b2, _ := json.MarshalIndent(upcomingOut, "", "  ")
+	fmt.Println(string(b2))
+}

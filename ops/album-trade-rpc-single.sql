@@ -1,4 +1,6 @@
--- RPC para ejecutar un intercambio atómicamente
+-- Corrección para permitir intercambios de cromos con cantidad = 1 (útil para Diamantes, Esmeraldas, etc.)
+-- Al bajar la cantidad a 0, el cromo desaparecerá visualmente del inventario y el usuario podrá pedirlo nuevamente.
+
 CREATE OR REPLACE FUNCTION album.execute_trade(
     p_requester_ids text[],
     p_accepter_ids text[],
@@ -28,7 +30,7 @@ BEGIN
         UPDATE album.user_stickers us
         SET quantity = us.quantity - 1
         FROM cte
-        WHERE us.id = cte.id AND cte.quantity > 1
+        WHERE us.id = cte.id AND cte.quantity > 0
         RETURNING us.id INTO v_updated_id;
 
         IF v_updated_id IS NULL THEN
@@ -49,7 +51,7 @@ BEGIN
         UPDATE album.user_stickers us
         SET quantity = us.quantity - 1
         FROM cte
-        WHERE us.id = cte.id AND cte.quantity > 1
+        WHERE us.id = cte.id AND cte.quantity > 0
         RETURNING us.id INTO v_updated_id;
 
         IF v_updated_id IS NULL THEN
