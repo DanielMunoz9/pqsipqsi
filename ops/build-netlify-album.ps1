@@ -16,6 +16,8 @@ Copy-Item -Path (Join-Path $sourcePath 'robots.txt') -Destination (Join-Path $Ou
 Copy-Item -Path (Join-Path $sourcePath 'apuestas.html') -Destination (Join-Path $Output 'apuestas.html') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'sorteo.html') -Destination (Join-Path $Output 'sorteo.html') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'admin.html') -Destination (Join-Path $Output 'admin.html') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'verificar.html') -Destination (Join-Path $Output 'verificar.html') -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $sourcePath 'tradeos.html') -Destination (Join-Path $Output 'tradeos.html') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'shared.css') -Destination (Join-Path $Output 'shared.css') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'sentinel.js') -Destination (Join-Path $Output 'sentinel.js') -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path $sourcePath 'tracker.js') -Destination (Join-Path $Output 'tracker.js') -ErrorAction SilentlyContinue

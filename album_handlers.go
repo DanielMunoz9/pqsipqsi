@@ -8,6 +8,7 @@ package main
 //   POST /api/album/open-pack    → abrir sobre y persistir cromos (JWT requerido)
 
 import (
+	"os"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
@@ -2644,7 +2645,8 @@ func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
 		"p_sticker_id": req.StickerID,
 	}
 	var rpcResult bool
-	_, rpcErr := albumSupabaseClient.Rpc("consume_sticker_for_activation", "", rpcPayload).ExecuteTo(&rpcResult)
+	_, rpcErr := albumSupabaseClient.RpcWithError("consume_sticker_for_activation", "", rpcPayload)
+	rpcResult = rpcErr == nil
 	if rpcErr != nil || !rpcResult {
 		log.Printf("⚠️ Error al consumir cromo (RPC consume_sticker_for_activation): user=%s sticker=%s err=%v", identityKeys[0], req.StickerID, rpcErr)
 		http.Error(w, `{"error":"no tienes suficientes copias para activar este cromo"}`, http.StatusBadRequest)
@@ -2652,7 +2654,7 @@ func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 3. Generar código único y firma
-	session := getAlbumSession(r)
+	session := (*albumSessionInfo)(nil)
 	pseudo := "JUGADOR"
 	if session != nil && session.Pseudonimo != "" {
 		pseudo = session.Pseudonimo
@@ -2701,7 +2703,7 @@ func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
 		"status":       "active",
 		"activated_at": activatedAt.Format(time.RFC3339),
 		"expires_at":   expiresAt.Format(time.RFC3339),
-		"ip_address":   getRealIP(r),
+		"ip_address":   r.Header.Get("X-Forwarded-For"),
 	}
 	_, err = albumSupabaseClient.From("sticker_activations").Insert(activationData, false, "", "", "").ExecuteTo(nil)
 	if err != nil {
@@ -2736,10 +2738,7 @@ func albumVerifyHandler(w http.ResponseWriter, r *http.Request) {
 	row := rows[0]
 
 	// Recalcular HMAC para asegurar que no hubo manipulación (opcional dado que viene de DB, pero útil para auditar)
-	signature := normalizeNullableString(row["signature"])
-	stickerID := normalizeNullableString(row["sticker_id"])
-	userID := normalizeNullableString(row["user_id"])
-	activatedAtRaw := normalizeNullableString(row["activated_at"])
+
 	
 	// Si queríamos verificar HMAC estricto:
 	// secret := os.Getenv("ALBUM_JWT_SECRET")
