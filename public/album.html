@@ -11278,10 +11278,10 @@ function bindEvents() {
   if (refs.saveKeyButton) refs.saveKeyButton.addEventListener('click', syncKey);
   if (refs.registerFastButton) refs.registerFastButton.addEventListener('click', registerQuickIdentity);
   if (refs.clearKeyButton) refs.clearKeyButton.addEventListener('click', clearKey);
-  [refs.pseudoInput, refs.keyInput].forEach((input) => if (input) input.addEventListener('keydown', (event) => {
+  [refs.pseudoInput, refs.keyInput].forEach((input) => input && input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') syncKey();
   }));
-  [refs.registerPseudoInput, refs.registerCountrySelect].forEach((input) => if (input) input.addEventListener('keydown', (event) => {
+  [refs.registerPseudoInput, refs.registerCountrySelect].forEach((input) => input && input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') registerQuickIdentity();
   }));
 
