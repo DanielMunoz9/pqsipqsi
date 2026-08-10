@@ -11251,10 +11251,10 @@ function promptAlbumLogin() {
 }
 
 function bindEvents() {
-  refs.enterAlbumButton.addEventListener('click', () => {
+  if (refs.enterAlbumButton) refs.enterAlbumButton.addEventListener('click', () => {
     switchScene('album');
   });
-  refs.introPackButton.addEventListener('click', openPack);
+  if (refs.introPackButton) refs.introPackButton.addEventListener('click', openPack);
   refs.hubOpenAlbum && refs.hubOpenAlbum.addEventListener('click', () => {
     switchScene('album');
   });
@@ -11273,78 +11273,78 @@ function bindEvents() {
     refs.invTabAll && refs.invTabAll.classList.remove('active');
     renderInventoryModal('trade');
   });
-  refs.albumPackButton.addEventListener('click', openPack);
-  refs.backIntroButton.addEventListener('click', () => switchScene('intro'));
-  refs.saveKeyButton.addEventListener('click', syncKey);
-  refs.registerFastButton.addEventListener('click', registerQuickIdentity);
-  refs.clearKeyButton.addEventListener('click', clearKey);
-  [refs.pseudoInput, refs.keyInput].forEach((input) => input.addEventListener('keydown', (event) => {
+  if (refs.albumPackButton) refs.albumPackButton.addEventListener('click', openPack);
+  if (refs.backIntroButton) refs.backIntroButton.addEventListener('click', () => switchScene('intro'));
+  if (refs.saveKeyButton) refs.saveKeyButton.addEventListener('click', syncKey);
+  if (refs.registerFastButton) refs.registerFastButton.addEventListener('click', registerQuickIdentity);
+  if (refs.clearKeyButton) refs.clearKeyButton.addEventListener('click', clearKey);
+  [refs.pseudoInput, refs.keyInput].forEach((input) => if (input) input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') syncKey();
   }));
-  [refs.registerPseudoInput, refs.registerCountrySelect].forEach((input) => input.addEventListener('keydown', (event) => {
+  [refs.registerPseudoInput, refs.registerCountrySelect].forEach((input) => if (input) input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') registerQuickIdentity();
   }));
 
-  refs.pagePrev.addEventListener('click', () => navigatePage(-1));
-  refs.pageNext.addEventListener('click', () => navigatePage(1));
+  if (refs.pagePrev) refs.pagePrev.addEventListener('click', () => navigatePage(-1));
+  if (refs.pageNext) refs.pageNext.addEventListener('click', () => navigatePage(1));
 
   const mobilePagePrev = document.getElementById('mobile-page-prev');
   const mobilePageNext = document.getElementById('mobile-page-next');
   mobilePagePrev && mobilePagePrev.addEventListener('click', () => navigatePage(-1));
   mobilePageNext && mobilePageNext.addEventListener('click', () => navigatePage(1));
 
-  refs.pagePill.addEventListener('click', () => {
+  if (refs.pagePill) refs.pagePill.addEventListener('click', () => {
     if (refs.pageJumpMenu && !refs.pageJumpMenu.hidden) closePageJumpMenu();
     else openPageJumpMenu();
   });
   document.addEventListener('click', (e) => {
     if (refs.pageJumpMenu && !refs.pageJumpMenu.hidden && refs.pagePillWrap && !refs.pagePillWrap.contains(e.target)) closePageJumpMenu();
   });
-  refs.pageJumpMenu.addEventListener('click', (e) => {
+  if (refs.pageJumpMenu) refs.pageJumpMenu.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-jump-page]');
     if (!btn) return;
     jumpToPage(Number(btn.dataset.jumpPage));
   });
-  refs.packSceneButton.addEventListener('click', playPackOpening);
+  if (refs.packSceneButton) refs.packSceneButton.addEventListener('click', playPackOpening);
 
-  refs.revealPrev.addEventListener('click', () => {
+  if (refs.revealPrev) refs.revealPrev.addEventListener('click', () => {
     if (state.revealIndex <= 0) return;
     state.revealIndex -= 1;
     renderReveal();
   });
-  refs.revealNext.addEventListener('click', () => {
+  if (refs.revealNext) refs.revealNext.addEventListener('click', () => {
     if (state.revealIndex >= state.currentPack.length - 1) return;
     state.revealIndex += 1;
     renderReveal();
   });
-  refs.openAnotherButton.addEventListener('click', openPack);
-  refs.revealAlbumButton.addEventListener('click', () => switchScene('album'));
-  refs.revealPasteButton.addEventListener('click', goToPasteScene);
-  refs.revealDownloadBtn.addEventListener('click', () => {
+  if (refs.openAnotherButton) refs.openAnotherButton.addEventListener('click', openPack);
+  if (refs.revealAlbumButton) refs.revealAlbumButton.addEventListener('click', () => switchScene('album'));
+  if (refs.revealPasteButton) refs.revealPasteButton.addEventListener('click', goToPasteScene);
+  if (refs.revealDownloadBtn) refs.revealDownloadBtn.addEventListener('click', () => {
     const card = refs.revealCardHost;
     if (!card) return;
     const sticker = state.currentPack[state.revealIndex];
     const slug = sticker ? safeText(sticker.displayName, 'cromo').toLowerCase().replace(/\s+/g, '-') : 'cromo';
     downloadStickerCard(card, `cromo-${slug}.png`);
   });
-  refs.accessOpenPanel.addEventListener('click', () => {
+  if (refs.accessOpenPanel) refs.accessOpenPanel.addEventListener('click', () => {
     promptAlbumLogin();
     setStatus(hasAlbumIdentity() ? 'Gestiona tu acceso Bellator desde este panel.' : 'Entra o crea tu perfil Bellator desde este panel.', '');
   });
-  refs.hubLogout.addEventListener('click', clearKey);
-  refs.hubOpenTrade.addEventListener('click', () => { window.location.href = 'tradeos.html'; });
-  refs.tradeModalClose.addEventListener('click', closeTradeModal);
-  refs.tradeModalBackdrop.addEventListener('click', (e) => {
+  if (refs.hubLogout) refs.hubLogout.addEventListener('click', clearKey);
+  if (refs.hubOpenTrade) refs.hubOpenTrade.addEventListener('click', () => { window.location.href = 'tradeos.html'; });
+  if (refs.tradeModalClose) refs.tradeModalClose.addEventListener('click', closeTradeModal);
+  if (refs.tradeModalBackdrop) refs.tradeModalBackdrop.addEventListener('click', (e) => {
     if (e.target === refs.tradeModalBackdrop) closeTradeModal();
   });
-  refs.tradeTabOffer.addEventListener('click', () => {
+  if (refs.tradeTabOffer) refs.tradeTabOffer.addEventListener('click', () => {
     refs.tradeTabOffer.classList.add('active');
     refs.tradeTabImport.classList.remove('active');
     refs.tradePanelOffer.classList.add('active');
     refs.tradePanelImport.classList.remove('active');
     renderTradeOfferPanel();
   });
-  refs.tradeTabImport.addEventListener('click', () => {
+  if (refs.tradeTabImport) refs.tradeTabImport.addEventListener('click', () => {
     refs.tradeTabImport.classList.add('active');
     refs.tradeTabOffer.classList.remove('active');
     refs.tradePanelImport.classList.add('active');
@@ -11355,7 +11355,7 @@ function bindEvents() {
     state.tradeTargetPlayer = safeText(refs.tradeTargetSelect.value, '');
     renderTradeOfferPanel();
   });
-  refs.tradeCopyCodeButton.addEventListener('click', async () => {
+  if (refs.tradeCopyCodeButton) refs.tradeCopyCodeButton.addEventListener('click', async () => {
     const payload = publishTradeRequest();
     if (!payload) {
       const targetPlayer = safeText(state.tradeTargetPlayer, '');
@@ -11393,29 +11393,29 @@ function bindEvents() {
       refs.tradeCopyCodeButton.disabled = false;
     }
   });
-  refs.tradeDuplicateList.addEventListener('click', (event) => {
+  if (refs.tradeDuplicateList) refs.tradeDuplicateList.addEventListener('click', (event) => {
     const button = event.target.closest('[data-trade-offer-id]');
     if (!button) return;
     toggleTradeOfferSelection(button.getAttribute('data-trade-offer-id'));
   });
-  refs.tradeWantList.addEventListener('click', (event) => {
+  if (refs.tradeWantList) refs.tradeWantList.addEventListener('click', (event) => {
     const button = event.target.closest('[data-trade-want-id]');
     if (!button) return;
     toggleTradeWantSelection(button.getAttribute('data-trade-want-id'));
   });
-  refs.tradeWantFilter.addEventListener('input', () => {
+  if (refs.tradeWantFilter) refs.tradeWantFilter.addEventListener('input', () => {
     state.tradeWantFilter = refs.tradeWantFilter.value || '';
     renderTradeOfferPanel();
   });
-  refs.tradeBoardFilterOpen.addEventListener('click', () => {
+  if (refs.tradeBoardFilterOpen) refs.tradeBoardFilterOpen.addEventListener('click', () => {
     state.tradeBoardFilter = 'open';
     renderTradeBoard();
   });
-  refs.tradeBoardFilterAll.addEventListener('click', () => {
+  if (refs.tradeBoardFilterAll) refs.tradeBoardFilterAll.addEventListener('click', () => {
     state.tradeBoardFilter = 'all';
     renderTradeBoard();
   });
-  refs.tradeOfferResult.addEventListener('click', async (event) => {
+  if (refs.tradeOfferResult) refs.tradeOfferResult.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-trade-accept-id]');
     if (!button) return;
     const tradeId = safeText(button.getAttribute('data-trade-accept-id'), '');
@@ -11445,35 +11445,35 @@ function bindEvents() {
   if (refs.missionEditorSave) refs.missionEditorSave.addEventListener('click', saveMissionEditor);
   if (refs.missionEditorCancel) refs.missionEditorCancel.addEventListener('click', closeMissionEditor);
   if (refs.missionEditorReset) refs.missionEditorReset.addEventListener('click', resetMissionEditor);
-  refs.soundtrackSelect.addEventListener('change', () => applySoundtrackSelection(refs.soundtrackSelect.value));
-  refs.soundtrackToggle.addEventListener('click', toggleSoundtrack);
-  refs.soundtrackStop.addEventListener('click', stopSoundtrack);
+  if (refs.soundtrackSelect) refs.soundtrackSelect.addEventListener('change', () => applySoundtrackSelection(refs.soundtrackSelect.value));
+  if (refs.soundtrackToggle) refs.soundtrackToggle.addEventListener('click', toggleSoundtrack);
+  if (refs.soundtrackStop) refs.soundtrackStop.addEventListener('click', stopSoundtrack);
 
-  refs.accederToggle.addEventListener('click', () => {
+  if (refs.accederToggle) refs.accederToggle.addEventListener('click', () => {
     refs.identityPanelWrap.hidden = !refs.identityPanelWrap.hidden;
     refs.accederToggle.textContent = refs.identityPanelWrap.hidden
       ? 'Acceder con tu clave Bellator ▾'
       : 'Cerrar acceso ▴';
   });
 
-  refs.mnavIntro.addEventListener('click', () => switchScene('intro'));
-  refs.mnavPack.addEventListener('click', () => {
+  if (refs.mnavIntro) refs.mnavIntro.addEventListener('click', () => switchScene('intro'));
+  if (refs.mnavPack) refs.mnavPack.addEventListener('click', () => {
     if (state.loading || state.busy) return;
     refs.introPackButton.click();
   });
-  refs.mnavAlbum.addEventListener('click', () => switchScene('album'));
-  refs.mnavTrade.addEventListener('click', openTradeModal);
+  if (refs.mnavAlbum) refs.mnavAlbum.addEventListener('click', () => switchScene('album'));
+  if (refs.mnavTrade) refs.mnavTrade.addEventListener('click', openTradeModal);
 
-  refs.overlayClose.addEventListener('click', closeOverlay);
-  refs.overlay.addEventListener('click', (event) => {
+  if (refs.overlayClose) refs.overlayClose.addEventListener('click', closeOverlay);
+  if (refs.overlay) refs.overlay.addEventListener('click', (event) => {
     if (event.target === refs.overlay) closeOverlay();
   });
-  refs.overlayPrev.addEventListener('click', () => {
+  if (refs.overlayPrev) refs.overlayPrev.addEventListener('click', () => {
     if (state.overlayIndex <= 0) return;
     state.overlayIndex -= 1;
     renderOverlay();
   });
-  refs.overlayNext.addEventListener('click', () => {
+  if (refs.overlayNext) refs.overlayNext.addEventListener('click', () => {
     if (state.overlayIndex >= state.overlayPool.length - 1) return;
     state.overlayIndex += 1;
     renderOverlay();
@@ -11519,12 +11519,12 @@ function bindEvents() {
 
   let touchStartX = 0;
   let touchStartY = 0;
-  refs.albumHost.addEventListener('touchstart', (event) => {
+  if (refs.albumHost) refs.albumHost.addEventListener('touchstart', (event) => {
     touchStartX = event.touches[0].clientX;
     touchStartY = event.touches[0].clientY;
   }, { passive: true });
 
-  refs.albumHost.addEventListener('touchend', (event) => {
+  if (refs.albumHost) refs.albumHost.addEventListener('touchend', (event) => {
     if (state.currentScene !== 'album') return;
     const dx = event.changedTouches[0].clientX - touchStartX;
     const dy = event.changedTouches[0].clientY - touchStartY;
@@ -12166,7 +12166,7 @@ function initCreator() {
   });
 
   [nameInput, subtitleInput, countrySelect].forEach((el) => {
-    el.addEventListener('input', buildPreview);
+    if (el) el.addEventListener('input', buildPreview);
   });
 
   downloadBtn.addEventListener('click', async () => {
