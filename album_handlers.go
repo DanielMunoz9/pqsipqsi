@@ -2644,20 +2644,17 @@ func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
 		"p_user_id":    identityKeys[0], // Usamos el alias activo
 		"p_sticker_id": req.StickerID,
 	}
-	var rpcResult bool
 	_, rpcErr := albumSupabaseClient.RpcWithError("consume_sticker_for_activation", "", rpcPayload)
-	rpcResult = rpcErr == nil
-	if rpcErr != nil || !rpcResult {
+	if rpcErr != nil {
 		log.Printf("⚠️ Error al consumir cromo (RPC consume_sticker_for_activation): user=%s sticker=%s err=%v", identityKeys[0], req.StickerID, rpcErr)
 		http.Error(w, `{"error":"no tienes suficientes copias para activar este cromo"}`, http.StatusBadRequest)
 		return
 	}
 
 	// 3. Generar código único y firma
-	session := (*albumSessionInfo)(nil)
 	pseudo := "JUGADOR"
-	if session != nil && session.Pseudonimo != "" {
-		pseudo = session.Pseudonimo
+	if len(identityKeys) > 0 && identityKeys[0] != "" {
+		pseudo = identityKeys[0]
 	}
 	pseudoClean := strings.ToUpper(strings.ReplaceAll(pseudo, " ", ""))
 	if len(pseudoClean) > 6 {

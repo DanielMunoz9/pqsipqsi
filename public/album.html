@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
 <title>Bellator Album 2026</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap');
@@ -531,7 +532,7 @@ body[data-scene="reveal"]::after {
   position: relative;
   background: linear-gradient(92deg, #ffe9a6 0%, #ffffff 35%, var(--accent) 55%, #ffcf5a 100%);
   background-size: 220% 100%;
-  -webkit-background-clip: text; background-clip: text;
+  -webkit-background-clip: text; background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;
   filter: drop-shadow(0 4px 22px color-mix(in srgb, var(--accent) 55%, transparent));
   animation: intro-title-sheen 6s ease-in-out infinite;
@@ -988,7 +989,9 @@ body[data-scene="reveal"]::after {
   padding: 3px;
   background: linear-gradient(140deg,#7a4e0c,#ffd966 18%,#b8f0ff 36%,#fff 50%,#cca0ff 64%,#ffd966 82%,#7a4e0c);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
+  mask-composite: exclude;
           mask-composite: exclude;
   pointer-events: none;
 }
@@ -2497,22 +2500,64 @@ button, input { font: inherit; }
   display: block;
 }
 
+.slot-card.rarity-comun .slot-photo.fallback, .sticker-card.rarity-comun .sticker-photo.fallback { background: linear-gradient(135deg, rgba(14,28,52,.9), rgba(28,45,80,.95)); }
+.slot-card.rarity-raro .slot-photo.fallback, .sticker-card.rarity-raro .sticker-photo.fallback { background: linear-gradient(135deg, rgba(10,24,120,.9), rgba(18,56,200,.95)); }
+.slot-card.rarity-epico .slot-photo.fallback, .sticker-card.rarity-epico .sticker-photo.fallback { background: linear-gradient(135deg, rgba(90,14,140,.9), rgba(160,32,240,.95)); }
+.slot-card.rarity-legendario .slot-photo.fallback, .sticker-card.rarity-legendario .sticker-photo.fallback { background: linear-gradient(135deg, rgba(180,80,0,.9), rgba(255,140,0,.95)); }
+.slot-card.rarity-iconico .slot-photo.fallback, .sticker-card.rarity-iconico .sticker-photo.fallback { background: linear-gradient(135deg, rgba(180,0,0,.9), rgba(255,0,50,.95)); }
+
 .slot-photo.fallback {
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(255,255,255,.08), transparent 60%),
-    linear-gradient(160deg, rgba(14,28,52,.9) 0%, rgba(6,14,32,.95) 100%);
+  background: linear-gradient(160deg, rgba(14,28,52,.9) 0%, rgba(6,14,32,.95) 100%);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
-.slot-initials {
+.slot-photo.fallback::after {
+  content: attr(data-initials);
   font-family: 'Teko', sans-serif;
   font-size: 2.8rem;
   letter-spacing: .04em;
   line-height: 1;
-  color: rgba(255,255,255,.28);
+  color: rgba(255,255,255,.5);
   text-transform: uppercase;
-  text-shadow: 0 0 18px rgba(80,140,255,.2);
+  text-shadow: 0 2px 8px rgba(0,0,0,.8);
+}
+
+.slot-initials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Teko', sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: rgba(255,255,255,.6);
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0,0,0,.8);
+}
+
+.activable-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(255,215,0,0.5);
+  animation: pulse-activable 2s infinite;
+  pointer-events: none;
+}
+@keyframes pulse-activable {
+  0% { transform: scale(1); box-shadow: 0 2px 8px rgba(255,215,0,0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,215,0,0.8); }
+  100% { transform: scale(1); box-shadow: 0 2px 8px rgba(255,215,0,0.5); }
 }
 
 .slot-footer {
@@ -3371,6 +3416,19 @@ button, input { font: inherit; }
   text-transform: uppercase;
   letter-spacing: .2rem;
   font-size: 2rem;
+  background: linear-gradient(160deg, rgba(14,28,52,.9) 0%, rgba(6,14,32,.95) 100%);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.sticker-photo.fallback::after {
+  content: attr(data-initials);
+  font-family: 'Teko', sans-serif;
+  font-size: 3rem;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0,0,0,.8);
 }
 
 .sticker-footer {
@@ -5311,7 +5369,9 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   padding: 3px;
   background: linear-gradient(140deg, #8a6512, #ffe58a 26%, #fff6d0 50%, #ffe58a 74%, #8a6512);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
+  mask-composite: exclude;
           mask-composite: exclude;
   pointer-events: none;
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--ic-accent) 50%, transparent));
@@ -5421,7 +5481,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   line-height: .95;
   color: #fff8e2;
   background: linear-gradient(90deg, #ffe9a6, #fff, #ffd766);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 10px rgba(0,0,0,.5);
 }
 .iconic-card .ic-sub {
@@ -5522,7 +5582,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   line-height: .9; letter-spacing: .01em;
   text-transform: uppercase;
   background: linear-gradient(92deg, #8a5a06, #c8940a 40%, #6d4402 75%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 1px 0 rgba(255,255,255,.5));
 }
 .iconic-spread .legacy-legend-name {
@@ -5626,7 +5686,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   font-size: clamp(2rem, 5vw, 3rem); line-height: .92; text-transform: uppercase;
   color: #fff;
   background: linear-gradient(92deg, #e8e8ee, #ffffff 45%, #a9a9b2);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .black-extras-spread .bxs-sub { max-width: 620px; margin: 0 auto; color: #b9b9c2; font-size: .96rem; line-height: 1.5; }
 .black-extras-spread .bxs-count {
@@ -5756,7 +5816,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   font-size: clamp(2.4rem, 6vw, 4rem); line-height: .9;
   background: linear-gradient(92deg, #b8860b, #ffe58a 35%, #fff6d0 50%, #ffe58a 65%, #b8860b);
   background-size: 220% 100%;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   animation: iis-title-shine 5s ease-in-out infinite, iis-rise .7s ease both;
 }
 .icon-info-spread .iis-lead {
@@ -6812,7 +6872,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   line-height: 0.8;
   margin: 0;
   background: linear-gradient(135deg, #FFDE00 0%, #D4AF37 100%);
-  -webkit-background-clip: text;
+  -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 10px rgba(255,222,0,0.5));
 }
@@ -7548,9 +7608,9 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
     <div class="overlay-panel">
       <button class="side-nav light" id="overlay-prev" type="button" aria-label="Anterior">&#8249;</button>
       <div style="display:flex; flex-direction:column; align-items:center;">
-        <div class="sticker-frame" id="overlay-card-host"></div>
-        <div id="activation-container" style="display:none; margin-top: 20px; text-align:center; max-width: 300px; width:100%;">
-          <button id="activate-skill-btn" style="background:#D4AF37; color:#000; font-family:Teko, sans-serif; font-size:1.3rem; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; width:100%; box-shadow:0 4px 15px rgba(212,175,55,0.4);">⚡ ACTIVAR HABILIDAD</button>
+        
+        <div id="activation-container" style="display:none; margin-bottom: 20px; text-align:center; max-width: 300px; width:100%;">
+          <button id="activate-skill-btn" style="background:#D4AF37; color:#000; font-family:Teko, sans-serif; font-size:1.3rem; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; width:100%; box-shadow:0 4px 15px rgba(212,175,55,0.4); text-transform: uppercase; letter-spacing: 1px;">⚡ ACTIVAR HABILIDAD</button>
           <div id="activation-form" style="display:none; margin-top:15px; background:rgba(0,0,0,0.6); padding:15px; border-radius:8px; border:1px solid #D4AF37;">
             <p style="font-size:0.85rem; color:#fff; margin-bottom:10px; line-height:1.2;">Al activar, perderás esta copia del cromo y recibirás un código anti-fraude para usar en combate.</p>
             <textarea id="activation-wish" placeholder="Escribe tu deseo (opcional)" style="width:100%; padding:10px; border-radius:6px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:#fff; margin-bottom:10px; display:none; resize:none;" rows="3"></textarea>
@@ -7563,6 +7623,8 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
             <button id="activation-copy-btn" style="background:#fff; color:#000; font-size:0.8rem; font-weight:bold; padding:5px 10px; margin-top:10px; border:none; border-radius:4px; cursor:pointer;">Copiar Código</button>
           </div>
         </div>
+
+        <div class="sticker-frame" id="overlay-card-host"></div>
       </div>
       <button class="side-nav" id="overlay-next" type="button" aria-label="Siguiente">&#8250;</button>
     </div>
@@ -7596,7 +7658,7 @@ const ROSTER_RARITY_UP = ['comun', 'raro', 'epico', 'legendario'];
 const ICONIC_DROP_PERCENT = 3; // 3% por sobre
 // Override de avatares locales por pseudónimo (case-insensitive)
 const AVATAR_OVERRIDES = {
-  'khamzat': 'STICKERS/00c51ca3fc2408a1795e91ad23c5dc35.webp',
+  'khamzat': 'STICKERS/0d237a28ca4ea71a440829441f38014e.jpg',
 };
 
 // ✦ ICONOS DE LEYENDA — cromos ultra raros (≈3% por sobre). Cada uno es su propia página.
@@ -7622,7 +7684,7 @@ const ICONIC_LEGACIES = {
 const ICONIC_LEGENDS = [
   {
     id: 'iconic-bandet', name: 'BANDET', legacy: 'orochi',
-    image: 'STICKERS/images (2).jpg',
+    image: 'STICKERS/Bandet_Icon.jpg',
     position: 'PRIME', rating: 109, country: '',
     tagline: 'Pure talent, always the best',
     lore: 'In raw talent, Bandet always stood a step above everyone. He never chased greatness — greatness followed him into every arena of the Battle. When the pressure was highest, his gift was purest.',
@@ -7640,7 +7702,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-merus', name: 'MERUS', legacy: 'orochi',
-    image: 'STICKERS/979643e71d81be19038c415e8ad98bd2.jpg',
+    image: 'STICKERS/images.jpg',
     position: 'BRAVE', rating: 108, country: '',
     tagline: 'The bravest of them all',
     lore: 'Where others hesitated, Merus advanced. The bravest of the Orochi Legacy: first on every line and last to surrender. His courage set the tempo for the entire clan.',
@@ -7649,7 +7711,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-akira', name: 'AKIRA', legacy: 'orochi',
-    image: 'STICKERS/29773f4d994905a1785a3ee990d181c8.jpg',
+    image: 'STICKERS/AKIRA_ICON.jpg',
     position: 'JEWEL', rating: 109, country: '',
     tagline: 'Forever the jewel',
     lore: 'The eternal jewel of the Orochi Legacy. Talent and shine that time cannot fade: Akira always was, and always will be, the jewel of the clan. Pure elegance turned into legend.',
@@ -7658,7 +7720,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-ego', name: 'EGO', legacy: 'iconos',
-    image: 'STICKERS/648182651_122223086078282233_1385444020102020884_n.jpg',
+    image: 'STICKERS/EGO_ICON.jpg',
     position: 'MASTER', rating: 110, country: '',
     tagline: 'The most respected master',
     lore: 'A master whose name commands silence. Ego earned respect not through force but through mastery — every technique refined, every lesson eternal. To face her was to learn; to earn her nod was legend itself.',
@@ -7667,7 +7729,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-inverse', name: 'INVERSE BERKANSTEL', legacy: 'iconos',
-    image: 'STICKERS/l4xiji7ms0991.png',
+    image: 'STICKERS/Berkanstel.webp',
     position: 'ELITE', rating: 110, country: '',
     tagline: 'A level apart',
     lore: 'Inverse Berkanstel played in a different dimension. His level was never compared: it was admired. Every appearance redefined the ceiling of the Battle and made clear exactly where the summit stood.',
@@ -7676,7 +7738,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-reddraig', name: 'RED DRAIG CRIMSON', legacy: 'iconos',
-    image: 'STICKERS/HD-wallpaper-god-of-high-school-jin-jin-mori.jpg',
+    image: 'STICKERS/cc1c98353325e66b4f04f1e419db7392.jpg',
     position: 'BOSS', rating: 110, country: '',
     tagline: 'Top of the hierarchy',
     lore: 'At the peak of his clan hierarchy, Red Draig Crimson dictated the law of the Crimson. His word was rank and his presence was order: the absolute apex of his lineage.',
@@ -7808,17 +7870,17 @@ const BLACK_EXTRA_DROP_PERCENT = 3;
 const BLACK_EXTRAS = [
   {
     id: 'black-sekiro', name: 'SEKIRO',
-    image: 'STICKERS/050b77ab14a86fcefa22a47fd495d290.jpg',
+    image: 'STICKERS/e8244db3ee57997061909761784e89ee.jpg',
     note: 'First warrior to receive the Black Border. A whole season inside the arena, without losing a single battle.',
   },
   {
     id: 'black-bianca', name: 'BIANCA',
-    image: 'STICKERS/475878211_122094566582766070_8045130554263902921_n.jpg',
+    image: 'STICKERS/BIANCA.jpg',
     note: 'The first woman to earn it. Active since day one, immovable from the elite. Bellator chose her without hesitation.',
   },
   {
     id: 'black-eisengaard', name: 'EISENGAARD',
-    image: 'STICKERS/735193523_122159961422413217_3074989910249570087_n.jpg',
+    image: 'STICKERS/EISENGAARD.jpg',
     note: 'When everyone else gave up, Eisengaard kept going. The Black Border is not granted: it is earned with time and presence.',
   },
 ];
@@ -8178,21 +8240,8 @@ function slugSeries(value) {
 function safeImageUrl(value) {
   const url = safeText(value, '');
   if (!url) return '';
-  // Ya proxeada — evita doble envoltura si vuelve a pasar por aquí.
-  if (/^https:\/\/images\.weserv\.nl\//i.test(url)) return url;
-  if (/^https?:\/\//i.test(url)) {
-    // Supabase Storage (nuestro propio bucket) carga directo y confiable.
-    if (/(^|\.)supabase\.co\//i.test(url)) return url;
-    // Imgur CDN funciona directo y el proxy está devolviendo 404 para estas URLs.
-    if (/^https?:\/\/i\.imgur\.com\//i.test(url)) return url;
-    // Netlify (nuestro host de stickers)
-    if (/(^|\.)netlify\.app\//i.test(url)) return url;
-    // El resto (pinimg, gstatic, wikia, imgur, animesher, etc.) se enruta por un
-    // proxy de imágenes para esquivar ORB/hotlink/certificados inválidos del navegador.
-    return 'https://images.weserv.nl/?url=' + encodeURIComponent(url.replace(/^https?:\/\//i, ''));
-  }
-  if (url.startsWith('/')) return url; // absoluto same-origin
-  // Permitir assets locales relativos (ej: STICKERS/foo.webp) — bloquea data:/javascript: y traversal
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('/')) return url;
   if (!url.includes('..') && (url.startsWith('STICKERS/') || /^[\w%][\w\-. /%()]*\.(webp|jpe?g|png|gif|avif)$/i.test(url))) return url;
   return '';
 }
@@ -9608,8 +9657,8 @@ function stickerCardMarkup(sticker) {
   const isBB = sticker.rarity === 'blackborder' || sticker.variant === 'blackborder';
   const initials = escapeHtml(safeText(sticker.displayName, '').replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?');
   const photo = sticker.imageUrl
-    ? `<div class="sticker-photo"><img src="${imageUrl}" alt="${displayName}" onerror="const parent=this.parentElement;if(!parent)return;parent.classList.add('fallback');const d=document.createElement('div');d.className='slot-initials';d.textContent='${initials}';this.replaceWith(d)"></div>`
-    : `<div class="sticker-photo fallback"><div class="slot-initials">${initials}</div></div>`;
+    ? `<div class="sticker-photo" data-initials="${initials}"><img src="${imageUrl}" alt="${displayName}" loading="lazy" onerror="this.parentElement.classList.add('fallback');this.remove()"></div>`
+    : `<div class="sticker-photo fallback" data-initials="${initials}"></div>`;
   const flagRawCode = sticker.countryCode ? String(sticker.countryCode).toUpperCase().slice(0, 2) : '';
   const flagImgSrc = flagRawCode ? countryFlagImg(flagRawCode) : '';
   const flagEmojiFb = flagRawCode ? countryFlag(flagRawCode) : '';
@@ -9803,28 +9852,28 @@ function renderIntroShowcaseCards() {
     legendPosition: 'PRIME',
     legendAccent: '#c8102e',
     legendAccent2: '#3a0a12',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
     legacyLabel: 'Orochi Legacy',
     countryCode: '',
   };
   const bandetBlackData = {
     displayName: 'BANDET',
     name: 'BANDET',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
     blackNote: 'El primero. El talento puro de Orochi.',
   };
   const bandetDiamondData = {
     name: 'BANDET',
     rating: 109,
     position: 'PRIME',
-    image: 'STICKERS/images (2).jpg',
+    image: 'STICKERS/Bandet_Icon.jpg',
   };
   const bandetEmeraldData = {
     displayName: 'BANDET',
     name: 'BANDET',
     legendRating: 109,
     legendPosition: 'PRIME',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
   };
 
   const iconicHost = document.getElementById('intro-card-iconic');
@@ -9889,8 +9938,8 @@ function renderAlbumSlot(sticker, fallbackLabel) {
   const isPending = state.pendingStickers.has(sticker.id);
   const initials = displayName.replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?';
   const photo = sticker.imageUrl
-    ? `<div class="slot-photo"><img src="${escapeHtml(sticker.imageUrl)}" alt="${displayName}" onerror="const p=this.parentElement;if(!p)return;p.classList.add('fallback');const d=document.createElement('div');d.className='slot-initials';d.textContent='${escapeHtml(initials)}';p.appendChild(d);this.remove()"></div>`
-    : `<div class="slot-photo fallback"><div class="slot-initials">${escapeHtml(initials)}</div></div>`;
+    ? `<div class="slot-photo" data-initials="${escapeHtml(initials)}"><img src="${escapeHtml(sticker.imageUrl)}" alt="${escapeHtml(displayName)}" loading="lazy" onerror="this.parentElement.classList.add('fallback');this.remove()"></div>`
+    : `<div class="slot-photo fallback" data-initials="${escapeHtml(initials)}"></div>`;
   const flagCode = sticker.countryCode ? String(sticker.countryCode).toUpperCase().slice(0, 2) : '';
   const flagImgSrc = flagCode ? countryFlagImg(flagCode) : '';
   const flagHtml = flagCode
@@ -9905,9 +9954,13 @@ function renderAlbumSlot(sticker, fallbackLabel) {
       <div class="paste-label">Pegar</div>
     </div>` : '';
 
+  const isActivable = ['esmeralda', 'iconico', 'extra', 'diamante'].includes((sticker.specialType || '').toLowerCase()) && sticker.quantity >= 1;
+  const activableBadge = isActivable ? `<div class="activable-badge">⚡ ACTIVABLE</div>` : '';
+
   return `
     <button class="slot" type="button" data-sticker-id="${escapeHtml(sticker.id)}"${isPending ? ' data-pending="true"' : ''}>
       <div class="slot-card rarity-${escapeHtml(sticker.rarity)}" data-series="${series}">
+        ${activableBadge}
         <div class="slot-shine" aria-hidden="true"></div>
         <div class="slot-number">${slotLabel}</div>
         ${sticker.quantity > 1 ? `<div class="slot-quantity">x${sticker.quantity}</div>` : ''}

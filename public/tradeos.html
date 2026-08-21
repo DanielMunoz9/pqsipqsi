@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
 <title>Mercado Bellator - Tradeos</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap');
@@ -7002,32 +7003,7 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   .pk-card { width: 100%; }
 }
 
-/* 2-Column Grid Layout for Trade Panels */
-.trade-modal {
-    max-width: 1400px;
-    padding: 30px;
-}
-.trade-modal > div:not(.trade-modal-header):not(.trade-feedback-banner) {
-    display: none;
-}
-.trade-feedback-banner {
-    display: block;
-    grid-column: 1 / -1;
-}
-/* Create a wrapper for panels */
-.trade-panels-wrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-@media (min-width: 900px) {
-    .trade-panels-wrapper {
-        grid-template-columns: 1fr 1.2fr;
-    }
-}
-.always-active {
-    display: flex !important;
-}
+
 
 </style>
   <!-- Confetti para revelaciones épicas -->
@@ -7070,7 +7046,7 @@ body {
     max-width: 1400px;
     padding: 30px;
 }
-.trade-modal > div:not(.trade-modal-header):not(.trade-feedback-banner) {
+.trade-modal > div:not(.trade-modal-header):not(.trade-feedback-banner):not(.trade-panels-wrapper) {
     display: none;
 }
 .trade-feedback-banner {
@@ -7559,14 +7535,6 @@ body {
 <div class="trade-panels-wrapper">
     <div class="trade-panel always-active" id="trade-panel-offer">
       
-      <div style="margin-bottom: 20px;">
-          <label style="font-family: Teko, sans-serif; font-size: 1.2rem; color: #d4af37; letter-spacing: 1px;">SELECCIONA JUGADOR DESTINO:</label>
-          <select id="trade-target-select" class="trade-filter-input" style="width: 100%; margin-top: 8px;">
-              <option value="">Selecciona un jugador...</option>
-          </select>
-          <div id="trade-target-hint" style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 8px;">Debes elegir a quién le envías la solicitud.</div>
-      </div>
-
       <span id="trade-builder-player" style="display:none;">-</span>
       <span id="trade-builder-offer-count" style="display:none;">0</span>
       <span id="trade-builder-want-count" style="display:none;">0</span>
@@ -7678,7 +7646,7 @@ const ROSTER_RARITY_UP = ['comun', 'raro', 'epico', 'legendario'];
 const ICONIC_DROP_PERCENT = 3; // 3% por sobre
 // Override de avatares locales por pseudónimo (case-insensitive)
 const AVATAR_OVERRIDES = {
-  'khamzat': 'STICKERS/00c51ca3fc2408a1795e91ad23c5dc35.webp',
+  'khamzat': 'STICKERS/0d237a28ca4ea71a440829441f38014e.jpg',
 };
 
 // ✦ ICONOS DE LEYENDA — cromos ultra raros (≈3% por sobre). Cada uno es su propia página.
@@ -7704,7 +7672,7 @@ const ICONIC_LEGACIES = {
 const ICONIC_LEGENDS = [
   {
     id: 'iconic-bandet', name: 'BANDET', legacy: 'orochi',
-    image: 'STICKERS/images (2).jpg',
+    image: 'STICKERS/Bandet_Icon.jpg',
     position: 'PRIME', rating: 109, country: '',
     tagline: 'Pure talent, always the best',
     lore: 'In raw talent, Bandet always stood a step above everyone. He never chased greatness — greatness followed him into every arena of the Battle. When the pressure was highest, his gift was purest.',
@@ -7722,7 +7690,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-merus', name: 'MERUS', legacy: 'orochi',
-    image: 'STICKERS/979643e71d81be19038c415e8ad98bd2.jpg',
+    image: 'STICKERS/images.jpg',
     position: 'BRAVE', rating: 108, country: '',
     tagline: 'The bravest of them all',
     lore: 'Where others hesitated, Merus advanced. The bravest of the Orochi Legacy: first on every line and last to surrender. His courage set the tempo for the entire clan.',
@@ -7731,7 +7699,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-akira', name: 'AKIRA', legacy: 'orochi',
-    image: 'STICKERS/29773f4d994905a1785a3ee990d181c8.jpg',
+    image: 'STICKERS/AKIRA_ICON.jpg',
     position: 'JEWEL', rating: 109, country: '',
     tagline: 'Forever the jewel',
     lore: 'The eternal jewel of the Orochi Legacy. Talent and shine that time cannot fade: Akira always was, and always will be, the jewel of the clan. Pure elegance turned into legend.',
@@ -7740,7 +7708,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-ego', name: 'EGO', legacy: 'iconos',
-    image: 'STICKERS/648182651_122223086078282233_1385444020102020884_n.jpg',
+    image: 'STICKERS/EGO_ICON.jpg',
     position: 'MASTER', rating: 110, country: '',
     tagline: 'The most respected master',
     lore: 'A master whose name commands silence. Ego earned respect not through force but through mastery — every technique refined, every lesson eternal. To face her was to learn; to earn her nod was legend itself.',
@@ -7749,7 +7717,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-inverse', name: 'INVERSE BERKANSTEL', legacy: 'iconos',
-    image: 'STICKERS/l4xiji7ms0991.png',
+    image: 'STICKERS/Berkanstel.webp',
     position: 'ELITE', rating: 110, country: '',
     tagline: 'A level apart',
     lore: 'Inverse Berkanstel played in a different dimension. His level was never compared: it was admired. Every appearance redefined the ceiling of the Battle and made clear exactly where the summit stood.',
@@ -7758,7 +7726,7 @@ const ICONIC_LEGENDS = [
   },
   {
     id: 'iconic-reddraig', name: 'RED DRAIG CRIMSON', legacy: 'iconos',
-    image: 'STICKERS/HD-wallpaper-god-of-high-school-jin-jin-mori.jpg',
+    image: 'STICKERS/cc1c98353325e66b4f04f1e419db7392.jpg',
     position: 'BOSS', rating: 110, country: '',
     tagline: 'Top of the hierarchy',
     lore: 'At the peak of his clan hierarchy, Red Draig Crimson dictated the law of the Crimson. His word was rank and his presence was order: the absolute apex of his lineage.',
@@ -7890,17 +7858,17 @@ const BLACK_EXTRA_DROP_PERCENT = 3;
 const BLACK_EXTRAS = [
   {
     id: 'black-sekiro', name: 'SEKIRO',
-    image: 'STICKERS/050b77ab14a86fcefa22a47fd495d290.jpg',
+    image: 'STICKERS/e8244db3ee57997061909761784e89ee.jpg',
     note: 'First warrior to receive the Black Border. A whole season inside the arena, without losing a single battle.',
   },
   {
     id: 'black-bianca', name: 'BIANCA',
-    image: 'STICKERS/475878211_122094566582766070_8045130554263902921_n.jpg',
+    image: 'STICKERS/BIANCA.jpg',
     note: 'The first woman to earn it. Active since day one, immovable from the elite. Bellator chose her without hesitation.',
   },
   {
     id: 'black-eisengaard', name: 'EISENGAARD',
-    image: 'STICKERS/735193523_122159961422413217_3074989910249570087_n.jpg',
+    image: 'STICKERS/EISENGAARD.jpg',
     note: 'When everyone else gave up, Eisengaard kept going. The Black Border is not granted: it is earned with time and presence.',
   },
 ];
@@ -8260,21 +8228,8 @@ function slugSeries(value) {
 function safeImageUrl(value) {
   const url = safeText(value, '');
   if (!url) return '';
-  // Ya proxeada — evita doble envoltura si vuelve a pasar por aquí.
-  if (/^https:\/\/images\.weserv\.nl\//i.test(url)) return url;
-  if (/^https?:\/\//i.test(url)) {
-    // Supabase Storage (nuestro propio bucket) carga directo y confiable.
-    if (/(^|\.)supabase\.co\//i.test(url)) return url;
-    // Imgur CDN funciona directo y el proxy está devolviendo 404 para estas URLs.
-    if (/^https?:\/\/i\.imgur\.com\//i.test(url)) return url;
-    // Netlify (nuestro host de stickers)
-    if (/(^|\.)netlify\.app\//i.test(url)) return url;
-    // El resto (pinimg, gstatic, wikia, imgur, animesher, etc.) se enruta por un
-    // proxy de imágenes para esquivar ORB/hotlink/certificados inválidos del navegador.
-    return 'https://images.weserv.nl/?url=' + encodeURIComponent(url.replace(/^https?:\/\//i, ''));
-  }
-  if (url.startsWith('/')) return url; // absoluto same-origin
-  // Permitir assets locales relativos (ej: STICKERS/foo.webp) — bloquea data:/javascript: y traversal
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('/')) return url;
   if (!url.includes('..') && (url.startsWith('STICKERS/') || /^[\w%][\w\-. /%()]*\.(webp|jpe?g|png|gif|avif)$/i.test(url))) return url;
   return '';
 }
@@ -9890,28 +9845,28 @@ function renderIntroShowcaseCards() {
     legendPosition: 'PRIME',
     legendAccent: '#c8102e',
     legendAccent2: '#3a0a12',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
     legacyLabel: 'Orochi Legacy',
     countryCode: '',
   };
   const bandetBlackData = {
     displayName: 'BANDET',
     name: 'BANDET',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
     blackNote: 'El primero. El talento puro de Orochi.',
   };
   const bandetDiamondData = {
     name: 'BANDET',
     rating: 109,
     position: 'PRIME',
-    image: 'STICKERS/images (2).jpg',
+    image: 'STICKERS/Bandet_Icon.jpg',
   };
   const bandetEmeraldData = {
     displayName: 'BANDET',
     name: 'BANDET',
     legendRating: 109,
     legendPosition: 'PRIME',
-    imageUrl: 'STICKERS/images (2).jpg',
+    imageUrl: 'STICKERS/Bandet_Icon.jpg',
   };
 
   const iconicHost = document.getElementById('intro-card-iconic');
@@ -11791,7 +11746,7 @@ function openTradeModal() {
 }
 
 function closeTradeModal() {
-  
+  refs.tradeModalBackdrop && refs.tradeModalBackdrop.classList.remove('show');
 }
 
 function renderTradeBoard() {
@@ -12031,17 +11986,29 @@ function renderTradeOfferPanel() {
   const visualWant = document.getElementById('visual-slot-want');
   const submitBtn = document.getElementById('trade-copy-code-button');
 
+  const getVisualSlotMarkup = (sticker) => {
+    if (!sticker) return `<div class="trade-slot-placeholder">+</div>`;
+    const initials = escapeHtml(sticker.displayName).replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?';
+    const fallbackSvg = `<svg class="fallback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; opacity: 0.5; margin-bottom: 4px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
+    const photoMarkup = sticker.imageUrl 
+      ? `<img src="${escapeHtml(sticker.imageUrl)}" class="trade-slot-img rarity-${escapeHtml(sticker.rarity)}" onerror="const p=this.parentElement;if(!p)return;p.innerHTML='<div class=\\'trade-slot-img rarity-${escapeHtml(sticker.rarity)}\\' style=\\'display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Teko,sans-serif;font-size:1.5rem;color:rgba(255,255,255,0.6);text-shadow:0 2px 4px rgba(0,0,0,0.8);background:linear-gradient(135deg,rgba(14,28,52,.9),rgba(6,14,32,.95));box-shadow:inset 0 0 20px rgba(0,0,0,0.5);\\'>${fallbackSvg}<div>${initials}</div></div>';">`
+      : `<div class="trade-slot-img rarity-${escapeHtml(sticker.rarity)}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Teko,sans-serif;font-size:1.5rem;color:rgba(255,255,255,0.6);text-shadow:0 2px 4px rgba(0,0,0,0.8);background:linear-gradient(135deg,rgba(14,28,52,.9),rgba(6,14,32,.95));box-shadow:inset 0 0 20px rgba(0,0,0,0.5);">${fallbackSvg}<div>${initials}</div></div>`;
+      
+    return `
+      ${photoMarkup}
+      <div style="position:absolute; bottom:5px; left:5px; right:5px; background:rgba(0,0,0,0.8); border-radius:4px; padding:2px 4px; text-align:center;">
+        <div style="font-family:Teko,sans-serif; font-size:1rem; color:#fff; line-height:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(sticker.displayName)}</div>
+        <div style="font-size:0.65rem; color:rgba(255,255,255,0.7); text-transform:uppercase;">${escapeHtml(rarityLabel(sticker.rarity))}</div>
+      </div>
+    `;
+  };
+
   if (visualOffer) {
     if (state.tradeOfferSelection.size === 1) {
       const offerId = Array.from(state.tradeOfferSelection)[0];
       const sticker = duplicates.find(s => s.id === offerId);
-      if (sticker && sticker.imageUrl) {
-        visualOffer.innerHTML = `<img src="${escapeHtml(sticker.imageUrl)}" class="trade-slot-img rarity-${escapeHtml(sticker.rarity)}" onerror="const p=this.parentElement;if(!p)return;p.innerHTML='<div class=\\'trade-slot-placeholder\\'>✓</div>';">`;
-        visualOffer.classList.add('filled');
-      } else {
-        visualOffer.innerHTML = `<div class="trade-slot-placeholder">✓</div>`;
-        visualOffer.classList.add('filled');
-      }
+      visualOffer.innerHTML = getVisualSlotMarkup(sticker);
+      visualOffer.classList.add('filled');
     } else {
       visualOffer.innerHTML = `<div class="trade-slot-placeholder">+</div>`;
       visualOffer.classList.remove('filled');
@@ -12052,13 +12019,8 @@ function renderTradeOfferPanel() {
     if (state.tradeWantSelection.size === 1) {
       const wantId = Array.from(state.tradeWantSelection)[0];
       const sticker = missing.find(s => s.id === wantId);
-      if (sticker && sticker.imageUrl) {
-        visualWant.innerHTML = `<img src="${escapeHtml(sticker.imageUrl)}" class="trade-slot-img rarity-${escapeHtml(sticker.rarity)}" onerror="const p=this.parentElement;if(!p)return;p.innerHTML='<div class=\\'trade-slot-placeholder\\'>✓</div>';">`;
-        visualWant.classList.add('filled');
-      } else {
-        visualWant.innerHTML = `<div class="trade-slot-placeholder">✓</div>`;
-        visualWant.classList.add('filled');
-      }
+      visualWant.innerHTML = getVisualSlotMarkup(sticker);
+      visualWant.classList.add('filled');
     } else {
       visualWant.innerHTML = `<div class="trade-slot-placeholder">?</div>`;
       visualWant.classList.remove('filled');
