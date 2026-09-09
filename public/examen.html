@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -728,6 +728,14 @@
         document.getElementById('panelCombat').style.display = 'block';
         document.getElementById('xPh1').classList.add('off');
         document.getElementById('xPh2').classList.remove('off');
+        // Reset timer to exactly 5 minutes for the narrative part
+        gRemaining = 300;
+        document.getElementById('xGFill').style.transition = 'none';
+        document.getElementById('xGFill').style.width = '100%';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          document.getElementById('xGFill').style.transition = 'width 299s linear';
+          document.getElementById('xGFill').style.width = '0%';
+        }));
         sfxPhase();
       } else {
         renderQuestion();

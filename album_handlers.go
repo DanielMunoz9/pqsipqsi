@@ -2635,8 +2635,8 @@ func albumActivateHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"este cromo no se puede activar"}`, http.StatusBadRequest)
 		return
 	}
-	if specialType != "esmeralda" && req.WishText != "" {
-		req.WishText = "" // Solo esmeralda puede tener deseo
+	if specialType != "esmeralda" && specialType != "diamante" && req.WishText != "" {
+		req.WishText = "" // Solo esmeralda y diamante pueden tener deseo
 	}
 
 	// 2. Ejecutar RPC para consumir atómicamente exactamente 1 copia

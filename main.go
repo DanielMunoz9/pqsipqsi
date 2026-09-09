@@ -427,6 +427,7 @@ func main() {
 	router.HandleFunc("/api/stats", cachePublicResponse(20*time.Second, publicStatsHandler)).Methods("GET")
 	router.HandleFunc("/api/division-slots", cachePublicResponse(15*time.Second, divisionSlotsHandler)).Methods("GET")
 	router.HandleFunc("/api/inscribir", inscribirHandler).Methods("POST")
+	router.HandleFunc("/api/admin/change-division", banMiddleware(changeDivisionHandler)).Methods("PATCH")
 	router.HandleFunc("/api/schedule", cachePublicResponse(60*time.Second, publicScheduleHandler)).Methods("GET")
 	router.HandleFunc("/api/rankings", cachePublicResponse(30*time.Second, tournamentRankingsHandler)).Methods("GET")
 	router.HandleFunc("/api/champions", cachePublicResponse(30*time.Second, tournamentChampionsHandler)).Methods("GET")
@@ -530,6 +531,8 @@ func main() {
 	router.HandleFunc("/admision", serveFile("./public/admision.html")).Methods("GET")
 	router.HandleFunc("/examen", serveFile("./public/examen.html")).Methods("GET")
 	router.HandleFunc("/examen-universal", serveFile("./public/examen-universal.html")).Methods("GET")
+	router.HandleFunc("/examen-planeta", serveFile("./public/examen-planeta.html")).Methods("GET")
+	router.HandleFunc("/examen-planeta.html", serveFile("./public/examen-planeta.html")).Methods("GET")
 	router.HandleFunc("/album-demo", serveFile("./public/album-demo.html")).Methods("GET")
 	router.HandleFunc("/album2", serveFile("./public/album2.html")).Methods("GET")
 	router.HandleFunc("/apuestas", serveFile("./public/apuestas.html")).Methods("GET")
@@ -1965,48 +1968,9 @@ func clearAdminLoginBanRecords(ip string) {
 	}
 }
 
-// banMiddleware bloquea IPs baneadas consultando Supabase.
-// Filtra por razón que empiece con "admin_login_blocked" para solo banear por intentos de login.
+// banMiddleware bloquea IPs baneadas consultando Supabase. (Desactivado temporalmente a petición del usuario)
 func banMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip := cleanIPPort(r.RemoteAddr)
-
-		// Verificar si la IP tiene ban definitivo en Supabase
-		var banned []BanEntry
-		_, err := supabaseClient.From("banned_ips").Select("ip,reason", "", false).
-			Filter("ip", "eq", ip).ExecuteTo(&banned)
-		if err == nil {
-			blockedByLogin := false
-			for _, b := range banned {
-				if strings.HasPrefix(b.Reason, "admin_login_blocked") {
-					blockedByLogin = true
-					break
-				}
-			}
-			if blockedByLogin {
-				if requestHasValidAdminCredentials(r) {
-					log.Printf("🟡 IP con ban previo permitida por credenciales válidas: %s", ip)
-				} else {
-					log.Printf("🔴 IP CON BAN DE LOGIN intentó acceder: %s", ip)
-					http.Error(w, `{"error":"IP bloqueada permanentemente"}`, http.StatusForbidden)
-					return
-				}
-			}
-		}
-		// Sincronizar contador en memoria desde Supabase (intentos anteriores al reinicio)
-		attemptCount := 0
-		for _, b := range banned {
-			if strings.HasPrefix(b.Reason, "admin_login_attempt_") {
-				attemptCount++
-			}
-		}
-		if attemptCount > 0 {
-			loginAttemptsMu.Lock()
-			if loginAttempts[ip] < attemptCount {
-				loginAttempts[ip] = attemptCount
-			}
-			loginAttemptsMu.Unlock()
-		}
 		next(w, r)
 	}
 }
@@ -2473,12 +2437,16 @@ func officialQualifiedDivisionKey(division string) string {
 	if strings.Contains(trimmed, "universal") {
 		return "universal"
 	}
+	if strings.Contains(trimmed, "planeta") {
+		return "planeta"
+	}
 	return ""
 }
 
 const (
 	cityDivisionSlotCap      = 16
 	universalDivisionSlotCap = 12
+	planetaDivisionSlotCap   = 16
 	reservedUniversalPseudo  = "Lucifer Vosgronne"
 )
 
@@ -2486,6 +2454,8 @@ func divisionSlotCapForKey(divisionKey string) int {
 	switch strings.ToLower(strings.TrimSpace(divisionKey)) {
 	case "universal":
 		return universalDivisionSlotCap
+	case "planeta":
+		return planetaDivisionSlotCap
 	case "ciudad":
 		return cityDivisionSlotCap
 	default:
@@ -2498,10 +2468,14 @@ func divisionSlotCapForName(division string) int {
 }
 
 func maxDivisionSlotCap() int {
-	if cityDivisionSlotCap >= universalDivisionSlotCap {
-		return cityDivisionSlotCap
+	maxVal := cityDivisionSlotCap
+	if universalDivisionSlotCap > maxVal {
+		maxVal = universalDivisionSlotCap
 	}
-	return universalDivisionSlotCap
+	if planetaDivisionSlotCap > maxVal {
+		maxVal = planetaDivisionSlotCap
+	}
+	return maxVal
 }
 
 func ensureReservedUniversalCompetitor(players []PublicPlayer, limit int) []PublicPlayer {
@@ -3122,6 +3096,7 @@ func officialQualifiedPlayersByDivision(players []PublicPlayer, limit int) map[s
 	grouped := map[string][]PublicPlayer{
 		"ciudad":    {},
 		"universal": {},
+		"planeta":   {},
 	}
 	deduped := make(map[string]PublicPlayer, len(players))
 	orderedKeys := make([]string, 0, len(players))
@@ -3187,9 +3162,11 @@ func officialQualifiedPlayersHandler(w http.ResponseWriter, r *http.Request) {
 	resp := map[string]interface{}{
 		"ciudad":        qualified["ciudad"],
 		"universal":     qualified["universal"],
+		"planeta":       qualified["planeta"],
 		"max":           maxDivisionSlotCap(),
 		"ciudad_max":    divisionSlotCapForKey("ciudad"),
 		"universal_max": divisionSlotCapForKey("universal"),
+		"planeta_max":   divisionSlotCapForKey("planeta"),
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(resp)
@@ -3236,13 +3213,13 @@ func publicStatsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-func countDivisionCompetitors() (int, int, error) {
+func countDivisionCompetitors() (int, int, int, error) {
 	players, err := loadPublicPlayers()
 	if err != nil {
-		return 0, 0, err
+		return 0, 0, 0, err
 	}
 	qualified := officialQualifiedPlayersByDivision(players, 16)
-	return len(qualified["ciudad"]), len(qualified["universal"]), nil
+	return len(qualified["ciudad"]), len(qualified["universal"]), len(qualified["planeta"]), nil
 }
 
 // ── GET /api/rankings ────────────────────────────────────────────────────────
@@ -5517,7 +5494,7 @@ func updatePlayerProfileHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error":"pseudonimo_muy_largo"}`, http.StatusBadRequest)
 		return
 	}
-	if body.Division != "" && body.Division != "Ciudad" && body.Division != "Universal" {
+	if body.Division != "" && body.Division != "Ciudad" && body.Division != "Universal" && body.Division != "Planeta" {
 		http.Error(w, `{"error":"division_invalida"}`, http.StatusBadRequest)
 		return
 	}
@@ -5672,7 +5649,7 @@ func updatePlayerProfileHandler(w http.ResponseWriter, r *http.Request) {
 			currentChar2 := normalizeNullableString(profileRows[0]["top_char_2"])
 			currentChar3 := normalizeNullableString(profileRows[0]["top_char_3"])
 			charsChanged := encodedChar1 != currentChar1 || encodedChar2 != currentChar2 || encodedChar3 != currentChar3
-			charLockTime := time.Date(2026, 5, 14, 5, 0, 0, 0, time.UTC)
+			charLockTime := time.Date(2026, 9, 10, 0, 0, 0, 0, time.UTC)
 			if charsChanged && time.Now().UTC().After(charLockTime) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusForbidden)
@@ -5841,14 +5818,17 @@ func leaveClanHandler(w http.ResponseWriter, r *http.Request) {
 func divisionSlotsHandler(w http.ResponseWriter, r *http.Request) {
 	cityMax := divisionSlotCapForKey("ciudad")
 	universalMax := divisionSlotCapForKey("universal")
-	ciudad, universal, _ := countDivisionCompetitors()
+	planetaMax := divisionSlotCapForKey("planeta")
+	ciudad, universal, planeta, _ := countDivisionCompetitors()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"ciudad":        ciudad,
 		"universal":     universal,
+		"planeta":       planeta,
 		"max":           maxDivisionSlotCap(),
 		"ciudad_max":    cityMax,
 		"universal_max": universalMax,
+		"planeta_max":   planetaMax,
 		"locked":        false,
 	})
 }
@@ -5878,7 +5858,7 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	clientIP := requestClientIP(r)
-	if !body.ExamPassed {
+	if !body.ExamPassed && body.Division != "Planeta" {
 		http.Error(w, `{"error":"exam_not_passed"}`, http.StatusForbidden)
 		return
 	}
@@ -5887,7 +5867,7 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 	body.NombreReal = strings.TrimSpace(body.NombreReal)
 	body.Email = strings.TrimSpace(body.Email)
 	body.Telefono = strings.TrimSpace(body.Telefono)
-	if body.Pseudonimo == "" || (body.Division != "Ciudad" && body.Division != "Universal") {
+	if body.Pseudonimo == "" || (body.Division != "Ciudad" && body.Division != "Universal" && body.Division != "Planeta") {
 		http.Error(w, `{"error":"invalid_data"}`, http.StatusBadRequest)
 		return
 	}
@@ -6002,13 +5982,14 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		// ── Actualizar la fila activa del aspirante sin permitir mover slots ya fijados ──
+		// Si acaban de aprobar el examen, se permite el ascenso oficial de división sin importar el bloqueo previo
+		allowDivisionChange := !lockedOfficialUpgrade || body.ExamPassed
 		effectiveDivision := body.Division
-		if lockedOfficialUpgrade {
+		if !allowDivisionChange {
 			effectiveDivision = firstNonEmpty(currentDivision, body.Division)
 		}
 		auditUpdate := map[string]interface{}{}
-		if !lockedOfficialUpgrade {
+		if allowDivisionChange {
 			auditUpdate["division"] = body.Division
 		}
 		auditUpdate["timestamp"] = now.Format(time.RFC3339)
@@ -6069,7 +6050,7 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ciudadCount, universalCount, cntErr := countDivisionCompetitors()
+	ciudadCount, universalCount, planetaCount, cntErr := countDivisionCompetitors()
 	if cntErr != nil {
 		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
 		return
@@ -6077,6 +6058,15 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 	divCount := ciudadCount
 	if body.Division == "Universal" {
 		divCount = universalCount
+	} else if body.Division == "Planeta" {
+		divCount = planetaCount
+	}
+
+	if divCount >= slotCap {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "division_full"})
+		return
 	}
 
 	// Comprobar que el pseudónimo no exista ya
@@ -6230,6 +6220,54 @@ func inscribirHandler(w http.ResponseWriter, r *http.Request) {
 		"remaining": remaining,
 		"division":  body.Division,
 	})
+}
+
+// ── PATCH /api/admin/change-division ──────────────────────────────────────────
+// Cambia la división de un jugador (requiere autenticación admin/telemetry)
+func changeDivisionHandler(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Pseudonimo  string `json:"pseudonimo"`
+		NewDivision string `json:"new_division"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, `{"error":"bad_request"}`, http.StatusBadRequest)
+		return
+	}
+	body.Pseudonimo = strings.TrimSpace(body.Pseudonimo)
+	body.NewDivision = strings.TrimSpace(body.NewDivision)
+	if body.Pseudonimo == "" || (body.NewDivision != "Ciudad" && body.NewDivision != "Universal" && body.NewDivision != "Planeta") {
+		http.Error(w, `{"error":"invalid_data"}`, http.StatusBadRequest)
+		return
+	}
+
+	var existing []map[string]interface{}
+	_, err := supabaseClient.From("audit_logs").
+		Select("id", "", false).
+		Filter("pseudonimo", "eq", body.Pseudonimo).
+		Order("timestamp", &postgrest.OrderOpts{Ascending: false}).
+		Limit(1, "").
+		ExecuteTo(&existing)
+	if err != nil {
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+	if len(existing) == 0 {
+		http.Error(w, `{"error":"not_found"}`, http.StatusNotFound)
+		return
+	}
+
+	auditID := fmt.Sprintf("%v", existing[0]["id"])
+	_, err = supabaseClient.From("audit_logs").
+		Update(map[string]interface{}{"division": body.NewDivision}, "", "").
+		Filter("id", "eq", auditID).
+		ExecuteTo(&existing)
+	if err != nil {
+		http.Error(w, `{"error":"db_error"}`, http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"ok": true, "message": "División actualizada"})
 }
 
 // ── POST /api/upload ─────────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -237,6 +237,11 @@
       border-color:rgba(96,165,250,.32);
       color:#93c5fd;
     }
+    .bl-tab-btn.active-planeta{
+      background:rgba(168,85,247,.10);
+      border-color:rgba(168,85,247,.32);
+      color:#c084fc;
+    }
 
     /* ── Stats bar extra ── */
     .bl-clasif-stats{
@@ -340,6 +345,10 @@
           <span class="bl-stat-num" id="stat-ciudad">–</span>
           <span class="bl-stat-label">División Ciudad</span>
         </div>
+        <div class="bl-stat-card" style="border-top-color:#a855f7">
+          <span class="bl-stat-num" id="stat-planeta">–</span>
+          <span class="bl-stat-label">División Planeta</span>
+        </div>
         <div class="bl-stat-card" style="border-top-color:#4ade80">
           <span class="bl-stat-num" id="stat-total-wins">–</span>
           <span class="bl-stat-label">Victorias totales</span>
@@ -359,6 +368,7 @@
         <button class="bl-tab-btn active" id="tab-all"   onclick="filterTab('all')">Todos</button>
         <button class="bl-tab-btn"        id="tab-univ"  onclick="filterTab('universal')">Universal</button>
         <button class="bl-tab-btn"        id="tab-ciudad" onclick="filterTab('ciudad')">Ciudad</button>
+        <button class="bl-tab-btn"        id="tab-planeta" onclick="filterTab('planeta')">Planeta</button>
       </div>
 
       <div class="bl-rank-wrap">
@@ -444,6 +454,7 @@
         document.getElementById('stat-total').textContent = data.length;
         document.getElementById('stat-universal').textContent = data.filter(p => String(p.division || '').toLowerCase().includes('universal')).length;
         document.getElementById('stat-ciudad').textContent = data.filter(p => String(p.division || '').toLowerCase().includes('ciudad')).length;
+        document.getElementById('stat-planeta').textContent = data.filter(p => String(p.division || '').toLowerCase().includes('planeta')).length;
 
         podium.innerHTML = data.slice(0, 3).map((item, index) => {
           const rankClass = index === 0 ? 'p1' : index === 1 ? 'p2' : 'p3';
@@ -510,7 +521,11 @@
           const avatar = item.avatar_url && item.avatar_url !== '<nil>'
             ? `<div class="bl-rank-av-cell"><img class="bl-rank-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="bl-rank-avatar-ph" style="display:none">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div></div>`
             : `<div class="bl-rank-av-cell"><div class="bl-rank-avatar-ph">${(item.pseudonimo || '?').charAt(0).toUpperCase()}</div></div>`;
-          const divClass = String(item.division || '').toLowerCase().includes('ciudad') ? 'div-c' : '';
+          const divClass = String(item.division || '').toLowerCase().includes('ciudad') 
+            ? 'div-c' 
+            : String(item.division || '').toLowerCase().includes('planeta') 
+              ? 'div-p' 
+              : '';
           return `
             <a class="bl-rank-row" href="${profileUrl(item.pseudonimo)}">
               <span class="bl-rank-pos ${posClass(index)}">${index + 1}</span>
@@ -552,9 +567,12 @@
                    <div class="bl-nation-avatar-ph" style="display:none">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`
                 : `<div class="bl-nation-avatar-ph">${(p.pseudonimo || '?').charAt(0).toUpperCase()}</div>`;
               const isCiudad = String(p.division || '').toLowerCase().includes('ciudad');
+              const isPlaneta = String(p.division || '').toLowerCase().includes('planeta');
               const divBadge = isCiudad
                 ? '<span class="bl-nation-division" style="color:#93c5fd;border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.12)">Ciudad</span>'
-                : '<span class="bl-nation-division" style="color:#f6d36b;border-color:rgba(212,175,55,.26);background:rgba(212,175,55,.10)">Universal</span>';
+                : isPlaneta
+                  ? '<span class="bl-nation-division" style="color:#c084fc;border-color:rgba(168,85,247,.25);background:rgba(168,85,247,.12)">Planeta</span>'
+                  : '<span class="bl-nation-division" style="color:#f6d36b;border-color:rgba(212,175,55,.26);background:rgba(212,175,55,.10)">Universal</span>';
               return `<a class="bl-nation-card" href="${profileUrl(p.pseudonimo)}" style="--nation-accent:${accent}">
                 <div class="bl-nation-rank">TOP ${globalRank}</div>
                 <span class="bl-nation-bg-flag fi fi-${cc}" aria-hidden="true"></span>
@@ -583,12 +601,18 @@
     const all   = document.getElementById('tab-all');
     const univ  = document.getElementById('tab-univ');
     const ciudad= document.getElementById('tab-ciudad');
-    if (all)   { all.classList.remove('active','active-ciudad'); }
-    if (univ)  { univ.classList.remove('active','active-ciudad'); }
-    if (ciudad){ ciudad.classList.remove('active','active-ciudad'); }
-    if (type === 'all')     { if (all)    all.classList.add('active'); }
-    if (type === 'universal') { if (univ) univ.classList.add('active'); }
-    if (type === 'ciudad')  { if (ciudad) ciudad.classList.add('active-ciudad'); }
+    const planeta= document.getElementById('tab-planeta');
+    
+    if (all)   { all.classList.remove('active','active-ciudad','active-planeta'); }
+    if (univ)  { univ.classList.remove('active','active-ciudad','active-planeta'); }
+    if (ciudad){ ciudad.classList.remove('active','active-ciudad','active-planeta'); }
+    if (planeta){ planeta.classList.remove('active','active-ciudad','active-planeta'); }
+    
+    if (type === 'all')       { if (all)    all.classList.add('active'); }
+    if (type === 'universal') { if (univ)   univ.classList.add('active'); }
+    if (type === 'ciudad')    { if (ciudad) ciudad.classList.add('active-ciudad'); }
+    if (type === 'planeta')   { if (planeta) planeta.classList.add('active-planeta'); }
+    
     rankPage = 0;
     const data = window._rankData || [];
     const filtered = type === 'all'

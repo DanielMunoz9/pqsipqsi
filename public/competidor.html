@@ -2251,7 +2251,8 @@
 
       var divisionSelect = document.getElementById('bio-edit-division');
       var divisionNote = document.getElementById('bio-edit-division-note');
-      divisionSelect.value = currentDriverState.division === 'Universal' ? 'Universal' : 'Ciudad';
+      var cd = currentDriverState.division;
+      divisionSelect.value = (cd === 'Universal' || cd === 'Planeta') ? cd : 'Ciudad';
       if (totalFights >= 4) {
         divisionSelect.disabled = false;
         divisionNote.className = 'f1-form-note';
@@ -2857,6 +2858,7 @@
                 <select class="f1-form-select" id="bio-edit-division">
                   <option value="Ciudad">Ciudad</option>
                   <option value="Universal">Universal</option>
+                  <option value="Planeta">Planeta</option>
                 </select>
                 <span class="f1-form-note" id="bio-edit-division-note">La división actual se mantiene.</span>
               </div>

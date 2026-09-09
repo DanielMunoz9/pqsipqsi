@@ -61,7 +61,7 @@
       kind: 'player',
       code: divisionKey.slice(0, 1).toUpperCase() + String(index + 1).padStart(2, '0'),
       name: name,
-      note: String(player && player.division || divisionKey).trim() || divisionKey,
+      note: String(player && (player.titulo || player.clan_name || player.division) || divisionKey).trim() || divisionKey,
       avatar: player && player.avatar_url && player.avatar_url !== '<nil>' ? String(player.avatar_url).trim() : '',
       initial: displayInitial(name, '?')
     };

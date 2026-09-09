@@ -740,6 +740,16 @@
         is_upgrade:  false,
       };
 
+      if (div === 'Planeta') {
+        // Direct registration
+      }
+      if (div === 'Ciudad') {
+        // Direct registration
+      }
+      if (div === 'Universal') {
+        // Direct registration
+      }
+
       try {
         const res  = await fetch('/api/inscribir', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
         const data = await res.json();

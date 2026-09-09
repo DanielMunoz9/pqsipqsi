@@ -1,5 +1,5 @@
 [build]
-  publish = "public"
+  publish = ".netlify-album-dist"
 
 [[redirects]]
   from = "/api/*"

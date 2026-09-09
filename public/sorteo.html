@@ -7,7 +7,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BELLATOR ROLBATTLE">
   <meta property="og:title" content="Sorteo Transparente - Bellator RolBattle">
-  <meta property="og:description" content="Llaves oficiales Bellator: Ciudad con 16 rivales y Universal con 12, seed publico y estilo Champions League.">
+  <meta property="og:description" content="Llaves oficiales Bellator: Planeta con 16 rivales y Universal con 12, seed publico y estilo Champions League.">
   <meta property="og:url" content="https://bellatorrpg.online/sorteo.html">
   <link rel="canonical" href="https://bellatorrpg.online/sorteo.html">
   <title>Sorteo Transparente - BELLATOR ROLBATTLE</title>
@@ -81,6 +81,7 @@
     .drw-board::after{content:'';position:absolute;inset:14px;border-radius:24px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
     .drw-board--city{--drw-accent:66,159,255;background:linear-gradient(180deg,rgba(7,18,34,.98),rgba(5,10,19,.98))}
     .drw-board--universal{--drw-accent:255,116,64;background:linear-gradient(180deg,rgba(28,10,11,.98),rgba(14,7,9,.98))}
+    .drw-board--planeta{--drw-accent:168,85,247;background:linear-gradient(180deg,rgba(18,7,34,.98),rgba(9,5,19,.98))}
     .drw-board-top,.drw-bracket-frame,.drw-board-scroll,.drw-board-foot{position:relative;z-index:2}
     .drw-board-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
     .drw-board-kicker{font-size:.66rem;letter-spacing:3.6px;text-transform:uppercase;color:rgba(var(--drw-accent),.96);font-weight:700}
@@ -279,15 +280,15 @@
 
     <div class="bl-event-bar bl-stripe-bg">
       <span class="bl-event-round">SORTEO</span>
-      <span class="bl-event-name">Tablero oficial de llaves Bellator · Ciudad 16 · Universal 12</span>
+      <span class="bl-event-name">Tablero oficial de llaves Bellator · Planeta 16 · Universal 12</span>
       <div class="bl-event-clock"><span id="bl-clock">00:00:00</span></div>
     </div>
 
     <main class="drw-page">
       <section class="drw-hero" aria-labelledby="drw-title">
         <div class="drw-eyebrow">BELLATOR DRAW BOARD</div>
-        <h1 class="drw-title" id="drw-title">Llaves oficiales<br>Ciudad 16 · Universal 12</h1>
-        <p class="drw-copy">Aqu&iacute; la gr&aacute;fica manda. Ciudad conserva su cuadro de 16 y Universal queda en 12 con 6 duelos fijos ya definidos, sin avances dibujados hasta que existan resultados reales. Ambas vistas arrancan listas para verse completas tanto en m&oacute;vil como en escritorio.</p>
+        <h1 class="drw-title" id="drw-title">Llaves oficiales<br>Planeta 16 · Universal 12</h1>
+        <p class="drw-copy">Aqu&iacute; la gr&aacute;fica manda. Planeta conserva su cuadro de 16 y Universal queda en 12 con 6 duelos fijos ya definidos, sin avances dibujados hasta que existan resultados reales. Ambas vistas arrancan listas para verse completas tanto en m&oacute;vil como en escritorio.</p>
         <div class="drw-action-row">
           <a class="drw-action-solid" href="/registro">Inscribir competidor</a>
           <a class="drw-action-ghost" href="/">Volver al inicio</a>
@@ -307,7 +308,7 @@
               <button type="button" class="drw-help-pill" data-drw-mode="detail">Detalle</button>
             </div>
             <div class="drw-helpbar-link-row" aria-label="Atajos del sorteo">
-              <a class="drw-help-pill" href="#drw-board-city">Ciudad</a>
+              <a class="drw-help-pill" href="#drw-board-city">Planeta</a>
               <a class="drw-help-pill" href="#drw-board-universal">Universal</a>
               <a class="drw-help-pill" href="#drw-fairness">Por que es imparcial</a>
             </div>
@@ -331,7 +332,7 @@
           </div>
           <div class="drw-chip-row">
             <span class="drw-chip">drand public network</span>
-            <span class="drw-chip">Ciudad 16 · Universal 12</span>
+            <span class="drw-chip">Planeta 16 · Universal 12</span>
             <span class="drw-chip">reproducible</span>
             <span class="drw-chip">champions style</span>
           </div>
@@ -345,7 +346,7 @@
           </div>
           <div class="drw-proof-body">
             <ol class="drw-steps">
-              <li><strong>Bellator fija el tope por divisi&oacute;n.</strong> Ciudad conserva 16 plazas; Universal cierra en 12 y deja visible d&oacute;nde faltan rivales antes del cierre.</li>
+              <li><strong>Bellator fija el tope por divisi&oacute;n.</strong> Planeta conserva 16 plazas; Universal cierra en 12 y deja visible d&oacute;nde faltan rivales antes del cierre.</li>
               <li><strong>Slot aleatorio fijo.</strong> Cada aprobado cae en un hueco libre con una regla determinista; no entra simplemente detr&aacute;s del anterior.</li>
               <li><strong>Cruces congelados.</strong> La llave publicada no reacomoda manualmente a quienes ya quedaron ubicados.</li>
             </ol>
@@ -394,8 +395,11 @@
       </section>
 
       <section class="drw-board-stack" aria-label="Llaves del torneo">
+        <article class="drw-board drw-board--planeta" id="drw-board-planeta">
+          <div class="drw-board-empty"><strong>Planeta</strong><span>Armando llave de 16 rivales...</span></div>
+        </article>
         <article class="drw-board drw-board--city" id="drw-board-city">
-          <div class="drw-board-empty"><strong>Ciudad</strong><span>Armando llave de 16 rivales...</span></div>
+          <div class="drw-board-empty"><strong>Planeta</strong><span>Armando llave de 16 rivales...</span></div>
         </article>
         <article class="drw-board drw-board--universal" id="drw-board-universal">
           <div class="drw-board-empty"><strong>Universal</strong><span>Armando llave de 12 rivales...</span></div>
@@ -417,9 +421,9 @@
       if (qualifiedRosterCache) return qualifiedRosterCache;
       try {
         const data = await fetch('/api/competidores-oficiales', { cache: 'no-store' }).then(function(res) { return res.json(); });
-        qualifiedRosterCache = data && typeof data === 'object' ? data : { ciudad: [], universal: [], max: 16 };
+        qualifiedRosterCache = data && typeof data === 'object' ? data : { planeta: [], universal: [], max: 16 };
       } catch (_) {
-        qualifiedRosterCache = { ciudad: [], universal: [], max: 16 };
+        qualifiedRosterCache = { planeta: [], universal: [], max: 16 };
       }
       return qualifiedRosterCache;
     }
@@ -747,7 +751,7 @@
     }
 
     function getDivisionSlotCap(slotInfo, divisionKey) {
-      const prop = divisionKey === 'universal' ? 'universal_max' : 'ciudad_max';
+      const prop = divisionKey === 'universal' ? 'universal_max' : 'planeta_max';
       const fallback = divisionKey === 'universal' ? 12 : 16;
       const parsed = Number(slotInfo && slotInfo[prop]);
       return parsed > 0 ? parsed : fallback;
@@ -777,17 +781,23 @@
     function renderDrawBoard(divisionKey, players, seedInfo, slotCap) {
       const mobileView = isMobileDrawViewport();
       const config = {
-        ciudad: {
-          kicker: 'Ciudad Draw Board',
-          title: 'Ciudad',
+        planeta: {
+          kicker: 'Planeta Draw Board',
+          title: 'Planeta',
           copy: 'Llave urbana con cuadro completo de 16 rivales. Los registros visibles ocupan su lugar y los huecos siguen marcados hasta cerrar cupos.',
-          label: 'Ciudad'
+          label: 'Planeta'
         },
         universal: {
           kicker: 'Universal Draw Board',
           title: 'Universal',
           copy: 'Universal queda en 12 rivales con 6 duelos pre-establecidos. No se dibujan avances ni rondas siguientes hasta que exista un resultado real.',
           label: 'Universal'
+        },
+        planeta: {
+          kicker: 'Planeta Draw Board',
+          title: 'Planeta',
+          copy: 'Llave planetaria con cuadro completo de 16 rivales. Los registros visibles ocupan su lugar.',
+          label: 'Planeta'
         }
       }[divisionKey];
 
@@ -804,7 +814,37 @@
       const boardMetrics = getBoardMetrics(slotCap, mobileView);
       const openSlots = Math.max(0, slotCap - players.length);
       const provisionalMode = openSlots > 0;
-      const drawModel = Draw.buildOrderedDrawModel(players, divisionKey, bracketSize);
+      const rosterSeed = players.map(function(p) { return p.pseudonimo; }).join('');
+      const drawSeed = Draw.makeDrawSeed(seedInfo, rosterSeed);
+      
+      let drawModel;
+      if (divisionKey === 'planeta') {
+        const planetaNames = [
+          'MERUS', 'Sekiro',
+          'ember', 'FANTASMANO',
+          '𝐌𝐚𝐪𝐮𝐢𝐚𝐯𝐞𝐥ō', 'Tenkai',
+          'Bullet火', 'Albyss',
+          '𝖂indham', 'Snake.',
+          'Ashley', 'AYAX',
+          'DRAKEN', 'YAN',
+          'DONNER', 'VELDORA TEMPEST'
+        ];
+        const sortedPlayers = [];
+        planetaNames.forEach(function(name) {
+           let searchName = name.normalize('NFKC').toLowerCase();
+           let p = players.find(function(x) { 
+               let pName = x.pseudonimo.normalize('NFKC').toLowerCase();
+               return pName === searchName || pName.includes(searchName); 
+           });
+           if (p) sortedPlayers.push(p);
+           else sortedPlayers.push({ pseudonimo: name, clan_name: 'Planeta', avatar_url: '' });
+        });
+        drawModel = Draw.buildOrderedDrawModel(sortedPlayers, divisionKey, 16);
+      } else {
+        drawModel = provisionalMode 
+          ? Draw.buildProgressiveDrawModel(players, divisionKey, bracketSize, drawSeed)
+          : Draw.buildDrawModel(players, divisionKey, bracketSize, drawSeed);
+      }
       const rightColumns = drawModel.right.slice().reverse();
       const rightLabels = roundLabels.slice().reverse();
       const leftChampion = drawModel.left[drawModel.left.length - 1][0].code;
@@ -854,6 +894,7 @@
     (async function initDrawBoards() {
       const cityEl = document.getElementById('drw-board-city');
       const universalEl = document.getElementById('drw-board-universal');
+      const planetaEl = document.getElementById('drw-board-planeta');
       const beaconEl = document.getElementById('drw-beacon-card');
       if (!cityEl || !universalEl || !beaconEl) return;
 
@@ -864,27 +905,30 @@
           fetchTransparentSeed(),
           fetch('/api/bracket/results').then(function(res){ return res.json(); }).catch(function(){ return []; })
         ]);
-
-        const players = result[0] || { ciudad: [], universal: [] };
+        const players = result[0] || { planeta: [], universal: [], ciudad: [] };
         const slotData = result[1];
         const seedInfo = result[2];
         const bracketResults = result[3];
 
-        const capC = getDivisionSlotCap(slotData, 'ciudad');
+        const capC = getDivisionSlotCap(slotData, 'planeta');
         const capU = getDivisionSlotCap(slotData, 'universal');
+        const capP = getDivisionSlotCap(slotData, 'planeta') || 16;
 
         // Handle Beacon
         const tournamentLocked = !!(slotData && slotData.locked);
-        const grouped = { ciudad: players.ciudad || [], universal: players.universal || [] };
+        const grouped = { planeta: players.planeta || players.ciudad || [], universal: players.universal || [] };
         const citySlotCap = capC;
         const universalSlotCap = capU;
+        const planetaSlotCap = capP;
         const provisionalBoards = [];
-        if (!tournamentLocked && grouped.ciudad.length < citySlotCap) provisionalBoards.push('Ciudad');
+        if (!tournamentLocked && grouped.planeta.length < citySlotCap) provisionalBoards.push('Planeta');
         if (!tournamentLocked && grouped.universal.length < universalSlotCap) provisionalBoards.push('Universal');
+        if (!tournamentLocked && grouped.planeta.length < planetaSlotCap) provisionalBoards.push('Planeta');
 
         if (tournamentLocked) {
-          grouped.ciudad = [];
+          grouped.planeta = [];
           grouped.universal = [];
+          grouped.planeta = [];
         }
 
         beaconEl.innerHTML = provisionalBoards.length
@@ -903,8 +947,9 @@
               '</div>'
             ].join('');
 
-        cityEl.innerHTML = renderDrawBoard('ciudad', grouped.ciudad, seedInfo, citySlotCap);
+        cityEl.innerHTML = renderDrawBoard('planeta', grouped.planeta, seedInfo, citySlotCap);
         universalEl.innerHTML = renderDrawBoard('universal', grouped.universal, seedInfo, universalSlotCap);
+        if (planetaEl) planetaEl.innerHTML = renderDrawBoard('planeta', grouped.planeta, seedInfo, planetaSlotCap);
         initDrawScrollbars();
         
         // Aplicar resultados de llaves
@@ -944,7 +989,7 @@
                      const noteEl = teamEl.querySelector('.drw-team-note');
                      if (noteEl) noteEl.innerText = 'Avanza';
                      const parent = teamEl.querySelector('.drw-team-avatar') || teamEl.querySelector('.drw-team-ph');
-                     const winnerPlayer = [...(grouped.ciudad||[]), ...(grouped.universal||[])].find(p => p.pseudonimo === r.winner_pseudo);
+                     const winnerPlayer = [...(grouped.planeta||[]), ...(grouped.universal||[]), ...(grouped.planeta||[])].find(p => p.pseudonimo === r.winner_pseudo);
                      const avatarUrl = winnerPlayer && winnerPlayer.avatar_url && winnerPlayer.avatar_url !== '<nil>' ? winnerPlayer.avatar_url : '';
                      
                      if (parent) {
@@ -970,7 +1015,7 @@
       } catch (e) {
         console.error("Failed to load boards:", e);
         beaconEl.innerHTML = '<div class="drw-beacon-box"><span class="drw-beacon-label">Beacon del sorteo</span><strong class="drw-beacon-value">No se pudo cargar la semilla</strong><span class="drw-beacon-proof">La vista sigue mostrando la estructura general.</span></div>';
-        cityEl.innerHTML = '<div class="drw-board-empty"><strong>Ciudad</strong><span>No se pudo generar la llave en este momento.</span></div>';
+        cityEl.innerHTML = '<div class="drw-board-empty"><strong>Planeta</strong><span>No se pudo generar la llave en este momento.</span></div>';
         universalEl.innerHTML = '<div class="drw-board-empty"><strong>Universal</strong><span>No se pudo generar la llave en este momento.</span></div>';
       }
     })();

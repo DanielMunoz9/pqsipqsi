@@ -139,8 +139,8 @@ func getBetFightDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	var details []BetDetail
-	var totalA, totalB int
-	var fighterA, fighterB string
+	var totalA, totalB, totalC int
+	var fighterA, fighterB, fighterC string
 	
 	for _, b := range bets {
 		user, _ := b["user_username"].(string)
@@ -151,27 +151,81 @@ func getBetFightDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		
 		details = append(details, BetDetail{Username: user, Picked: picked, Sobres: amt})
 		
-		if fighterA == "" { fighterA = picked; fighterB = opp }
-		
-		if picked == fighterA {
-			totalA += amt
+		if fighterA == "" { 
+			// Si el oponente tiene un pipe, es una triple amenaza
+			if strings.Contains(opp, "|") {
+				parts := strings.Split(opp, "|")
+				if picked != parts[0] && picked != parts[1] {
+					fighterA = picked
+					fighterB = parts[0]
+					fighterC = parts[1]
+				} else {
+					fighterA = opp // esto es un poco raro, pero inicializaremos desde db si es posible
+				}
+			} else if strings.Contains(picked, "|") {
+				parts := strings.Split(picked, "|")
+				fighterA = opp
+				fighterB = parts[0]
+				fighterC = parts[1]
+			} else {
+				fighterA = picked; fighterB = opp 
+			}
+		}
+	}
+	
+	// Mejor extraer los nombres de la pelea directamente de la BD en caso de 0 apuestas
+	var fightInfo []map[string]interface{}
+	resFight, _, _ := supabaseClient.From("bet_fights").Select("fighter_a, fighter_b", "", false).Eq("fight_id", fightID).Execute()
+	json.Unmarshal(resFight, &fightInfo)
+	if len(fightInfo) > 0 {
+		fighterA, _ = fightInfo[0]["fighter_a"].(string)
+		fb, _ := fightInfo[0]["fighter_b"].(string)
+		if strings.Contains(fb, "|") {
+			parts := strings.Split(fb, "|")
+			fighterB = parts[0]
+			fighterC = parts[1]
 		} else {
-			totalB += amt
+			fighterB = fb
+		}
+	}
+
+	for _, d := range details {
+		if d.Picked == fighterA {
+			totalA += d.Sobres
+		} else if fighterC != "" && d.Picked == fighterC {
+			totalC += d.Sobres
+		} else {
+			totalB += d.Sobres
 		}
 	}
 	
 	// Añadir 5 sobres semilla a cada lado para cuota dinámica
 	totalA += 5
 	totalB += 5
+	if fighterC != "" {
+		totalC += 5
+	}
 	
 	pctA := 50.0
 	pctB := 50.0
-	var oddsA, oddsB float64
-	if totalA + totalB > 0 {
-		pctA = math.Round(float64(totalA) / float64(totalA+totalB) * 100)
-		pctB = 100.0 - pctA
-		oddsA = math.Round((float64(totalA+totalB)/float64(totalA))*100)/100
-		oddsB = math.Round((float64(totalA+totalB)/float64(totalB))*100)/100
+	pctC := 0.0
+	var oddsA, oddsB, oddsC float64
+	totalPool := totalA + totalB + totalC
+
+	if totalPool > 0 {
+		pctA = math.Round(float64(totalA) / float64(totalPool) * 100)
+		pctB = math.Round(float64(totalB) / float64(totalPool) * 100)
+		if fighterC != "" {
+			pctC = 100.0 - pctA - pctB
+		} else {
+			pctB = 100.0 - pctA
+		}
+		
+		oddsA = math.Round((float64(totalPool)/float64(totalA))*100)/100
+		oddsB = math.Round((float64(totalPool)/float64(totalB))*100)/100
+		if fighterC != "" {
+			oddsC = math.Round((float64(totalPool)/float64(totalC))*100)/100
+		}
 	}
 	
 	resp := map[string]interface{}{
@@ -184,6 +238,12 @@ func getBetFightDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		"total_a": totalA - 5,
 		"total_b": totalB - 5,
 		"bets": details,
+	}
+	if fighterC != "" {
+		resp["fighter_c"] = fighterC
+		resp["pct_c"] = pctC
+		resp["odds_c"] = oddsC
+		resp["total_c"] = totalC - 5
 	}
 	
 	out, _ := json.Marshal(resp)

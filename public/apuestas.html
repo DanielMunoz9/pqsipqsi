@@ -270,7 +270,7 @@
     let playersDict = {};
     
     function startCountdown() {
-      const deadline = new Date("2026-08-10T05:00:00Z").getTime();
+      const deadline = new Date('2026-09-15T20:00:00').getTime();
       const el = document.getElementById('countdown-timer');
       if (!el) return;
       setInterval(() => {
@@ -400,8 +400,9 @@
         currentStats = await resStats.json();
         const players = await resPlayers.json();
         
+        const normKey = s => (s||'').normalize('NFKD').replace(/[^\w\s]/g, '').toLowerCase().replace(/\s+/g, '');
         if (players && players.length) {
-          players.forEach(p => { playersDict[p.pseudonimo] = p.top_char_1_image; });
+          players.forEach(p => { playersDict[normKey(p.pseudonimo)] = p.top_char_1_image || p.avatar_url; });
         }
         
         renderTrends(currentStats.trending_fighters);
@@ -415,16 +416,13 @@
           return;
         }
 
-        // Classify fights
-        const validLabels = ['Pelea Estelar', 'Pelea Co-Estelar', 'Pelea Oficial'];
         const isClosed = f => (f.status === 'closed') || (f.label || '').toUpperCase().includes('FASE II') || (f.division || '').toUpperCase().includes('FASE II');
-        const isValidFight = f => validLabels.some(l => (f.label || '').includes(l)) || isClosed(f);
         
-        const filtered = fights.filter(isValidFight);
-        const openFights = filtered.filter(f => !isClosed(f));
-        const closedFights = filtered.filter(f => isClosed(f));
+        const openFights = fights.filter(f => !isClosed(f));
+        const closedFights = fights.filter(f => isClosed(f));
         
         // Sort open fights: Estelar first, then Co-Estelar, then Oficial
+        
         const priority = f => {
           const label = (f.label || '').toLowerCase();
           if (label.includes('estelar') && !label.includes('co-estelar')) return 0;
@@ -465,8 +463,16 @@
             btnHtml = `<button class="btn-detalles" onclick="openDetalles('${f.fight_id}')">Ver más detalles</button>`;
           }
           
-          const imgA = playersDict[f.fighter_a] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
-          const imgB = playersDict[f.fighter_b] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const imgA = playersDict[typeof normKey !== 'undefined' ? normKey(f.fighter_a) : f.fighter_a] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          let fb_actual = f.fighter_b;
+          let fc_actual = null;
+          if (f.fighter_b.includes('|')) {
+             const parts = f.fighter_b.split('|');
+             fb_actual = parts[0].trim();
+             fc_actual = parts[1].trim();
+          }
+          const imgB = playersDict[typeof normKey !== 'undefined' ? normKey(fb_actual) : fb_actual] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const imgC = fc_actual ? (playersDict[typeof normKey !== 'undefined' ? normKey(fc_actual) : fc_actual] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?') : null;
           
           let oddsA = 2.00, oddsB = 2.00;
           let pctA = 50, pctB = 50;
@@ -519,16 +525,28 @@
                   </div>
                 </div>
                 <div class="vs-badge" style="align-self:center;">VS</div>
-                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_b}', 'b')" id="fb-${f.fight_id}-b" style="display:flex;flex-direction:column;align-items:center;">
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${fb_actual}', 'b')" id="fb-${f.fight_id}-b" style="display:flex;flex-direction:column;align-items:center;">
                   ${htmlFavB}
                   <img src="${imgB}" alt="P2">
-                  <span style="margin-bottom:2px;">${f.fighter_b}</span>
+                  <span style="margin-bottom:2px;">${fb_actual}</span>
                   <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctB}% de probabilidad</div>
                   <div class="fighter-odds" style="font-size:1.1rem;color:${textB};background:${colorB};padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid ${colorB};">
                      <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
                      <span>${oddsB.toFixed(2)}x</span>
                   </div>
                 </div>
+                ${fc_actual ? `
+                <div class="vs-badge" style="align-self:center;">VS</div>
+                <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${fc_actual}', 'c')" id="fb-${f.fight_id}-c" style="display:flex;flex-direction:column;align-items:center;">
+                  <img src="${imgC}" alt="P3">
+                  <span style="margin-bottom:2px;color:#0ea5e9;">${fc_actual}</span>
+                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">0% de probabilidad</div>
+                  <div class="fighter-odds" style="font-size:1.1rem;color:#0ea5e9;background:rgba(14,165,233,0.15);padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(14,165,233,0.15);">
+                     <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
+                     <span>${((currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id] ? currentStats.fight_stats[f.fight_id].odds_c : 2.00) || 2.00).toFixed(2)}x</span>
+                  </div>
+                </div>
+                ` : ''}
               </div>
               ${probHtml}
               ${ closed ? `

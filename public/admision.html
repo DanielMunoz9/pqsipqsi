@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -539,8 +539,10 @@
       try {
         const rc = sessionStorage.getItem('bellator_exam_result');
         const ru = sessionStorage.getItem('bellator_exam_result_universal');
+        const rp = sessionStorage.getItem('bellator_exam_result_planeta');
         if (rc) { result = JSON.parse(rc); sessionStorage.removeItem('bellator_exam_result'); division = 'Ciudad'; retryUrl = '/examen'; }
         else if (ru) { result = JSON.parse(ru); sessionStorage.removeItem('bellator_exam_result_universal'); division = 'Universal · 3-A'; retryUrl = '/examen-universal'; }
+        else if (rp) { result = JSON.parse(rp); sessionStorage.removeItem('bellator_exam_result_planeta'); division = 'Planeta'; retryUrl = '/examen-planeta'; }
       } catch(e) {}
       const card = document.getElementById('introCard');
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,220 +15,1484 @@
   <title>BELLATOR ROLBATTLE — Inicio</title>
   <link rel="stylesheet" href="/shared.css?v=15">
   <style>
-    .bl-search-hero{padding:64px 24px 52px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:1px solid var(--bl-border2);position:relative;z-index:10}
-    .bl-sh-eyebrow{font-family:'Teko',sans-serif;letter-spacing:6px;font-size:.7rem;color:var(--bl-gold);text-transform:uppercase;opacity:.9}
-    .bl-sh-title{font-family:'Teko',sans-serif;font-size:clamp(2.8rem,6vw,4.2rem);font-weight:700;line-height:.95;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 45%,var(--bl-gold2,#f0c040) 85%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0}
-    .bl-sh-sub{font-size:.95rem;color:var(--bl-soft);margin:0 0 14px;max-width:480px;opacity:.85}
-    .bl-sh-wrap{width:100%;max-width:680px}
-    .bl-gsr-cat-label{font-size:.63rem;letter-spacing:3px;padding:8px 16px 4px;color:var(--bl-muted);text-transform:uppercase;background:rgba(13,17,23,.5);border-bottom:1px solid var(--bl-border2);font-family:'Teko',sans-serif}
-    .bl-gsr-page-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--bl-border2);text-decoration:none;color:inherit}
-    .bl-gsr-page-item:hover{background:rgba(212,175,55,.06)}
-    .bl-gsr-page-icon{width:36px;height:36px;border-radius:8px;background:rgba(212,175,55,.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;color:var(--bl-gold)}
-    .bl-gsr-page-name{font-size:.95rem;color:var(--bl-text);font-weight:700}
-    .bl-gsr-page-desc{font-size:.8rem;color:var(--bl-muted)}
-    .bl-gsr-page-arrow{margin-left:auto;color:var(--bl-muted);font-size:.85rem;flex-shrink:0;padding-left:8px}
-    .bl-home-intro{max-width:1320px;margin:0 auto;padding:36px 24px 20px;border-bottom:1px solid rgba(212,175,55,.10)}
-    .bl-home-intro-inner{max-width:900px;display:grid;gap:8px}
-    .bl-home-intro-eyebrow{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.85}
-    .bl-home-intro-title{font-family:'Teko',sans-serif;font-size:clamp(2.4rem,4.5vw,3.4rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0}
-    .bl-home-intro-body{font-size:1.05rem;color:var(--bl-soft);line-height:1.7;max-width:760px;border-left:3px solid rgba(212,175,55,.36);padding-left:18px;margin-top:4px}
-    .bl-home-intro-copy{display:none}
-    .bl-home-carousel[hidden]{display:none !important}
-    .bl-home-hero--slim{padding:28px 24px 30px}
-    .bl-home-hero--slim .bl-hero-copy{isolation:isolate;border-color:rgba(212,175,55,.16);background:
-      radial-gradient(circle at 78% 24%,rgba(31,111,235,.20) 0%,rgba(31,111,235,.08) 20%,transparent 38%),
-      radial-gradient(circle at 82% 78%,rgba(212,175,55,.11) 0%,transparent 28%),
-      linear-gradient(140deg,transparent 0 70%,rgba(31,111,235,.11) 70% 78%,transparent 78% 100%),
-      linear-gradient(140deg,transparent 0 78%,rgba(212,175,55,.11) 78% 84%,transparent 84% 100%),
-      repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 160px),
-      linear-gradient(115deg,rgba(13,17,23,.96) 0%,rgba(10,13,19,.88) 48%,rgba(8,15,28,.80) 100%)}
-    .bl-home-hero--slim .bl-hero-copy::before{content:'';position:absolute;right:24px;top:22px;width:220px;height:220px;border-radius:50%;border:6px solid rgba(212,175,55,.10);box-shadow:0 0 0 34px rgba(212,175,55,.03),0 0 0 72px rgba(212,175,55,.02);opacity:.72;pointer-events:none}
-    .bl-home-hero--slim .bl-hero-copy-inner{max-width:560px}
-    .bl-hero-orb{position:absolute;right:24px;top:22px;width:220px;height:220px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:0}
-    .bl-hero-orb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
-    .bl-hero-orb-img.orb-active{opacity:.68}
-    .bl-home-hero-grid{grid-template-columns:1fr;align-items:start}
-    .bl-home-hero-main{display:grid;gap:18px;min-width:0}
-    .bl-home-hero-meta{max-width:none;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-    .bl-home-hero-meta .bl-aside-card{height:100%}
-    .bl-home-hero-lower{max-width:1320px;margin:18px auto 0}
-    .bl-home-carousel{max-width:1320px;margin:0 auto;padding:4px 24px 50px}
-    .bl-home-carousel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px}
-    .bl-home-carousel-copy{max-width:520px;margin:0;color:var(--bl-muted);font-size:.95rem;line-height:1.5}
-    .bl-home-carousel-scene{position:relative;height:420px;overflow:hidden;padding:8px 0 4px}
-    .bl-home-carousel-track{display:flex;align-items:stretch;gap:22px;height:100%;transition:transform .62s cubic-bezier(.22,1,.36,1);will-change:transform}
-    .bl-home-carousel-card{position:relative;flex:0 0 clamp(274px,24vw,320px);width:clamp(274px,24vw,320px);height:360px;border-radius:28px;overflow:hidden;text-decoration:none;color:var(--bl-text);background:linear-gradient(180deg,rgba(7,10,16,.82),rgba(7,10,16,.98));border:1px solid rgba(255,255,255,.08);box-shadow:0 26px 58px rgba(0,0,0,.34);transform:translateY(10px) scale(.86);opacity:.48;filter:blur(.35px) saturate(.78);transition:transform .62s cubic-bezier(.22,1,.36,1),opacity .35s ease,filter .35s ease,border-color .25s ease,box-shadow .25s ease;will-change:transform,opacity;isolation:isolate}
-    .bl-home-carousel-card::before{content:'';position:absolute;inset:0;background:linear-gradient(165deg,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 42%),radial-gradient(circle at 82% 18%,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 24%);opacity:.95;pointer-events:none}
-    .bl-home-carousel-card::after{content:'';position:absolute;inset:14px;border-radius:22px;border:1px solid rgba(255,255,255,.08);pointer-events:none;opacity:.75}
-    .bl-home-carousel-card.is-near{transform:translateY(4px) scale(.93);opacity:.8;filter:blur(.12px) saturate(.92)}
-    .bl-home-carousel-card.is-far{opacity:.34}
-    .bl-home-carousel-card.is-active{border-color:rgba(212,175,55,.34);box-shadow:0 32px 80px rgba(0,0,0,.42),0 0 0 1px rgba(212,175,55,.08)}
-    .bl-home-carousel-card.is-active{transform:translateY(0) scale(1);opacity:1;filter:none}
-    .bl-home-carousel-top,.bl-home-carousel-bottom{position:relative;z-index:2}
-    .bl-home-carousel-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 18px 0}
-    .bl-home-carousel-badge,.bl-home-carousel-index{display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(10,14,20,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-    .bl-home-carousel-badge{padding:8px 12px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.82)}
-    .bl-home-carousel-index{padding:8px 10px;font-family:'Teko',sans-serif;font-size:.88rem;letter-spacing:2px;color:var(--bl-gold)}
-    .bl-home-carousel-media{position:absolute;inset:0;overflow:hidden}
-    .bl-home-carousel-media img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.06) contrast(1.04) brightness(.82)}
-    .bl-home-carousel-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,10,16,.02) 0%,rgba(7,10,16,.08) 38%,rgba(7,10,16,.92) 100%)}
-    .bl-home-carousel-media--abstract{background:radial-gradient(circle at 50% 26%,var(--card-glow,rgba(212,175,55,.18)) 0%,transparent 24%),linear-gradient(135deg,rgba(255,255,255,.06),transparent 30%),linear-gradient(145deg,#101928 0%,#0b1220 48%,#070b11 100%)}
-    .bl-home-carousel-fallback{position:absolute;inset:0;display:grid;place-items:center;font-family:'Teko',sans-serif;font-size:5.2rem;letter-spacing:.08em;color:rgba(255,255,255,.92);text-shadow:0 0 18px rgba(0,0,0,.34)}
-    .bl-home-carousel-bottom{position:absolute;left:0;right:0;bottom:0;padding:18px 20px 20px}
-    .bl-home-carousel-name{font-family:'Teko',sans-serif;font-size:2rem;line-height:.88;letter-spacing:.03em;color:#fff;text-transform:uppercase}
-    .bl-home-carousel-meta{margin-top:8px;font-size:.9rem;line-height:1.45;color:var(--bl-soft)}
-    .bl-home-carousel-link{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold)}
-    .bl-home-carousel-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:18px}
-    .bl-home-carousel-nav{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(15,20,29,.94),rgba(9,13,18,.94));color:var(--bl-text);font-size:1.15rem;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease}
-    .bl-home-carousel-nav:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.36);background:linear-gradient(180deg,rgba(22,28,38,.96),rgba(11,15,21,.96))}
-    .bl-home-carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px;min-height:18px}
-    .bl-home-carousel-dots button{width:10px;height:10px;border-radius:50%;border:none;background:rgba(255,255,255,.18);cursor:pointer;transition:transform .18s ease,background .18s ease}
-    .bl-home-carousel-dots button.is-active{background:var(--bl-gold);transform:scale(1.2)}
+    .bl-search-hero {
+      padding: 64px 24px 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--bl-border2);
+      position: relative;
+      z-index: 10
+    }
+
+    .bl-sh-eyebrow {
+      font-family: 'Teko', sans-serif;
+      letter-spacing: 6px;
+      font-size: .7rem;
+      color: var(--bl-gold);
+      text-transform: uppercase;
+      opacity: .9
+    }
+
+    .bl-sh-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-weight: 700;
+      line-height: .95;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--bl-gold) 0%, #fff 45%, var(--bl-gold2, #f0c040) 85%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0
+    }
+
+    .bl-sh-sub {
+      font-size: .95rem;
+      color: var(--bl-soft);
+      margin: 0 0 14px;
+      max-width: 480px;
+      opacity: .85
+    }
+
+    .bl-sh-wrap {
+      width: 100%;
+      max-width: 680px
+    }
+
+    .bl-gsr-cat-label {
+      font-size: .63rem;
+      letter-spacing: 3px;
+      padding: 8px 16px 4px;
+      color: var(--bl-muted);
+      text-transform: uppercase;
+      background: rgba(13, 17, 23, .5);
+      border-bottom: 1px solid var(--bl-border2);
+      font-family: 'Teko', sans-serif
+    }
+
+    .bl-gsr-page-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      transition: background .15s;
+      border-bottom: 1px solid var(--bl-border2);
+      text-decoration: none;
+      color: inherit
+    }
+
+    .bl-gsr-page-item:hover {
+      background: rgba(212, 175, 55, .06)
+    }
+
+    .bl-gsr-page-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(212, 175, 55, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: var(--bl-gold)
+    }
+
+    .bl-gsr-page-name {
+      font-size: .95rem;
+      color: var(--bl-text);
+      font-weight: 700
+    }
+
+    .bl-gsr-page-desc {
+      font-size: .8rem;
+      color: var(--bl-muted)
+    }
+
+    .bl-gsr-page-arrow {
+      margin-left: auto;
+      color: var(--bl-muted);
+      font-size: .85rem;
+      flex-shrink: 0;
+      padding-left: 8px
+    }
+
+    .bl-home-intro {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 36px 24px 20px;
+      border-bottom: 1px solid rgba(212, 175, 55, .10)
+    }
+
+    .bl-home-intro-inner {
+      max-width: 900px;
+      display: grid;
+      gap: 8px
+    }
+
+    .bl-home-intro-eyebrow {
+      font-family: 'Teko', sans-serif;
+      font-size: .72rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--bl-gold);
+      opacity: .85
+    }
+
+    .bl-home-intro-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+      font-weight: 700;
+      line-height: .9;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--bl-gold) 0%, #fff 50%, var(--bl-gold) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0
+    }
+
+    .bl-home-intro-body {
+      font-size: 1.05rem;
+      color: var(--bl-soft);
+      line-height: 1.7;
+      max-width: 760px;
+      border-left: 3px solid rgba(212, 175, 55, .36);
+      padding-left: 18px;
+      margin-top: 4px
+    }
+
+    .bl-home-intro-copy {
+      display: none
+    }
+
+    .bl-home-carousel[hidden] {
+      display: none !important
+    }
+
+    .bl-home-hero--slim {
+      padding: 28px 24px 30px
+    }
+
+    .bl-home-hero--slim .bl-hero-copy {
+      isolation: isolate;
+      border-color: rgba(212, 175, 55, .16);
+      background:
+        radial-gradient(circle at 78% 24%, rgba(31, 111, 235, .20) 0%, rgba(31, 111, 235, .08) 20%, transparent 38%),
+        radial-gradient(circle at 82% 78%, rgba(212, 175, 55, .11) 0%, transparent 28%),
+        linear-gradient(140deg, transparent 0 70%, rgba(31, 111, 235, .11) 70% 78%, transparent 78% 100%),
+        linear-gradient(140deg, transparent 0 78%, rgba(212, 175, 55, .11) 78% 84%, transparent 84% 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, .02) 0 1px, transparent 1px 160px),
+        linear-gradient(115deg, rgba(13, 17, 23, .96) 0%, rgba(10, 13, 19, .88) 48%, rgba(8, 15, 28, .80) 100%)
+    }
+
+    .bl-home-hero--slim .bl-hero-copy::before {
+      content: '';
+      position: absolute;
+      right: 24px;
+      top: 22px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 6px solid rgba(212, 175, 55, .10);
+      box-shadow: 0 0 0 34px rgba(212, 175, 55, .03), 0 0 0 72px rgba(212, 175, 55, .02);
+      opacity: .72;
+      pointer-events: none
+    }
+
+    .bl-home-hero--slim .bl-hero-copy-inner {
+      max-width: 560px
+    }
+
+    .bl-hero-orb {
+      position: absolute;
+      right: 24px;
+      top: 22px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0
+    }
+
+    .bl-hero-orb-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.2s ease
+    }
+
+    .bl-hero-orb-img.orb-active {
+      opacity: .68
+    }
+
+    .bl-home-hero-grid {
+      grid-template-columns: 1fr;
+      align-items: start
+    }
+
+    .bl-home-hero-main {
+      display: grid;
+      gap: 18px;
+      min-width: 0
+    }
+
+    .bl-home-hero-meta {
+      max-width: none;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px
+    }
+
+    .bl-home-hero-meta .bl-aside-card {
+      height: 100%
+    }
+
+    .bl-home-hero-lower {
+      max-width: 1320px;
+      margin: 18px auto 0
+    }
+
+    .bl-home-carousel {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 4px 24px 50px
+    }
+
+    .bl-home-carousel-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 20px
+    }
+
+    .bl-home-carousel-copy {
+      max-width: 520px;
+      margin: 0;
+      color: var(--bl-muted);
+      font-size: .95rem;
+      line-height: 1.5
+    }
+
+    .bl-home-carousel-scene {
+      position: relative;
+      height: 420px;
+      overflow: hidden;
+      padding: 8px 0 4px
+    }
+
+    .bl-home-carousel-track {
+      display: flex;
+      align-items: stretch;
+      gap: 22px;
+      height: 100%;
+      transition: transform .62s cubic-bezier(.22, 1, .36, 1);
+      will-change: transform
+    }
+
+    .bl-home-carousel-card {
+      position: relative;
+      flex: 0 0 clamp(274px, 24vw, 320px);
+      width: clamp(274px, 24vw, 320px);
+      height: 360px;
+      border-radius: 28px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--bl-text);
+      background: linear-gradient(180deg, rgba(7, 10, 16, .82), rgba(7, 10, 16, .98));
+      border: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 26px 58px rgba(0, 0, 0, .34);
+      transform: translateY(10px) scale(.86);
+      opacity: .48;
+      filter: blur(.35px) saturate(.78);
+      transition: transform .62s cubic-bezier(.22, 1, .36, 1), opacity .35s ease, filter .35s ease, border-color .25s ease, box-shadow .25s ease;
+      will-change: transform, opacity;
+      isolation: isolate
+    }
+
+    .bl-home-carousel-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(165deg, var(--card-glow, rgba(212, 175, 55, .18)) 0%, transparent 42%), radial-gradient(circle at 82% 18%, var(--card-glow, rgba(212, 175, 55, .18)) 0%, transparent 24%);
+      opacity: .95;
+      pointer-events: none
+    }
+
+    .bl-home-carousel-card::after {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      pointer-events: none;
+      opacity: .75
+    }
+
+    .bl-home-carousel-card.is-near {
+      transform: translateY(4px) scale(.93);
+      opacity: .8;
+      filter: blur(.12px) saturate(.92)
+    }
+
+    .bl-home-carousel-card.is-far {
+      opacity: .34
+    }
+
+    .bl-home-carousel-card.is-active {
+      border-color: rgba(212, 175, 55, .34);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, .42), 0 0 0 1px rgba(212, 175, 55, .08)
+    }
+
+    .bl-home-carousel-card.is-active {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      filter: none
+    }
+
+    .bl-home-carousel-top,
+    .bl-home-carousel-bottom {
+      position: relative;
+      z-index: 2
+    }
+
+    .bl-home-carousel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 18px 18px 0
+    }
+
+    .bl-home-carousel-badge,
+    .bl-home-carousel-index {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .10);
+      background: rgba(10, 14, 20, .48);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px)
+    }
+
+    .bl-home-carousel-badge {
+      padding: 8px 12px;
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .82)
+    }
+
+    .bl-home-carousel-index {
+      padding: 8px 10px;
+      font-family: 'Teko', sans-serif;
+      font-size: .88rem;
+      letter-spacing: 2px;
+      color: var(--bl-gold)
+    }
+
+    .bl-home-carousel-media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden
+    }
+
+    .bl-home-carousel-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.06) contrast(1.04) brightness(.82)
+    }
+
+    .bl-home-carousel-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 10, 16, .02) 0%, rgba(7, 10, 16, .08) 38%, rgba(7, 10, 16, .92) 100%)
+    }
+
+    .bl-home-carousel-media--abstract {
+      background: radial-gradient(circle at 50% 26%, var(--card-glow, rgba(212, 175, 55, .18)) 0%, transparent 24%), linear-gradient(135deg, rgba(255, 255, 255, .06), transparent 30%), linear-gradient(145deg, #101928 0%, #0b1220 48%, #070b11 100%)
+    }
+
+    .bl-home-carousel-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 5.2rem;
+      letter-spacing: .08em;
+      color: rgba(255, 255, 255, .92);
+      text-shadow: 0 0 18px rgba(0, 0, 0, .34)
+    }
+
+    .bl-home-carousel-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 18px 20px 20px
+    }
+
+    .bl-home-carousel-name {
+      font-family: 'Teko', sans-serif;
+      font-size: 2rem;
+      line-height: .88;
+      letter-spacing: .03em;
+      color: #fff;
+      text-transform: uppercase
+    }
+
+    .bl-home-carousel-meta {
+      margin-top: 8px;
+      font-size: .9rem;
+      line-height: 1.45;
+      color: var(--bl-soft)
+    }
+
+    .bl-home-carousel-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .10);
+      font-size: .72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--bl-gold)
+    }
+
+    .bl-home-carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px
+    }
+
+    .bl-home-carousel-nav {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: linear-gradient(180deg, rgba(15, 20, 29, .94), rgba(9, 13, 18, .94));
+      color: var(--bl-text);
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease
+    }
+
+    .bl-home-carousel-nav:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 175, 55, .36);
+      background: linear-gradient(180deg, rgba(22, 28, 38, .96), rgba(11, 15, 21, .96))
+    }
+
+    .bl-home-carousel-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 18px
+    }
+
+    .bl-home-carousel-dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, .18);
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease
+    }
+
+    .bl-home-carousel-dots button.is-active {
+      background: var(--bl-gold);
+      transform: scale(1.2)
+    }
+
     /* ── PRÓXIMAS PELEAS: carrusel 2 filas ─────────────────────────────────── */
-    .bl-prox-shell{position:relative}
-    .bl-prox-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,minmax(0,1fr));grid-auto-columns:minmax(300px,320px);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:2px 0 10px;scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.35) rgba(255,255,255,.04);touch-action:pan-x;-webkit-overflow-scrolling:touch}
-    .bl-prox-grid::-webkit-scrollbar{height:8px}
-    .bl-prox-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:999px}
-    .bl-prox-grid::-webkit-scrollbar-thumb{background:rgba(212,175,55,.45);border-radius:999px}
-    .bl-prox-card{scroll-snap-align:start;background:rgba(255,255,255,.035);border:1px solid rgba(212,175,55,.18);border-radius:16px;padding:20px 18px 18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden}
-    .bl-prox-nav{display:flex;gap:10px}
-    .bl-prox-nav-btn{width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(13,17,23,.86);color:#fff;cursor:pointer}
-    .bl-prox-nav-btn:hover{border-color:rgba(212,175,55,.45);color:var(--bl-gold)}
-    @media(max-width:960px){
-      .bl-prox-grid{grid-template-rows:1fr;grid-auto-columns:minmax(86vw,86vw);gap:14px;padding-bottom:2px;scrollbar-width:none;-ms-overflow-style:none}
-      .bl-prox-grid::-webkit-scrollbar{display:none}
-      .bl-prox-nav{display:none}
+    .bl-prox-shell {
+      position: relative
     }
-    .bl-draw-callout{max-width:1320px;margin:0 auto;padding:20px 24px 12px}
-    .bl-draw-callout-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;padding:26px 28px;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(6,11,19,.97) 0%,rgba(10,16,28,.96) 40%,rgba(22,10,11,.96) 100%);box-shadow:0 24px 68px rgba(0,0,0,.34);isolation:isolate}
-    .bl-draw-callout-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 16% 18%,rgba(66,159,255,.22) 0%,transparent 26%),radial-gradient(circle at 84% 26%,rgba(255,115,78,.20) 0%,transparent 28%),linear-gradient(120deg,transparent 0 72%,rgba(212,175,55,.08) 72% 79%,transparent 79% 100%);pointer-events:none}
-    .bl-draw-callout-card::after{content:'';position:absolute;inset:14px;border-radius:22px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
-    .bl-draw-callout-copy,.bl-draw-callout-actions{position:relative;z-index:2}
-    .bl-draw-callout-kicker{font-family:'Teko',sans-serif;font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9}
-    .bl-draw-callout-title{font-family:'Teko',sans-serif;font-size:clamp(2.2rem,4.4vw,3.35rem);font-weight:700;line-height:.88;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 52%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:4px 0 0}
-    .bl-draw-callout-body{max-width:760px;margin:8px 0 0;color:var(--bl-soft);font-size:.96rem;line-height:1.64}
-    .bl-draw-callout-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
-    .bl-draw-callout-chip{display:inline-flex;align-items:center;min-height:32px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.62rem;letter-spacing:1.9px;text-transform:uppercase;color:rgba(238,244,255,.82);white-space:nowrap}
-    .bl-draw-callout-btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 24px;border-radius:999px;background:linear-gradient(135deg,#d4af37 0%,#f1cb57 52%,#b98b18 100%);color:#0d1117;text-decoration:none;font-family:'Teko',sans-serif;font-size:1.18rem;letter-spacing:2.8px;text-transform:uppercase;font-weight:700;box-shadow:0 18px 38px rgba(212,175,55,.22);transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
-    .bl-draw-callout-btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 24px 48px rgba(212,175,55,.28)}
-    @media (max-width:960px){
-      .bl-home-intro{padding:22px 14px 10px}
-      .bl-home-hero--slim{padding:24px 14px 22px}
-      .bl-home-hero-main{gap:14px}
-      .bl-home-hero-lower{margin-top:14px}
-      .bl-home-hero-meta{grid-template-columns:1fr;margin-top:0}
-      .bl-home-hero--slim .bl-hero-copy::before{right:12px;top:auto;bottom:18px;width:150px;height:150px;box-shadow:0 0 0 24px rgba(212,175,55,.03),0 0 0 50px rgba(212,175,55,.02)}
-      .bl-hero-orb{right:12px;bottom:18px;top:auto;width:150px;height:150px}
-      .bl-home-carousel{padding:0 14px 38px}
-      .bl-home-carousel-head{margin-bottom:14px}
-      .bl-home-carousel-scene{height:auto}
-      .bl-home-carousel-track.is-mobile{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;height:auto;scrollbar-width:none;transition:none;transform:none !important}
-      .bl-home-carousel-track.is-mobile::-webkit-scrollbar{display:none}
-      .bl-home-carousel-track.is-mobile .bl-home-carousel-card{position:relative;min-width:80vw;width:80vw;height:330px;transform:none !important;opacity:1 !important;filter:none !important;scroll-snap-align:center}
-      .bl-home-carousel-controls{margin-top:8px}
-      .bl-draw-callout{padding:16px 14px 10px}
-      .bl-draw-callout-card{grid-template-columns:1fr;padding:18px 16px}
-      .bl-draw-callout-actions{display:flex;justify-content:flex-start}
-      .bl-draw-callout-btn{width:100%}
+
+    .bl-prox-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      grid-auto-columns: minmax(300px, 320px);
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 2px 0 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212, 175, 55, .35) rgba(255, 255, 255, .04);
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch
     }
-    mark{background:rgba(212,175,55,.22);color:var(--bl-gold);border-radius:2px;padding:0 1px;font-style:normal}
-    .bl-nav-card-icon{color:var(--bl-gold)}
-    .bl-nav-card-icon svg{display:block;stroke:var(--bl-gold)}
+
+    .bl-prox-grid::-webkit-scrollbar {
+      height: 8px
+    }
+
+    .bl-prox-grid::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, .05);
+      border-radius: 999px
+    }
+
+    .bl-prox-grid::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, .45);
+      border-radius: 999px
+    }
+
+    .bl-prox-card {
+      scroll-snap-align: start;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(212, 175, 55, .18);
+      border-radius: 16px;
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      overflow: hidden
+    }
+
+    .bl-prox-nav {
+      display: flex;
+      gap: 10px
+    }
+
+    .bl-prox-nav-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .15);
+      background: rgba(13, 17, 23, .86);
+      color: #fff;
+      cursor: pointer
+    }
+
+    .bl-prox-nav-btn:hover {
+      border-color: rgba(212, 175, 55, .45);
+      color: var(--bl-gold)
+    }
+
+    @media(max-width:960px) {
+      .bl-prox-grid {
+        grid-template-rows: 1fr;
+        grid-auto-columns: minmax(86vw, 86vw);
+        gap: 14px;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+        -ms-overflow-style: none
+      }
+
+      .bl-prox-grid::-webkit-scrollbar {
+        display: none
+      }
+
+      .bl-prox-nav {
+        display: none
+      }
+    }
+
+    .bl-draw-callout {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 20px 24px 12px
+    }
+
+    .bl-draw-callout-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      padding: 26px 28px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      background: linear-gradient(135deg, rgba(6, 11, 19, .97) 0%, rgba(10, 16, 28, .96) 40%, rgba(22, 10, 11, .96) 100%);
+      box-shadow: 0 24px 68px rgba(0, 0, 0, .34);
+      isolation: isolate
+    }
+
+    .bl-draw-callout-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 16% 18%, rgba(66, 159, 255, .22) 0%, transparent 26%), radial-gradient(circle at 84% 26%, rgba(255, 115, 78, .20) 0%, transparent 28%), linear-gradient(120deg, transparent 0 72%, rgba(212, 175, 55, .08) 72% 79%, transparent 79% 100%);
+      pointer-events: none
+    }
+
+    .bl-draw-callout-card::after {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, .06);
+      pointer-events: none
+    }
+
+    .bl-draw-callout-copy,
+    .bl-draw-callout-actions {
+      position: relative;
+      z-index: 2
+    }
+
+    .bl-draw-callout-kicker {
+      font-family: 'Teko', sans-serif;
+      font-size: .72rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--bl-gold);
+      opacity: .9
+    }
+
+    .bl-draw-callout-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.2rem, 4.4vw, 3.35rem);
+      font-weight: 700;
+      line-height: .88;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--bl-gold) 0%, #fff 52%, var(--bl-gold) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 4px 0 0
+    }
+
+    .bl-draw-callout-body {
+      max-width: 760px;
+      margin: 8px 0 0;
+      color: var(--bl-soft);
+      font-size: .96rem;
+      line-height: 1.64
+    }
+
+    .bl-draw-callout-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px
+    }
+
+    .bl-draw-callout-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .10);
+      font-size: .62rem;
+      letter-spacing: 1.9px;
+      text-transform: uppercase;
+      color: rgba(238, 244, 255, .82);
+      white-space: nowrap
+    }
+
+    .bl-draw-callout-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #d4af37 0%, #f1cb57 52%, #b98b18 100%);
+      color: #0d1117;
+      text-decoration: none;
+      font-family: 'Teko', sans-serif;
+      font-size: 1.18rem;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      box-shadow: 0 18px 38px rgba(212, 175, 55, .22);
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease
+    }
+
+    .bl-draw-callout-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 24px 48px rgba(212, 175, 55, .28)
+    }
+
+    @media (max-width:960px) {
+      .bl-home-intro {
+        padding: 22px 14px 10px
+      }
+
+      .bl-home-hero--slim {
+        padding: 24px 14px 22px
+      }
+
+      .bl-home-hero-main {
+        gap: 14px
+      }
+
+      .bl-home-hero-lower {
+        margin-top: 14px
+      }
+
+      .bl-home-hero-meta {
+        grid-template-columns: 1fr;
+        margin-top: 0
+      }
+
+      .bl-home-hero--slim .bl-hero-copy::before {
+        right: 12px;
+        top: auto;
+        bottom: 18px;
+        width: 150px;
+        height: 150px;
+        box-shadow: 0 0 0 24px rgba(212, 175, 55, .03), 0 0 0 50px rgba(212, 175, 55, .02)
+      }
+
+      .bl-hero-orb {
+        right: 12px;
+        bottom: 18px;
+        top: auto;
+        width: 150px;
+        height: 150px
+      }
+
+      .bl-home-carousel {
+        padding: 0 14px 38px
+      }
+
+      .bl-home-carousel-head {
+        margin-bottom: 14px
+      }
+
+      .bl-home-carousel-scene {
+        height: auto
+      }
+
+      .bl-home-carousel-track.is-mobile {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 4px 4px 14px;
+        height: auto;
+        scrollbar-width: none;
+        transition: none;
+        transform: none !important
+      }
+
+      .bl-home-carousel-track.is-mobile::-webkit-scrollbar {
+        display: none
+      }
+
+      .bl-home-carousel-track.is-mobile .bl-home-carousel-card {
+        position: relative;
+        min-width: 80vw;
+        width: 80vw;
+        height: 330px;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+        scroll-snap-align: center
+      }
+
+      .bl-home-carousel-controls {
+        margin-top: 8px
+      }
+
+      .bl-draw-callout {
+        padding: 16px 14px 10px
+      }
+
+      .bl-draw-callout-card {
+        grid-template-columns: 1fr;
+        padding: 18px 16px
+      }
+
+      .bl-draw-callout-actions {
+        display: flex;
+        justify-content: flex-start
+      }
+
+      .bl-draw-callout-btn {
+        width: 100%
+      }
+    }
+
+    mark {
+      background: rgba(212, 175, 55, .22);
+      color: var(--bl-gold);
+      border-radius: 2px;
+      padding: 0 1px;
+      font-style: normal
+    }
+
+    .bl-nav-card-icon {
+      color: var(--bl-gold)
+    }
+
+    .bl-nav-card-icon svg {
+      display: block;
+      stroke: var(--bl-gold)
+    }
+
     /* ─── TOURNAMENT PROMO ──────────────────────────────────────── */
-    .bl-divshow{opacity:0;transform:translateY(18px);transition:opacity .75s ease,transform .75s ease}
-    .bl-divshow.bl-ds-visible{opacity:1;transform:translateY(0)}
-    .bl-divshow-card{position:relative;overflow:hidden;border-radius:24px;padding:16px 16px 14px;background:linear-gradient(180deg,rgba(7,10,16,.95),rgba(7,10,16,.88));border:1px solid rgba(255,255,255,.08);box-shadow:0 22px 58px rgba(0,0,0,.30)}
-    .bl-divshow-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(212,175,55,.10),transparent 32%);pointer-events:none}
-    .bl-divshow-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.08) 0 1px,transparent 1px 8px);background-size:14px 14px;opacity:.07;mix-blend-mode:screen;pointer-events:none}
-    .bl-divshow-head{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .bl-divshow-kicker{font-size:.68rem;letter-spacing:3.4px;text-transform:uppercase;color:var(--bl-gold);font-weight:700}
-    .bl-divshow-title{font-family:'Teko',sans-serif;font-size:1.9rem;line-height:.88;letter-spacing:.4px;color:#fff;text-transform:uppercase;margin:2px 0 0}
-    .bl-divshow-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.78);white-space:nowrap}
-    .bl-divshow-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .bl-ds-panel{position:relative;display:block;min-height:220px;border-radius:20px;overflow:hidden;text-decoration:none;background:#090d12;border:1px solid rgba(255,255,255,.08);isolation:isolate}
-    .bl-ds-panel:focus-visible{outline:2px solid var(--bl-gold);outline-offset:3px}
-    .bl-ds-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.02);transition:transform .55s ease,filter .55s ease;filter:saturate(1.08) contrast(1.1) brightness(.8)}
-    .bl-ds-panel:hover .bl-ds-photo{transform:scale(1.06);filter:saturate(1.14) contrast(1.14) brightness(.86)}
-    .bl-ds-gif-wrap{position:absolute;top:0;right:0;width:55%;height:100%;overflow:hidden;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.38) 24%,rgba(0,0,0,.84) 50%,#000 70%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.38) 24%,rgba(0,0,0,.84) 50%,#000 70%)}
-    .bl-ds-gif{width:100%;height:100%;object-fit:cover;object-position:center;display:block;mix-blend-mode:screen;filter:contrast(1.42) brightness(1.14) saturate(1.32)}
-    .bl-ds-gif-tone{position:absolute;inset:0;mix-blend-mode:screen;opacity:.7}
-    .bl-ds-city .bl-ds-gif-tone{background:linear-gradient(180deg,rgba(54,166,255,.88),rgba(12,28,70,.68))}
-    .bl-ds-univ .bl-ds-gif-tone{background:linear-gradient(180deg,rgba(255,92,64,.88),rgba(90,12,16,.68))}
-    .bl-ds-tint,.bl-ds-panel::before,.bl-ds-panel::after{position:absolute;inset:0;content:'';pointer-events:none}
-    .bl-ds-tint{z-index:1}
-    .bl-ds-city{background:
-      radial-gradient(circle at 80% 22%,rgba(39,170,255,.22),transparent 0 18%),
-      radial-gradient(circle at 74% 72%,rgba(10,100,255,.18),transparent 0 22%),
-      linear-gradient(135deg,#030914 0%,#0a1831 42%,#07111f 100%)}
-    .bl-ds-univ{background:
-      radial-gradient(circle at 80% 24%,rgba(255,92,64,.22),transparent 0 18%),
-      radial-gradient(circle at 72% 72%,rgba(255,40,40,.15),transparent 0 22%),
-      linear-gradient(135deg,#120305 0%,#311015 42%,#150509 100%)}
-    .bl-ds-city .bl-ds-tint{background:
-      linear-gradient(90deg,rgba(3,8,18,.94) 0%,rgba(3,8,18,.86) 42%,rgba(3,8,18,.28) 67%,rgba(3,8,18,.14) 100%),
-      repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 11px)}
-    .bl-ds-univ .bl-ds-tint{background:
-      linear-gradient(90deg,rgba(16,2,3,.95) 0%,rgba(16,2,3,.86) 42%,rgba(16,2,3,.28) 67%,rgba(16,2,3,.14) 100%),
-      repeating-linear-gradient(115deg,rgba(255,255,255,.045) 0 2px,transparent 2px 11px)}
-    .bl-ds-panel::before{background:radial-gradient(circle at 14% 18%,rgba(255,255,255,.10) 0 1px,transparent 1px 7px);background-size:12px 12px;opacity:.14;mix-blend-mode:screen;z-index:2}
-    .bl-ds-panel::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.74) 100%);z-index:2}
-    .bl-ds-frame{position:absolute;inset:12px;border:1px solid rgba(255,255,255,.11);border-radius:16px;z-index:3;pointer-events:none}
-    .bl-ds-frame::before{content:'';position:absolute;inset:auto 18px 14px 18px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);opacity:.45}
-    .bl-ds-slash{position:absolute;top:-10%;left:64%;width:3px;height:130%;transform:rotate(24deg);background:linear-gradient(180deg,transparent,rgba(255,255,255,.24),transparent);opacity:.28;z-index:3}
-    .bl-ds-bg-word{position:absolute;right:-6px;bottom:12px;font-family:'Teko',sans-serif;font-size:clamp(3.8rem,7vw,5.8rem);line-height:.8;letter-spacing:2px;color:rgba(255,255,255,.06);text-transform:uppercase;z-index:1;pointer-events:none}
-    .bl-ds-burst{position:absolute;right:8px;top:12px;width:54%;height:70%;z-index:1;pointer-events:none;opacity:.92}
-    .bl-ds-city .bl-ds-burst{background:
-      radial-gradient(circle at 50% 50%,rgba(70,170,255,.26) 0 12%,transparent 12% 100%),
-      conic-gradient(from 0deg,rgba(120,210,255,.32) 0 8deg,transparent 8deg 20deg,rgba(120,210,255,.12) 20deg 24deg,transparent 24deg 36deg,rgba(120,210,255,.26) 36deg 42deg,transparent 42deg 100%);
-      filter:blur(.2px)}
-    .bl-ds-univ .bl-ds-burst{background:
-      radial-gradient(circle at 50% 50%,rgba(255,110,84,.24) 0 12%,transparent 12% 100%),
-      conic-gradient(from 0deg,rgba(255,130,95,.30) 0 10deg,transparent 10deg 22deg,rgba(255,130,95,.12) 22deg 26deg,transparent 26deg 38deg,rgba(255,130,95,.24) 38deg 44deg,transparent 44deg 100%);
-      filter:blur(.2px)}
-    .bl-ds-orb{position:absolute;right:10px;top:42px;width:110px;height:110px;border-radius:50%;z-index:1;pointer-events:none;mix-blend-mode:screen}
-    .bl-ds-city .bl-ds-orb{background:radial-gradient(circle,rgba(94,194,255,.34) 0%,rgba(24,105,255,.20) 34%,rgba(0,0,0,0) 70%)}
-    .bl-ds-univ .bl-ds-orb{background:radial-gradient(circle,rgba(255,134,98,.34) 0%,rgba(255,50,50,.18) 34%,rgba(0,0,0,0) 70%)}
-    .bl-ds-speed{position:absolute;inset:12px 12px 12px 56%;z-index:1;pointer-events:none;opacity:.15}
-    .bl-ds-city .bl-ds-speed{background:repeating-linear-gradient(132deg,rgba(150,220,255,.30) 0 2px,transparent 2px 12px)}
-    .bl-ds-univ .bl-ds-speed{background:repeating-linear-gradient(132deg,rgba(255,170,160,.26) 0 2px,transparent 2px 12px)}
-    .bl-ds-halftone{position:absolute;left:-18px;bottom:-18px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.15) 0 1px,transparent 1px 8px);background-size:12px 12px;opacity:.18;z-index:2;pointer-events:none}
-    .bl-ds-ribbon{position:absolute;top:14px;left:-34px;z-index:4;transform:rotate(-30deg);padding:5px 42px 4px;background:rgba(255,255,255,.12);border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.12);font-size:.54rem;letter-spacing:2.6px;text-transform:uppercase;color:#fff;backdrop-filter:blur(8px)}
-    .bl-ds-content{position:relative;z-index:4;display:flex;flex-direction:column;justify-content:space-between;min-height:220px;padding:16px 16px 14px;color:#fff}
-    .bl-ds-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
-    .bl-ds-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(7,10,16,.34);backdrop-filter:blur(10px);font-size:.64rem;font-weight:700;letter-spacing:2.8px;text-transform:uppercase;color:rgba(255,255,255,.88)}
-    .bl-ds-city .bl-ds-badge{box-shadow:0 0 0 1px rgba(90,180,255,.08) inset}
-    .bl-ds-univ .bl-ds-badge{box-shadow:0 0 0 1px rgba(255,90,90,.08) inset}
-    .bl-ds-count{display:flex;flex-direction:column;align-items:flex-end;padding-top:4px}
-    .bl-ds-count-num{font-family:'Teko',sans-serif;font-size:1.7rem;line-height:.9;letter-spacing:.5px;color:#fff}
-    .bl-ds-count-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.64)}
-    .bl-ds-bottom{max-width:66%}
-    .bl-ds-kicker{font-size:.58rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.76);margin:0 0 6px}
-    .bl-ds-title{font-family:'Teko',sans-serif;font-size:clamp(2.7rem,3vw,3.4rem);line-height:.82;letter-spacing:-.6px;text-transform:uppercase;color:#fff;margin:0;text-wrap:balance;text-shadow:0 10px 26px rgba(0,0,0,.42)}
-    .bl-ds-subtitle{font-size:.76rem;line-height:1.1;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.95);margin:8px 0 0}
-    .bl-ds-copy{font-size:.72rem;line-height:1.28;max-width:26ch;color:rgba(255,255,255,.68);margin:8px 0 12px}
-    .bl-ds-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .bl-ds-chip{display:inline-flex;align-items:center;min-height:26px;padding:6px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);font-size:.58rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#fff}
-    .bl-ds-cta-btn{font-family:'Teko',sans-serif;font-size:.8rem;letter-spacing:3px;text-transform:uppercase;color:#fff;opacity:.9;transition:transform .25s ease,letter-spacing .25s ease,opacity .25s ease}
-    .bl-ds-panel:hover .bl-ds-cta-btn{transform:translateX(4px);letter-spacing:5px;opacity:1}
-    .bl-ds-city .bl-ds-title,.bl-ds-city .bl-ds-subtitle{text-shadow:0 0 32px rgba(60,140,255,.18),0 8px 22px rgba(0,0,0,.46)}
-    .bl-ds-univ .bl-ds-title,.bl-ds-univ .bl-ds-subtitle{text-shadow:0 0 32px rgba(255,70,50,.16),0 8px 22px rgba(0,0,0,.46)}
-    @media(max-width:980px){.bl-divshow-grid{grid-template-columns:1fr 1fr}.bl-ds-bottom{max-width:66%}}
-    @media(max-width:680px){.bl-divshow-grid{grid-template-columns:1fr}.bl-ds-panel,.bl-ds-content{min-height:212px}.bl-ds-frame{inset:10px;border-radius:14px}.bl-ds-slash{left:60%}.bl-ds-burst{right:8px;top:10px;width:50%;height:64%}.bl-ds-orb{right:8px;top:38px;width:92px;height:92px}.bl-ds-speed{inset:10px 10px 10px 58%}.bl-ds-bg-word{font-size:4.2rem}.bl-ds-bottom{max-width:66%}.bl-ds-title{font-size:2.55rem}.bl-ds-copy{max-width:24ch}.bl-ds-gif-wrap{width:50%;height:100%;top:0;right:0}}
+    .bl-divshow {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .75s ease, transform .75s ease
+    }
+
+    .bl-divshow.bl-ds-visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .bl-divshow-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      padding: 16px 16px 14px;
+      background: linear-gradient(180deg, rgba(7, 10, 16, .95), rgba(7, 10, 16, .88));
+      border: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 22px 58px rgba(0, 0, 0, .30)
+    }
+
+    .bl-divshow-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(212, 175, 55, .10), transparent 32%);
+      pointer-events: none
+    }
+
+    .bl-divshow-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 18% 18%, rgba(255, 255, 255, .08) 0 1px, transparent 1px 8px);
+      background-size: 14px 14px;
+      opacity: .07;
+      mix-blend-mode: screen;
+      pointer-events: none
+    }
+
+    .bl-divshow-head {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px
+    }
+
+    .bl-divshow-kicker {
+      font-size: .68rem;
+      letter-spacing: 3.4px;
+      text-transform: uppercase;
+      color: var(--bl-gold);
+      font-weight: 700
+    }
+
+    .bl-divshow-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 1.9rem;
+      line-height: .88;
+      letter-spacing: .4px;
+      color: #fff;
+      text-transform: uppercase;
+      margin: 2px 0 0
+    }
+
+    .bl-divshow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .10);
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .78);
+      white-space: nowrap
+    }
+
+    .bl-divshow-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .bl-ds-panel {
+      position: relative;
+      display: block;
+      min-height: 220px;
+      border-radius: 20px;
+      overflow: hidden;
+      text-decoration: none;
+      background: #090d12;
+      border: 1px solid rgba(255, 255, 255, .08);
+      isolation: isolate
+    }
+
+    .bl-ds-panel:focus-visible {
+      outline: 2px solid var(--bl-gold);
+      outline-offset: 3px
+    }
+
+    .bl-ds-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.02);
+      transition: transform .55s ease, filter .55s ease;
+      filter: saturate(1.08) contrast(1.1) brightness(.8)
+    }
+
+    .bl-ds-panel:hover .bl-ds-photo {
+      transform: scale(1.06);
+      filter: saturate(1.14) contrast(1.14) brightness(.86)
+    }
+
+    .bl-ds-gif-wrap {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, .38) 24%, rgba(0, 0, 0, .84) 50%, #000 70%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, .38) 24%, rgba(0, 0, 0, .84) 50%, #000 70%)
+    }
+
+    .bl-ds-gif {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      mix-blend-mode: screen;
+      filter: contrast(1.42) brightness(1.14) saturate(1.32)
+    }
+
+    .bl-ds-gif-tone {
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: screen;
+      opacity: .7
+    }
+
+    .bl-ds-city .bl-ds-gif-tone {
+      background: linear-gradient(180deg, rgba(54, 166, 255, .88), rgba(12, 28, 70, .68))
+    }
+
+    .bl-ds-univ .bl-ds-gif-tone {
+      background: linear-gradient(180deg, rgba(255, 92, 64, .88), rgba(90, 12, 16, .68))
+    }
+
+    .bl-ds-tint,
+    .bl-ds-panel::before,
+    .bl-ds-panel::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      pointer-events: none
+    }
+
+    .bl-ds-tint {
+      z-index: 1
+    }
+
+    .bl-ds-city {
+      background:
+        radial-gradient(circle at 80% 22%, rgba(39, 170, 255, .22), transparent 0 18%),
+        radial-gradient(circle at 74% 72%, rgba(10, 100, 255, .18), transparent 0 22%),
+        linear-gradient(135deg, #030914 0%, #0a1831 42%, #07111f 100%)
+    }
+
+    .bl-ds-univ {
+      background:
+        radial-gradient(circle at 80% 24%, rgba(255, 92, 64, .22), transparent 0 18%),
+        radial-gradient(circle at 72% 72%, rgba(255, 40, 40, .15), transparent 0 22%),
+        linear-gradient(135deg, #120305 0%, #311015 42%, #150509 100%)
+    }
+
+    .bl-ds-city .bl-ds-tint {
+      background:
+        linear-gradient(90deg, rgba(3, 8, 18, .94) 0%, rgba(3, 8, 18, .86) 42%, rgba(3, 8, 18, .28) 67%, rgba(3, 8, 18, .14) 100%),
+        repeating-linear-gradient(115deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 11px)
+    }
+
+    .bl-ds-univ .bl-ds-tint {
+      background:
+        linear-gradient(90deg, rgba(16, 2, 3, .95) 0%, rgba(16, 2, 3, .86) 42%, rgba(16, 2, 3, .28) 67%, rgba(16, 2, 3, .14) 100%),
+        repeating-linear-gradient(115deg, rgba(255, 255, 255, .045) 0 2px, transparent 2px 11px)
+    }
+
+    .bl-ds-panel::before {
+      background: radial-gradient(circle at 14% 18%, rgba(255, 255, 255, .10) 0 1px, transparent 1px 7px);
+      background-size: 12px 12px;
+      opacity: .14;
+      mix-blend-mode: screen;
+      z-index: 2
+    }
+
+    .bl-ds-panel::after {
+      background: linear-gradient(180deg, transparent 0%, transparent 46%, rgba(0, 0, 0, .74) 100%);
+      z-index: 2
+    }
+
+    .bl-ds-frame {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(255, 255, 255, .11);
+      border-radius: 16px;
+      z-index: 3;
+      pointer-events: none
+    }
+
+    .bl-ds-frame::before {
+      content: '';
+      position: absolute;
+      inset: auto 18px 14px 18px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .85), transparent);
+      opacity: .45
+    }
+
+    .bl-ds-slash {
+      position: absolute;
+      top: -10%;
+      left: 64%;
+      width: 3px;
+      height: 130%;
+      transform: rotate(24deg);
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, .24), transparent);
+      opacity: .28;
+      z-index: 3
+    }
+
+    .bl-ds-bg-word {
+      position: absolute;
+      right: -6px;
+      bottom: 12px;
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(3.8rem, 7vw, 5.8rem);
+      line-height: .8;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, .06);
+      text-transform: uppercase;
+      z-index: 1;
+      pointer-events: none
+    }
+
+    .bl-ds-burst {
+      position: absolute;
+      right: 8px;
+      top: 12px;
+      width: 54%;
+      height: 70%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .92
+    }
+
+    .bl-ds-city .bl-ds-burst {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(70, 170, 255, .26) 0 12%, transparent 12% 100%),
+        conic-gradient(from 0deg, rgba(120, 210, 255, .32) 0 8deg, transparent 8deg 20deg, rgba(120, 210, 255, .12) 20deg 24deg, transparent 24deg 36deg, rgba(120, 210, 255, .26) 36deg 42deg, transparent 42deg 100%);
+      filter: blur(.2px)
+    }
+
+    .bl-ds-univ .bl-ds-burst {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 110, 84, .24) 0 12%, transparent 12% 100%),
+        conic-gradient(from 0deg, rgba(255, 130, 95, .30) 0 10deg, transparent 10deg 22deg, rgba(255, 130, 95, .12) 22deg 26deg, transparent 26deg 38deg, rgba(255, 130, 95, .24) 38deg 44deg, transparent 44deg 100%);
+      filter: blur(.2px)
+    }
+
+    .bl-ds-orb {
+      position: absolute;
+      right: 10px;
+      top: 42px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      z-index: 1;
+      pointer-events: none;
+      mix-blend-mode: screen
+    }
+
+    .bl-ds-city .bl-ds-orb {
+      background: radial-gradient(circle, rgba(94, 194, 255, .34) 0%, rgba(24, 105, 255, .20) 34%, rgba(0, 0, 0, 0) 70%)
+    }
+
+    .bl-ds-univ .bl-ds-orb {
+      background: radial-gradient(circle, rgba(255, 134, 98, .34) 0%, rgba(255, 50, 50, .18) 34%, rgba(0, 0, 0, 0) 70%)
+    }
+
+    .bl-ds-speed {
+      position: absolute;
+      inset: 12px 12px 12px 56%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .15
+    }
+
+    .bl-ds-city .bl-ds-speed {
+      background: repeating-linear-gradient(132deg, rgba(150, 220, 255, .30) 0 2px, transparent 2px 12px)
+    }
+
+    .bl-ds-univ .bl-ds-speed {
+      background: repeating-linear-gradient(132deg, rgba(255, 170, 160, .26) 0 2px, transparent 2px 12px)
+    }
+
+    .bl-ds-halftone {
+      position: absolute;
+      left: -18px;
+      bottom: -18px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, .15) 0 1px, transparent 1px 8px);
+      background-size: 12px 12px;
+      opacity: .18;
+      z-index: 2;
+      pointer-events: none
+    }
+
+    .bl-ds-ribbon {
+      position: absolute;
+      top: 14px;
+      left: -34px;
+      z-index: 4;
+      transform: rotate(-30deg);
+      padding: 5px 42px 4px;
+      background: rgba(255, 255, 255, .12);
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+      font-size: .54rem;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: #fff;
+      backdrop-filter: blur(8px)
+    }
+
+    .bl-ds-content {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      padding: 16px 16px 14px;
+      color: #fff
+    }
+
+    .bl-ds-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start
+    }
+
+    .bl-ds-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(7, 10, 16, .34);
+      backdrop-filter: blur(10px);
+      font-size: .64rem;
+      font-weight: 700;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .88)
+    }
+
+    .bl-ds-city .bl-ds-badge {
+      box-shadow: 0 0 0 1px rgba(90, 180, 255, .08) inset
+    }
+
+    .bl-ds-univ .bl-ds-badge {
+      box-shadow: 0 0 0 1px rgba(255, 90, 90, .08) inset
+    }
+
+    .bl-ds-count {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding-top: 4px
+    }
+
+    .bl-ds-count-num {
+      font-family: 'Teko', sans-serif;
+      font-size: 1.7rem;
+      line-height: .9;
+      letter-spacing: .5px;
+      color: #fff
+    }
+
+    .bl-ds-count-label {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .64)
+    }
+
+    .bl-ds-bottom {
+      max-width: 66%
+    }
+
+    .bl-ds-kicker {
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .76);
+      margin: 0 0 6px
+    }
+
+    .bl-ds-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(2.7rem, 3vw, 3.4rem);
+      line-height: .82;
+      letter-spacing: -.6px;
+      text-transform: uppercase;
+      color: #fff;
+      margin: 0;
+      text-wrap: balance;
+      text-shadow: 0 10px 26px rgba(0, 0, 0, .42)
+    }
+
+    .bl-ds-subtitle {
+      font-size: .76rem;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .95);
+      margin: 8px 0 0
+    }
+
+    .bl-ds-copy {
+      font-size: .72rem;
+      line-height: 1.28;
+      max-width: 26ch;
+      color: rgba(255, 255, 255, .68);
+      margin: 8px 0 12px
+    }
+
+    .bl-ds-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .bl-ds-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(255, 255, 255, .08);
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #fff
+    }
+
+    .bl-ds-cta-btn {
+      font-family: 'Teko', sans-serif;
+      font-size: .8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: .9;
+      transition: transform .25s ease, letter-spacing .25s ease, opacity .25s ease
+    }
+
+    .bl-ds-panel:hover .bl-ds-cta-btn {
+      transform: translateX(4px);
+      letter-spacing: 5px;
+      opacity: 1
+    }
+
+    .bl-ds-city .bl-ds-title,
+    .bl-ds-city .bl-ds-subtitle {
+      text-shadow: 0 0 32px rgba(60, 140, 255, .18), 0 8px 22px rgba(0, 0, 0, .46)
+    }
+
+    .bl-ds-univ .bl-ds-title,
+    .bl-ds-univ .bl-ds-subtitle {
+      text-shadow: 0 0 32px rgba(255, 70, 50, .16), 0 8px 22px rgba(0, 0, 0, .46)
+    }
+
+    @media(max-width:980px) {
+      .bl-divshow-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .bl-ds-bottom {
+        max-width: 66%
+      }
+    }
+
+    @media(max-width:680px) {
+      .bl-divshow-grid {
+        grid-template-columns: 1fr
+      }
+
+      .bl-ds-panel,
+      .bl-ds-content {
+        min-height: 212px
+      }
+
+      .bl-ds-frame {
+        inset: 10px;
+        border-radius: 14px
+      }
+
+      .bl-ds-slash {
+        left: 60%
+      }
+
+      .bl-ds-burst {
+        right: 8px;
+        top: 10px;
+        width: 50%;
+        height: 64%
+      }
+
+      .bl-ds-orb {
+        right: 8px;
+        top: 38px;
+        width: 92px;
+        height: 92px
+      }
+
+      .bl-ds-speed {
+        inset: 10px 10px 10px 58%
+      }
+
+      .bl-ds-bg-word {
+        font-size: 4.2rem
+      }
+
+      .bl-ds-bottom {
+        max-width: 66%
+      }
+
+      .bl-ds-title {
+        font-size: 2.55rem
+      }
+
+      .bl-ds-copy {
+        max-width: 24ch
+      }
+
+      .bl-ds-gif-wrap {
+        width: 50%;
+        height: 100%;
+        top: 0;
+        right: 0
+      }
+    }
+
     /* ── Lock overlay (PRÓXIMAMENTE) — muestra el diseño de fondo ── */
-    .bl-ds-lock-overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:0 14px 14px;gap:3px;background:linear-gradient(180deg,transparent 0%,transparent 28%,rgba(7,10,16,.38) 58%,rgba(7,10,16,.90) 100%);border-radius:20px;pointer-events:none}
-    .bl-ds-lock-icon{font-size:.88rem;line-height:1;opacity:.9}
-    .bl-ds-lock-label{font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:4px;text-transform:uppercase;color:#D4AF37;font-weight:700;line-height:1.1}
-    .bl-ds-lock-date{font-size:.63rem;letter-spacing:1.5px;color:rgba(238,244,255,.72);text-transform:uppercase;line-height:1.55}
-    .bl-ds-panel--locked{pointer-events:none!important;cursor:default!important}
-    .bl-ds-panel--locked .bl-ds-content{opacity:0}
+    .bl-ds-lock-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 0 14px 14px;
+      gap: 3px;
+      background: linear-gradient(180deg, transparent 0%, transparent 28%, rgba(7, 10, 16, .38) 58%, rgba(7, 10, 16, .90) 100%);
+      border-radius: 20px;
+      pointer-events: none
+    }
+
+    .bl-ds-lock-icon {
+      font-size: .88rem;
+      line-height: 1;
+      opacity: .9
+    }
+
+    .bl-ds-lock-label {
+      font-family: 'Teko', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #D4AF37;
+      font-weight: 700;
+      line-height: 1.1
+    }
+
+    .bl-ds-lock-date {
+      font-size: .63rem;
+      letter-spacing: 1.5px;
+      color: rgba(238, 244, 255, .72);
+      text-transform: uppercase;
+      line-height: 1.55
+    }
+
+    .bl-ds-panel--locked {
+      pointer-events: none !important;
+      cursor: default !important
+    }
+
+    .bl-ds-panel--locked .bl-ds-content {
+      opacity: 0
+    }
   </style>
 </head>
+
 <body>
   <div class="intrusion-modal" id="intrusionModal">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23d4af37'/%3E%3Cstop offset='1' stop-color='%23ef4444'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='80' cy='80' r='74' fill='%230d1117' stroke='url(%23g)' stroke-width='8'/%3E%3Cpath d='M80 34 118 106H42z' fill='url(%23g)'/%3E%3Crect x='74' y='58' width='12' height='28' rx='6' fill='%230d1117'/%3E%3Ccircle cx='80' cy='96' r='6' fill='%230d1117'/%3E%3C/svg%3E" alt="ALERTA">
+    <img
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23d4af37'/%3E%3Cstop offset='1' stop-color='%23ef4444'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='80' cy='80' r='74' fill='%230d1117' stroke='url(%23g)' stroke-width='8'/%3E%3Cpath d='M80 34 118 106H42z' fill='url(%23g)'/%3E%3Crect x='74' y='58' width='12' height='28' rx='6' fill='%230d1117'/%3E%3Ccircle cx='80' cy='96' r='6' fill='%230d1117'/%3E%3C/svg%3E"
+      alt="ALERTA">
     <h1>INTENTO DE INTRUSIÓN DETECTADO</h1>
     <p>Acción no autorizada detectada por el sistema.</p>
-    <button class="close-btn" onclick="document.getElementById('intrusionModal').classList.remove('active')">ENTENDIDO</button>
+    <button class="close-btn"
+      onclick="document.getElementById('intrusionModal').classList.remove('active')">ENTENDIDO</button>
   </div>
 
   <canvas class="space" id="space" aria-hidden="true"></canvas>
@@ -237,12 +1502,13 @@
   <canvas class="fx" id="fx" aria-hidden="true"></canvas>
   <div class="custom-cursor" id="cursor">
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000" stroke-width="1"/>
-      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000"/>
-      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 16 2 L 18 14 L 28 16 L 18 18 L 16 30 L 14 18 L 4 16 L 14 14 Z" fill="#000" stroke="#000"
+        stroke-width="1" />
+      <circle class="rune-center" cx="16" cy="16" r="3" fill="#000" />
+      <path d="M 16 6 L 16 10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M 26 16 L 22 16" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M 16 26 L 16 22" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M 6 16 L 10 16" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
     </svg>
   </div>
 
@@ -262,15 +1528,19 @@
     <nav class="bl-navbar" style="position:relative">
       <a class="bl-navbar-logo" href="/">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <polygon points="16,2 30,28 2,28" fill="#D4AF37"/>
-          <polygon points="16,9 25,26 7,26" fill="#0d1117"/>
-          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
-          <circle cx="16" cy="12" r="1.5" fill="#D4AF37"/>
+          <polygon points="16,2 30,28 2,28" fill="#D4AF37" />
+          <polygon points="16,9 25,26 7,26" fill="#0d1117" />
+          <line x1="16" y1="14" x2="16" y2="22" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round" />
+          <circle cx="16" cy="12" r="1.5" fill="#D4AF37" />
         </svg>
         <span>BELLATOR</span>
       </a>
       <button class="bl-hamburger" id="bl-burger" aria-label="Menú">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="2" rx="1"/><rect y="9" width="20" height="2" rx="1"/><rect y="15" width="20" height="2" rx="1"/></svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <rect y="3" width="20" height="2" rx="1" />
+          <rect y="9" width="20" height="2" rx="1" />
+          <rect y="15" width="20" height="2" rx="1" />
+        </svg>
       </button>
       <ul class="bl-navbar-links" id="bl-links">
         <li><a class="bl-navlink" href="/">Inicio</a></li>
@@ -280,9 +1550,14 @@
         <li><a class="bl-navlink" href="/apuestas.html">Apuestas</a></li>
         <li><a class="bl-navlink" href="/reglamento">Reglamento</a></li>
         <li><a class="bl-navlink" href="/clanes">Clanes</a></li>
-        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a></li>
+        <li><a class="bl-navlink" href="/practica" style="display:inline-flex;align-items:center;gap:6px">Práctica<span
+              style="font-size:.55rem;background:#f59e0b;color:#0d1117;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">BETA</span></a>
+        </li>
         <li><a class="bl-navlink" href="/escenario">Escenario</a></li>
-        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a></li>
+        <li><a class="bl-navlink" href="/cosmologias.html" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:6px" title="Disponible pronto">Cosmologías<span
+              style="font-size:.55rem;background:#6366f1;color:#fff;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:3px;font-family:'Barlow Semi Condensed',sans-serif">PRONTO</span></a>
+        </li>
       </ul>
       <div class="bl-navbar-right">
         <a href="/registro" class="bl-topbar-subscribe" style="text-decoration:none">INSCRIBIRSE</a>
@@ -305,8 +1580,12 @@
       <div class="bl-gsearch-wrap bl-sh-wrap">
         <div class="bl-gsearch-ring">
           <div class="bl-gsearch-inner">
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.56a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
-            <input type="text" id="b-pseudonimo" class="bl-gsearch-input" placeholder="Busca competidores, reglas, páginas..." autofocus autocomplete="off">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.56a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+            </svg>
+            <input type="text" id="b-pseudonimo" class="bl-gsearch-input"
+              placeholder="Busca competidores, reglas, páginas..." autofocus autocomplete="off">
             <span class="bl-gsearch-kbd">ENTER</span>
           </div>
         </div>
@@ -318,7 +1597,9 @@
       <div class="bl-home-intro-inner">
         <div class="bl-home-intro-eyebrow">Código de Honor &mdash; El único estándar</div>
         <h2 class="bl-home-intro-title">Aquí no se<br>entra sin mérito.</h2>
-        <p class="bl-home-intro-body">Bellator RolBattle es el estándar de combate narrativo donde cada duelo exige rol legible, lectura precisa del rival e interpretación que respete la escala. El código de honor no es opcional: es la puerta. El mérito, la única corona posible.</p>
+        <p class="bl-home-intro-body">Bellator RolBattle es el estándar de combate narrativo donde cada duelo exige rol
+          legible, lectura precisa del rival e interpretación que respete la escala. El código de honor no es opcional:
+          es la puerta. El mérito, la única corona posible.</p>
       </div>
     </section>
 
@@ -369,36 +1650,166 @@
       </div>
     </section>
 
+    <!-- ── EXAMEN DE ADMISIÓN PLANETA ──────────────────────────────────────── -->
+    <section class="bl-section" style="padding-top:16px;display:none;" id="planet-admission-section">
+      <div
+        style="background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(0,0,0,.6));border:1px solid rgba(168,85,247,.22);border-radius:24px;padding:32px 24px;position:relative;overflow:hidden;backdrop-filter:blur(18px);box-shadow:0 24px 60px rgba(0,0,0,.4)">
+        <div
+          style="position:absolute;top:-50%;left:-20%;width:140%;height:200%;background:radial-gradient(circle at 50% 0,rgba(168,85,247,.12) 0%,transparent 60%);pointer-events:none">
+        </div>
+        <div
+          style="position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:24px;max-width:800px;margin:0 auto">
+
+          <div style="text-align:center">
+            <div
+              style="font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:6px;text-transform:uppercase;color:#a855f7;margin-bottom:8px">
+              ADMISIÓN ESPECIAL</div>
+            <h2
+              style="font-family:'Teko',sans-serif;font-size:clamp(2.4rem,4vw,3.6rem);line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,#e8caff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px">
+              División Planeta</h2>
+            <p style="font-size:.9rem;color:rgba(238,244,255,.7);line-height:1.6;max-width:500px;margin:0 auto">Las
+              inscripciones a Planeta exigen superar una cámara de admisión de Powerscaling a contrarreloj y un turno
+              narrativo de nivel Low 1-C. Los cupos están estrictamente limitados a 16 aspirantes.</p>
+          </div>
+
+          <div id="planet-admission-status"
+            style="background:rgba(0,0,0,.4);border:1px solid rgba(168,85,247,.16);border-radius:16px;padding:24px;text-align:center">
+            <div id="planet-loading"
+              style="font-size:1rem;color:#a855f7;font-family:'Teko',sans-serif;letter-spacing:2px">Verificando estado
+              del servidor...</div>
+
+            <div id="planet-countdown-ui" style="display:none">
+              <div
+                style="font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px">
+                APERTURA DE PUERTAS EN:</div>
+              <div id="planet-timer"
+                style="font-family:'Teko',sans-serif;font-size:3rem;line-height:1;color:#fff;letter-spacing:4px;text-shadow:0 4px 16px rgba(168,85,247,.5)">
+                00:00:00</div>
+            </div>
+
+            <div id="planet-open-ui" style="display:none">
+              <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px">
+                <span
+                  style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#3fb950;box-shadow:0 0 12px #3fb950"></span>
+                <span
+                  style="font-family:'Teko',sans-serif;font-size:1.2rem;letter-spacing:3px;color:#3fb950;text-transform:uppercase">INSCRIPCIONES
+                  ABIERTAS</span>
+              </div>
+              <div style="font-size:.9rem;color:rgba(238,244,255,.8);margin-bottom:20px">Cupos ocupados: <strong
+                  id="planet-slots-count" style="color:#a855f7">0</strong> / 16</div>
+              <button onclick="openPlanetRegistration()"
+                style="padding:14px 42px;border-radius:99px;background:linear-gradient(135deg,#a855f7,#d8b4fe);color:#1a0b2e;font-family:'Teko',sans-serif;font-size:1.2rem;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(168,85,247,.4);transition:transform .2s">REGISTRARSE
+                AHORA</button>
+            </div>
+
+            <div id="planet-full-ui" style="display:none">
+              <div style="font-size:3rem;margin-bottom:12px">⛔</div>
+              <div
+                style="font-family:'Teko',sans-serif;font-size:1.6rem;letter-spacing:2px;color:#ef4444;text-transform:uppercase;margin-bottom:8px">
+                CUPOS AGOTADOS</div>
+              <p style="font-size:.9rem;color:var(--muted)">Los 16 cupos para la División Planeta han sido cubiertos.
+              </p>
+            </div>
+          </div>
+
+          <div id="planet-leaderboard-wrap"
+            style="display:none;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:20px">
+            <h3
+              style="font-family:'Teko',sans-serif;font-size:1.2rem;letter-spacing:2px;color:#a855f7;margin-bottom:16px;text-align:center">
+              ASPIRANTES REGISTRADOS</h3>
+            <div id="planet-leaderboard"
+              style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:10px"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Registro Rápido Planeta -->
+    <div id="planetRegModal"
+      style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px">
+      <div
+        style="background:#0b0e14;border:1px solid rgba(168,85,247,.3);border-radius:24px;width:100%;max-width:440px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+        <h3
+          style="font-family:'Teko',sans-serif;font-size:2rem;color:#a855f7;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;text-align:center">
+          Inscripción Planeta</h3>
+        <form id="planetRegForm" style="display:grid;gap:16px">
+          <div>
+            <label
+              style="display:block;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Pseudónimo</label>
+            <input type="text" id="planet-pseudo" required
+              style="width:100%;padding:12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:inherit"
+              placeholder="Ej: Zero">
+          </div>
+          <div>
+            <label
+              style="display:block;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">País</label>
+            <input type="text" id="planet-country" required maxlength="2"
+              style="width:100%;padding:12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:inherit;text-transform:uppercase"
+              placeholder="CO, MX, ES, AR...">
+          </div>
+          <div>
+            <label
+              style="display:block;font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Biografía
+              Breve</label>
+            <textarea id="planet-bio" rows="3"
+              style="width:100%;padding:12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:inherit;resize:none"
+              placeholder="Opcional..."></textarea>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <button type="button" onclick="closePlanetRegistration()"
+              style="flex:1;padding:12px;border-radius:8px;background:rgba(255,255,255,.05);border:none;color:var(--muted);cursor:pointer">CANCELAR</button>
+            <button type="submit" id="planet-submit-btn"
+              style="flex:2;padding:12px;border-radius:8px;background:#a855f7;border:none;color:#fff;font-weight:700;letter-spacing:1px;cursor:pointer">ENVIAR
+              SOLICITUD</button>
+          </div>
+          <div id="planet-reg-msg" style="text-align:center;font-size:.85rem;margin-top:8px;color:#ef4444"></div>
+        </form>
+      </div>
+    </div>
+
     <section class="bl-draw-callout" aria-labelledby="bl-album-callout-title">
-      <div class="bl-draw-callout-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      <div class="bl-draw-callout-grid"
+        style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
         <div class="bl-draw-callout-card">
           <div class="bl-draw-callout-copy">
             <div class="bl-draw-callout-kicker">NUEVO LANZAMIENTO</div>
             <h2 class="bl-draw-callout-title" id="bl-album-callout-title">ÁLBUM BELLATOR</h2>
-            <p class="bl-draw-callout-body">Abre sobres, pega cromos y activa tu identidad Bellator desde la edición standalone.</p>
+            <p class="bl-draw-callout-body">Abre sobres, pega cromos y activa tu identidad Bellator desde la edición
+              standalone.</p>
             <div class="bl-draw-callout-meta">
               <span class="bl-draw-callout-chip">Sobres diarios</span>
               <span class="bl-draw-callout-chip">Intercambio</span>
             </div>
           </div>
           <div class="bl-draw-callout-actions" style="display:flex;flex-direction:column;gap:12px;">
-            <a class="bl-draw-callout-btn" href="https://valhala-album.netlify.app/" target="_blank" rel="noopener">Entrar al Álbum</a>
+            <a class="bl-draw-callout-btn" href="https://valhala-album.netlify.app/" target="_blank"
+              rel="noopener">Entrar al Álbum</a>
           </div>
         </div>
 
-        <div class="bl-draw-callout-card" style="background: linear-gradient(135deg, rgba(212,175,55,0.05), rgba(0,0,0,0.5)); border: 1px solid rgba(212,175,55,0.2);">
+        <div class="bl-draw-callout-card"
+          style="background: linear-gradient(135deg, rgba(212,175,55,0.05), rgba(0,0,0,0.5)); border: 1px solid rgba(212,175,55,0.2);">
           <div class="bl-draw-callout-copy">
             <div class="bl-draw-callout-kicker" style="color: #d4af37;">MERCADO OFICIAL</div>
-            <h2 class="bl-draw-callout-title" style="background: linear-gradient(135deg, #d4af37, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -1px; margin-bottom: 8px;">MERCADO DE APUESTAS</h2>
-            <p class="bl-draw-callout-body">Multiplica tus sobres apostando por tus competidores favoritos. Sigue las llaves del torneo en vivo.</p>
+            <h2 class="bl-draw-callout-title"
+              style="background: linear-gradient(135deg, #d4af37, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -1px; margin-bottom: 8px;">
+              MERCADO DE APUESTAS</h2>
+            <p class="bl-draw-callout-body">Multiplica tus sobres apostando por tus competidores favoritos. Sigue las
+              llaves del torneo en vivo.</p>
             <div class="bl-draw-callout-meta">
-              <span class="bl-draw-callout-chip" style="border-color: rgba(212,175,55,0.3); color: #d4af37;">Apuestas en vivo</span>
-              <span class="bl-draw-callout-chip" style="border-color: rgba(212,175,55,0.3); color: #d4af37;">Llaves del Torneo</span>
+              <span class="bl-draw-callout-chip" style="border-color: rgba(212,175,55,0.3); color: #d4af37;">Apuestas en
+                vivo</span>
+              <span class="bl-draw-callout-chip" style="border-color: rgba(212,175,55,0.3); color: #d4af37;">Llaves del
+                Torneo</span>
             </div>
           </div>
           <div class="bl-draw-callout-actions" style="display:flex;flex-direction:column;gap:12px;">
-            <a class="bl-draw-callout-btn" href="/apuestas.html" style="background: #d4af37; color: #0d1117;">Apostar Sobres</a>
-            <a class="bl-draw-callout-btn" href="/sorteo.html" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2);">Ver Gráfica Sorteo</a>
+            <a class="bl-draw-callout-btn" href="/apuestas.html" style="background: #d4af37; color: #0d1117;">Apostar
+              Sobres</a>
+            <a class="bl-draw-callout-btn" href="/sorteo.html"
+              style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2);">Ver Gráfica
+              Sorteo</a>
           </div>
         </div>
       </div>
@@ -406,17 +1817,25 @@
 
     <!-- ── PRÓXIMAS PELEAS ──────────────────────────────────────── -->
     <section id="bl-proximas-section" style="max-width:1320px;margin:0 auto;padding:48px 24px 16px">
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px">
+      <div
+        style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px">
         <div>
-          <div style="font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9;margin-bottom:6px">AGENDA OFICIAL</div>
-          <h2 style="font-family:'Teko',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">Próximas Peleas</h2>
+          <div
+            style="font-family:'Teko',sans-serif;font-size:.7rem;letter-spacing:6px;text-transform:uppercase;color:var(--bl-gold);opacity:.9;margin-bottom:6px">
+            AGENDA OFICIAL</div>
+          <h2
+            style="font-family:'Teko',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:.9;letter-spacing:-1px;background:linear-gradient(135deg,var(--bl-gold) 0%,#fff 50%,var(--bl-gold) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">
+            Próximas Peleas</h2>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
           <div class="bl-prox-nav" aria-label="Controles de próximas peleas">
-            <button class="bl-prox-nav-btn" id="bl-prox-prev" type="button" aria-label="Ver peleas anteriores">&#8592;</button>
+            <button class="bl-prox-nav-btn" id="bl-prox-prev" type="button"
+              aria-label="Ver peleas anteriores">&#8592;</button>
             <button class="bl-prox-nav-btn" id="bl-prox-next" type="button" aria-label="Ver más peleas">&#8594;</button>
           </div>
-          <a href="/competidores" style="display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold);text-decoration:none;opacity:.8">Ver todos los competidores &#8594;</a>
+          <a href="/competidores"
+            style="display:inline-flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--bl-gold);text-decoration:none;opacity:.8">Ver
+            todos los competidores &#8594;</a>
         </div>
       </div>
       <div class="bl-prox-shell">
@@ -432,15 +1851,18 @@
           <div class="bl-kicker">Registro visual</div>
           <h2 class="bl-section-h2" id="bl-home-carousel-title">Carrusel Bellator</h2>
         </div>
-        <p class="bl-home-carousel-copy">Los perfiles oficiales del circuito aparecerán aquí conforme existan competidores registrados dentro de Bellator.</p>
+        <p class="bl-home-carousel-copy">Los perfiles oficiales del circuito aparecerán aquí conforme existan
+          competidores registrados dentro de Bellator.</p>
       </div>
       <div class="bl-home-carousel-scene">
         <div class="bl-home-carousel-track" id="bl-home-carousel-track" aria-live="polite"></div>
       </div>
       <div class="bl-home-carousel-controls">
-        <button class="bl-home-carousel-nav" id="bl-home-carousel-prev" type="button" aria-label="Mostrar tarjeta anterior">&#8592;</button>
+        <button class="bl-home-carousel-nav" id="bl-home-carousel-prev" type="button"
+          aria-label="Mostrar tarjeta anterior">&#8592;</button>
         <div class="bl-home-carousel-dots" id="bl-home-carousel-dots" aria-label="Paginación del carrusel"></div>
-        <button class="bl-home-carousel-nav" id="bl-home-carousel-next" type="button" aria-label="Mostrar tarjeta siguiente">&#8594;</button>
+        <button class="bl-home-carousel-nav" id="bl-home-carousel-next" type="button"
+          aria-label="Mostrar tarjeta siguiente">&#8594;</button>
       </div>
     </section>
 
@@ -512,22 +1934,43 @@
 
     <div class="bl-nav-grid">
       <a href="/registro" class="bl-nav-card">
-        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg></span>
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+            <line x1="19" y1="8" x2="19" y2="14" />
+            <line x1="16" y1="11" x2="22" y2="11" />
+          </svg></span>
         <span class="bl-nav-card-label">Registro</span>
         <span class="bl-nav-card-sub">Centro de inscripción y datos básicos</span>
       </a>
       <a href="/competidores" class="bl-nav-card">
-        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg></span>
         <span class="bl-nav-card-label">Competidores</span>
         <span class="bl-nav-card-sub">Cards grandes con acceso a perfil individual</span>
       </a>
       <a href="/clasificacion" class="bl-nav-card">
-        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+            <line x1="2" y1="20" x2="22" y2="20" />
+          </svg></span>
         <span class="bl-nav-card-label">Clasificación</span>
         <span class="bl-nav-card-sub">Top 3, snapshot de líderes y tabla completa</span>
       </a>
       <a href="/reglamento" class="bl-nav-card">
-        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <span class="bl-nav-card-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg></span>
         <span class="bl-nav-card-label">Reglamento</span>
         <span class="bl-nav-card-sub">Código de honor y formato de temporada</span>
       </a>
@@ -541,11 +1984,15 @@
       border:1px solid rgba(212,175,55,.15);border-left:3px solid var(--bl-gold)">
       <span style="font-size:1.4rem;flex-shrink:0;margin-top:2px">⚔️</span>
       <div>
-        <div style="font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--bl-gold);line-height:1;margin-bottom:6px">Créditos</div>
+        <div
+          style="font-family:'Teko',sans-serif;font-size:1rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--bl-gold);line-height:1;margin-bottom:6px">
+          Créditos</div>
         <div style="font-size:.8rem;color:var(--bl-soft);line-height:1.5">
           Reglamento y sistema de combate <strong style="color:var(--bl-white)">Bellator RolBattle</strong> creado por
-          <strong style="color:var(--bl-white)">Bandet</strong> y el <span style="color:var(--bl-gold)">Odiado Clan Orochi</span>.
-          Plataforma web, dossier digital y desarrollo completo por <strong style="color:var(--bl-white)">Bandet</strong>.
+          <strong style="color:var(--bl-white)">Bandet</strong> y el <span style="color:var(--bl-gold)">Odiado Clan
+            Orochi</span>.
+          Plataforma web, dossier digital y desarrollo completo por <strong
+            style="color:var(--bl-white)">Bandet</strong>.
         </div>
       </div>
     </div>
@@ -607,14 +2054,14 @@
 
     function hexToRgbList(hex) {
       return [hex.slice(1, 3), hex.slice(3, 5), hex.slice(5, 7)]
-        .map(function(part) { return parseInt(part, 16); })
+        .map(function (part) { return parseInt(part, 16); })
         .join(',');
     }
 
     function tokenizeSearchText(value) {
-      var stop = new Set(['de','la','el','los','las','en','del','y','o','un','una','por','para','con']);
+      var stop = new Set(['de', 'la', 'el', 'los', 'las', 'en', 'del', 'y', 'o', 'un', 'una', 'por', 'para', 'con']);
       var normalized = String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      return normalized.split(/[^\p{L}\p{N}]+/u).filter(function(token) {
+      return normalized.split(/[^\p{L}\p{N}]+/u).filter(function (token) {
         return token && token.length > 2 && !stop.has(token);
       });
     }
@@ -625,50 +2072,50 @@
       if (!input || !results) return;
 
       const SITE_INDEX = [
-        {type:'pagina',  name:'Registro',           desc:'Inscribir un nuevo competidor al sistema',                         url:'/registro',      icon:'⚔'},
-        {type:'pagina',  name:'Competidores',        desc:'Parrilla completa de guerreros registrados',                      url:'/competidores',  icon:'🏁'},
-        {type:'pagina',  name:'Clasificación',       desc:'Standings, tabla de posiciones y podio',                          url:'/clasificacion', icon:'📊'},
-        {type:'pagina',  name:'Reglamento',          desc:'Sistema de Combate y normas del B.R.B.',                          url:'/reglamento',    icon:'📜'},
-        {type:'pagina',  name:'Reglamento Solo Lectura', desc:'Dossier editorial largo con búsqueda e índice anclado',        url:'/reglamento-lectura', icon:'📚'},
-        {type:'pagina',  name:'Banco de Práctica',   desc:'Revisar turnos, ortografía y reglas en tiempo real',              url:'/practica',      icon:'🎯'},
-        {type:'reglamento', name:'Sistema de Combate',                       desc:'Principios: ROL LEGIBLE · ESTRATEGIA · INTERPRETACIÓN',                    url:'/reglamento'},
-        {type:'reglamento', name:'Código de Honor',                          desc:'Convivencia, rivalidad de élite y conducta en Bellator',                    url:'/reglamento'},
-        {type:'reglamento', name:'Spam, Apelación y Escala Disciplinaria',   desc:'Procedimiento de denuncia, apelaciones y sanciones',                       url:'/reglamento'},
-        {type:'reglamento', name:'Modelo Profesional Bellator',              desc:'Divisiones, ascenso y estructura competitiva',                             url:'/reglamento'},
-        {type:'reglamento', name:'Campeón, Títulos y Ranking Global',        desc:'Cinturones, títulos y cómo se mueve el ranking',                           url:'/reglamento'},
-        {type:'reglamento', name:'Protocolo de Unificación Bellator',        desc:'Estándar global — reglas que aplican en todo encuentro oficial',            url:'/reglamento'},
-        {type:'reglamento', name:'Fase de Apertura',                         desc:'Introducción y ambientación — Primer Turno solo presentación',             url:'/reglamento'},
-        {type:'reglamento', name:'Marco Operativo y Protocolo de Etiqueta',  desc:'PUB — procedimiento de publicación y etiqueta en canal',                   url:'/reglamento'},
-        {type:'reglamento', name:'Política de Integridad Narrativa',         desc:'Protocolo Anti-Plagio — prohibido reutilizar turnos anteriores',           url:'/reglamento'},
-        {type:'reglamento', name:'Gestión de Acciones y Dinámica de Combate',desc:'PUB — regresión, adelanto, cronología y ciclo de respuesta',               url:'/reglamento'},
-        {type:'reglamento', name:'Estándar de Energía y Equivalencia',       desc:'PUB — Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — equivalentes',         url:'/reglamento'},
-        {type:'reglamento', name:'Ontología del HAX y la Magia',             desc:'PUB — cómo funcionan y se clasifican los poderes anómalos',                url:'/reglamento'},
-        {type:'reglamento', name:'Registro Oficial de Capacidades Anómalas', desc:'HAX — 41 fichas con estatus, límites y cooldown por habilidad',            url:'/reglamento'},
-        {type:'reglamento', name:'Meta Rol',                                 desc:'PROHIBIDO — usar conocimiento que el personaje no debería poseer',         url:'/reglamento'},
-        {type:'reglamento', name:'Super-Rol / God-Rol',                      desc:'Descalifica — hazañas que superan el material original del personaje',     url:'/reglamento'},
-        {type:'reglamento', name:'Rule-Sharking',                             desc:'PROHIBIDO — presionar al juez para interrumpir el combate',               url:'/reglamento'},
-        {type:'reglamento', name:'Manipulación Blanca',                      desc:'PERMITIDA — aprovechar huecos argumentales del rival sin imponerle daño',  url:'/reglamento'},
-        {type:'reglamento', name:'Manipulación Negra',                       desc:'PROHIBIDO — dar por hecho consecuencias sobre el rival — regla primaria',  url:'/reglamento'},
-        {type:'reglamento', name:'Manipulación Negada',                      desc:'PROHIBIDO — asumir consecuencias implícitas sin describir fuerza',         url:'/reglamento'},
-        {type:'reglamento', name:'Regresión y Adelantos',                    desc:'Regresión válida · Adelanto prohibido — interrumpir acción rival',         url:'/reglamento'},
-        {type:'reglamento', name:'Determinismo Narrativo',                   desc:'PROHIBIDO — narrar el futuro del rival como hecho inevitable',             url:'/reglamento'},
-        {type:'reglamento', name:'Sentencia Lógica del Intercambio',         desc:'OBLIGATORIO — resolver cada intercambio con coherencia causa-efecto',      url:'/reglamento'},
-        {type:'reglamento', name:'Pasividad, Huida y Ocultamiento',          desc:'Penalizable — evitar el combate de forma sistemática',                     url:'/reglamento'},
-        {type:'reglamento', name:'Defensa Estéril',                          desc:'Castigable — defensas que no responden ni avanzan la narrativa',           url:'/reglamento'},
-        {type:'reglamento', name:'Tiempo de Respuesta y Rol Pausa',          desc:'24h por turno · Rol Pausa 1 uso por intercambio',                         url:'/reglamento'},
-        {type:'reglamento', name:'Stats y Aclaraciones',                     desc:'No obligatorio — recomendado añadir scans o fuentes al inicio del turno',  url:'/reglamento'},
-        {type:'reglamento', name:'Niveles de Poder — Divisiones Bellator',   desc:'División Ciudad (7-B) y División Universal (3-A) — arsenal completo',     url:'/reglamento'},
-        {type:'reglamento', name:'El Juzgado',                               desc:'5 parámetros: Normas, Lógica, Interpretación, Legibilidad, Extensión',     url:'/reglamento'},
-        {type:'reglamento', name:'Crossover — Cosmologías',                  desc:'Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — energías equivalentes',      url:'/cosmologias.html'},
-        {type:'reglamento', name:'BFR',                                      desc:'HAX PROHIBIDO — Battlefield Remove fuera del combate',                     url:'/reglamento'},
-        {type:'reglamento', name:'Inmortalidad',                             desc:'HAX PROHIBIDO — toda forma de inmortalidad está anulada',                  url:'/reglamento'},
-        {type:'reglamento', name:'Acasualidad',                              desc:'HAX PROHIBIDO completamente en combate',                                   url:'/reglamento'},
-        {type:'reglamento', name:'Regeneración',                             desc:'HAX LIMITADO — máx. 3 usos · máx. 30% del daño de un ataque específico',  url:'/reglamento'},
-        {type:'reglamento', name:'Control Mental',                           desc:'HAX LIMITADO — máximo un objetivo, cadena causa-efecto coherente',         url:'/reglamento'},
-        {type:'reglamento', name:'Borrado Existencial',                      desc:'HAX LIMITADO — un solo uso por batalla, nunca vs rival directamente',      url:'/reglamento'},
-        {type:'reglamento', name:'Teletransportación',                       desc:'HAX con Cooldown — desplazamiento instantáneo',                            url:'/reglamento'},
-        {type:'reglamento', name:'Clarividencia',                            desc:'HAX con Cooldown — percepción del futuro cercano',                         url:'/reglamento'},
-        {type:'reglamento', name:'Análisis de Información',                  desc:'HAX con Cooldown — revelar ubicación, estadísticas o historial del rival', url:'/reglamento'},
+        { type: 'pagina', name: 'Registro', desc: 'Inscribir un nuevo competidor al sistema', url: '/registro', icon: '⚔' },
+        { type: 'pagina', name: 'Competidores', desc: 'Parrilla completa de guerreros registrados', url: '/competidores', icon: '🏁' },
+        { type: 'pagina', name: 'Clasificación', desc: 'Standings, tabla de posiciones y podio', url: '/clasificacion', icon: '📊' },
+        { type: 'pagina', name: 'Reglamento', desc: 'Sistema de Combate y normas del B.R.B.', url: '/reglamento', icon: '📜' },
+        { type: 'pagina', name: 'Reglamento Solo Lectura', desc: 'Dossier editorial largo con búsqueda e índice anclado', url: '/reglamento-lectura', icon: '📚' },
+        { type: 'pagina', name: 'Banco de Práctica', desc: 'Revisar turnos, ortografía y reglas en tiempo real', url: '/practica', icon: '🎯' },
+        { type: 'reglamento', name: 'Sistema de Combate', desc: 'Principios: ROL LEGIBLE · ESTRATEGIA · INTERPRETACIÓN', url: '/reglamento' },
+        { type: 'reglamento', name: 'Código de Honor', desc: 'Convivencia, rivalidad de élite y conducta en Bellator', url: '/reglamento' },
+        { type: 'reglamento', name: 'Spam, Apelación y Escala Disciplinaria', desc: 'Procedimiento de denuncia, apelaciones y sanciones', url: '/reglamento' },
+        { type: 'reglamento', name: 'Modelo Profesional Bellator', desc: 'Divisiones, ascenso y estructura competitiva', url: '/reglamento' },
+        { type: 'reglamento', name: 'Campeón, Títulos y Ranking Global', desc: 'Cinturones, títulos y cómo se mueve el ranking', url: '/reglamento' },
+        { type: 'reglamento', name: 'Protocolo de Unificación Bellator', desc: 'Estándar global — reglas que aplican en todo encuentro oficial', url: '/reglamento' },
+        { type: 'reglamento', name: 'Fase de Apertura', desc: 'Introducción y ambientación — Primer Turno solo presentación', url: '/reglamento' },
+        { type: 'reglamento', name: 'Marco Operativo y Protocolo de Etiqueta', desc: 'PUB — procedimiento de publicación y etiqueta en canal', url: '/reglamento' },
+        { type: 'reglamento', name: 'Política de Integridad Narrativa', desc: 'Protocolo Anti-Plagio — prohibido reutilizar turnos anteriores', url: '/reglamento' },
+        { type: 'reglamento', name: 'Gestión de Acciones y Dinámica de Combate', desc: 'PUB — regresión, adelanto, cronología y ciclo de respuesta', url: '/reglamento' },
+        { type: 'reglamento', name: 'Estándar de Energía y Equivalencia', desc: 'PUB — Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — equivalentes', url: '/reglamento' },
+        { type: 'reglamento', name: 'Ontología del HAX y la Magia', desc: 'PUB — cómo funcionan y se clasifican los poderes anómalos', url: '/reglamento' },
+        { type: 'reglamento', name: 'Registro Oficial de Capacidades Anómalas', desc: 'HAX — 41 fichas con estatus, límites y cooldown por habilidad', url: '/reglamento' },
+        { type: 'reglamento', name: 'Meta Rol', desc: 'PROHIBIDO — usar conocimiento que el personaje no debería poseer', url: '/reglamento' },
+        { type: 'reglamento', name: 'Super-Rol / God-Rol', desc: 'Descalifica — hazañas que superan el material original del personaje', url: '/reglamento' },
+        { type: 'reglamento', name: 'Rule-Sharking', desc: 'PROHIBIDO — presionar al juez para interrumpir el combate', url: '/reglamento' },
+        { type: 'reglamento', name: 'Manipulación Blanca', desc: 'PERMITIDA — aprovechar huecos argumentales del rival sin imponerle daño', url: '/reglamento' },
+        { type: 'reglamento', name: 'Manipulación Negra', desc: 'PROHIBIDO — dar por hecho consecuencias sobre el rival — regla primaria', url: '/reglamento' },
+        { type: 'reglamento', name: 'Manipulación Negada', desc: 'PROHIBIDO — asumir consecuencias implícitas sin describir fuerza', url: '/reglamento' },
+        { type: 'reglamento', name: 'Regresión y Adelantos', desc: 'Regresión válida · Adelanto prohibido — interrumpir acción rival', url: '/reglamento' },
+        { type: 'reglamento', name: 'Determinismo Narrativo', desc: 'PROHIBIDO — narrar el futuro del rival como hecho inevitable', url: '/reglamento' },
+        { type: 'reglamento', name: 'Sentencia Lógica del Intercambio', desc: 'OBLIGATORIO — resolver cada intercambio con coherencia causa-efecto', url: '/reglamento' },
+        { type: 'reglamento', name: 'Pasividad, Huida y Ocultamiento', desc: 'Penalizable — evitar el combate de forma sistemática', url: '/reglamento' },
+        { type: 'reglamento', name: 'Defensa Estéril', desc: 'Castigable — defensas que no responden ni avanzan la narrativa', url: '/reglamento' },
+        { type: 'reglamento', name: 'Tiempo de Respuesta y Rol Pausa', desc: '24h por turno · Rol Pausa 1 uso por intercambio', url: '/reglamento' },
+        { type: 'reglamento', name: 'Stats y Aclaraciones', desc: 'No obligatorio — recomendado añadir scans o fuentes al inicio del turno', url: '/reglamento' },
+        { type: 'reglamento', name: 'Niveles de Poder — Divisiones Bellator', desc: 'División Ciudad (7-B) y División Universal (3-A) — arsenal completo', url: '/reglamento' },
+        { type: 'reglamento', name: 'El Juzgado', desc: '5 parámetros: Normas, Lógica, Interpretación, Legibilidad, Extensión', url: '/reglamento' },
+        { type: 'reglamento', name: 'Crossover — Cosmologías', desc: 'Ki, Mana, Nen, Chakra, Cosmo, Riatsu, Haki — energías equivalentes', url: '/cosmologias.html' },
+        { type: 'reglamento', name: 'BFR', desc: 'HAX PROHIBIDO — Battlefield Remove fuera del combate', url: '/reglamento' },
+        { type: 'reglamento', name: 'Inmortalidad', desc: 'HAX PROHIBIDO — toda forma de inmortalidad está anulada', url: '/reglamento' },
+        { type: 'reglamento', name: 'Acasualidad', desc: 'HAX PROHIBIDO completamente en combate', url: '/reglamento' },
+        { type: 'reglamento', name: 'Regeneración', desc: 'HAX LIMITADO — máx. 3 usos · máx. 30% del daño de un ataque específico', url: '/reglamento' },
+        { type: 'reglamento', name: 'Control Mental', desc: 'HAX LIMITADO — máximo un objetivo, cadena causa-efecto coherente', url: '/reglamento' },
+        { type: 'reglamento', name: 'Borrado Existencial', desc: 'HAX LIMITADO — un solo uso por batalla, nunca vs rival directamente', url: '/reglamento' },
+        { type: 'reglamento', name: 'Teletransportación', desc: 'HAX con Cooldown — desplazamiento instantáneo', url: '/reglamento' },
+        { type: 'reglamento', name: 'Clarividencia', desc: 'HAX con Cooldown — percepción del futuro cercano', url: '/reglamento' },
+        { type: 'reglamento', name: 'Análisis de Información', desc: 'HAX con Cooldown — revelar ubicación, estadísticas o historial del rival', url: '/reglamento' },
       ];
 
       function hl(text, q) {
@@ -765,12 +2212,12 @@
       }
 
       let debTimer;
-      input.addEventListener('input', function() {
+      input.addEventListener('input', function () {
         clearTimeout(debTimer);
         debTimer = setTimeout(() => runSearch(this.value), 120);
       });
 
-      input.addEventListener('keydown', async function(event) {
+      input.addEventListener('keydown', async function (event) {
         if (event.key !== 'Enter') return;
         event.preventDefault();
         clearTimeout(debTimer);
@@ -787,13 +2234,13 @@
         runSearch(q);
       });
 
-      results.addEventListener('click', function(event) {
+      results.addEventListener('click', function (event) {
         const item = event.target.closest('.bl-gsr-item[data-name]');
         if (!item) return;
         window.location.href = profileUrl(item.dataset.name);
       });
 
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', function (event) {
         if (!event.target.closest('.bl-gsearch-wrap')) results.style.display = 'none';
       });
     })();
@@ -808,7 +2255,7 @@
         set('chip-total', stats.total);
         set('chip-universal', stats.universal);
         set('chip-ciudad', stats.ciudad);
-      } catch (_) {}
+      } catch (_) { }
     })();
 
     (async function loadCompetitors() {
@@ -852,10 +2299,10 @@
           }).join('');
         }
         if (standings) {
-          const renderMiniAvatar = function(item) {
+          const renderMiniAvatar = function (item) {
             return item.avatar_url && item.avatar_url !== '<nil>'
               ? `<img class="bl-mini-avatar" src="${item.avatar_url}" alt="${item.pseudonimo}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` +
-                  `<div class="bl-mini-avatar-ph" style="display:none">${displayInitial(item.pseudonimo)}</div>`
+              `<div class="bl-mini-avatar-ph" style="display:none">${displayInitial(item.pseudonimo)}</div>`
               : `<div class="bl-mini-avatar-ph">${displayInitial(item.pseudonimo)}</div>`;
           };
           const leaders = data.slice(0, 3);
@@ -916,7 +2363,7 @@
           grid.innerHTML = '<div class="bl-featured-skeleton" style="grid-column:1/-1">No hay clanes registrados aún. <a href="/clanes" style="color:var(--bl-gold)">¡Crea el primero!</a></div>';
           return;
         }
-        grid.innerHTML = clanes.slice(0, 6).map(function(c, index) {
+        grid.innerHTML = clanes.slice(0, 6).map(function (c, index) {
           const safeC = normalizeClanColor(c.primary_color);
           const colorStyle = `--tc:${safeC};--driver-color:${safeC};--driver-color-rgb:${hexToRgbList(safeC)};`;
           const name = String(c.name || 'Sin nombre').trim() || 'Sin nombre';
@@ -935,8 +2382,8 @@
             <div class="bl-clan-hero">
               <div class="bl-clan-crest">
                 ${logo
-                  ? `<img class="bl-clan-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(name)}" onerror="this.outerHTML='<div class=&quot;bl-clan-logo-fallback&quot;>${escapeHtml(initial)}</div>'">`
-                  : `<div class="bl-clan-logo-fallback">${escapeHtml(initial)}</div>`}
+              ? `<img class="bl-clan-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(name)}" onerror="this.outerHTML='<div class=&quot;bl-clan-logo-fallback&quot;>${escapeHtml(initial)}</div>'">`
+              : `<div class="bl-clan-logo-fallback">${escapeHtml(initial)}</div>`}
               </div>
               <div class="bl-clan-copy">
                 <div class="bl-clan-kicker">Clanes destacados</div>
@@ -989,32 +2436,32 @@
       }
 
       const slides = shuffleArr(rawData).slice(0, Math.min(rawData.length, 8)).map((item, index) => {
-            const division = String(item.division || 'Competidor Bellator');
-            const normalizedDivision = division.toLowerCase();
-            const glow = normalizedDivision.includes('ciudad')
-              ? 'rgba(54,166,255,.24)'
-              : normalizedDivision.includes('universal')
-                ? 'rgba(255,92,64,.24)'
-                : 'rgba(212,175,55,.22)';
-            const initials = String(item.pseudonimo || '?')
-              .split(/\s+/)
-              .filter(Boolean)
-              .slice(0, 2)
-              .map(part => part.charAt(0).toUpperCase())
-              .join('') || '?';
-            return {
-              title: item.pseudonimo || `Competidor ${index + 1}`,
-              division,
-              subtitle: item.fecha_inicio_rol
-                ? `Registro Bellator desde ${item.fecha_inicio_rol}.`
-                : 'Competidor activo dentro del circuito oficial Bellator.',
-              image: item.avatar_url && item.avatar_url !== '<nil>' ? item.avatar_url : '',
-              url: profileUrl(item.pseudonimo || `competidor-${index + 1}`),
-              cta: 'Abrir perfil',
-              glow,
-              initials
-            };
-          });
+        const division = String(item.division || 'Competidor Bellator');
+        const normalizedDivision = division.toLowerCase();
+        const glow = normalizedDivision.includes('ciudad')
+          ? 'rgba(54,166,255,.24)'
+          : normalizedDivision.includes('universal')
+            ? 'rgba(255,92,64,.24)'
+            : 'rgba(212,175,55,.22)';
+        const initials = String(item.pseudonimo || '?')
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map(part => part.charAt(0).toUpperCase())
+          .join('') || '?';
+        return {
+          title: item.pseudonimo || `Competidor ${index + 1}`,
+          division,
+          subtitle: item.fecha_inicio_rol
+            ? `Registro Bellator desde ${item.fecha_inicio_rol}.`
+            : 'Competidor activo dentro del circuito oficial Bellator.',
+          image: item.avatar_url && item.avatar_url !== '<nil>' ? item.avatar_url : '',
+          url: profileUrl(item.pseudonimo || `competidor-${index + 1}`),
+          cta: 'Abrir perfil',
+          glow,
+          initials
+        };
+      });
 
       track.innerHTML = slides.map((slide, index) => {
         const media = slide.image
@@ -1193,7 +2640,7 @@
         img.src = url;
         img.alt = '';
         img.loading = 'lazy';
-        img.onerror = function() { this.style.display = 'none'; };
+        img.onerror = function () { this.style.display = 'none'; };
         orb.appendChild(img);
       });
       if (pool.length <= 1) return;
@@ -1243,99 +2690,270 @@
   </script>
 
   <script>
-  // ── PRÓXIMAS PELEAS ─────────────────────────────────────────────
-  (async function loadProximasPeleas() {
-    const grid = document.getElementById('bl-proximas-grid');
-    const prevBtn = document.getElementById('bl-prox-prev');
-    const nextBtn = document.getElementById('bl-prox-next');
-    if (!grid) return;
-    try {
-      const res = await fetch('/api/proximas-peleas');
-      if (!res.ok) { grid.innerHTML = ''; return; }
-      const peleas = await res.json();
-      if (!peleas || peleas.length === 0) {
-        document.getElementById('bl-proximas-section').style.display = 'none';
-        return;
-      }
-      grid.innerHTML = peleas.map(function(p) {
-        const dateStr = p.event_date ? new Date(p.event_date + 'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase() : '';
-        const av1 = p.player1_avatar && p.player1_avatar !== '' ? `<img src="${p.player1_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player1_pseudo||'?').charAt(0).toUpperCase()}</span>`;
-        const av2 = p.player2_avatar && p.player2_avatar !== '' ? `<img src="${p.player2_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player2_pseudo||'?').charAt(0).toUpperCase()}</span>`;
-        return `<article class="bl-prox-card">
+    // ── PRÓXIMAS PELEAS ─────────────────────────────────────────────
+    (async function loadProximasPeleas() {
+      const grid = document.getElementById('bl-proximas-grid');
+      const prevBtn = document.getElementById('bl-prox-prev');
+      const nextBtn = document.getElementById('bl-prox-next');
+      if (!grid) return;
+      try {
+        const res = await fetch('/api/proximas-peleas');
+        if (!res.ok) { grid.innerHTML = ''; return; }
+        const peleas = await res.json();
+        if (!peleas || peleas.length === 0) {
+          document.getElementById('bl-proximas-section').style.display = 'none';
+          return;
+        }
+        grid.innerHTML = peleas.map(function (p) {
+          const dateStr = p.event_date ? new Date(p.event_date + 'T12:00:00').toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() : '';
+          
+          let av1 = `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p.player1_pseudo || '?').charAt(0).toUpperCase()}</span>`;
+          if (p.player1_avatar && p.player1_avatar !== '') {
+            av1 = `<img src="${p.player1_avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+          }
+
+          let hasThird = false;
+          let p2_pseudo = p.player2_pseudo;
+          let p3_pseudo = '';
+          if (p.player2_pseudo && p.player2_pseudo.includes('|')) {
+             hasThird = true;
+             const parts = p.player2_pseudo.split('|');
+             p2_pseudo = parts[0];
+             p3_pseudo = parts[1];
+          }
+
+          let p2_avatar_str = p.player2_avatar || '';
+          let p3_avatar_str = '';
+          if (p2_avatar_str.includes('|')) {
+             const parts = p2_avatar_str.split('|');
+             p2_avatar_str = parts[0];
+             p3_avatar_str = parts[1];
+          }
+
+          let av2 = `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p2_pseudo || '?').charAt(0).toUpperCase()}</span>`;
+          if (p2_avatar_str !== '') {
+            av2 = `<img src="${p2_avatar_str}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+          }
+
+          let av3 = `<span style="font-family:'Teko',sans-serif;font-size:1.8rem;color:var(--bl-gold)">${(p3_pseudo || '?').charAt(0).toUpperCase()}</span>`;
+          if (p3_avatar_str !== '') {
+            av3 = `<img src="${p3_avatar_str}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+          }
+
+          // Attempt to load avatars from playersData if available
+          if (window.playersData && window.playersData.length > 0) {
+            if (p.player1_avatar === '') {
+              const p1Data = window.playersData.find(x => x.pseudonimo.toLowerCase() === p.player1_pseudo.toLowerCase());
+              if (p1Data && p1Data.avatar_url) av1 = `<img src="${p1Data.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+            }
+            if (p.player2_avatar === '' || hasThird) {
+              const p2Data = window.playersData.find(x => x.pseudonimo.toLowerCase() === p2_pseudo.toLowerCase());
+              if (p2Data && p2Data.avatar_url) av2 = `<img src="${p2Data.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+            }
+            if (hasThird) {
+              const p3Data = window.playersData.find(x => x.pseudonimo.toLowerCase() === p3_pseudo.toLowerCase());
+              if (p3Data && p3Data.avatar_url) av3 = `<img src="${p3Data.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+            }
+          }
+
+          const avatarSize = hasThird ? '56px' : '72px';
+          const fontSize = hasThird ? '1rem' : '1.1rem';
+          const vsSize = hasThird ? '1.2rem' : '1.5rem';
+
+          return `<article class="bl-prox-card">
           <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(212,175,55,.06) 0%,transparent 70%);pointer-events:none"></div>
           <div style="font-family:'Teko',sans-serif;font-size:.62rem;letter-spacing:5px;text-transform:uppercase;color:var(--bl-gold);opacity:.75;margin-bottom:10px">${p.event_name || 'Bellator RolBattle'}</div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
-              <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av1}</div>
-              <div style="font-family:'Teko',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p.player1_pseudo}</div>
+              <div style="width:${avatarSize};height:${avatarSize};border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av1}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:${fontSize};font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p.player1_pseudo}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
-              <div style="font-family:'Teko',sans-serif;font-size:1.5rem;font-weight:900;color:var(--bl-gold);letter-spacing:2px;line-height:1">VS</div>
-              <div style="font-size:.68rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.3">${dateStr}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:${vsSize};font-weight:900;color:var(--bl-gold);letter-spacing:2px;line-height:1">VS</div>
+              ${!hasThird ? `<div style="font-size:.68rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.3">${dateStr}</div>` : ''}
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
-              <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av2}</div>
-              <div style="font-family:'Teko',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p.player2_pseudo}</div>
+              <div style="width:${avatarSize};height:${avatarSize};border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av2}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:${fontSize};font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p2_pseudo}</div>
             </div>
+            ${hasThird ? `
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+              <div style="font-family:'Teko',sans-serif;font-size:${vsSize};font-weight:900;color:var(--bl-gold);letter-spacing:2px;line-height:1">VS</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
+              <div style="width:${avatarSize};height:${avatarSize};border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">${av3}</div>
+              <div style="font-family:'Teko',sans-serif;font-size:${fontSize};font-weight:700;letter-spacing:.04em;text-align:center;line-height:1.1;color:#fff;word-break:break-word">${p3_pseudo}</div>
+            </div>
+            <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:.68rem;color:rgba(255,255,255,.5);line-height:1.3">${dateStr}</div>
+            ` : ''}
           </div>
           ${p.division ? `<div style="margin-top:14px;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;border-top:1px solid rgba(255,255,255,.06);padding-top:10px">${p.division}</div>` : ''}
         </article>`;
-      }).join('');
+        }).join('');
 
-      const isMobile = window.matchMedia('(max-width:960px)').matches;
+        const isMobile = window.matchMedia('(max-width:960px)').matches;
 
-      const scrollByStep = function(direction) {
-        const firstCard = grid.children[0];
-        if (!firstCard) return;
-        const cardWidth = firstCard.getBoundingClientRect().width;
-        const step = cardWidth + 16;
-        const multiplier = isMobile ? 1 : 2;
-        grid.scrollBy({ left: direction * step * multiplier, behavior: 'smooth' });
-      };
-
-      if (prevBtn) prevBtn.onclick = function() { scrollByStep(-1); };
-      if (nextBtn) nextBtn.onclick = function() { scrollByStep(1); };
-
-      if (grid.getAttribute('data-auto-scroll') === 'true' && window.matchMedia('(max-width:768px)').matches) {
-        setTimeout(() => {
-          if (peleas.length > 1 && !grid.dataset.autoscrolled) {
-            const itemWidth = grid.children[0]?.getBoundingClientRect().width || 340;
-            const gapWidth = 16;
-            const scrollDist = itemWidth + gapWidth;
-            grid.scrollTo({ left: scrollDist, behavior: 'smooth' });
-            setTimeout(() => { grid.scrollTo({ left: 0, behavior: 'smooth' }); }, 700);
-            grid.dataset.autoscrolled = '1';
-          }
-        }, 300);
-      }
-
-      if (isMobile && peleas.length > 1 && grid.dataset.mobileTicker !== '1') {
-        grid.dataset.mobileTicker = '1';
-        let direction = 1;
-        let userInteracted = false;
-        const onUserInteraction = function() { userInteracted = true; };
-        grid.addEventListener('touchstart', onUserInteraction, { passive: true });
-        grid.addEventListener('pointerdown', onUserInteraction, { passive: true });
-        grid.addEventListener('wheel', onUserInteraction, { passive: true });
-
-        window.setInterval(function() {
-          if (userInteracted) return;
+        const scrollByStep = function (direction) {
           const firstCard = grid.children[0];
           if (!firstCard) return;
-          const step = firstCard.getBoundingClientRect().width + 16;
-          const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
-          if (maxScroll <= 0) return;
-          if (grid.scrollLeft >= maxScroll - step * 0.4) direction = -1;
-          if (grid.scrollLeft <= step * 0.2) direction = 1;
-          grid.scrollBy({ left: direction * step, behavior: 'smooth' });
-        }, 2600);
+          const cardWidth = firstCard.getBoundingClientRect().width;
+          const step = cardWidth + 16;
+          const multiplier = isMobile ? 1 : 2;
+          grid.scrollBy({ left: direction * step * multiplier, behavior: 'smooth' });
+        };
+
+        if (prevBtn) prevBtn.onclick = function () { scrollByStep(-1); };
+        if (nextBtn) nextBtn.onclick = function () { scrollByStep(1); };
+
+        if (grid.getAttribute('data-auto-scroll') === 'true' && window.matchMedia('(max-width:768px)').matches) {
+          setTimeout(() => {
+            if (peleas.length > 1 && !grid.dataset.autoscrolled) {
+              const itemWidth = grid.children[0]?.getBoundingClientRect().width || 340;
+              const gapWidth = 16;
+              const scrollDist = itemWidth + gapWidth;
+              grid.scrollTo({ left: scrollDist, behavior: 'smooth' });
+              setTimeout(() => { grid.scrollTo({ left: 0, behavior: 'smooth' }); }, 700);
+              grid.dataset.autoscrolled = '1';
+            }
+          }, 300);
+        }
+
+        if (isMobile && peleas.length > 1 && grid.dataset.mobileTicker !== '1') {
+          grid.dataset.mobileTicker = '1';
+          let direction = 1;
+          let userInteracted = false;
+          const onUserInteraction = function () { userInteracted = true; };
+          grid.addEventListener('touchstart', onUserInteraction, { passive: true });
+          grid.addEventListener('pointerdown', onUserInteraction, { passive: true });
+          grid.addEventListener('wheel', onUserInteraction, { passive: true });
+
+          window.setInterval(function () {
+            if (userInteracted) return;
+            const firstCard = grid.children[0];
+            if (!firstCard) return;
+            const step = firstCard.getBoundingClientRect().width + 16;
+            const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+            if (maxScroll <= 0) return;
+            if (grid.scrollLeft >= maxScroll - step * 0.4) direction = -1;
+            if (grid.scrollLeft <= step * 0.2) direction = 1;
+            grid.scrollBy({ left: direction * step, behavior: 'smooth' });
+          }, 2600);
+        }
+      } catch (e) {
+        document.getElementById('bl-proximas-section').style.display = 'none';
       }
-    } catch(e) {
-      document.getElementById('bl-proximas-section').style.display = 'none';
-    }
-  })();
+    })();
   </script>
 
-<script src="/translate.js?v=4"></script>
+  <script src="/translate.js?v=4"></script>
+  <!-- Lógica de Admisión Planeta -->
+  <script>
+    (function () {
+      const OPENS = new Date('2026-09-04T08:34:00-05:00');
+      let countdownInterval = null;
+      let isFull = false;
+
+      const uiLoading = document.getElementById('planet-loading');
+      const uiCountdown = document.getElementById('planet-countdown-ui');
+      const uiOpen = document.getElementById('planet-open-ui');
+      const uiFull = document.getElementById('planet-full-ui');
+      const uiTimer = document.getElementById('planet-timer');
+      const uiSlotsCount = document.getElementById('planet-slots-count');
+      const uiLeaderboardWrap = document.getElementById('planet-leaderboard-wrap');
+      const uiLeaderboard = document.getElementById('planet-leaderboard');
+
+      async function checkPlanetStatus() {
+        try {
+          const res = await fetch('/api/division-slots');
+          if (!res.ok) return;
+          const data = await res.json();
+          const pCount = data.planeta || 0;
+          uiSlotsCount.textContent = pCount;
+
+          isFull = pCount >= 16;
+          updateView();
+
+          // Load leaderboard
+          const offRes = await fetch('/api/competidores-oficiales');
+          if (offRes.ok) {
+            const offData = await offRes.json();
+            const pList = offData.planeta || [];
+            if (pList.length > 0) {
+              uiLeaderboardWrap.style.display = 'block';
+              uiLeaderboard.innerHTML = pList.map((p, i) => `
+                <div style="background:rgba(0,0,0,.3);border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:10px">
+                  <div style="font-family:'Teko',sans-serif;font-size:1.2rem;color:#a855f7">#${i + 1}</div>
+                  <div style="font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.pseudonimo}</div>
+                </div>
+              `).join('');
+            }
+          }
+        } catch (e) { console.error('Planet check failed', e); }
+      }
+
+      function updateView() {
+        const now = new Date();
+        uiLoading.style.display = 'none';
+        uiCountdown.style.display = 'none';
+        uiOpen.style.display = 'none';
+        uiFull.style.display = 'none';
+
+        if (now < OPENS) {
+          uiCountdown.style.display = 'block';
+          if (!countdownInterval) {
+            countdownInterval = setInterval(() => {
+              const remaining = OPENS - new Date();
+              if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                checkPlanetStatus(); // Recalculate once open
+              } else {
+                const hrs = String(Math.floor(remaining / 3600000)).padStart(2, '0');
+                const mins = String(Math.floor((remaining % 3600000) / 60000)).padStart(2, '0');
+                const secs = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+                uiTimer.textContent = `${hrs}:${mins}:${secs}`;
+              }
+            }, 1000);
+          }
+        } else if (isFull) {
+          uiFull.style.display = 'block';
+        } else {
+          uiOpen.style.display = 'block';
+        }
+      }
+
+      window.openPlanetRegistration = function () {
+        document.getElementById('planetRegModal').style.display = 'flex';
+      };
+      window.closePlanetRegistration = function () {
+        document.getElementById('planetRegModal').style.display = 'none';
+      };
+
+      document.getElementById('planetRegForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('planet-submit-btn');
+        const msg = document.getElementById('planet-reg-msg');
+        btn.disabled = true;
+        msg.textContent = 'Iniciando cámara de admisión...';
+        msg.style.color = 'var(--muted)';
+
+        const payload = {
+          pseudonimo: document.getElementById('planet-pseudo').value.trim(),
+          country_code: document.getElementById('planet-country').value.trim(),
+          bio: document.getElementById('planet-bio').value.trim(),
+          division: 'Planeta'
+        };
+
+        sessionStorage.setItem('bellator_pending_reg', JSON.stringify(payload));
+
+        setTimeout(() => {
+          window.location.href = '/examen-planeta.html';
+        }, 800);
+      });
+
+      // Initial check
+      checkPlanetStatus();
+    })();
+  </script>
 </body>
+
 </html>

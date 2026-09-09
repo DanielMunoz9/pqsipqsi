@@ -519,6 +519,7 @@ input.bl-cp-hex{width:42px;height:27px;border-radius:6px;border:1px solid var(--
 .bl-rank-name{font-size:1rem;font-weight:700;color:var(--bl-text)}
 .bl-rank-div{font-size:.9rem;padding:4px 10px;border-radius:999px;font-weight:700;letter-spacing:1px;text-align:center;background:rgba(212,175,55,.12);color:var(--bl-gold)}
 .bl-rank-div.div-c{background:rgba(59,130,246,.12);color:#93c5fd}
+.bl-rank-div.div-p{background:rgba(168,85,247,.12);color:#c084fc}
 .bl-rank-since{font-size:.9rem;color:var(--bl-muted)}
 .bl-rank-empty{grid-column:1/-1;text-align:center;padding:54px 20px;color:var(--bl-muted);font-size:1rem}
 

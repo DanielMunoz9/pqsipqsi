@@ -16,6 +16,22 @@
     let voicesPromise = null;
     let currentRequest = null;
     let audioEl = null;
+
+    return {
+      loadVoices: function() {
+        if (window.BellatorCore && typeof window.BellatorCore.createTTSClient === 'function') {
+          window.BellatorTTS = window.BellatorCore.createTTSClient();
+          if (typeof window.BellatorTTS.loadVoices === 'function') window.BellatorTTS.loadVoices();
+        }
+      },
+      speak: function(text, opts) {
+        if (window.BellatorCore && typeof window.BellatorCore.createTTSClient === 'function') {
+           window.BellatorTTS = window.BellatorCore.createTTSClient();
+           if (typeof window.BellatorTTS.speak === 'function') window.BellatorTTS.speak(text, opts);
+        }
+      }
+    };
+  })();
 (function() {
   function bootNarrator() {
     if (!window.BellatorTTS && window.BellatorCore && typeof window.BellatorCore.createTTSClient === 'function') {
@@ -31,4 +47,5 @@
   } else {
     bootNarrator();
   }
+})();
 })();

@@ -5,7 +5,7 @@ const rawNames = [
   '𝕽𝐲𝐮𝐮.', 'Fear.',
   'тєηкα', 'Dhaela',
   '丂єρτιмυѕ ƒɢο', 'Musashi',
-  'RagnaKurenai', 'Prrox',
+  'RagnaKurenai', 'Prox',
   'NeroAggelo', 'Setta rojas (Cejotas)',
   'Artoria', 'Lucent',
   'GULTARD GABANNA', 'REVAN'

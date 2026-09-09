@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -453,9 +453,9 @@
       examRunning = false;
       stopGlobal(); stopQTimer();
       sessionStorage.setItem('bellator_exam_result_universal', JSON.stringify({
-        passed: false, score: qScore, total: 10, reason
+        passed: false, score: qScore, total: 10, reason: reason || 'Infracción grave de seguridad'
       }));
-      exitAndRedirect(regError ? 5000 : 520);
+      exitAndRedirect(520);
     }
 
     function exitAndRedirect(delay) {
@@ -480,7 +480,6 @@
        PREGUNTAS — DIVISIÓN UNIVERSAL 3-A
     ────────────────────────────────────── */
     const QUESTIONS = [
-      /* ── Q1 30s: VELOCIDAD OPERACIONAL EN UNIVERSAL ── */
       {
         text: '¿Cuál es el techo de velocidad operacional establecido por el reglamento de Bellator para División Universal?',
         opts: [
@@ -493,7 +492,6 @@
         fb_ok: 'Correcto. División Universal establece MFTL+ con un piso de ≥ 1.000× c como referencia operacional. No hay un techo superior fijo, pero toda afirmación de velocidad debe estar justificada con scans del personaje.',
         fb_no: 'Incorrecto — C. El reglamento fija el piso en MFTL+ ≥ 1.000× la velocidad de la luz. FTL simple (apenas superar c) aplica a divisiones inferiores; en Universal el mínimo esperado es cuatro órdenes de magnitud por encima.'
       },
-      /* ── Q2 30s: ESCALA ESPACIAL ── */
       {
         text: 'Un personaje declara que su ataque "borrará el universo observable". ¿Bajo qué condición exacta es eso válido en División Universal?',
         opts: [
@@ -506,7 +504,6 @@
         fb_ok: 'Correcto. El reglamento de Universal fija el marco en el universo observable (93 mil millones de años luz de diámetro). La destrucción cosmológica es válida dentro de ese límite si hay scans que la acrediten; cualquier afirmación multiversal o transdimensional queda fuera sin justificación específica.',
         fb_no: 'Incorrecto — C. Universal no es ilimitado: el techo explícito son los 93 mil millones de años luz del universo observable. Además, el universo en sí no te da omnipotencia automática; los scans deben existir y la narrativa mantiene el principio de acción-reacción.'
       },
-      /* ── Q3 30s: HAX EN UNIVERSAL VS CIUDAD ── */
       {
         text: '¿Cuántos HAX nuevos agrega División Universal respecto al registro de División Ciudad?',
         opts: [
@@ -519,7 +516,6 @@
         fb_ok: 'Correcto. El reglamento es explícito: División Universal NO agrega nuevas entradas al registro de HAX. Los mismos HAX disponibles en Ciudad, con las mismas restricciones, se aplican en Universal. La diferencia está en la ESCALA de aplicación, no en el catálogo de herramientas.',
         fb_no: 'Incorrecto — C. Una confusión frecuente: "jugar en Universal" no desbloquea HAX extras. El catálogo es idéntico al de Ciudad. Lo que escala es la magnitud de los efectos, no los tipos de habilidades disponibles.'
       },
-      /* ── Q4 45s: ECONOMÍA DE ATAQUES — "1 ataque sigue siendo 1 ataque" ── */
       {
         text: 'Un jugador en Universal dice: "Mi personaje lanza un ataque que destruye el universo observable. Como el daño es universal, ese único ataque debería contar como 5 ataques en el scorecard." ¿Qué responde el reglamento?',
         opts: [
@@ -532,7 +528,6 @@
         fb_ok: 'Correcto. El reglamento Universal preserva la economía de ataques: 1 ataque sigue siendo 1 ataque. La escala cosmológica no convierte un turno en cinco turnos ni otorga ventajas extra en el scorecard. La magnitud se evalúa como calidad del ataque, no como cantidad.',
         fb_no: 'Incorrecto — C. Que un ataque sea de escala universal no lo convierte en múltiples ataques. El principio es explícito en el reglamento: la economía de ataque no varía con la escala. Si fuera así, cualquier personaje Universal ganaría automáticamente por tamaño.'
       },
-      /* ── Q5 45s: PROHIBICIONES EN UNIVERSAL ── */
       {
         text: 'Un personaje en División Universal usa Acasualidad para "desconectar la causalidad del universo entero", argumentando que a escala 3-A eso es narrativamente coherente. ¿Cuál es la respuesta del reglamento?',
         opts: [
@@ -545,7 +540,6 @@
         fb_ok: 'Correcto. Las Prohibiciones Absolutas no tienen excepciones por división. Acasualidad está prohibida en Ciudad, Universal y cualquier futura división. No existe un "tier suficientemente alto" para desbloquear una Prohibición Absoluta.',
         fb_no: 'Incorrecto — C. El catálogo de prohibidos es global. Ninguna escala, tier ni argumento narrativo habilita una Prohibición Absoluta. El jugador recibe descalificación inmediata independientemente de la división en que juegue.'
       },
-      /* ── Q6 45s: MASA EN UNIVERSAL ── */
       {
         text: 'Un turno en Universal cita "la masa del universo observable" como base para el daño de energía cinética del personaje. ¿Cuál es el valor aproximado correcto que el reglamento reconoce para esa referencia?',
         opts: [
@@ -558,7 +552,6 @@
         fb_ok: 'Correcto. El reglamento cita específicamente ~1,46 × 10⁵³ kg como la masa convencional del universo observable. Usar ese valor (o scans del personaje compatibles con él) es la base técnica correcta para ataques de escala 3-A.',
         fb_no: 'Incorrecto — A. El valor correcto es ~1,46 × 10⁵³ kg. La masa solar (10³⁰ kg) y la terrestre (10²⁴ kg) son referencias de divisiones inferiores. "Cualquier número grande" no es aceptable: el reglamento exige precisión o scans justificados.'
       },
-      /* ── Q7 60s: GOD-ROL EN ESCALA CÓSMICA ── */
       {
         text: 'Personaje A en Universal narra: <em>"Mi energía es absoluta y no tiene límite cuantificable; a esta escala, ninguna defensa puede existir porque la física del universo se dobla ante mi presencia."</em> ¿Qué infracción comete y por qué es especialmente grave aquí?',
         opts: [
@@ -571,7 +564,6 @@
         fb_ok: 'Correcto. God-Rol prohíbe declarar poder ilimitado o afirmaciones de naturaleza omnipotente ("energía absoluta sin límite cuantificable"). A eso se suma Determinismo Narrativo al cerrar toda defensa posible. En Universal esta combinación es más grave porque el alcance implícito ("la física del universo") hace que la DN bloquee TODO recurso del rival a nivel estructural.',
         fb_no: 'Incorrecto — C. "Energía absoluta sin límite cuantificable" = God-Rol (el reglamento prohíbe explícitamente invocar omnipotencia o infinitud). "Ninguna defensa puede existir porque la física se dobla ante mi presencia" = Determinismo Narrativo de alcance cosmológico. Son dos infracciones simultáneas.'
       },
-      /* ── Q8 60s: MFTL+ EN COMBATE — qué es válido y qué no ── */
       {
         text: 'Personaje B afirma que su velocidad es "MFTL+ a 10.000c" y que por eso puede "ejecutar 10.000 ataques antes de que el rival reaccione". ¿Cuál es el análisis reglamentario correcto?',
         opts: [
@@ -584,7 +576,6 @@
         fb_ok: 'Correcto. La velocidad por sí sola no cancela el turno del rival. MFTL+ es un dato técnico que cuantifica la ofensiva, pero la resolución de si el rival puede responder depende del intercambio narrativo, no de un cálculo automático de "más rápido = ataca más". Convertirlo en "10.000 ataques libres" es DN encadenado.',
         fb_no: 'Incorrecto — C. No importa cuánto c sea la velocidad: en Bellator siempre hay ventana de respuesta. Usar MFTL+ para producir un número de ataques mayor al que el rival puede procesar, convirtiéndolos en inevitables, es la definición exacta de Determinismo Narrativo usando datos técnicos como cobertura.'
       },
-      /* ── Q9 60s: MULTIVERSE / TRASCENDENCIA — límite de la división ── */
       {
         text: 'Personaje A afirma que su poder "trasciende el universo observable y opera desde un plano superior al espacio-tiempo". ¿El reglamento lo permite en División Universal?',
         opts: [
@@ -597,7 +588,6 @@
         fb_ok: 'Correcto. "División Universal" no es sinónimo de "sin límite". El techo es el universo observable: 93 mil millones de años luz, no un plano superior al espacio-tiempo. Afirmar trascendencia dimensional sin scans específicos que la acrediten es exceso de escala, independientemente del tier de VS Battles que el jugador cite.',
         fb_no: 'Incorrecto — C. Universal no es la división más alta sin tope: tiene un techo definido. Sin scans que acrediten que el personaje opera en planos superiores al espacio-tiempo, esa narración supera el marco de la división. El reglamento exige que cada afirmación de poder esté justificada; "jugar en Universal" no es una carta blanca.'
       },
-      /* ── Q10 90s: CRUCETA UNIVERSAL AVANZADA ── */
       {
         text: 'Cruceta en Universal: turno incluye (I) Manipulación del Tiempo para revertir el universo 1 segundo atrás, (II) SUMMON de 50 entidades cósmicas, cada una genera 3 ataques a escala estelar, (III) Incorporeidad activada defensivamente + el jugador la usa para atravesar la defensa del rival, (IV) Control Mental con alcance "todos los seres del universo". ¿Cuál análisis es completamente correcto?',
         opts: [
@@ -702,6 +692,14 @@
         document.getElementById('panelCombat').style.display = 'block';
         document.getElementById('xPh1').classList.add('off');
         document.getElementById('xPh2').classList.remove('off');
+        // Reset timer to exactly 5 minutes for the narrative part
+        gRemaining = 300;
+        document.getElementById('xGFill').style.transition = 'none';
+        document.getElementById('xGFill').style.width = '100%';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          document.getElementById('xGFill').style.transition = 'width 299s linear';
+          document.getElementById('xGFill').style.width = '0%';
+        }));
         sfxPhase();
       } else {
         renderQuestion();
@@ -815,19 +813,15 @@
       let regError  = null;
       let pendingPseudo = '';
 
-      // Mostrar panel resultado con estado de carga si aprobo
       document.getElementById('panelCombat').style.display = 'none';
       const res = document.getElementById('panelResult');
       res.style.display = 'block';
-      const bestWrap = document.getElementById('xRBest');
-      if (bestWrap) bestWrap.style.display = 'none';
 
       if (passed) {
         document.getElementById('xRI').textContent = String.fromCodePoint(0x23F3);
         document.getElementById('xRT').textContent = 'REGISTRANDO\u2026';
         document.getElementById('xRT').style.color = 'var(--gold)';
         document.getElementById('xRS').textContent = 'Guardando tu perfil, no cierr\u00e9s la pantalla\u2026';
-        document.getElementById('xRS').style.color = '';
         let pending = null;
         try { pending = JSON.parse(sessionStorage.getItem('bellator_pending_reg')); } catch(_) {}
         if (!pending) { try { pending = JSON.parse(localStorage.getItem('bellator_pending_reg')); } catch(_) {} }
@@ -871,9 +865,9 @@
         document.getElementById('xRS').style.color = 'var(--red)';
       } else {
         document.getElementById('xRS').style.color = '';
-      document.getElementById('xRS').textContent  = passed
-        ? (regStatus ? regStatus + ' — bienvenido a Bellator.' : 'Turno válido y teoría Universal aprobada.')
-        : 'Turno válido, pero no alcanzaste 7/10 en teoría Universal. Repasá el reglamento sección Universal.';
+        document.getElementById('xRS').textContent  = passed
+          ? (regStatus ? regStatus + ' — bienvenido a Bellator.' : 'Turno válido y teoría Universal aprobada.')
+          : 'Turno válido, pero no alcanzaste 7/10 en teoría Universal. Repasá el reglamento sección Universal.';
       }
       document.getElementById('xRSc').textContent = 'TEORÍA: ' + qScore + ' / 10' + (passed ? '  ·  COMBATE: APROBADO' : '');
       const bestList = document.getElementById('xRBestList');

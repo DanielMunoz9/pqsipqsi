@@ -324,7 +324,7 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
   <div class="live-feed-section" id="slots-ranking-section" style="margin-top:24px">
     <h3>⏱️ Clasificados Oficiales por División</h3>
     <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Este bloque define quién entra realmente a la llave pública. Se ordena por timestamp de aprobación/registro y corta en 16 para Ciudad y 12 para Universal.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1100px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:1100px">
       <div style="padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)">
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Ciudad</div>
         <div id="slots-ciudad" style="display:grid;gap:8px"><div style="font-size:.82rem;color:rgba(255,255,255,.35)">Cargando...</div></div>
@@ -332,6 +332,10 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
       <div style="padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)">
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Universal</div>
         <div id="slots-universal" style="display:grid;gap:8px"><div style="font-size:.82rem;color:rgba(255,255,255,.35)">Cargando...</div></div>
+      </div>
+      <div style="padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Planeta</div>
+        <div id="slots-planeta" style="display:grid;gap:8px"><div style="font-size:.82rem;color:rgba(255,255,255,.35)">Cargando...</div></div>
       </div>
     </div>
   </div>
@@ -412,6 +416,32 @@ td small { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
       <div style="display:flex;align-items:center;gap:14px">
         <button onclick="eliminarJugador()" style="padding:10px 22px;background:#ef4444;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🗑️ ELIMINAR JUGADOR</button>
         <span id="dp-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAMBIAR DIVISIÓN ─────────────────────────────────────────────── -->
+  <div class="live-feed-section" id="change-division-section" style="margin-top:24px">
+    <h3>🔄 Cambiar División de Jugador</h3>
+    <p style="font-size:.82rem;color:var(--muted);margin:6px 0 16px">Traslada al usuario a otra división sin tener que borrar su cuenta.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Jugador</label>
+        <select id="cd-player" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="">— Selecciona jugador —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Nueva División</label>
+        <select id="cd-division" style="width:100%;padding:8px 10px;background:#0f141b;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-size:.88rem">
+          <option value="Ciudad">Ciudad</option>
+          <option value="Universal">Universal</option>
+          <option value="Planeta">Planeta</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;grid-column:1/-1">
+        <button onclick="cambiarDivision()" style="padding:10px 22px;background:#3b82f6;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;letter-spacing:.05em">🔄 CAMBIAR DIVISIÓN</button>
+        <span id="cd-msg" style="font-size:.82rem;color:rgba(255,255,255,.45)"></span>
       </div>
     </div>
   </div>
@@ -1284,6 +1314,7 @@ async function loadOfficialDivisionSlots() {
     const data = await res.json();
     renderOfficialDivisionList('slots-ciudad', data.ciudad || []);
     renderOfficialDivisionList('slots-universal', data.universal || []);
+    renderOfficialDivisionList('slots-planeta', data.planeta || []);
   } catch (_) { /* silent */ }
 }
 
@@ -1738,6 +1769,7 @@ async function loadPlayerDropdowns() {
   try {
     const currentSelectedPlayer = document.getElementById('pc-player') ? document.getElementById('pc-player').value : '';
     const currentDeletePlayer = document.getElementById('dp-player') ? document.getElementById('dp-player').value : '';
+    const currentChangeDivPlayer = document.getElementById('cd-player') ? document.getElementById('cd-player').value : '';
     const currentResetPlayer = document.getElementById('rk-player') ? document.getElementById('rk-player').value : '';
     const currentRankingPlayer = document.getElementById('rp-player') ? document.getElementById('rp-player').value : '';
     const [playersRes, clansRes] = await Promise.all([
@@ -1774,6 +1806,13 @@ async function loadPlayerDropdowns() {
         dpSel.value = currentDeletePlayer;
       }
     }
+    const cdSel = document.getElementById('cd-player');
+    if (cdSel) {
+      cdSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
+      if (currentChangeDivPlayer && players.some(p => p.pseudonimo === currentChangeDivPlayer)) {
+        cdSel.value = currentChangeDivPlayer;
+      }
+    }
     const rkSel = document.getElementById('rk-player');
     if (rkSel) {
       rkSel.innerHTML = '<option value="">— Selecciona jugador —</option>' + opts;
@@ -1801,6 +1840,42 @@ async function loadPlayerDropdowns() {
     syncSelectedPlayerAdminState();
     syncRankingPointsAdminState();
   } catch(e) { /* silent */ }
+}
+
+async function cambiarDivision() {
+  const pseudo = String(document.getElementById('cd-player')?.value || '').trim();
+  const newDiv = String(document.getElementById('cd-division')?.value || '').trim();
+  const msg = document.getElementById('cd-msg');
+  if (!msg) return;
+  if (!pseudo || !newDiv) { msg.textContent = 'Selecciona jugador y división.'; msg.style.color = '#ef4444'; return; }
+  if (!confirm(`¿Seguro que quieres cambiar la división de "${pseudo}" a "${newDiv}"?`)) return;
+
+  msg.textContent = 'Actualizando...';
+  msg.style.color = 'var(--muted)';
+  try {
+    const res = await fetch(window.location.origin + '/api/admin/change-division', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + String(document.getElementById('admin-token')?.value || '').trim()
+      },
+      body: JSON.stringify({ pseudonimo: pseudo, new_division: newDiv })
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      msg.textContent = 'Error: ' + errText;
+      msg.style.color = '#ef4444';
+      return;
+    }
+    msg.textContent = '¡División actualizada con éxito!';
+    msg.style.color = '#10b981';
+    await loadPlayerDropdowns();
+    await loadOfficialDivisionSlots();
+    setTimeout(() => { if (msg) msg.textContent = ''; }, 3000);
+  } catch (err) {
+    msg.textContent = 'Error de conexión.';
+    msg.style.color = '#ef4444';
+  }
 }
 
 async function eliminarJugador() {

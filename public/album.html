@@ -4201,7 +4201,7 @@ select.trade-filter-input {
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 60;
   display: none;
   align-items: center;
   justify-content: center;
@@ -4220,6 +4220,20 @@ select.trade-filter-input {
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 20px;
   align-items: center;
+}
+
+.overlay-center-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+@media (min-width: 900px) {
+  .overlay-center-area {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .overlay-close {
@@ -6546,28 +6560,51 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
 }
 
 /* --- TRADE ARENA REDESIGN --- */
+/* --- TRADE ARENA REDESIGN --- */
+@keyframes trade-slot-breathe {
+  0%, 100% { box-shadow: 0 0 12px rgba(212,175,55,0.08), inset 0 0 20px rgba(212,175,55,0.03); }
+  50% { box-shadow: 0 0 20px rgba(212,175,55,0.18), inset 0 0 30px rgba(212,175,55,0.06); }
+}
+@keyframes trade-slot-fill-glow {
+  0% { box-shadow: 0 0 0 rgba(212,175,55,0); }
+  50% { box-shadow: 0 0 25px rgba(212,175,55,0.5), 0 0 50px rgba(212,175,55,0.2); }
+  100% { box-shadow: 0 4px 20px rgba(212,175,55,0.25); }
+}
+@keyframes trade-divider-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
 .trade-arena {
-  background: radial-gradient(circle at center, rgba(30,40,60,0.8), #090e15);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 12px;
-  padding: 24px;
+  background: linear-gradient(160deg, rgba(14,22,40,0.95) 0%, rgba(6,10,20,0.98) 50%, rgba(18,28,50,0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 28px 24px;
   margin-bottom: 24px;
   position: relative;
   text-align: center;
+  overflow: hidden;
+}
+.trade-arena::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%);
+  pointer-events: none;
 }
 .trade-arena-title {
   font-family: 'Teko', sans-serif;
-  font-size: 1.8rem;
-  letter-spacing: 2px;
-  color: #fff;
-  margin-bottom: 20px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  font-size: 1.6rem;
+  letter-spacing: 3px;
+  color: var(--bl-gold, #D4AF37);
+  margin-bottom: 22px;
+  text-shadow: 0 2px 8px rgba(212,175,55,0.3);
+  position: relative;
 }
 .trade-arena-slots {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   margin-bottom: 24px;
 }
 .trade-slot-container {
@@ -6577,53 +6614,103 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
   gap: 10px;
 }
 .trade-slot-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--bl-gold, #D4AF37);
+  font-family: 'Teko', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(212,175,55,0.85);
+  text-transform: uppercase;
 }
 .trade-slot {
   width: 120px;
-  height: 160px;
-  background: rgba(255,255,255,0.03);
-  border: 2px dashed rgba(255,255,255,0.2);
-  border-radius: 8px;
+  height: 165px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(212,175,55,0.02) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(212,175,55,0.2);
+  border-radius: 10px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
   position: relative;
   overflow: hidden;
+  animation: trade-slot-breathe 3s ease-in-out infinite;
+}
+.trade-slot::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.15), transparent 40%, transparent 60%, rgba(212,175,55,0.1));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 .trade-slot:hover {
-  background: rgba(212, 175, 55, 0.08);
-  border-color: rgba(212, 175, 55, 0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(212,175,55,0.15);
+  background: linear-gradient(145deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 100%);
+  border-color: rgba(212, 175, 55, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(212,175,55,0.15), 0 0 15px rgba(212,175,55,0.08);
+}
+.trade-slot:hover::before {
+  opacity: 1;
 }
 .trade-slot.filled {
-  border-style: solid;
-  border-color: var(--bl-gold, #D4AF37);
-  background: rgba(0,0,0,0.4);
+  border: 2px solid var(--bl-gold, #D4AF37);
+  background: rgba(0,0,0,0.5);
+  animation: trade-slot-fill-glow 0.6s ease-out forwards;
+}
+.trade-slot.filled::before {
+  opacity: 0;
 }
 .trade-slot-placeholder {
-  font-size: 3rem;
-  color: rgba(255,255,255,0.1);
-  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(212,175,55,0.3);
+  transition: color 0.3s;
+}
+.trade-slot:hover .trade-slot-placeholder {
+  color: rgba(212,175,55,0.6);
+}
+.trade-slot-placeholder svg {
+  width: 40px;
+  height: 52px;
+  opacity: 0.7;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.trade-slot:hover .trade-slot-placeholder svg {
+  opacity: 1;
+  transform: scale(1.08);
+}
+.trade-slot-placeholder .trade-slot-hint {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 .trade-slot.filled .trade-slot-placeholder {
-  color: var(--bl-gold, #D4AF37);
-  font-size: 4rem;
+  display: none;
 }
 .trade-slot-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 .trade-slot-divider {
-  color: rgba(255,255,255,0.3);
+  color: rgba(212,175,55,0.4);
+  animation: trade-divider-pulse 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(212,175,55,0.2));
+}
+.trade-slot-divider svg {
+  width: 28px;
+  height: 28px;
 }
 
 .trade-inventory-tabs {
@@ -6691,11 +6778,15 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
 
 @media (max-width: 600px) {
   .trade-arena-slots {
-    gap: 10px;
+    gap: 12px;
   }
   .trade-slot {
     width: 100px;
     height: 140px;
+  }
+  .trade-slot-placeholder svg {
+    width: 32px;
+    height: 42px;
   }
   .trade-duplicate-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -7129,10 +7220,10 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
                   <div class="access-sub">Entra con tu nombre y tu clave Bellator</div>
                 </div>
               </div>
-              <div class="identity-bar">
+              <form class="identity-bar" onsubmit="event.preventDefault(); document.getElementById('save-key-button').click();">
                 <input id="player-pseudo-input" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="Nombre / pseudónimo">
                 <input id="player-key-input" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" placeholder="Clave personal">
-              </div>
+              </form>
               <div class="identity-bar-actions">
                 <button class="identity-button" id="save-key-button" type="button">Entrar al álbum</button>
                 <button class="secondary-button" id="clear-key-button" type="button">Cerrar sesión</button>
@@ -7540,16 +7631,22 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
           <div class="trade-slot-container">
             <div class="trade-slot-label">TU OFERTA</div>
             <div class="trade-slot" id="visual-slot-offer" onclick="document.getElementById('tab-sel-offer').click()">
-              <div class="trade-slot-placeholder">+</div>
+              <div class="trade-slot-placeholder">
+                <svg viewBox="0 0 40 52" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="32" height="44" rx="4" stroke-dasharray="4 3" opacity=".6"/><circle cx="20" cy="18" r="6" opacity=".5"/><path d="M12 32h16M14 37h12" stroke-linecap="round" opacity=".35"/><path d="M28 38l6 6v6H6v-6l6-6" opacity=".2"/></svg>
+                <span class="trade-slot-hint">Toca para elegir</span>
+              </div>
             </div>
           </div>
           <div class="trade-slot-divider">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l-4-4m4 4l4-4"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l-4-4m4 4l4-4"/></svg>
           </div>
           <div class="trade-slot-container">
             <div class="trade-slot-label">RECIBES</div>
             <div class="trade-slot" id="visual-slot-want" onclick="document.getElementById('tab-sel-want').click()">
-              <div class="trade-slot-placeholder">?</div>
+              <div class="trade-slot-placeholder">
+                <svg viewBox="0 0 40 52" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="32" height="44" rx="4" stroke-dasharray="4 3" opacity=".6"/><text x="20" y="28" text-anchor="middle" font-size="18" fill="currentColor" stroke="none" opacity=".4">?</text></svg>
+                <span class="trade-slot-hint">Toca para elegir</span>
+              </div>
             </div>
           </div>
         </div>
@@ -7607,9 +7704,9 @@ details[open] .creator-toggle::after { transform: rotate(180deg); }
     <button class="overlay-close" id="overlay-close" type="button" aria-label="Cerrar">&#10005;</button>
     <div class="overlay-panel">
       <button class="side-nav light" id="overlay-prev" type="button" aria-label="Anterior">&#8249;</button>
-      <div style="display:flex; flex-direction:column; align-items:center;">
+      <div class="overlay-center-area">
         
-        <div id="activation-container" style="display:none; margin-bottom: 20px; text-align:center; max-width: 300px; width:100%;">
+        <div id="activation-container" style="display:none; text-align:center; max-width: 300px; width:100%; flex-shrink: 0;">
           <button id="activate-skill-btn" style="background:#D4AF37; color:#000; font-family:Teko, sans-serif; font-size:1.3rem; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; width:100%; box-shadow:0 4px 15px rgba(212,175,55,0.4); text-transform: uppercase; letter-spacing: 1px;">⚡ ACTIVAR HABILIDAD</button>
           <div id="activation-form" style="display:none; margin-top:15px; background:rgba(0,0,0,0.6); padding:15px; border-radius:8px; border:1px solid #D4AF37;">
             <p style="font-size:0.85rem; color:#fff; margin-bottom:10px; line-height:1.2;">Al activar, perderás esta copia del cromo y recibirás un código anti-fraude para usar en combate.</p>
@@ -8929,6 +9026,11 @@ function groupedPages(stickers) {
     const playerStickers = stickers
       .filter((sticker) => sticker.groupKey === groupKey && sticker.playerPseudo === playerPseudo)
       .sort((a, b) => a.slotNumber - b.slotNumber);
+
+    if (playerStickers.length > 0) {
+      const isAbsylumNormal = (playerPseudo === 'Abssylum' || playerPseudo === 'Absylum') && playerStickers[0].variant === 'normal';
+      if (isAbsylumNormal) return;
+    }
 
     const playerSticker = playerStickers.find((sticker) => sticker.stickerType === 'player') || playerStickers[0] || null;
     const charStickers = playerStickers.filter((sticker) => sticker.stickerType !== 'player').slice(0, 3);
@@ -10496,7 +10598,8 @@ function renderOverlay() {
       actBtn.onclick = () => {
         actBtn.style.display = 'none';
         actForm.style.display = 'block';
-        actWish.style.display = specialType === 'esmeralda' ? 'block' : 'none';
+        actWish.style.display = (specialType === 'esmeralda' || specialType === 'diamante') ? 'block' : 'none';
+        actWish.placeholder = specialType === 'diamante' ? 'Escribe tus dos deseos (diamante)' : 'Escribe tu deseo (opcional)';
         actWish.value = '';
       };
       
