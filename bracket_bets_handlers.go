@@ -306,10 +306,10 @@ func placeBetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Verificar fecha límite (10 de agosto 2026 00:00 hora local -> 05:00 UTC)
-	deadline, _ := time.Parse(time.RFC3339, "2026-08-10T05:00:00Z")
+	// Verificar fecha límite (12 de septiembre 2026 20:00 UTC)
+	deadline, _ := time.Parse(time.RFC3339, "2026-09-12T20:00:00Z")
 	if time.Now().After(deadline) {
-		http.Error(w, `{"error":"El plazo para apostar ya cerró (10 de Agosto)."}`, http.StatusBadRequest)
+		http.Error(w, `{"error":"El plazo para apostar ya cerró."}`, http.StatusBadRequest)
 		return
 	}
 
