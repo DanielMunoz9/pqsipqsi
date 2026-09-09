@@ -434,6 +434,13 @@
         
         const allSorted = [...openFights, ...(closedFights.length ? closedFights : [])];
 
+        const aliasMap = {
+          'INVERSE BERKANSTEL': 'Inverse Bernkastel',
+          'Ashley': 'Ashley Dmitriev',
+          'Absylum': 'Abssylum'
+        };
+        const getRealName = n => aliasMap[n] || n;
+
         function renderFightCard(f, idx) {
           const isUniv = (f.division || '').toLowerCase().includes('universal');
           const closed = isClosed(f);
@@ -464,7 +471,8 @@
             btnHtml = `<button class="btn-detalles" onclick="openDetalles('${f.fight_id}')">Ver más detalles</button>`;
           }
           
-          const imgA = playersDict[typeof normKey !== 'undefined' ? normKey(f.fighter_a) : f.fighter_a] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const realA = getRealName(f.fighter_a);
+          const imgA = playersDict[typeof normKey !== 'undefined' ? normKey(realA) : realA] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
           let fb_actual = f.fighter_b;
           let fc_actual = null;
           if (f.fighter_b.includes('|')) {
@@ -472,18 +480,23 @@
              fb_actual = parts[0].trim();
              fc_actual = parts[1].trim();
           }
-          const imgB = playersDict[typeof normKey !== 'undefined' ? normKey(fb_actual) : fb_actual] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
-          const imgC = fc_actual ? (playersDict[typeof normKey !== 'undefined' ? normKey(fc_actual) : fc_actual] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?') : null;
+          const realB = getRealName(fb_actual);
+          const realC = fc_actual ? getRealName(fc_actual) : null;
+
+          const imgB = playersDict[typeof normKey !== 'undefined' ? normKey(realB) : realB] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const imgC = realC ? (playersDict[typeof normKey !== 'undefined' ? normKey(realC) : realC] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?') : null;
           
-          let oddsA = 2.00, oddsB = 2.00;
-          let pctA = 50, pctB = 50;
+          let oddsA = 2.00, oddsB = 2.00, oddsC = 2.00;
+          let pctA = 50, pctB = 50, pctC = 0;
           
           if (currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id]) {
             const fs = currentStats.fight_stats[f.fight_id];
             oddsA = parseFloat(fs.odds_a) || 2.00;
             oddsB = parseFloat(fs.odds_b) || 2.00;
+            oddsC = parseFloat(fs.odds_c) || 2.00;
             pctA = fs.pct_a || 50;
             pctB = fs.pct_b || 50;
+            pctC = fs.pct_c || 0;
           }
 
           const favBadge = '<div style="background:rgba(74,222,128,0.2);color:#4ade80;font-size:0.65rem;padding:2px 8px;border-radius:12px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;font-weight:bold;width:fit-content;margin-left:auto;margin-right:auto;">Favorito</div>';
@@ -518,7 +531,7 @@
                 <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${f.fighter_a}', 'a')" id="fb-${f.fight_id}-a" style="display:flex;flex-direction:column;align-items:center;">
                   ${htmlFavA}
                   <img src="${imgA}" alt="P1">
-                  <span style="margin-bottom:2px;">${f.fighter_a}</span>
+                  <span style="margin-bottom:2px;">${realA}</span>
                   <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctA}% de probabilidad</div>
                   <div class="fighter-odds" style="font-size:1.1rem;color:${textA};background:${colorA};padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid ${colorA};">
                      <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
@@ -529,7 +542,7 @@
                 <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${fb_actual}', 'b')" id="fb-${f.fight_id}-b" style="display:flex;flex-direction:column;align-items:center;">
                   ${htmlFavB}
                   <img src="${imgB}" alt="P2">
-                  <span style="margin-bottom:2px;">${fb_actual}</span>
+                  <span style="margin-bottom:2px;">${realB}</span>
                   <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctB}% de probabilidad</div>
                   <div class="fighter-odds" style="font-size:1.1rem;color:${textB};background:${colorB};padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid ${colorB};">
                      <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
@@ -540,11 +553,11 @@
                 <div class="vs-badge" style="align-self:center;">VS</div>
                 <div class="fighter-btn" onclick="selectFighter('${f.fight_id}', '${fc_actual}', 'c')" id="fb-${f.fight_id}-c" style="display:flex;flex-direction:column;align-items:center;">
                   <img src="${imgC}" alt="P3">
-                  <span style="margin-bottom:2px;color:#0ea5e9;">${fc_actual}</span>
-                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">0% de probabilidad</div>
+                  <span style="margin-bottom:2px;color:#0ea5e9;">${realC}</span>
+                  <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">${pctC}% de probabilidad</div>
                   <div class="fighter-odds" style="font-size:1.1rem;color:#0ea5e9;background:rgba(14,165,233,0.15);padding:6px 12px;border-radius:6px;width:100%;font-weight:bold;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(14,165,233,0.15);">
                      <span style="font-size:0.8rem;text-transform:uppercase;opacity:0.8;">Paga</span>
-                     <span>${((currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id] ? currentStats.fight_stats[f.fight_id].odds_c : 2.00) || 2.00).toFixed(2)}x</span>
+                     <span>${oddsC.toFixed(2)}x</span>
                   </div>
                 </div>
                 ` : ''}
