@@ -502,14 +502,19 @@ type TrendingFighter struct {
 type FightBetStats struct {
 	TotalA   int      `json:"total_a"`
 	TotalB   int      `json:"total_b"`
+	TotalC   int      `json:"total_c"`
 	FighterA string   `json:"fighter_a"`
 	FighterB string   `json:"fighter_b"`
+	FighterC string   `json:"fighter_c"`
 	BetsA    []BetDet `json:"bets_a"`
 	BetsB    []BetDet `json:"bets_b"`
+	BetsC    []BetDet `json:"bets_c"`
 	PctA     float64  `json:"pct_a"`
 	PctB     float64  `json:"pct_b"`
+	PctC     float64  `json:"pct_c"`
 	OddsA    float64  `json:"odds_a"`
 	OddsB    float64  `json:"odds_b"`
+	OddsC    float64  `json:"odds_c"`
 }
 
 type BetDet struct {
@@ -586,13 +591,24 @@ func getBetsStatsHandler(w http.ResponseWriter, r *http.Request) {
 	// 2. Fight Stats
 	fightStats := make(map[string]FightBetStats)
 	for _, f := range openFights {
+		fb := f.FighterB
+		fc := ""
+		if strings.Contains(fb, "|") {
+			parts := strings.Split(fb, "|")
+			fb = strings.TrimSpace(parts[0])
+			fc = strings.TrimSpace(parts[1])
+		}
+
 		fs := FightBetStats{
 			TotalA:   0,
 			TotalB:   0,
+			TotalC:   0,
 			FighterA: f.FighterA,
-			FighterB: f.FighterB,
+			FighterB: fb,
+			FighterC: fc,
 			BetsA:    []BetDet{},
 			BetsB:    []BetDet{},
+			BetsC:    []BetDet{},
 		}
 		// find bets for this fight
 		for _, b := range allBets {
@@ -600,9 +616,12 @@ func getBetsStatsHandler(w http.ResponseWriter, r *http.Request) {
 				if b.PickedPseudo == f.FighterA {
 					fs.TotalA += b.SobresAmount
 					fs.BetsA = append(fs.BetsA, BetDet{Username: b.UserUsername, Sobres: b.SobresAmount})
-				} else if b.PickedPseudo == f.FighterB {
+				} else if b.PickedPseudo == fb {
 					fs.TotalB += b.SobresAmount
 					fs.BetsB = append(fs.BetsB, BetDet{Username: b.UserUsername, Sobres: b.SobresAmount})
+				} else if fc != "" && b.PickedPseudo == fc {
+					fs.TotalC += b.SobresAmount
+					fs.BetsC = append(fs.BetsC, BetDet{Username: b.UserUsername, Sobres: b.SobresAmount})
 				}
 			}
 		}
@@ -610,12 +629,25 @@ func getBetsStatsHandler(w http.ResponseWriter, r *http.Request) {
 		// Pari-Mutuel Calculation with 5 seed packs
 		poolA := float64(fs.TotalA + 5)
 		poolB := float64(fs.TotalB + 5)
-		totalPool := poolA + poolB
+		poolC := float64(fs.TotalC)
+		if fc != "" {
+			poolC += 5
+		}
+		totalPool := poolA + poolB + poolC
 		
 		fs.PctA = math.Round((poolA / totalPool) * 100)
-		fs.PctB = 100.0 - fs.PctA
+		fs.PctB = math.Round((poolB / totalPool) * 100)
+		if fc != "" {
+			fs.PctC = math.Round((poolC / totalPool) * 100)
+		} else {
+			fs.PctB = 100.0 - fs.PctA
+		}
+
 		fs.OddsA = math.Round((totalPool / poolA) * 100) / 100
 		fs.OddsB = math.Round((totalPool / poolB) * 100) / 100
+		if fc != "" {
+			fs.OddsC = math.Round((totalPool / poolC) * 100) / 100
+		}
 		
 		fightStats[f.FightID] = fs
 	}

@@ -249,9 +249,10 @@
     <div class="modal-box">
       <button class="modal-close" onclick="document.getElementById('det-modal').style.display='none'">×</button>
       <div class="modal-title" id="det-title">Detalles de Apuestas</div>
-      <div style="display:flex; gap:20px;">
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
         <div class="det-col" id="det-col-a"></div>
         <div class="det-col" id="det-col-b"></div>
+        <div class="det-col" id="det-col-c" style="display:none;"></div>
       </div>
     </div>
   </div>
@@ -615,6 +616,15 @@
         
         document.getElementById('det-col-a').innerHTML = `<h4 style="color:#4f46e5">${fs.fighter_a} <span style="font-size:0.75rem;opacity:0.8;font-weight:normal">(Paga ${fs.odds_a}x)</span></h4>` + renderList(fs.bets_a);
         document.getElementById('det-col-b').innerHTML = `<h4 style="color:#e11d48">${fs.fighter_b} <span style="font-size:0.75rem;opacity:0.8;font-weight:normal">(Paga ${fs.odds_b}x)</span></h4>` + renderList(fs.bets_b);
+        
+        if (fs.fighter_c) {
+          document.getElementById('det-col-c').innerHTML = `<h4 style="color:#0ea5e9">${fs.fighter_c} <span style="font-size:0.75rem;opacity:0.8;font-weight:normal">(Paga ${fs.odds_c}x)</span></h4>` + renderList(fs.bets_c);
+          document.getElementById('det-col-c').style.display = 'block';
+          document.getElementById('det-title').innerText = `Detalles: ${fs.fighter_a} vs ${fs.fighter_b} vs ${fs.fighter_c}`;
+        } else {
+          const colC = document.getElementById('det-col-c');
+          if (colC) colC.style.display = 'none';
+        }
         
         document.getElementById('det-modal').style.display = 'flex';
       };
