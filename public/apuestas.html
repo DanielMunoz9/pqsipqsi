@@ -159,10 +159,20 @@
     .vs-prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 12px 0; background: rgba(255,255,255,0.1); }
     .vs-prob-a { height: 100%; background: #4f46e5; transition: width 0.5s; }
     .vs-prob-b { height: 100%; background: #e11d48; transition: width 0.5s; }
+    .vs-prob-c { height: 100%; background: #0ea5e9; transition: width 0.5s; }
     .vs-prob-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: rgba(255,255,255,0.5); font-family: 'Teko', sans-serif; font-size: 1.1rem; }
     
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
     .modal-box { background: #111520; border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 24px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+    
+    @media (max-width: 640px) {
+      .fighter-btn { min-width: 80px; padding: 8px 4px; gap: 4px; }
+      .fighter-btn span { font-size: 1rem; }
+      .fighter-btn img { width: 36px; height: 36px; }
+      .fighter-odds { font-size: 0.9rem; padding: 4px; }
+      .vs-badge { padding: 4px 8px; font-size: 0.8rem; }
+      .fight-vs-row { margin-bottom: 16px; }
+    }
     .modal-close { float: right; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; line-height: 1; }
     .modal-title { font-family: 'Teko', sans-serif; font-size: 1.8rem; color: #d4af37; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
     .det-col { flex: 1; }
@@ -458,21 +468,36 @@
           if (currentStats && currentStats.fight_stats && currentStats.fight_stats[f.fight_id]) {
             const fs = currentStats.fight_stats[f.fight_id];
             
-            probHtml = `
-              <div class="vs-prob-bar">
-                <div class="vs-prob-a" style="width:${fs.pct_a}%"></div>
-                <div class="vs-prob-b" style="width:${fs.pct_b}%"></div>
-              </div>
-              <div class="vs-prob-labels">
-                <span style="color:#4f46e5">${fs.pct_a}% (${fs.total_a} sobres)</span>
-                <span style="color:#e11d48">${fs.pct_b}% (${fs.total_b} sobres)</span>
-              </div>
-            `;
+            if (fs.fighter_c) {
+              probHtml = `
+                <div class="vs-prob-bar">
+                  <div class="vs-prob-a" style="width:${fs.pct_a}%"></div>
+                  <div class="vs-prob-b" style="width:${fs.pct_b}%"></div>
+                  <div class="vs-prob-c" style="width:${fs.pct_c}%"></div>
+                </div>
+                <div class="vs-prob-labels" style="justify-content: space-between;">
+                  <span style="color:#4f46e5">${fs.pct_a}% (${fs.total_a} sobres)</span>
+                  <span style="color:#e11d48">${fs.pct_b}% (${fs.total_b} sobres)</span>
+                  <span style="color:#0ea5e9">${fs.pct_c}% (${fs.total_c} sobres)</span>
+                </div>
+              `;
+            } else {
+              probHtml = `
+                <div class="vs-prob-bar">
+                  <div class="vs-prob-a" style="width:${fs.pct_a}%"></div>
+                  <div class="vs-prob-b" style="width:${fs.pct_b}%"></div>
+                </div>
+                <div class="vs-prob-labels">
+                  <span style="color:#4f46e5">${fs.pct_a}% (${fs.total_a} sobres)</span>
+                  <span style="color:#e11d48">${fs.pct_b}% (${fs.total_b} sobres)</span>
+                </div>
+              `;
+            }
             btnHtml = `<button class="btn-detalles" onclick="openDetalles('${f.fight_id}')">Ver más detalles</button>`;
           }
           
           const realA = getRealName(f.fighter_a);
-          const imgA = playersDict[typeof normKey !== 'undefined' ? normKey(realA) : realA] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
+          const imgA = playersDict[typeof normKey !== 'undefined' ? normKey(realA) : realA] || `https://ui-avatars.com/api/?name=${encodeURIComponent(realA)}&background=1a1f35&color=d4af37`;
           let fb_actual = f.fighter_b;
           let fc_actual = null;
           if (f.fighter_b.includes('|')) {
@@ -483,8 +508,8 @@
           const realB = getRealName(fb_actual);
           const realC = fc_actual ? getRealName(fc_actual) : null;
 
-          const imgB = playersDict[typeof normKey !== 'undefined' ? normKey(realB) : realB] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?';
-          const imgC = realC ? (playersDict[typeof normKey !== 'undefined' ? normKey(realC) : realC] || 'https://via.placeholder.com/64/1a1f35/d4af37?text=?') : null;
+          const imgB = playersDict[typeof normKey !== 'undefined' ? normKey(realB) : realB] || `https://ui-avatars.com/api/?name=${encodeURIComponent(realB)}&background=1a1f35&color=d4af37`;
+          const imgC = realC ? (playersDict[typeof normKey !== 'undefined' ? normKey(realC) : realC] || `https://ui-avatars.com/api/?name=${encodeURIComponent(realC)}&background=1a1f35&color=d4af37`) : null;
           
           let oddsA = 2.00, oddsB = 2.00, oddsC = 2.00;
           let pctA = 50, pctB = 50, pctC = 0;
@@ -645,6 +670,8 @@
     window.selectFighter = function(fightId, fighter, side) {
       document.getElementById(`fb-${fightId}-a`).classList.remove('selected');
       document.getElementById(`fb-${fightId}-b`).classList.remove('selected');
+      const fcBtn = document.getElementById(`fb-${fightId}-c`);
+      if (fcBtn) fcBtn.classList.remove('selected');
       
       document.getElementById(`fb-${fightId}-${side}`).classList.add('selected');
       
@@ -664,6 +691,7 @@
         const fs = currentStats.fight_stats[fightId];
         if (pick === fs.fighter_a) odds = fs.odds_a;
         else if (pick === fs.fighter_b) odds = fs.odds_b;
+        else if (pick === fs.fighter_c) odds = fs.odds_c;
       }
       
       const payout = Math.round(amt * odds);
